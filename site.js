@@ -321,10 +321,17 @@ document.addEventListener('click', function (e) {
 // lectr case study: one lot traced, read live from lectr.bid (CORS * on the data files)
 (function () {
   if (!document.getElementById('trace')) return;
-  var ID = 'wright-308259~', SALE = '2026-09-16';
+  // The pinned lot. lectr drops a lot's comps from the served feed once it
+  // sells, so this needs re-pinning to a live flagged lot when the sale date
+  // passes — otherwise the section quietly becomes a snapshot of a finished
+  // lot. Pick one from lectr.bid/data/ray/comp-evidence.json.
+  var ID = 'bonhams-31916-177', SALE = '2026-09-24';
   var usd = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
   var today = new Date().toISOString().slice(0, 10);
   var when = document.getElementById('trace-when'); if (when && today > SALE) when.textContent = 'closed ' + SALE;
+  // once it has closed the comps below are a record, not a live read — say so
+  // rather than leaving a label that implies the lot is still on the block
+  if (today > SALE) { var cs = document.getElementById('trace-comps-src'); if (cs) cs.textContent = '\u00b7 as read on ' + SALE; }
   var j = function (u) { return fetch(u, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }); };
   j('https://lectr.bid/data/ray/comp-evidence.json').then(function (ce) {
     var rows = ce.byLot && ce.byLot[ID]; if (!rows || !rows.length) return;
@@ -368,8 +375,22 @@ document.addEventListener('click', function (e) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } }); }, { threshold: 0, rootMargin: '0px 0px -6% 0px' });
     pending.forEach(function (b) { io.observe(b); });
   }
-  var st; function sweep() { var vh2 = innerHeight; pending.forEach(function (b) { var r = b.getBoundingClientRect(); if (r.top < vh2 * 0.94 && r.bottom > 0) show(b); }); }
-  addEventListener('scroll', function () { clearTimeout(st); st = setTimeout(sweep, 80); }, { passive: true }); setTimeout(sweep, 1500);
+  // The sweep reveals anything the viewport has REACHED, not only what is in
+  // it right now: a block flicked clean past the fold between two debounced
+  // sweeps used to fail the old `r.bottom > 0` test and stay hidden for good.
+  var st; function sweep() { var vh2 = innerHeight; pending.forEach(function (b) { if (b.getBoundingClientRect().top < vh2 * 0.94) show(b); }); }
+  addEventListener('scroll', function () { clearTimeout(st); st = setTimeout(sweep, 80); }, { passive: true });
+  addEventListener('resize', sweep, { passive: true });
+  // a hidden tab freezes the document timeline: a block that took .in while
+  // backgrounded sits mid-transition until the tab is looked at again
+  addEventListener('visibilitychange', function () { if (!document.hidden) sweep(); });
+  // printing must never omit a section — the résumé is the reason
+  addEventListener('beforeprint', function () { pending.forEach(show); });
+  setTimeout(sweep, 1200);
+  // last resort: an invisible paragraph is a worse failure than a missed
+  // animation, so anything still pending after four seconds is simply shown
+  setTimeout(function () { pending.forEach(show); }, 4000);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) pending.forEach(show);
   // ledes and statements arrive word by word
   [].forEach.call(document.querySelectorAll('.lede, .statement'), function (p) {
     if (p.querySelector('a, b, span.dim')) { var dim = p.querySelector('span.dim'); if (!dim) return; }
@@ -385,6 +406,11 @@ document.addEventListener('click', function (e) {
       var m = /^([^\d]*)([\d,]+)(.*)$/.exec(n.textContent.trim()); if (!m || /→/.test(n.textContent)) return;
       var target = parseInt(m[2].replace(/,/g, ''), 10), pre = m[1], post = m[3], t0 = performance.now(), D = 1100, comma = m[2].indexOf(',') >= 0;
       n.style.fontVariantNumeric = 'tabular-nums';
+      // Only count when there is something to count. "1.14M" parses to the
+      // integer 1, so animating it printed "0.14M lots in the corpus" for a
+      // whole second — a wrong number, stated as a fact. A hidden tab freezes
+      // rAF at that same first frame, so it could sit there indefinitely.
+      if (target < 10 || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       (function tick(now) { var u = Math.min(1, (now - t0) / D); u = 1 - Math.pow(1 - u, 4); var v = Math.round(target * u); n.textContent = pre + (comma ? v.toLocaleString('en-US') : String(v)) + post; if (u < 1) requestAnimationFrame(tick); })(t0);
     });
   }
