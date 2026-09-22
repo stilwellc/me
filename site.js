@@ -15,62 +15,104 @@
 // squares; the rest fall back to a faint dot field. Hover un-resolves cells
 // near the cursor; click replays from the picture. Reduced motion: text only.
 function matrix(c, opts) {
-  // A line-screen. The canvas is a fine grid (4px cells on desktop); every cell is a
-  // vertical dash whose height follows the source: a photograph's luminance in the
-  // picture phase, the word mask in the text phase. A coarse flow field, driven by
-  // cursor velocity, displaces where each cell samples from, so the screen smears
-  // under the pointer and settles back. Film grain on top.
+  // A line-screen that always fills its band. Every cell of the canvas carries
+  // something: a faint filler dot when nothing else is there, a vertical dash
+  // whose height follows a photograph's luminance in a picture phase, a square
+  // whose size follows the word mask in a text phase. Phases do not cut or cull:
+  // they MORPH, cell by cell, along a dithered sweep, with a gust through the
+  // flow field so the screen smears into its next shape and settles. A coarse
+  // flow field driven by cursor velocity displaces where each cell samples
+  // from. Film grain on top.
   var ctx = c.getContext('2d');
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var dpr = Math.min(2, window.devicePixelRatio || 1);
-  var W, H, cols, rows, cell, maskF, lum, th, t0, img = null, word = opts.text, raf = 0, showPic = true;
+  var W, H, cols, rows, cell, N, th, t0 = 0, raf = 0, word = opts.text, img = null, prevImg = null, showPic = true;
+  var maskF = null, pic = null, picPrev = null;          // fields: {v: Float32Array, e: Float32Array|null}
   var fc, fr, F = 5, vx, vy, tmpx, tmpy, pmx = -1, pmy = -1, pmt = 0;   // flow grid, F fine cells per flow cell
-  var PIC = 3.0, DISSOLVE = 0.7, RESOLVE = 1.5;
-  var PREV = 1.0, PREV_DIS = 0.45, prevImg = null, lumPrev = null;
-  var outMask = null, outT = 0, OUT = 0.35;
   var GAIN = 1.4, DECAY = 0.94, DIFF = 0.11, MAXV = 2.4;                 // in flow cells
-  var grain = null, gctx = null;
+  var FILL_IN = 0.35, PREV_HOLD = 0.9, PIC_HOLD = 2.6, MORPH = 0.85, WORD_MORPH = 0.6, PRINT = 0.7;
+  var states = [], gusted = [], gustDir = 1;
+  var grain = null, gctx = null, A = null, B = null;
+  var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
+  var focus = [0.5, 0.5];
+  if (c.dataset && c.dataset.focus) { var fp = c.dataset.focus.split(',').map(parseFloat); if (fp.length === 2 && !isNaN(fp[0]) && !isNaN(fp[1])) focus = fp; }
   function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
-  function build() {
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function smooth(v) { v = clamp01(v); return v * v * (3 - 2 * v); }
+
+  function buildGrid() {
     var r = c.getBoundingClientRect();
     W = Math.max(1, Math.floor(r.width)); H = Math.max(1, Math.floor(r.height));
     c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     cell = W < 640 ? 3 : 4;
-    cols = Math.floor(W / cell); rows = Math.floor(H / cell);
-    var N = cols * rows;
+    cols = Math.floor(W / cell); rows = Math.floor(H / cell); N = cols * rows;
+    th = new Float32Array(N); for (var i = 0; i < N; i++) th[i] = Math.random();
+    fc = Math.ceil(cols / F) + 1; fr = Math.ceil(rows / F) + 1;
+    vx = new Float32Array(fc * fr); vy = new Float32Array(fc * fr); tmpx = new Float32Array(fc * fr); tmpy = new Float32Array(fc * fr);
+    A = new Float32Array(rows); B = new Float32Array(cols);
+    if (!grain) { grain = document.createElement('canvas'); grain.width = grain.height = 256; gctx = grain.getContext('2d'); var gd = gctx.createImageData(256, 256); for (var g = 0; g < gd.data.length; g += 4) { var v = 128 + (Math.random() * 90 - 45) | 0; gd.data[g] = gd.data[g + 1] = gd.data[g + 2] = v; gd.data[g + 3] = 255; } gctx.putImageData(gd, 0, 0); }
+  }
+  function buildMask(w) {
+    // one cap height for every word, so "Wave" and "SecMCPHub" sit in the same
+    // band at the same size; only a word that would overflow shrinks
     var m = document.createElement('canvas'); m.width = cols; m.height = rows;
     var mc = m.getContext('2d');
     mc.fillStyle = '#000'; mc.textBaseline = 'middle'; mc.textAlign = 'center';
-    var fs = rows * 0.8;
-    mc.font = '300 ' + fs + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif';
-    while (mc.measureText(word).width > cols * 0.9 && fs > 8) { fs -= 1; mc.font = '300 ' + fs + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; }
-    mc.fillText(word, cols / 2, rows * 0.53);
-    var px = mc.getImageData(0, 0, cols, rows).data;
-    maskF = new Float32Array(N); th = new Float32Array(N);
-    for (var i = 0; i < N; i++) { maskF[i] = px[i * 4 + 3] / 255; th[i] = Math.random(); }
-    fc = Math.ceil(cols / F) + 1; fr = Math.ceil(rows / F) + 1;
-    vx = new Float32Array(fc * fr); vy = new Float32Array(fc * fr); tmpx = new Float32Array(fc * fr); tmpy = new Float32Array(fc * fr);
-    lumPrev = prevImg ? halftone(prevImg) : null;
-    lum = (img && showPic) ? halftone(img) : null;
-    if (!grain) { grain = document.createElement('canvas'); grain.width = grain.height = 256; gctx = grain.getContext('2d'); var gd = gctx.createImageData(256, 256); for (var g = 0; g < gd.data.length; g += 4) { var v = 128 + (Math.random() * 90 - 45) | 0; gd.data[g] = gd.data[g + 1] = gd.data[g + 2] = v; gd.data[g + 3] = 255; } gctx.putImageData(gd, 0, 0); }
-    t0 = performance.now();
+    var fs = rows * 0.62, font = function (s) { return '300 ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
+    mc.font = font(fs);
+    while (mc.measureText(w).width > cols * 0.92 && fs > 8) { fs -= 1; mc.font = font(fs); }
+    mc.fillText(w, cols / 2, rows * 0.53);
+    var px = mc.getImageData(0, 0, cols, rows).data, out = new Float32Array(N);
+    for (var i = 0; i < N; i++) out[i] = px[i * 4 + 3] / 255;
+    return { v: out, e: null };
   }
-  function halftone(img) {
-    var p = document.createElement('canvas'); p.width = cols; p.height = rows;
+  function halftone(im) {
+    // 2x supersampled luminance, a percentile stretch, a little local contrast
+    // so flat screenshots keep their structure, and an edge channel that
+    // widens the dash on detail. Polarity flips so a light picture draws its
+    // darks. Photographs cover the band; drawings (svg) sit inside it.
+    var S = 2, cw = cols * S, rh = rows * S;
+    var p = document.createElement('canvas'); p.width = cw; p.height = rh;
     var pc = p.getContext('2d'); pc.imageSmoothingEnabled = true; pc.imageSmoothingQuality = 'high';
-    var padX = Math.max(1, Math.round(cols * 0.03)), padY = Math.max(1, Math.round(rows * 0.05));
-    var s = Math.min((cols - 2 * padX) / img.naturalWidth, (rows - 2 * padY) / img.naturalHeight), dw = img.naturalWidth * s, dh = img.naturalHeight * s;
-    var ox = Math.round((cols - dw) / 2), oy = Math.round((rows - dh) / 2);
-    pc.fillStyle = '#fff'; pc.fillRect(0, 0, cols, rows); pc.drawImage(img, ox, oy, dw, dh);
-    var d = pc.getImageData(0, 0, cols, rows).data, out = new Float32Array(cols * rows);
-    var inside = function (j) { var x = j % cols, y = (j / cols) | 0; return x >= ox && x < ox + dw && y >= oy && y < oy + dh; };
-    var raw = new Float32Array(cols * rows), mean = 0, nIn = 0, inList = [];
-    for (var j = 0; j < cols * rows; j++) { raw[j] = (d[j*4]*299 + d[j*4+1]*587 + d[j*4+2]*114) / 255000; if (inside(j)) { mean += raw[j]; nIn++; inList.push(raw[j]); } }
-    mean /= Math.max(1, nIn); var flip = mean > 0.5;               // light picture → draw its darks
-    inList.sort(function (a, b) { return a - b; });
-    var lo = inList[Math.floor(inList.length * 0.03)] || 0, hi = inList[Math.floor(inList.length * 0.97)] || 1, span = Math.max(0.05, hi - lo);
-    for (var k = 0; k < cols * rows; k++) { if (!inside(k)) { out[k] = 0; continue; } var v = flip ? 1 - raw[k] : raw[k]; v = (v - (flip ? 1 - hi : lo)) / span; v = Math.min(1, Math.max(0, v)); out[k] = Math.pow(v, 1.25); }
-    return out;
+    var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
+    var isSvg = /\.svg(\?|$)/i.test(im.src || '');
+    // landscape photographs cover the band (a viewport-dependent test flipped
+    // between cover and contain as the band's own aspect changed); drawings and
+    // portraits sit inside it over the filler
+    var fit = fitPref || (isSvg ? 'contain' : ((iw / ih) >= 1.3 ? 'cover' : 'contain'));
+    var padX = fit === 'cover' ? 0 : Math.round(cw * 0.03), padY = fit === 'cover' ? 0 : Math.round(rh * 0.05);
+    var sx = (cw - 2 * padX) / iw, sy = (rh - 2 * padY) / ih, s = fit === 'cover' ? Math.max(sx, sy) : Math.min(sx, sy);
+    var dw = Math.round(iw * s), dh = Math.round(ih * s);
+    var ox = fit === 'cover' ? Math.round((cw - dw) * focus[0]) : Math.round((cw - dw) / 2);
+    var oy = fit === 'cover' ? Math.round((rh - dh) * focus[1]) : Math.round((rh - dh) / 2);
+    pc.fillStyle = '#fff'; pc.fillRect(0, 0, cw, rh); pc.drawImage(im, ox, oy, dw, dh);
+    var d = pc.getImageData(0, 0, cw, rh).data;
+    var raw = new Float32Array(N), inside = new Uint8Array(N), list = [], mean = 0, nIn = 0;
+    for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
+      var acc = 0;
+      for (var yy = 0; yy < S; yy++) for (var xx = 0; xx < S; xx++) { var j = ((y * S + yy) * cw + (x * S + xx)) * 4; acc += (d[j] * 299 + d[j + 1] * 587 + d[j + 2] * 114) / 255000; }
+      var i = y * cols + x; raw[i] = acc / (S * S);
+      var cx = x * S + S / 2, cy = y * S + S / 2;
+      // one supersampled pixel in from the picture's edge: the antialiased
+      // boundary blends with the white fill and read as a bright bar
+      if (cx >= ox + 1 && cx < ox + dw - 1 && cy >= oy + 1 && cy < oy + dh - 1) { inside[i] = 1; list.push(raw[i]); mean += raw[i]; nIn++; }
+    }
+    mean /= Math.max(1, nIn); var flip = mean > 0.5;
+    list.sort(function (a, b) { return a - b; });
+    var lo = list[Math.floor(list.length * 0.03)] || 0, hi = list[Math.floor(list.length * 0.97)] || 1, span = Math.max(0.05, hi - lo);
+    var v0 = new Float32Array(N);
+    for (var k = 0; k < N; k++) { if (!inside[k]) continue; var u = flip ? 1 - raw[k] : raw[k]; u = (u - (flip ? 1 - hi : lo)) / span; v0[k] = clamp01(u); }
+    // local contrast + edges from a 3x3 box blur
+    var out = new Float32Array(N), edge = new Float32Array(N);
+    for (var y2 = 0; y2 < rows; y2++) for (var x2 = 0; x2 < cols; x2++) {
+      var i2 = y2 * cols + x2; if (!inside[i2]) continue;
+      var sum = 0, n = 0;
+      for (var dy = -1; dy <= 1; dy++) { var yb = y2 + dy; if (yb < 0 || yb >= rows) continue; for (var dx = -1; dx <= 1; dx++) { var xb = x2 + dx; if (xb < 0 || xb >= cols) continue; sum += v0[yb * cols + xb]; n++; } }
+      var bl = sum / n, dv = v0[i2] - bl;
+      out[i2] = Math.pow(clamp01(v0[i2] + 0.55 * dv), 1.2);
+      edge[i2] = clamp01(Math.abs(dv) * 3.2);
+    }
+    return { v: out, e: edge };
   }
   function sample(f, x, y) {
     if (x < 0 || y < 0 || x > cols - 1 || y > rows - 1) return 0;
@@ -78,7 +120,7 @@ function matrix(c, opts) {
     var a = f[y0 * cols + x0], b = f[y0 * cols + x1], cc = f[y1 * cols + x0], dd = f[y1 * cols + x1];
     return (a * (1 - fx) + b * fx) * (1 - fy) + (cc * (1 - fx) + dd * fx) * fy;
   }
-  function flowAt(f, x, y) {   // bilinear on the coarse grid, x,y in fine cells
+  function flowAt(f, x, y) {
     var gx = x / F, gy = y / F, x0 = gx | 0, y0 = gy | 0, x1 = x0 + 1 < fc ? x0 + 1 : x0, y1 = y0 + 1 < fr ? y0 + 1 : y0, fx = gx - x0, fy = gy - y0;
     return (f[y0 * fc + x0] * (1 - fx) + f[y0 * fc + x1] * fx) * (1 - fy) + (f[y1 * fc + x0] * (1 - fx) + f[y1 * fc + x1] * fx) * fy;
   }
@@ -90,7 +132,7 @@ function matrix(c, opts) {
     }
     var t = vx; vx = tmpx; tmpx = t; t = vy; vy = tmpy; tmpy = t;
   }
-  function inject(gxp, gyp, dxp, dyp) {   // in flow cells
+  function inject(gxp, gyp, dxp, dyp) {
     var R = 2.6, R2 = R * R, x0 = Math.max(0, (gxp - R) | 0), x1 = Math.min(fc - 1, (gxp + R) | 0), y0 = Math.max(0, (gyp - R) | 0), y1 = Math.min(fr - 1, (gyp + R) | 0);
     var mag = Math.hypot(dxp, dyp); if (mag > MAXV) { dxp *= MAXV / mag; dyp *= MAXV / mag; }
     for (var y = y0; y <= y1; y++) for (var x = x0; x <= x1; x++) {
@@ -98,78 +140,113 @@ function matrix(c, opts) {
       var w = (1 - d2 / R2) * GAIN, i = y * fc + x; vx[i] += dxp * w; vy[i] += dyp * w;
     }
   }
-  var A = null, B = null;
+  function gust(dir) {
+    // a wind through the whole band at the start of a morph: the screen smears
+    // into its next shape instead of switching to it
+    for (var y = 0; y < fr; y++) { var g = 1.5 * (0.7 + 0.3 * Math.sin(y * 0.6)); for (var x = 0; x < fc; x++) { var i = y * fc + x; vx[i] = Math.max(-MAXV, Math.min(MAXV, vx[i] + dir * g)); vy[i] += 0.25 * Math.sin(x * 0.4 + y); } }
+  }
+  function sequence() {
+    // what the band shows, in order; each state holds, then morphs into the next
+    var s = [];
+    if (picPrev && !reduce) s.push({ f: picPrev, kind: 'pic', hold: PREV_HOLD, sweep: 'lr' });
+    if (pic && showPic && !reduce) s.push({ f: pic, kind: 'pic', hold: PIC_HOLD, sweep: 'centre' });
+    s.push({ f: maskF, kind: 'word', hold: 1e9, sweep: 'lr' });
+    states = s; gusted = s.map(function () { return false; });
+  }
   function frame(now) {
     var el = (now - t0) / 1000;
     ctx.clearRect(0, 0, W, H);
     var inkCol = css('color') || '#161616', accent = css('--accent') || '#FF5A1F';
-    if (outMask) {
-      var ou = (now - outT) / 1000 / OUT; if (ou >= 1) { outMask = null; build(); el = 0; }
-      else {
-        ctx.fillStyle = inkCol; ctx.globalAlpha = 0.9; ctx.beginPath();
-        var half0 = cols / 2, sw = cell * 0.7;
-        for (var oy = 0; oy < rows; oy++) for (var ox = 0; ox < cols; ox++) { var oi = oy * cols + ox; if (outMask[oi] < 0.4) continue; var gone = Math.abs(ox - half0) / half0 < ou * 1.25; if (gone) { if (th[oi] < 0.25 * (1 - ou)) ctx.rect(ox * cell + cell * 0.25, oy * cell + cell * 0.25, cell * 0.5, cell * 0.5); } else ctx.rect(ox * cell + (cell - sw) / 2, oy * cell + (cell - sw) / 2, sw, sw); }
-        ctx.fill(); ctx.globalAlpha = 1; raf = requestAnimationFrame(frame); return;
-      }
-    }
     if (!reduce) stepFlow();
-    var hasPrev = !!lumPrev && !reduce, tPrev = hasPrev ? PREV + PREV_DIS : 0;
-    var hasPic = !!lum && !reduce;
-    var tPic = hasPic ? PIC : 0, tDis = hasPic ? DISSOLVE : 0;
-    var wave = reduce ? 1e9 : (el - tPrev - tPic - tDis - 0.1) / RESOLVE;
-    var picMix, src, printIn = 1;
-    if (hasPrev && el < tPrev) { src = lumPrev; picMix = el < PREV ? 1 : Math.max(0, 1 - (el - PREV) / PREV_DIS); printIn = Math.min(1, el / 0.7); }
-    else { src = lum; var e2 = el - tPrev; picMix = hasPic ? (e2 < tPic ? 1 : Math.max(0, 1 - (e2 - tPic) / tDis)) : 0; printIn = hasPrev ? 1 : Math.min(1, Math.max(0, e2) / 0.7); }
-    printIn = 1 - Math.pow(1 - printIn, 3);
+    // where are we in the sequence
+    var k = 0, u = 0, tt = el, morphing = false, morphT = MORPH;
+    while (k < states.length - 1) {
+      var d = states[k].kind === 'word' && states[k + 1].kind === 'word' ? WORD_MORPH : MORPH;
+      if (tt < states[k].hold) break;
+      tt -= states[k].hold;
+      if (tt < d) { morphing = true; u = tt / d; morphT = d; break; }
+      tt -= d; k++;
+    }
+    if (reduce) { k = states.length - 1; morphing = false; }
+    var SA = states[k], SB = morphing ? states[k + 1] : null;
+    if (morphing && !gusted[k]) { gusted[k] = true; states[k].dir = gustDir; gust(gustDir); gustDir = -gustDir; }
+    var sdir = SA.dir || 1;
+    var printIn = k === 0 ? 1 - Math.pow(1 - Math.min(1, el / PRINT), 3) : 1;
+    var fillIn = reduce ? 1 : Math.min(1, el / FILL_IN);
     var t = now / 1000, half = cols / 2, dmax = Math.hypot(half, rows / 2);
-    // ambient drift, separable so it is cheap: ax = A[y]·B[x]
-    if (!A || A.length !== rows) { A = new Float32Array(rows); B = new Float32Array(cols); }
-    var amb = picMix > 0 ? 0.9 : 0.25;
+    // ambient drift, separable so it is cheap
+    var amb = SA.kind === 'pic' ? 0.9 : 0.25;
     for (var yy = 0; yy < rows; yy++) A[yy] = amb * Math.sin(yy * 0.09 + t * 0.7);
     for (var xx = 0; xx < cols; xx++) B[xx] = Math.cos(xx * 0.05 - t * 0.45);
-    var dashW = Math.max(1.2, cell * 0.55), sq = cell * 0.7;
-    // picture: dashes in the accent colour
-    if (picMix > 0) {
-      ctx.fillStyle = accent; ctx.globalAlpha = 0.95 * Math.min(1, picMix * 1.2); ctx.beginPath();
-      for (var y = 0; y < rows; y++) { var ay = A[y]; for (var x = 0; x < cols; x++) {
+    var dashW = Math.max(1.2, cell * 0.55), sq = cell * 0.7, fillDot = cell * 0.22;
+    var accentRects = [], inkRects = [], fillRects = [];
+    var fA = SA.f, fB = SB ? SB.f : null, sweep = SB ? SB.sweep : null, up = u * 1.35;
+    for (var y = 0; y < rows; y++) {
+      var ay = A[y];
+      for (var x = 0; x < cols; x++) {
         var i = y * cols + x, ax = ay * B[x];
-        var sxp = x - flowAt(vx, x, y) * F - ax, syp = y - flowAt(vy, x, y) * F - ax * 0.4;
-        var L = sample(src, sxp, syp); if (L < 0.06) continue;
-        var pd = Math.hypot(x - half, y - rows / 2) / dmax;
-        var pin = Math.min(1, Math.max(0, (printIn * 1.5 - (0.5 * pd + 0.5 * th[i])) / 0.2)); if (pin <= 0) continue;
-        var h = cell * (0.2 + 0.9 * L) * pin * (picMix < 1 ? (th[i] < picMix ? 1 : 0) : 1); if (h < 0.5) continue;
-        ctx.rect(x * cell + (cell - dashW) / 2, y * cell + (cell - h) / 2, dashW, h);
-      } }
+        var fxv = flowAt(vx, x, y) * F, fyv = flowAt(vy, x, y) * F;
+        var sxp = x - fxv - ax, syp = y - fyv - ax * 0.4;
+        // per-cell mix into the next state, along a dithered sweep
+        var mix = 0;
+        if (SB) { var dpos = sweep === 'centre' ? Math.abs(x - half) / half : (sdir > 0 ? x / cols : 1 - x / cols); mix = smooth((up - (0.7 * dpos + 0.3 * th[i])) / 0.28); }
+        var vA = sample(fA.v, sxp, syp), vB = fB ? sample(fB.v, sxp, syp) : 0;
+        if (SA.kind === 'word' && vA < 0.3) vA = 0; if (fB && SB.kind === 'word' && vB < 0.3) vB = 0;
+        if (SA.kind === 'pic' && vA < 0.06) vA = 0; if (fB && SB.kind === 'pic' && vB < 0.06) vB = 0;
+        var v = vA * (1 - mix) + vB * mix;
+        if (k === 0 && printIn < 1) { var pd = Math.hypot(x - half, y - rows / 2) / dmax; var pin = clamp01((printIn * 1.5 - (0.5 * pd + 0.5 * th[i])) / 0.2); v *= pin; }
+        if (v < 0.04) {
+          // filler: the band is always a full rectangle
+          if (fillIn > 0) { var fd = fillDot * (0.7 + 0.5 * th[i]) * (0.85 + 0.15 * Math.sin(t * 0.6 + x * 0.05 + y * 0.09)); fillRects.push(x * cell + (cell - fd) / 2 - fxv * cell * 0.3, y * cell + (cell - fd) / 2 - fyv * cell * 0.3, fd); }
+          continue;
+        }
+        // shape: dash for a picture, square for a word, blended by mix
+        var kindA = SA.kind, kindB = SB ? SB.kind : kindA;
+        var wA = kindA === 'pic' ? dashW * (0.85 + 0.6 * (fA.e ? fA.e[i] : 0)) : sq * (0.6 + 0.4 * vA);
+        var hA = kindA === 'pic' ? cell * (0.2 + 0.9 * vA) * (0.78 + 0.22 * (fA.e ? fA.e[i] : 1)) : wA;
+        var wB = !SB ? wA : (kindB === 'pic' ? dashW * (0.85 + 0.6 * (fB.e ? fB.e[i] : 0)) : sq * (0.6 + 0.4 * vB));
+        var hB = !SB ? hA : (kindB === 'pic' ? cell * (0.2 + 0.9 * vB) * (0.78 + 0.22 * (fB.e ? fB.e[i] : 1)) : wB);
+        if (SB && kindB === 'word' && kindA !== 'word') { var pop = 1 + 0.18 * Math.sin(Math.PI * clamp01((mix - 0.45) / 0.55)); wB *= pop; hB *= pop; }
+        var w = wA * (1 - mix) + wB * mix, h = hA * (1 - mix) + hB * mix;
+        if (h < 0.5) continue;
+        var toInk = (mix < 0.5 ? kindA : kindB) === 'word';
+        (toInk ? inkRects : accentRects).push(x * cell + (cell - w) / 2, y * cell + (cell - h) / 2, w, h);
+      }
+    }
+    function paint(list, col, alpha, square) {
+      if (!list.length) return; ctx.fillStyle = col; ctx.globalAlpha = alpha; ctx.beginPath();
+      if (square) for (var q = 0; q < list.length; q += 3) ctx.rect(list[q], list[q + 1], list[q + 2], list[q + 2]);
+      else for (var q2 = 0; q2 < list.length; q2 += 4) ctx.rect(list[q2], list[q2 + 1], list[q2 + 2], list[q2 + 3]);
       ctx.fill();
     }
-    // word: squares in ink, resolving with a dithered wave; unresolved cells flicker as static
-    if (picMix < 1) {
-      ctx.fillStyle = inkCol; ctx.globalAlpha = 0.92 * (1 - picMix); ctx.beginPath(); var st = []; 
-      for (var y2 = 0; y2 < rows; y2++) { var ay2 = A[y2]; for (var x2 = 0; x2 < cols; x2++) {
-        var i2 = y2 * cols + x2, ax2 = ay2 * B[x2];
-        var sx2 = x2 - flowAt(vx, x2, y2) * F - ax2, sy2 = y2 - flowAt(vy, x2, y2) * F - ax2 * 0.4;
-        var m = sample(maskF, sx2, sy2); if (m < 0.3) continue;
-        var resolved = wave >= (0.6 * Math.abs(x2 - half) / half + 0.4 * th[i2]);
-        if (resolved) { var s2 = sq * (0.6 + 0.4 * Math.min(1, m)); ctx.rect(x2 * cell + (cell - s2) / 2, y2 * cell + (cell - s2) / 2, s2, s2); }
-        else if (((now / 90) | 0) % 2 === (i2 & 1)) st.push(i2);
-      } }
-      ctx.fill();
-      if (st.length) { ctx.globalAlpha = 0.35 * (1 - picMix); ctx.beginPath(); for (var k = 0; k < st.length; k++) { var si = st[k], sxq = si % cols, syq = (si / cols) | 0; ctx.rect(sxq * cell + cell * 0.3, syq * cell + cell * 0.3, cell * 0.4, cell * 0.4); } ctx.fill(); }
-    }
-    // grain
+    paint(fillRects, inkCol, 0.13 * fillIn, true);
+    paint(accentRects, accent, 0.95, false);
+    paint(inkRects, inkCol, 0.92, false);
     if (grain && !reduce) { ctx.globalAlpha = 0.22; ctx.globalCompositeOperation = 'source-atop'; var gx0 = -((Math.random() * 256) | 0), gy0 = -((Math.random() * 256) | 0); for (var gy = gy0; gy < H; gy += 256) for (var gx = gx0; gx < W; gx += 256) ctx.drawImage(grain, gx, gy); ctx.globalCompositeOperation = 'source-over'; }
     ctx.globalAlpha = 1;
     if (!reduce) raf = requestAnimationFrame(frame);
   }
-  function play() { build(); cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame); }
-  function setWord(w) { word = w; showPic = false; if (maskF && !reduce && !outMask) { outMask = maskF; outT = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); } else play(); }
+  function play() {
+    buildGrid(); maskF = buildMask(word);
+    picPrev = prevImg ? halftone(prevImg) : null; pic = (img && showPic) ? halftone(img) : null;
+    sequence(); t0 = performance.now();
+    cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame);
+  }
+  function setWord(w) {
+    word = w; showPic = false;
+    if (!cols) return play();
+    var old = maskF; maskF = buildMask(w);
+    if (reduce || !old) { states = [{ f: maskF, kind: 'word', hold: 1e9, sweep: 'lr' }]; gusted = [false]; }
+    else { states = [{ f: old, kind: 'word', hold: 0, sweep: 'lr' }, { f: maskF, kind: 'word', hold: 1e9, sweep: 'lr' }]; gusted = [false, false]; }
+    t0 = performance.now(); cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame);
+  }
   c.addEventListener('pointermove', function (e) {
     var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / (cell * F), y = (e.clientY - r.top) / (cell * F), now = performance.now();
     if (pmx >= 0 && vx) { var dt = Math.max(8, now - pmt) / 16.7; inject(x, y, (x - pmx) / dt, (y - pmy) / dt); }
     pmx = x; pmy = y; pmt = now;
   });
   c.addEventListener('pointerleave', function () { pmx = pmy = -1; });
-  c.addEventListener('click', function () { showPic = true; play(); });
+  c.addEventListener('click', function () { showPic = true; prevImg = null; play(); });
   var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(play, 120); });
   function start() {
     var pending = 0;
@@ -180,7 +257,12 @@ function matrix(c, opts) {
   }
   if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('300 40px "Bricolage Grotesque"'), document.fonts.load('400 12px "Geist Mono"')]).then(start, start); else start();
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (!raf && !reduce) raf = requestAnimationFrame(frame); } else { cancelAnimationFrame(raf); raf = 0; } }); }, { threshold: 0 }).observe(c);
-  return { setWord: setWord, replay: play, get word() { return word; } };
+  var api = { setWord: setWord, replay: play, get word() { return word; }, get fields() { return { pic: pic, prev: picPrev, mask: maskF, cols: cols, rows: rows }; },
+    // seek(seconds): draw the band as it looks that far into its sequence, once.
+    // For checking a moment of the animation without waiting for it.
+    seek: function (s) { cancelAnimationFrame(raf); t0 = performance.now() - s * 1000; frame(performance.now()); cancelAnimationFrame(raf); raf = 0; } };
+  (window.__mx = window.__mx || []).push(api);
+  return api;
 }
 
 // the glyph travels with you: the page you leave hands its glyph to the page you enter,
