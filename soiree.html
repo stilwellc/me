@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>Soirée — a case study — Collin Stilwell</title>
-<meta name="description" content="Soirée: 780 experiences across NYC, Hoboken/Jersey City and Philadelphia, gathered from the sources that post them and sorted by real dates.">
-<meta property="og:title" content="Soirée — a case study — Collin Stilwell">
-<meta property="og:description" content="Soirée: 780 experiences across NYC, Hoboken/Jersey City and Philadelphia, gathered from the sources that post them and sorted by real dates.">
 <meta charset="utf-8">
+<title>Soirée — a case study — Collin Stilwell</title>
+<meta name="description" content="Soirée: 780 experiences across NYC, Hoboken/Jersey City, and Philadelphia, gathered from the sources that post them and sorted by real dates.">
+<meta property="og:title" content="Soirée — a case study — Collin Stilwell">
+<meta property="og:description" content="Soirée: 780 experiences across NYC, Hoboken/Jersey City, and Philadelphia, gathered from the sources that post them and sorted by real dates.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/soiree.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/soiree.png">
@@ -18,58 +18,27 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site.css?v=1790041240">
-<style>@view-transition { navigation: auto; }</style>
+<link rel="stylesheet" href="site.css?v=1790042672">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
-<style>
-  .cs { max-width: 62rem; }
-  .cs h1.display { font-size: clamp(2.4rem, 6vw, 5.2rem); }
-  .cs .lede { font-size: clamp(18px, 1.6vw, 22px); font-weight: 300; line-height: 1.4; max-width: 34em; margin: 1.5rem 0 0; color: var(--ink); text-wrap: pretty; }
-  .facts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: clamp(28px,4vw,56px); border-top: 1px solid var(--hair); }
-  @media (max-width: 760px) { .facts { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-  .facts > div { padding: clamp(14px,2vw,24px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
-  .facts > div:nth-child(4n) { border-right: 0; }
-  @media (max-width: 760px) { .facts > div:nth-child(2n) { border-right: 0; } }
-  .facts .n { font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 3rem); letter-spacing: -0.03em; line-height: 1; }
-  .facts .l { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.6rem; }
-  .sec { margin-top: clamp(40px, 6vw, 88px); display: grid; grid-template-columns: 11rem minmax(0,1fr); gap: 2rem; }
-  @media (max-width: 760px) { .sec { grid-template-columns: 1fr; gap: 0.75rem; } }
-  .sec .k { font-family: var(--mono); font-size: 12px; color: var(--ink-3); padding-top: 0.5rem; }
-  .sec h2 { margin: 0 0 0.9rem; font-weight: 300; letter-spacing: -0.03em; font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.05; }
-  .sec p { margin: 0 0 1rem; max-width: 40em; color: var(--ink-2); font-size: 17px; text-wrap: pretty; }
-  .sec p b { color: var(--ink); font-weight: 500; }
-  .sec ul { margin: 0; padding: 0; list-style: none; max-width: 40em; }
-  .sec li { padding: 0.7rem 0; border-top: 1px solid var(--hair); color: var(--ink-2); display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1rem; }
-  .sec li:last-child { border-bottom: 1px solid var(--hair); }
-  .sec li .v { font-family: var(--mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
-  .stage { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; max-width: 46em; }
-  @media (max-width: 640px) { .stage { grid-template-columns: 1fr; } }
-  .stage > div { padding: 16px 18px; border-right: 1px solid var(--hair); }
-  .stage > div:last-child { border-right: 0; }
-  @media (max-width: 640px) { .stage > div { border-right: 0; border-bottom: 1px solid var(--hair); } .stage > div:last-child { border-bottom: 0; } }
-  .stage .t { font-weight: 500; }
-  .stage .d { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.35rem; }
-  .cta { margin-top: clamp(40px, 6vw, 88px); display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  pre.code { margin: 0.5rem 0 1rem; padding: 14px 16px; border: 1px solid var(--hair); border-radius: 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--ink-2); overflow-x: auto; max-width: 40em; }
-  pre.code b { color: var(--ink); font-weight: 500; }
-</style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="index.html"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
   <nav aria-label="Site"><a class="pill on" href="work.html">Work</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main class="page cs">
+<main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.18" data-text="Soirée" data-src="assets/shot-soiree.jpg" aria-label="Soirée, decoded" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
-  <p class="eyebrow rv">Case study · soiree.today</p>
-  <h1 class="display rv d1">What's actually happening<br>tonight.</h1>
-  <p class="lede rv d2">Every city has more going on than anyone can find. The listings are scattered across venue calendars, community boards, and a few good newsletters, and half of them don't carry a real date. Soirée gathers them, fixes the dates, and shows you tonight.</p>
+  <p class="eyebrow rv"><a href="work.html">Work</a> · soiree.today</p>
+  <h1 class="display rv d1">What’s actually happening<br>tonight.</h1>
+  <p class="lede rv d2">Every city has more going on than anyone can find. The listings are scattered across venue calendars, community boards, and a few good newsletters, and half of them don’t carry a real date. Soirée gathers them, fixes the dates, and shows you tonight.</p>
 
   <div class="facts rv d3">
     <div><div class="n">780</div><div class="l">experiences curated</div></div>
     <div><div class="n">391</div><div class="l">of them free</div></div>
-    <div><div class="n">3</div><div class="l">regions · NYC, Hoboken/JC, Philadelphia</div></div>
+    <div><div class="n">3</div><div class="l">regions<span class="sub">NYC, Hoboken/Jersey City, Philadelphia</span></div></div>
     <div><div class="n">464</div><div class="l">commits</div></div>
   </div>
 
@@ -77,8 +46,8 @@
     <div class="k">the problem</div>
     <div>
       <h2>Dates are the hard part.</h2>
-      <p>Event sources are inconsistent in one specific way: many post recurring or open-ended listings with no date at all. Early on, fewer than half the scraped events carried a real date. Sorting a feed by "date" when half the dates are placeholders produces garbage.</p>
-      <p>Soirée's rule is simple and strict. Events with real dates sort first, by date. Placeholder dates render as <b>ongoing</b> rather than pretending to be a day. A placeholder event that stops appearing at its source is automatically marked past, so nothing needs manual cleanup and history is preserved.</p>
+      <p>Event sources are inconsistent in one specific way: many post recurring or open-ended listings with no date at all. Early on, fewer than half the scraped events carried a real date. Sorting a feed by “date” when half the dates are placeholders produces garbage.</p>
+      <p>Soirée’s rule is simple and strict. Events with real dates sort first, by date. Placeholder dates render as <b>ongoing</b> rather than pretending to be a day. A placeholder event that stops appearing at its source is automatically marked past, so nothing needs manual cleanup and history is preserved.</p>
     </div>
   </section>
 
@@ -86,7 +55,7 @@
     <div class="k">the sources</div>
     <div>
       <h2>Scraped from the people who post them.</h2>
-      <p>Five scrapers, each tuned to its source: NYC For Free, The Local Girl for Hoboken and Jersey City, Time Out New York, and the museum calendars at MoMA, the Guggenheim, and the New Museum. Each source gets its own success-rate target and its own timeout, because a slow community board and a fast museum feed shouldn't share one.</p>
+      <p>Five scrapers, each tuned to its source: NYC For Free, The Local Girl for Hoboken and Jersey City, Time Out New York, and the museum calendars at MoMA, the Guggenheim, and the New Museum. Each source gets its own success-rate target and its own timeout, because a slow community board and a fast museum feed shouldn’t share one.</p>
       <ul>
         <li><span>Browse by</span><span class="v">tonight · today · this week · free only</span></li>
         <li><span>Moods</span><span class="v">art · perks &amp; pop-ups · culture &amp; community · openings · shows</span></li>
@@ -97,7 +66,7 @@
 
   <div class="cta">
     <a class="pill solid" href="https://soiree.today" target="_blank" rel="noopener">Open soiree.today</a>
-    <a class="pill ghost" href="work.html">Back to work</a>
+    <a class="pill ghost" href="work.html">← Work</a>
   </div>
 </main>
 <footer class="foot">
@@ -106,7 +75,7 @@
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" placeholder="Go to… work, security, writing, github, résumé, lectr, soirée, email" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… work, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -114,22 +83,9 @@
 <div class="keys" id="keys" hidden role="dialog" aria-label="Keyboard shortcuts">
   <div class="keys-box">
     <div class="keys-h">Shortcuts</div>
-    <div class="keys-grid">
-      <span><kbd>⌘K</kbd> / <kbd>/</kbd></span><span>command palette</span>
-      <span><kbd>g</kbd> <kbd>h</kbd></span><span>home</span>
-      <span><kbd>g</kbd> <kbd>w</kbd></span><span>work</span>
-      <span><kbd>g</kbd> <kbd>s</kbd></span><span>security</span>
-      <span><kbd>g</kbd> <kbd>n</kbd></span><span>writing</span>
-      <span><kbd>g</kbd> <kbd>g</kbd></span><span>github</span>
-      <span><kbd>g</kbd> <kbd>a</kbd></span><span>about</span>
-      <span><kbd>g</kbd> <kbd>r</kbd></span><span>résumé</span>
-      <span><kbd>t</kbd></span><span>toggle theme</span>
-      <span><kbd>click</kbd></span><span>on any header: replay picture → text</span>
-      <span><kbd>a–z</kbd></span><span>on the home page: type into the letterform</span>
-      <span><kbd>?</kbd></span><span>this</span>
-    </div>
+    <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790041240"></script>
+<script src="site.js?v=1790042672"></script>
 </body>
 </html>

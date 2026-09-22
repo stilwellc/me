@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
 <title>Collin Stilwell</title>
 <meta name="description" content="Collin Stilwell — security engineer who builds like a designer. Senior Product Security Engineer at WeightWatchers.">
 <meta property="og:title" content="Collin Stilwell">
 <meta property="og:description" content="Collin Stilwell — Senior Product Security Engineer at WeightWatchers. Four startups of product security, and the tools he wished existed: lectr, SecMCPHub, Soirée.">
-<meta charset="utf-8">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/index.png">
@@ -18,8 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site.css?v=1790041240">
-<style>@view-transition { navigation: auto; }</style>
+<link rel="stylesheet" href="site.css?v=1790042672">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
 <style>
@@ -29,19 +29,16 @@
   .field .hint { position: absolute; right: 0; bottom: -2px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); pointer-events: none; }
   .bottom { padding: var(--pad); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.1rem 3rem; align-items: end; }
   .bottom .statement { grid-column: 1 / -1; }
-  .live { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
-  .live b { color: var(--ink); font-weight: 500; }
-  .live .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ink-3); margin-right: 0.5ch; vertical-align: middle; }
-  .live .dot.on { background: #1FA35A; }
   @media (max-width: 760px) { .bottom { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="index.html"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
   <nav aria-label="Site"><a class="pill" href="work.html">Work</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<div class="home">
+<main id="main" class="home">
 <div class="field rv d1"><canvas id="field" aria-label="Collin, decoded" role="img"></canvas><span class="hint" id="field-hint">move the cursor · type to rewrite</span></div>
 <section class="bottom">
   <h1 class="statement rv d2">Security engineer who builds like a designer.</h1>
@@ -52,10 +49,14 @@
     <a class="pill ghost" href="mailto:hello@collin.dev">hello@collin.dev</a>
   </div>
 </section>
-</div>
+</main>
+<footer class="foot">
+  <span>© 2026 Collin Stilwell · Hoboken, NJ</span>
+  <span><a href="mailto:hello@collin.dev">hello@collin.dev</a> · <a href="https://github.com/stilwellc" target="_blank" rel="noopener">github.com/stilwellc</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+</footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" placeholder="Go to… work, security, writing, github, résumé, lectr, soirée, email" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… work, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -63,23 +64,9 @@
 <div class="keys" id="keys" hidden role="dialog" aria-label="Keyboard shortcuts">
   <div class="keys-box">
     <div class="keys-h">Shortcuts</div>
-    <div class="keys-grid">
-      <span><kbd>⌘K</kbd> / <kbd>/</kbd></span><span>command palette</span>
-      <span><kbd>g</kbd> <kbd>h</kbd></span><span>home</span>
-      <span><kbd>g</kbd> <kbd>w</kbd></span><span>work</span>
-      <span><kbd>g</kbd> <kbd>p</kbd></span><span>physical</span>
-      <span><kbd>g</kbd> <kbd>s</kbd></span><span>security</span>
-      <span><kbd>g</kbd> <kbd>n</kbd></span><span>writing</span>
-      <span><kbd>g</kbd> <kbd>g</kbd></span><span>github</span>
-      <span><kbd>g</kbd> <kbd>a</kbd></span><span>about</span>
-      <span><kbd>g</kbd> <kbd>r</kbd></span><span>résumé</span>
-      <span><kbd>t</kbd></span><span>toggle theme</span>
-      <span><kbd>click</kbd></span><span>on any header: replay picture → text</span>
-      <span><kbd>a–z</kbd></span><span>on the home page: type into the letterform</span>
-      <span><kbd>?</kbd></span><span>this</span>
-    </div>
+    <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790041240"></script>
+<script src="site.js?v=1790042672"></script>
 </body>
 </html>

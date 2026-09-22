@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
 <title>Résumé — Collin Stilwell</title>
 <meta name="description" content="Collin Stilwell — résumé. Senior Product Security Engineer at WeightWatchers; previously Remedy Meds, Thirty Madison, Podium, TD.">
 <meta property="og:title" content="Résumé — Collin Stilwell">
-<meta property="og:description" content="Collin Stilwell — résumé. Senior Product Security Engineer at Thirty Madison.">
-<meta charset="utf-8">
+<meta property="og:description" content="Collin Stilwell — résumé. Senior Product Security Engineer at WeightWatchers; previously Remedy Meds, Thirty Madison, Podium, TD.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/resume.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/resume.png">
@@ -18,8 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site.css?v=1790041240">
-<style>@view-transition { navigation: auto; }</style>
+<link rel="stylesheet" href="site.css?v=1790042672">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
 <style>
@@ -28,66 +28,70 @@
   .res h1.display { font-size: clamp(2.2rem, 5vw, 3.6rem); }
   .res .contact { font-family: var(--mono); font-size: 12px; color: var(--ink-2); line-height: 1.8; text-align: right; }
   .res section { margin-top: clamp(28px, 4vw, 44px); }
-  .res .lrow { grid-template-columns: 9rem minmax(0,1fr); }
   .res .lrow .d { max-width: none; }
   .res .print { margin-top: 2rem; }
   @media print {
-    :root { --ground: #fff; --ink: #111; --ink-2: #444; --ink-3: #777; --hair: #ddd; --hair-2: #ccc; }
+    /* the theme selectors are included so a dark-mode visitor does not print
+       near-white text on white paper; the body-prefixed selectors outrank the
+       site's centre-orientation block, which the old rules silently lost to */
+    :root, :root[data-theme="dark"], :root[data-theme="light"] { --ground: #fff; --ink: #111; --ink-2: #444; --ink-3: #777; --hair: #ddd; --hair-2: #ccc; }
+    @page { margin: 14mm; }
     .mast, .foot, .print, .pal, .keys, .mhead, #palette-btn, #theme { display: none !important; }
-    body { font-size: 12.5px; }
-    .page { padding: 0; }
-    .res { max-width: none; }
-    .res h1.display { font-size: 28pt; }
-    .res section { margin-top: 18pt; break-inside: avoid; }
-    a::after { content: none; }
+    body { font-size: 12.5px; background: #fff; color: #111; }
+    body .page { padding: 0; }
+    body .res { max-width: none; }
+    body .res h1.display { font-size: 28pt; line-height: 1.05; }
+    body .res section { margin-top: 18pt; }
+    body .res .lrow { break-inside: avoid; }
   }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="index.html"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
   <nav aria-label="Site"><a class="pill" href="work.html">Work</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill on" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main class="page res">
+<main id="main" class="page res">
   <div class="mhead rv"><canvas class="matrix" data-text="Résumé" data-src="assets/resume.svg" aria-label="A paper plane, decoded into the word Résumé" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
   <div class="head rv">
     <div>
-      <p class="eyebrow">Résumé</p>
+      <p class="eyebrow">Résumé · 2018 – 2026</p>
       <h1 class="display">Collin Stilwell</h1>
       <p class="statement" style="margin-top:.75rem">Senior Product Security Engineer · WeightWatchers</p>
     </div>
     <div class="contact">hello@collin.dev<br>github.com/stilwellc<br>linkedin.com/in/collin-stilwell<br>collinsthoughts.substack.com</div>
   </div>
   <section class="rv d1">
-    <p class="eyebrow">Experience</p>
+    <h2 class="sheet-h">Experience</h2>
     <div class="ledger">
       <div class="lrow"><div class="k">2026 –</div><div><div class="t">WeightWatchers — Senior Product Security Engineer</div><div class="d">Rebuilding product security from a compliance function into an engineering one as WW expands into clinical care and telehealth.</div></div></div>
       <div class="lrow"><div class="k">2025 – 2026</div><div><div class="t">Remedy Meds — Senior Product Security Engineer II</div><div class="d">Stayed on post-acquisition as the founding security team. Built product security, corporate security and privacy from zero.</div></div></div>
       <div class="lrow"><div class="k">2023 – 2026</div><div><div class="t">Thirty Madison — Senior Product Security Engineer, then Senior Product Security Engineer II</div><div class="d">Built security for three years through to the $650M exit. Scaled security and privacy across Nurx, Keeps and Cove, a telehealth platform treating over a million people.</div></div></div>
-      <div class="lrow"><div class="k">2021 – 2023</div><div><div class="t">Podium — Application Security Engineer; Tech Lead, Product Security (2022 – 23)</div><div class="d">Joined right before the $201M Series D. Secured the payments and fintech platform from proof of concept to billions in GPV. Built the product security team supporting about 200 engineers. Top contributor to Podium's open Elixir secure-coding curriculum; Semgrep rules for Ash Framework authorization.</div></div></div>
+      <div class="lrow"><div class="k">2021 – 2023</div><div><div class="t">Podium — Application Security Engineer; Tech Lead, Product Security (2022 – 23)</div><div class="d">Joined right before the $201M Series D. Secured the payments and fintech platform from proof of concept to billions in GPV. Built the product security team supporting about 200 engineers. Top contributor to Podium’s open Elixir secure-coding curriculum; Semgrep rules for Ash Framework authorization.</div></div></div>
       <div class="lrow"><div class="k">2020 – 2021</div><div><div class="t">TD — Associate, Enterprise Security</div><div class="d">Security engineering and application security across global corporate and investment banking.</div></div></div>
       <div class="lrow"><div class="k">2019</div><div><div class="t">TD — Summer Analyst, Enterprise Security</div><div class="d">US consumer banking BISO team; internal and third-party cyber risk.</div></div></div>
-      <div class="lrow"><div class="k">2018</div><div><div class="t">New Jersey State Police — Intern, Network Engineering</div><div class="d">Regional Operations &amp; Intelligence Center, the state's fusion center for data and intelligence.</div></div></div>
+      <div class="lrow"><div class="k">2018</div><div><div class="t">New Jersey State Police — Intern, Network Engineering</div><div class="d">Regional Operations &amp; Intelligence Center, the state’s fusion center for data and intelligence.</div></div></div>
     </div>
   </section>
   <section class="rv d2">
-    <p class="eyebrow">Education</p>
+    <h2 class="sheet-h">Education</h2>
     <div class="ledger">
       <div class="lrow"><div class="k">2021 – 2023</div><div><div class="t">New York University — M.S. Cyber Security program</div><div class="d">Cyber Fellowship recipient. Research: leveraging blockchain transactions in e-commerce through stablecoins.</div></div></div>
       <div class="lrow"><div class="k">2016 – 2020</div><div><div class="t">Rowan University — B.S. Computer Science, cum laude</div><div class="d">Concentration in cyber defense.</div></div></div>
     </div>
   </section>
   <section class="rv d2">
-    <p class="eyebrow">Selected work</p>
+    <h2 class="sheet-h">Selected work</h2>
     <div class="ledger">
-      <div class="lrow"><div class="k">lectr.bid</div><div><div class="t">Auction intelligence platform</div><div class="d">1.1M-lot corpus across 16 auction houses; value engine with a published backtest record; staged nightly pipeline (crawl matrix → assemble → deploy) with three publish gates. Cut the nightly from ~130 to 52 minutes with output-identical rewrites. TypeScript, Next.js, Cloudflare R2/Pages, GitHub Actions, Supabase.</div></div></div>
+      <div class="lrow"><div class="k">lectr.bid</div><div><div class="t">Auction intelligence platform</div><div class="d">1.1M-lot corpus across 18 auction houses; value engine with a published backtest record; staged nightly pipeline (crawl matrix → assemble → deploy) with three publish gates. Cut the nightly from ~130 to 52 minutes with output-identical rewrites. TypeScript, Next.js, Cloudflare R2/Pages, GitHub Actions, Supabase.</div></div></div>
       <div class="lrow"><div class="k">SecMCPHub</div><div><div class="t">Automated security MBR dashboard</div><div class="d">Claude Code skills that pull vulnerability-management, GRC, and incident data over MCP and render a single self-contained HTML report: trend deltas, MTTR, SLA compliance, a weighted composite risk grade, CWE-mapped cross-source attack paths.</div></div></div>
       <div class="lrow"><div class="k">Brumby</div><div><div class="t">Brumby Code Checker</div><div class="d">Redundancy scanner for C++, Java and Ada, built with Rowan University and ASRC Federal Mission Solutions for Lockheed Martin systems. Three similarity algorithms (cosine, ordered naive, longest common subsequence) blended into one weighted score. 2019 – 20.</div></div></div>
       <div class="lrow"><div class="k">soiree.today</div><div><div class="t">Event aggregator</div><div class="d">780 experiences across NYC, Hoboken/Jersey City, and Philadelphia, 391 free; scraped from the sources that post them, normalized, sorted by real dates. Node.js, Cloudflare.</div></div></div>
     </div>
   </section>
   <section class="rv d3">
-    <p class="eyebrow">Writing</p>
+    <h2 class="sheet-h">Writing</h2>
     <div class="ledger">
       <div class="lrow"><div class="k">2026-05</div><div><div class="t">Building an Application Security Program That Actually Works</div><div class="d">Substack. A four-legged framework for turning security from a blocking function into an enabler of engineering speed.</div></div></div>
     </div>
@@ -100,7 +104,7 @@
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" placeholder="Go to… work, security, writing, github, résumé, lectr, soirée, email" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… work, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -108,22 +112,9 @@
 <div class="keys" id="keys" hidden role="dialog" aria-label="Keyboard shortcuts">
   <div class="keys-box">
     <div class="keys-h">Shortcuts</div>
-    <div class="keys-grid">
-      <span><kbd>⌘K</kbd> / <kbd>/</kbd></span><span>command palette</span>
-      <span><kbd>g</kbd> <kbd>h</kbd></span><span>home</span>
-      <span><kbd>g</kbd> <kbd>w</kbd></span><span>work</span>
-      <span><kbd>g</kbd> <kbd>s</kbd></span><span>security</span>
-      <span><kbd>g</kbd> <kbd>n</kbd></span><span>writing</span>
-      <span><kbd>g</kbd> <kbd>g</kbd></span><span>github</span>
-      <span><kbd>g</kbd> <kbd>a</kbd></span><span>about</span>
-      <span><kbd>g</kbd> <kbd>r</kbd></span><span>résumé</span>
-      <span><kbd>t</kbd></span><span>toggle theme</span>
-      <span><kbd>click</kbd></span><span>on any header: replay picture → text</span>
-      <span><kbd>a–z</kbd></span><span>on the home page: type into the letterform</span>
-      <span><kbd>?</kbd></span><span>this</span>
-    </div>
+    <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790041240"></script>
+<script src="site.js?v=1790042672"></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
 <title>lectr — a case study — Collin Stilwell</title>
 <meta name="description" content="How lectr turns 1.1 million auction lots into prices you can trace: the corpus, the nightly pipeline, the gates, and the speed work.">
 <meta property="og:title" content="lectr — a case study — Collin Stilwell">
 <meta property="og:description" content="How lectr turns 1.1 million auction lots into prices you can trace: the corpus, the nightly pipeline, the gates, and the speed work.">
-<meta charset="utf-8">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/lectr.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/lectr.png">
@@ -18,41 +18,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site.css?v=1790041240">
-<style>@view-transition { navigation: auto; }</style>
+<link rel="stylesheet" href="site.css?v=1790042672">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
 <style>
-  .cs { max-width: 62rem; }
-  .cs h1.display { font-size: clamp(2.4rem, 6vw, 5.2rem); }
-  .cs .lede { font-size: clamp(18px, 1.6vw, 22px); font-weight: 300; line-height: 1.4; max-width: 34em; margin: 1.5rem 0 0; color: var(--ink); text-wrap: pretty; }
-  .facts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: clamp(28px,4vw,56px); border-top: 1px solid var(--hair); }
-  @media (max-width: 760px) { .facts { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-  .facts > div { padding: clamp(14px,2vw,24px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
-  .facts > div:nth-child(4n) { border-right: 0; }
-  @media (max-width: 760px) { .facts > div:nth-child(2n) { border-right: 0; } }
-  .facts .n { font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 3rem); letter-spacing: -0.03em; line-height: 1; }
-  .facts .l { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.6rem; }
-  .sec { margin-top: clamp(40px, 6vw, 88px); display: grid; grid-template-columns: 11rem minmax(0,1fr); gap: 2rem; }
-  @media (max-width: 760px) { .sec { grid-template-columns: 1fr; gap: 0.75rem; } }
-  .sec .k { font-family: var(--mono); font-size: 12px; color: var(--ink-3); padding-top: 0.5rem; }
-  .sec h2 { margin: 0 0 0.9rem; font-weight: 300; letter-spacing: -0.03em; font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.05; }
-  .sec p { margin: 0 0 1rem; max-width: 40em; color: var(--ink-2); font-size: 17px; text-wrap: pretty; }
-  .sec p b { color: var(--ink); font-weight: 500; }
-  .sec ul { margin: 0; padding: 0; list-style: none; max-width: 40em; }
-  .sec li { padding: 0.7rem 0; border-top: 1px solid var(--hair); color: var(--ink-2); display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1rem; }
-  .sec li:last-child { border-bottom: 1px solid var(--hair); }
-  .sec li .v { font-family: var(--mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
-  .stage { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; max-width: 46em; }
-  @media (max-width: 640px) { .stage { grid-template-columns: 1fr; } }
-  .stage > div { padding: 16px 18px; border-right: 1px solid var(--hair); }
-  .stage > div:last-child { border-right: 0; }
-  @media (max-width: 640px) { .stage > div { border-right: 0; border-bottom: 1px solid var(--hair); } .stage > div:last-child { border-bottom: 0; } }
-  .stage .t { font-weight: 500; }
-  .stage .d { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.35rem; }
-  .cta { margin-top: clamp(40px, 6vw, 88px); display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  pre.code { margin: 0.5rem 0 1rem; padding: 14px 16px; border: 1px solid var(--hair); border-radius: 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--ink-2); overflow-x: auto; max-width: 40em; }
-  pre.code b { color: var(--ink); font-weight: 500; }
   .trace { border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; max-width: 46em; margin: 1rem auto 0; text-align: center; }
   .trow { padding: 16px 18px; border-bottom: 1px solid var(--hair); }
   .trow .tl { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-bottom: 0.5rem; }
@@ -69,18 +39,19 @@
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="index.html"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
   <nav aria-label="Site"><a class="pill on" href="work.html">Work</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main class="page cs">
+<main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.18" data-text="lectr" data-src="assets/shot-lectr.jpg" aria-label="lectr, decoded" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
-  <p class="eyebrow rv">Case study · lectr.bid</p>
+  <p class="eyebrow rv"><a href="work.html">Work</a> · lectr.bid</p>
   <h1 class="display rv d1">Auction intelligence,<br>with every price traceable to a sale.</h1>
   <p class="lede rv d2">lectr watches eighteen auction houses, keeps every lot they have ever sold, and puts a value on what is coming up next. It runs itself every night. This is how it is built, and what it took to make it fast.</p>
 
-  <div class="facts rv d3" data-live="lectr">
-    <div><div class="n" id="cs-lots">1.14M</div><div class="l">lots in the corpus · <span id="cs-when">live</span></div></div>
+  <div class="facts rv d3">
+    <div><div class="n" id="cs-lots">1.14M</div><div class="l">lots in the corpus<span class="sub"><span id="cs-when">live</span></span></div></div>
     <div><div class="n" id="cs-sold">1.11M</div><div class="l">sold results</div></div>
     <div><div class="n">52<span style="font-size:.5em"> min</span></div><div class="l">full nightly, end to end</div></div>
     <div><div class="n">3</div><div class="l">gates before anything ships</div></div>
@@ -90,8 +61,8 @@
     <div class="k">the corpus</div>
     <div>
       <h2>Eighteen houses, one book.</h2>
-      <p>Each house has its own crawler and its own segment of the corpus. Christie's, Sotheby's, Bonhams, Phillips, Wright, Goldin, REA, Huggins &amp; Scott, Lelands, Memory Lane, Hake's, RR Auction, SCP, MLB and NFL Auctions, and LOTG. A house that fails can't touch another house's data, and a crawl that collapses its own segment refuses to overwrite the last good one.</p>
-      <p>Prices carry their basis. Hammer and buyer's premium are reconciled per house so a Sotheby's result and a Goldin result mean the same thing in a comparison.</p>
+      <p>Each house has its own crawler and its own segment of the corpus. Christie’s, Sotheby’s, Bonhams, Phillips, Wright, Goldin, REA, Huggins &amp; Scott, Lelands, Memory Lane, Hake’s, RR Auction, SCP, MLB and NFL Auctions, and LOTG. A house that fails can’t touch another house’s data, and a crawl that collapses its own segment refuses to overwrite the last good one.</p>
+      <p>Prices carry their basis. Hammer and buyer’s premium are reconciled per house so a Sotheby’s result and a Goldin result mean the same thing in a comparison.</p>
     </div>
   </section>
 
@@ -101,7 +72,7 @@
       <h2>Crawl, assemble, ship. Staged, isolated, retryable.</h2>
       <p>One GitHub Actions workflow, three stages. The crawl is a matrix, one job per house, all in parallel. Assemble is the only job that sees the whole corpus: it reunions every segment, runs the value engine and the market indices, and writes the served payload. Deploy pulls that payload and builds the site. Data moves between stages as same-run artifacts, with write-once versions in Cloudflare R2 behind a tiny pointer as the durable copy.</p>
       <div class="stage">
-        <div><div class="t">crawl</div><div class="d">16 jobs in parallel · per-house segments</div></div>
+        <div><div class="t">crawl</div><div class="d">18 jobs in parallel · per-house segments</div></div>
         <div><div class="t">assemble</div><div class="d">reunion · engine · indices · gates</div></div>
         <div><div class="t">deploy</div><div class="d">static export → Cloudflare Pages</div></div>
       </div>
@@ -140,30 +111,30 @@
     <div class="k">one lot, traced</div>
     <div>
       <h2>Every number here points at a sale.</h2>
-      <p>One live lot, the engine's call on it, and the realized prices the call is made of. The comps, the graded record and the backtest below are read from lectr.bid when this page loads; if that fails you see the September 20 snapshot and it says so.</p>
+      <p>One live lot, the engine’s call on it, and the realized prices the call is made of. The comps, the graded record and the backtest below are read from lectr.bid when this page loads; if that fails you see the 2026-09-20 snapshot and it says so.</p>
       <div class="trace">
         <div class="trow lot">
           <div class="tl">the lot</div>
-          <div class="tb"><b>Cartier &middot; 18k gold and diamond &lsquo;Panth&egrave;re de Cartier&rsquo; wristwatch</b><span class="mono">Bonhams &middot; Property from a Bel Air Estate &middot; lot 177 &middot; <span id="trace-when">closes 2026-09-24</span> &middot; estimate $5,000&ndash;$7,000, hammer basis</span><span class="mono"><a href="https://www.bonhams.com/auction/31916/lot/177" target="_blank" rel="noopener">the lot at Bonhams &#8599;</a> &middot; <a href="https://lectr.bid/lot/bonhams-31916-177" target="_blank" rel="noopener">on lectr &#8599;</a></span></div>
+          <div class="tb"><b>Cartier · 18k gold and diamond ‘Panthère de Cartier’ wristwatch</b><span class="mono">Bonhams · Property from a Bel Air Estate · lot 177 · <span id="trace-when">closes 2026-09-24</span> · estimate $5,000 – $7,000, hammer basis</span><span class="mono"><a href="https://www.bonhams.com/auction/31916/lot/177" target="_blank" rel="noopener">the lot at Bonhams &#8599;</a> · <a href="https://lectr.bid/lot/bonhams-31916-177" target="_blank" rel="noopener">on lectr &#8599;</a></span></div>
         </div>
         <div class="trow call">
           <div class="tl">the call</div>
-          <div class="tb"><b class="big">$10,880</b><span class="mono">comp value, all-in &middot; band $7,431 &ndash; $20,182 &middot; below comparable market, 1.8&times; the ask</span><span class="mono">confidence medium &middot; 43 comps in the pool &middot; 97% of them sold &middot; same model realized before: $12,800, Bonhams, 2025-11-18</span></div>
+          <div class="tb"><b class="big">$10,880</b><span class="mono">comp value, all-in · band $7,431 – $20,182 · below comparable market, 1.8× the ask</span><span class="mono">confidence medium · 43 comps in the pool · 97% of them sold · same model realized before: $12,800, Bonhams, 2025-11-18</span></div>
         </div>
         <div class="trow comps">
           <div class="tl">the comps <span id="trace-comps-src">· snapshot 2026-09-20</span></div>
-          <ul class="tb" id="trace-comps"><li><span>Bonhams &middot; 2005-10-05</span><span class="v">$8,736</span></li><li><span>Phillips &middot; 2020-12-03</span><span class="v">$5,292</span></li><li><span>Bonhams &middot; 2023-05-23</span><span class="v">$16,640</span></li><li><span>Bonhams &middot; 2024-09-17</span><span class="v">$10,240</span></li><li><span>Bonhams &middot; 2024-12-09</span><span class="v">$15,360</span></li><li><span>Bonhams &middot; 2025-06-12</span><span class="v">$9,600</span></li><li><span>Bonhams &middot; 2025-06-12</span><span class="v">$19,200</span></li><li><span>Bonhams &middot; 2025-09-26</span><span class="v">$10,240</span></li><li><span>Bonhams &middot; 2025-09-26</span><span class="v">$10,880</span></li><li><span>Bonhams &middot; 2025-11-18</span><span class="v">$12,800</span></li></ul>
+          <ul class="tb" id="trace-comps"><li><span>Bonhams · 2005-10-05</span><span class="v">$8,736</span></li><li><span>Phillips · 2020-12-03</span><span class="v">$5,292</span></li><li><span>Bonhams · 2023-05-23</span><span class="v">$16,640</span></li><li><span>Bonhams · 2024-09-17</span><span class="v">$10,240</span></li><li><span>Bonhams · 2024-12-09</span><span class="v">$15,360</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$9,600</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$19,200</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,240</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,880</span></li><li><span>Bonhams · 2025-11-18</span><span class="v">$12,800</span></li></ul>
         </div>
-        <p class="basis">All-in realized vs hammer-basis estimate: the gap carries the buyer's premium by design.</p>
+        <p class="basis">All-in realized vs hammer-basis estimate: the gap carries the buyer’s premium by design.</p>
       </div>
 
       <h2 style="margin-top:clamp(28px,4vw,48px)">The record, graded.</h2>
       <p>Calls are written down before the hammer and graded after it. The five most recent graded calls, then the backtest across the whole corpus. <span class="mono" id="trace-rec-src">Snapshot 2026-09-20.</span></p>
-      <ul id="trace-rec"><li><span>97 Topps Chrome Refractor #138 Kobe Bryant rookie, BGS 9 &middot; Goldin &middot; called 2026-08-24</span><span class="v">called $50,020 &rarr; realized $73,200</span></li><li><span>2017 National Treasures rookie patch autograph, BGS 9 &middot; Goldin &middot; called 2026-08-24</span><span class="v">called $231,800 &rarr; realized $292,800</span></li><li><span>87 Fleer #57 Michael Jordan signed rookie, PSA EX 5 &middot; Goldin &middot; called 2026-08-24</span><span class="v">called $10,347 &rarr; realized $123,220</span></li><li><span>85 Star #101 Michael Jordan rookie, BGS NM-MT 8 &middot; Goldin &middot; called 2026-08-24</span><span class="v">called $32,803 &rarr; realized $119,560</span></li><li><span>95 Playboy Chromium refractor #85, PSA 10 &middot; Goldin &middot; called 2026-08-24</span><span class="v">called $38,026 &rarr; realized $23,790</span></li></ul>
+      <ul id="trace-rec"><li><span>97 Topps Chrome Refractor #138 Kobe Bryant rookie, BGS 9 · Goldin · called 2026-08-24</span><span class="v">called $50,020 → realized $73,200</span></li><li><span>2017 National Treasures rookie patch autograph, BGS 9 · Goldin · called 2026-08-24</span><span class="v">called $231,800 → realized $292,800</span></li><li><span>87 Fleer #57 Michael Jordan signed rookie, PSA EX 5 · Goldin · called 2026-08-24</span><span class="v">called $10,347 → realized $123,220</span></li><li><span>85 Star #101 Michael Jordan rookie, BGS NM-MT 8 · Goldin · called 2026-08-24</span><span class="v">called $32,803 → realized $119,560</span></li><li><span>95 Playboy Chromium refractor #85, PSA 10 · Goldin · called 2026-08-24</span><span class="v">called $38,026 → realized $23,790</span></li></ul>
       <div class="facts" id="trace-bt" style="margin-top:1.25rem">
         <div><div class="n" id="bt-flag-n">38,855</div><div class="l">lots the engine flagged, graded</div></div>
-        <div><div class="n" id="bt-flag-perf">+41%</div><div class="l">their median result vs estimate · unflagged <span id="bt-unflag-perf">+16%</span></div></div>
-        <div><div class="n" id="bt-flag-beat">65%</div><div class="l">beat the high estimate · unflagged <span id="bt-unflag-beat">46%</span></div></div>
+        <div><div class="n" id="bt-flag-perf">+41%</div><div class="l">their median result vs estimate<span class="sub">unflagged <span id="bt-unflag-perf">+16%</span></span></div></div>
+        <div><div class="n" id="bt-flag-beat">65%</div><div class="l">beat the high estimate<span class="sub">unflagged <span id="bt-unflag-beat">46%</span></span></div></div>
         <div><div class="n" id="bt-graded">1,928</div><div class="l">graded calls in the vs-bid lane</div></div>
       </div>
     </div>
@@ -171,7 +142,7 @@
 
   <div class="cta">
     <a class="pill solid" href="https://lectr.bid" target="_blank" rel="noopener">Open lectr.bid</a>
-    <a class="pill ghost" href="work.html">Back to work</a>
+    <a class="pill ghost" href="work.html">← Work</a>
   </div>
 </main>
 <footer class="foot">
@@ -180,7 +151,7 @@
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" placeholder="Go to… work, security, writing, github, résumé, lectr, soirée, email" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… work, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -188,22 +159,9 @@
 <div class="keys" id="keys" hidden role="dialog" aria-label="Keyboard shortcuts">
   <div class="keys-box">
     <div class="keys-h">Shortcuts</div>
-    <div class="keys-grid">
-      <span><kbd>⌘K</kbd> / <kbd>/</kbd></span><span>command palette</span>
-      <span><kbd>g</kbd> <kbd>h</kbd></span><span>home</span>
-      <span><kbd>g</kbd> <kbd>w</kbd></span><span>work</span>
-      <span><kbd>g</kbd> <kbd>s</kbd></span><span>security</span>
-      <span><kbd>g</kbd> <kbd>n</kbd></span><span>writing</span>
-      <span><kbd>g</kbd> <kbd>g</kbd></span><span>github</span>
-      <span><kbd>g</kbd> <kbd>a</kbd></span><span>about</span>
-      <span><kbd>g</kbd> <kbd>r</kbd></span><span>résumé</span>
-      <span><kbd>t</kbd></span><span>toggle theme</span>
-      <span><kbd>click</kbd></span><span>on any header: replay picture → text</span>
-      <span><kbd>a–z</kbd></span><span>on the home page: type into the letterform</span>
-      <span><kbd>?</kbd></span><span>this</span>
-    </div>
+    <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790041240"></script>
+<script src="site.js?v=1790042672"></script>
 </body>
 </html>

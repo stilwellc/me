@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
 <title>Security — Collin Stilwell</title>
 <meta name="description" content="Collin Stilwell on application security: the four-legged AppSec program, guardrails not gates, and the open-source security work.">
 <meta property="og:title" content="Security — Collin Stilwell">
 <meta property="og:description" content="Collin Stilwell on application security: the four-legged AppSec program, guardrails not gates, and the open-source security work.">
-<meta charset="utf-8">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/security.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/security.png">
@@ -18,54 +18,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site.css?v=1790041240">
-<style>@view-transition { navigation: auto; }</style>
+<link rel="stylesheet" href="site.css?v=1790042672">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<style>
-  .cs { max-width: 62rem; }
-  .lede { font-size: clamp(18px, 1.6vw, 22px); font-weight: 300; line-height: 1.4; max-width: 34em; margin: 1.25rem 0 0; color: var(--ink); text-wrap: pretty; }
-  .facts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: clamp(28px,4vw,56px); border-top: 1px solid var(--hair); }
-  @media (max-width: 760px) { .facts { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-  .facts > div { padding: clamp(14px,2vw,24px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
-  .facts > div:nth-child(4n) { border-right: 0; }
-  @media (max-width: 760px) { .facts > div:nth-child(2n) { border-right: 0; } }
-  .facts .n { font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 3rem); letter-spacing: -0.03em; line-height: 1; }
-  .facts .l { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.6rem; }
-  .sec { margin-top: clamp(40px, 6vw, 88px); display: grid; grid-template-columns: 11rem minmax(0,1fr); gap: 2rem; }
-  @media (max-width: 760px) { .sec { grid-template-columns: 1fr; gap: 0.75rem; } }
-  .sec .k { font-family: var(--mono); font-size: 12px; color: var(--ink-3); padding-top: 0.5rem; }
-  .sec h2 { margin: 0 0 0.9rem; font-weight: 300; letter-spacing: -0.03em; font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.05; }
-  .sec p { margin: 0 0 1rem; max-width: 40em; color: var(--ink-2); font-size: 17px; text-wrap: pretty; }
-  .sec p b { color: var(--ink); font-weight: 500; }
-  .sec ul { margin: 0; padding: 0; list-style: none; max-width: 40em; }
-  .sec li { padding: 0.7rem 0; border-top: 1px solid var(--hair); color: var(--ink-2); display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1rem; }
-  .sec li:last-child { border-bottom: 1px solid var(--hair); }
-  .sec li .v { font-family: var(--mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
-  .stage { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; max-width: 46em; }
-  @media (max-width: 640px) { .stage { grid-template-columns: 1fr; } }
-  .stage > div { padding: 16px 18px; border-right: 1px solid var(--hair); }
-  .stage > div:last-child { border-right: 0; }
-  @media (max-width: 640px) { .stage > div { border-right: 0; border-bottom: 1px solid var(--hair); } .stage > div:last-child { border-bottom: 0; } }
-  .stage .t { font-weight: 500; }
-  .stage .d { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.35rem; }
-  .cta { margin-top: clamp(40px, 6vw, 88px); display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  pre.code { margin: 0.5rem 0 1rem; padding: 14px 16px; border: 1px solid var(--hair); border-radius: 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--ink-2); overflow-x: auto; max-width: 40em; }
-  pre.code b { color: var(--ink); font-weight: 500; }
-  .legs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
-  @media (max-width: 760px) { .legs { grid-template-columns: 1fr; } }
-  .legs > div { padding: clamp(16px,2.2vw,26px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
-  .legs > div:nth-child(2n) { border-right: 0; }
-  @media (max-width: 760px) { .legs > div { border-right: 0; } }
-  .legs .t { font-weight: 300; font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -0.03em; line-height: 1.05; margin: 0.4rem 0 0.6rem; }
-  .legs p { margin: 0; color: var(--ink-2); font-size: 15.5px; max-width: 34em; text-wrap: pretty; }
-</style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="index.html"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
   <nav aria-label="Site"><a class="pill" href="work.html">Work</a><a class="pill" href="physical.html">Physical</a><a class="pill on" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main class="page cs">
+<main id="main" class="page cs">
 <div class="lander-head">
   <div class="mhead rv"><canvas class="matrix" data-text="Security" data-src="assets/security.svg" aria-label="A row of space invaders and a cannon, decoded into the word Security" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
   <p class="eyebrow rv d1">Security · the day job</p>
@@ -73,34 +36,34 @@
   <p class="lede one rv d2">Product security, built four times from close to nothing. The job is making the secure path the fast path.</p>
 </div>
 
-  <p class="sheet-h rv d3">The road</p>
+  <h2 class="sheet-h rv d3">Road</h2>
   <div class="sheet rv d3">
     <div class="row"><span class="k">2026 –</span><span><span class="t">WeightWatchers</span><span class="d">Senior Product Security Engineer. Product security, from a compliance function to an engineering one.</span></span><span class="v">now</span></div>
-    <div class="row"><span class="k">2025 – 26</span><span><span class="t">Remedy Meds</span><span class="d">Stayed on post-acquisition as founding security. ProdSec, CorpSec and privacy from zero.</span></span><span class="v">0 → 1</span></div>
-    <div class="row"><span class="k">2023 – 26</span><span><span class="t">Thirty Madison</span><span class="d">Nurx, Keeps and Cove. A telehealth platform treating over a million people, built for three years through to the exit.</span></span><span class="v">$650M exit</span></div>
-    <div class="row"><span class="k">2021 – 23</span><span><span class="t">Podium</span><span class="d">Joined right before the Series D. Payments from proof of concept to billions in GPV; built the product security team for about 200 engineers.</span></span><span class="v">$201M Series D</span></div>
-    <div class="row"><span class="k">2019 – 21</span><span><span class="t">TD</span><span class="d">Enterprise security across global corporate and investment banking.</span></span><span class="v">the bank</span></div>
-    <div class="row"><span class="k">2018</span><span><span class="t">New Jersey State Police</span><span class="d">Network engineering intern at the ROIC, the state's fusion center.</span></span><span class="v">intern</span></div>
+    <div class="row"><span class="k">2025 – 2026</span><span><span class="t">Remedy Meds</span><span class="d">Stayed on post-acquisition as founding security. ProdSec, CorpSec and privacy from zero.</span></span><span class="v">0 → 1</span></div>
+    <div class="row"><span class="k">2023 – 2026</span><span><span class="t">Thirty Madison</span><span class="d">Nurx, Keeps, and Cove. A telehealth platform treating over a million people, built for three years through to the exit.</span></span><span class="v">$650M exit</span></div>
+    <div class="row"><span class="k">2021 – 2023</span><span><span class="t">Podium</span><span class="d">Joined right before the Series D. Payments from proof of concept to billions in GPV; built the product security team for about 200 engineers.</span></span><span class="v">$201M Series D</span></div>
+    <div class="row"><span class="k">2019 – 202021</span><span><span class="t">TD</span><span class="d">Enterprise security across global corporate and investment banking.</span></span><span class="v">the bank</span></div>
+    <div class="row"><span class="k">2018</span><span><span class="t">New Jersey State Police</span><span class="d">Network engineering intern at the ROIC, the state’s fusion center.</span></span><span class="v">intern</span></div>
   </div>
 
-  <p class="sheet-h">The program · four legs</p>
+  <h2 class="sheet-h">Program · four legs</h2>
   <div class="sheet">
-    <div class="row"><span class="k">leg 1</span><span><span class="t">Security by default</span><span class="d">Tiered SAST with an AI false-positive filter, auto-merged dependency patches, a threat model for every project at planning.</span></span><span class="v">guardrails</span></div>
-    <div class="row"><span class="k">leg 2</span><span><span class="t">Reactionary security</span><span class="d">The human pass: design review where the default model flags risk, pentest findings, bug bounty, incidents.</span></span><span class="v">small by design</span></div>
-    <div class="row"><span class="k">leg 3</span><span><span class="t">Security by design</span><span class="d">Paved roads. Primitives that make the right thing the easy thing.</span></span><span class="v">primitives</span></div>
-    <div class="row"><span class="k">leg 4</span><span><span class="t">Feedback and metrics</span><span class="d">Every override feeds the loop. Rules earn the right to block with a measured false-positive rate.</span></span><span class="v">&lt;5% FP to block</span></div>
+    <div class="row"><span class="k">guardrails</span><span><span class="t">Security by default</span><span class="d">Tiered SAST with an AI false-positive filter, auto-merged dependency patches, a threat model for every project at planning.</span></span><span class="v">leg 1</span></div>
+    <div class="row"><span class="k">small by design</span><span><span class="t">Reactionary security</span><span class="d">The human pass: design review where the default model flags risk, pentest findings, bug bounty, incidents.</span></span><span class="v">leg 2</span></div>
+    <div class="row"><span class="k">primitives</span><span><span class="t">Security by design</span><span class="d">Paved roads. Primitives that make the right thing the easy thing.</span></span><span class="v">leg 3</span></div>
+    <div class="row"><span class="k">&lt;5% FP</span><span><span class="t">Feedback and metrics</span><span class="d">Every override feeds the loop. Rules earn the right to block with a measured false-positive rate.</span></span><span class="v">leg 4</span></div>
     <a class="row" href="writing.html"><span class="k">essay</span><span><span class="t">Building an AppSec program that actually works<span class="arrow">→</span></span></span><span class="v">2026-05</span></a>
   </div>
 
-  <p class="sheet-h">In the open</p>
+  <h2 class="sheet-h">In the open</h2>
   <div class="sheet">
     <a class="row" href="secmcphub.html"><span class="k">2026</span><span><span class="t">SecMCPHub<span class="arrow">→</span></span><span class="d">A security business review that writes itself, over MCP.</span></span><span class="v">case study</span></a>
     <a class="row" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener"><span class="k">2025</span><span><span class="t">Ash Semgrep rules<span class="arrow">↗</span></span><span class="d">Static analysis for Ash Framework authorization.</span></span><span class="v">github</span></a>
-    <a class="row" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener"><span class="k">2023</span><span><span class="t">Elixir secure coding<span class="arrow">↗</span></span><span class="d">Top contributor to Podium's open, enterprise-oriented curriculum.</span></span><span class="v">github</span></a>
-    <div class="row"><span class="k">2019 – 20</span><span><span class="t">Brumby Code Checker</span><span class="d">Redundancy scanner for C++, Java and Ada, with Rowan and ASRC Federal for Lockheed Martin systems.</span></span><span class="v">rowan</span></div>
+    <a class="row" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener"><span class="k">2023</span><span><span class="t">Elixir secure coding<span class="arrow">↗</span></span><span class="d">Top contributor to Podium’s open, enterprise-oriented curriculum.</span></span><span class="v">github</span></a>
+    <div class="row"><span class="k">2019 – 2020</span><span><span class="t">Brumby Code Checker</span><span class="d">Redundancy scanner for C++, Java and Ada, with Rowan and ASRC Federal for Lockheed Martin systems.</span></span><span class="v">rowan</span></div>
   </div>
 
-  <div class="cta" style="margin-top:2.5rem">
+  <div class="cta">
     <a class="pill solid" href="mailto:hello@collin.dev">hello@collin.dev</a>
     <a class="pill ghost" href="resume.html">Résumé</a>
     <a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn</a>
@@ -112,7 +75,7 @@
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" placeholder="Go to… work, security, writing, github, résumé, lectr, soirée, email" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… work, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -120,22 +83,9 @@
 <div class="keys" id="keys" hidden role="dialog" aria-label="Keyboard shortcuts">
   <div class="keys-box">
     <div class="keys-h">Shortcuts</div>
-    <div class="keys-grid">
-      <span><kbd>⌘K</kbd> / <kbd>/</kbd></span><span>command palette</span>
-      <span><kbd>g</kbd> <kbd>h</kbd></span><span>home</span>
-      <span><kbd>g</kbd> <kbd>w</kbd></span><span>work</span>
-      <span><kbd>g</kbd> <kbd>s</kbd></span><span>security</span>
-      <span><kbd>g</kbd> <kbd>n</kbd></span><span>writing</span>
-      <span><kbd>g</kbd> <kbd>g</kbd></span><span>github</span>
-      <span><kbd>g</kbd> <kbd>a</kbd></span><span>about</span>
-      <span><kbd>g</kbd> <kbd>r</kbd></span><span>résumé</span>
-      <span><kbd>t</kbd></span><span>toggle theme</span>
-      <span><kbd>click</kbd></span><span>on any header: replay picture → text</span>
-      <span><kbd>a–z</kbd></span><span>on the home page: type into the letterform</span>
-      <span><kbd>?</kbd></span><span>this</span>
-    </div>
+    <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790041240"></script>
+<script src="site.js?v=1790042672"></script>
 </body>
 </html>

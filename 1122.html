@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
 <title>Project 1122 — Collin Stilwell</title>
 <meta name="description" content="A residence taken back to the studs, documented honestly, from as-found condition to design intent.">
-<meta property="og:title" content="Project 1122">
+<meta property="og:title" content="Project 1122 — Collin Stilwell">
 <meta property="og:description" content="A residence taken back to the studs, documented honestly, from as-found condition to design intent.">
-<meta charset="utf-8">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/1122.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/1122.png">
@@ -18,56 +18,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site.css?v=1790041240">
-<style>@view-transition { navigation: auto; }</style>
+<link rel="stylesheet" href="site.css?v=1790042672">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-<style>
-  .cs { max-width: 62rem; }
-  .lede { font-size: clamp(18px, 1.6vw, 22px); font-weight: 300; line-height: 1.4; max-width: 34em; margin: 1.25rem 0 0; color: var(--ink); text-wrap: pretty; }
-  .facts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: clamp(28px,4vw,56px); border-top: 1px solid var(--hair); }
-  @media (max-width: 760px) { .facts { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-  .facts > div { padding: clamp(14px,2vw,24px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
-  .facts > div:nth-child(4n) { border-right: 0; }
-  @media (max-width: 760px) { .facts > div:nth-child(2n) { border-right: 0; } }
-  .facts .n { font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 3rem); letter-spacing: -0.03em; line-height: 1; }
-  .facts .l { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.6rem; }
-  .sec { margin-top: clamp(40px, 6vw, 88px); display: grid; grid-template-columns: 11rem minmax(0,1fr); gap: 2rem; }
-  @media (max-width: 760px) { .sec { grid-template-columns: 1fr; gap: 0.75rem; } }
-  .sec .k { font-family: var(--mono); font-size: 12px; color: var(--ink-3); padding-top: 0.5rem; }
-  .sec h2 { margin: 0 0 0.9rem; font-weight: 300; letter-spacing: -0.03em; font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.05; }
-  .sec p { margin: 0 0 1rem; max-width: 40em; color: var(--ink-2); font-size: 17px; text-wrap: pretty; }
-  .sec p b { color: var(--ink); font-weight: 500; }
-  .sec ul { margin: 0; padding: 0; list-style: none; max-width: 40em; }
-  .sec li { padding: 0.7rem 0; border-top: 1px solid var(--hair); color: var(--ink-2); display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1rem; }
-  .sec li:last-child { border-bottom: 1px solid var(--hair); }
-  .sec li .v { font-family: var(--mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
-  .stage { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; max-width: 46em; }
-  @media (max-width: 640px) { .stage { grid-template-columns: 1fr; } }
-  .stage > div { padding: 16px 18px; border-right: 1px solid var(--hair); }
-  .stage > div:last-child { border-right: 0; }
-  @media (max-width: 640px) { .stage > div { border-right: 0; border-bottom: 1px solid var(--hair); } .stage > div:last-child { border-bottom: 0; } }
-  .stage .t { font-weight: 500; }
-  .stage .d { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-top: 0.35rem; }
-  .cta { margin-top: clamp(40px, 6vw, 88px); display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  pre.code { margin: 0.5rem 0 1rem; padding: 14px 16px; border: 1px solid var(--hair); border-radius: 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--ink-2); overflow-x: auto; max-width: 40em; }
-  pre.code b { color: var(--ink); font-weight: 500; }
-  .legs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
-  @media (max-width: 760px) { .legs { grid-template-columns: 1fr; } }
-  .legs > div { padding: clamp(16px,2.2vw,26px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
-  .legs > div:nth-child(2n) { border-right: 0; }
-  @media (max-width: 760px) { .legs > div { border-right: 0; } }
-  .legs .t { font-weight: 300; font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: -0.03em; line-height: 1.05; margin: 0.4rem 0 0.6rem; }
-  .legs p { margin: 0; color: var(--ink-2); font-size: 15.5px; max-width: 34em; text-wrap: pretty; }
-</style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="index.html"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
   <nav aria-label="Site"><a class="pill" href="work.html">Work</a><a class="pill on" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main class="page cs">
+<main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="No. 1122" data-src="assets/physical/1122-iso.jpg" aria-label="The building at No. 1122 in isometric, decoded into the words No. 1122" role="img"></canvas><span class="hint">click to replay · picture → text</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="No. 1122" data-src="assets/physical/1122-iso-sm.jpg" aria-label="The building at No. 1122 in isometric, decoded into the words No. 1122" role="img"></canvas><span class="hint">click to replay · picture → text</span></div>
   <p class="eyebrow rv d1"><a href="physical.html">Physical</a> · residence</p>
   <h1 class="display rv d1">Project 1122</h1>
   <p class="lede one rv d2">A residence taken back to the studs, documented honestly, from as-found condition to design intent.</p>
@@ -79,9 +42,9 @@
     <div class="row"><span class="k">rooms</span><span class="t">Master bedroom, bedroom/office, living, dining, kitchen, bath</span><span class="v">6</span></div>
   </div>
 
-  <figure class="plate wide rv d3"><img src="assets/physical/1122-iso.jpg" alt="No. 1122, the building, drawn in isometric: four stories of brick, a blue awning over the stoop"><figcaption>No. 1122 · the building</figcaption></figure>
+  <figure class="plate wide rv d3"><img width="1400" height="875" fetchpriority="high" src="assets/physical/1122-iso.jpg" alt="No. 1122, the building, drawn in isometric: four stories of brick, a blue awning over the stoop"><figcaption>No. 1122 · the building</figcaption></figure>
 
-  <p class="sheet-h">Chapter I · as found</p>
+  <h2 class="sheet-h">Chapter I · as found</h2>
   <p class="chapter">A pre-war railroad plan: one long line of rooms, gray paint over every wall, maple strip floors throughout, steam heat and window units doing the climate work. This is the unit exactly as it was handed over. Nothing staged, nothing retouched.</p>
   <div class="rooms">
     <div class="room">
@@ -121,7 +84,7 @@
     </div>
   </div>
 
-  <p class="sheet-h">Chapter II · the plan</p>
+  <h2 class="sheet-h">Chapter II · the plan</h2>
   <p class="chapter">There are no after photographs yet; the work is in progress. What exists is the intent, drawn. The moves are few and deliberate: the double-closet wall boxing in the master bedroom consolidates to a single closet so the opening into the living room widens; the kitchen counter extends and squares off toward the dining room instead of dead-ending mid-plan; and a built-in lands at the bedroom-office end to replace a freestanding closet. The point of all three is the same: keep the long line of the railroad plan continuous, and let light travel the full length of it.</p>
   <div class="pairs plans">
     <figure class="plate"><img src="assets/physical/plan-before.png" alt="Floor plan as found: railroad layout with master bedroom, living room, dining room, bathroom and bedroom-office" loading="lazy"><figcaption>Plan · as found</figcaption></figure>
@@ -129,7 +92,7 @@
   </div>
 
   <p class="chapter" style="margin-top:2.5rem">The story continues here as the work completes, photographed the same way it started.</p>
-  <div class="cta" style="margin-top:1.5rem"><a class="pill solid" href="prints.html">The prints</a><a class="pill ghost" href="physical.html">← Physical</a></div>
+  <div class="cta"><a class="pill solid" href="prints.html">The prints</a><a class="pill ghost" href="physical.html">← Physical</a></div>
 
 </main>
 <footer class="foot">
@@ -138,7 +101,7 @@
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" placeholder="Go to… work, security, writing, github, résumé, lectr, soirée, email" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… work, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -146,22 +109,9 @@
 <div class="keys" id="keys" hidden role="dialog" aria-label="Keyboard shortcuts">
   <div class="keys-box">
     <div class="keys-h">Shortcuts</div>
-    <div class="keys-grid">
-      <span><kbd>⌘K</kbd> / <kbd>/</kbd></span><span>command palette</span>
-      <span><kbd>g</kbd> <kbd>h</kbd></span><span>home</span>
-      <span><kbd>g</kbd> <kbd>w</kbd></span><span>work</span>
-      <span><kbd>g</kbd> <kbd>s</kbd></span><span>security</span>
-      <span><kbd>g</kbd> <kbd>n</kbd></span><span>writing</span>
-      <span><kbd>g</kbd> <kbd>g</kbd></span><span>github</span>
-      <span><kbd>g</kbd> <kbd>a</kbd></span><span>about</span>
-      <span><kbd>g</kbd> <kbd>r</kbd></span><span>résumé</span>
-      <span><kbd>t</kbd></span><span>toggle theme</span>
-      <span><kbd>click</kbd></span><span>on any header: replay picture → text</span>
-      <span><kbd>a–z</kbd></span><span>on the home page: type into the letterform</span>
-      <span><kbd>?</kbd></span><span>this</span>
-    </div>
+    <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790041240"></script>
+<script src="site.js?v=1790042672"></script>
 </body>
 </html>
