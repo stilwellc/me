@@ -14,6 +14,8 @@
 // Phase 3: cells inside the text's letterform resolve left→right into solid
 // squares; the rest fall back to a faint dot field. Hover un-resolves cells
 // near the cursor; click replays from the picture. Reduced motion: text only.
+function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
 function matrix(c, opts) {
   // A line-screen that always fills its band. Every cell of the canvas carries
   // something: a faint filler dot when nothing else is there, a vertical dash
@@ -247,8 +249,11 @@ function matrix(c, opts) {
   });
   c.addEventListener('pointerleave', function () { pmx = pmy = -1; });
   c.addEventListener('click', function () { showPic = true; prevImg = null; play(); });
+  if (!c.hasAttribute('tabindex')) c.tabIndex = 0;
+  c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPic = true; prevImg = null; play(); } });
   var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(play, 120); });
   function start() {
+    if (reduce) { play(); return; }
     var pending = 0;
     function done() { if (--pending <= 0) play(); }
     if (opts.prev) { pending++; prevImg = new Image(); prevImg.onload = done; prevImg.onerror = function () { prevImg = null; done(); }; prevImg.src = opts.prev; }
@@ -269,7 +274,8 @@ function matrix(c, opts) {
 // which shows it first and dissolves it into its own. (sessionStorage, one hop)
 var PREV_GLYPH = null;
 try { PREV_GLYPH = sessionStorage.getItem('mx:prev'); sessionStorage.removeItem('mx:prev'); } catch (e) {}
-var OWN_GLYPH = (document.querySelector('canvas.matrix') || {}).dataset ? document.querySelector('canvas.matrix').dataset.src : null;
+var _own = document.querySelector('canvas.matrix');
+var OWN_GLYPH = _own ? _own.dataset.src : (document.getElementById('field') ? 'assets/collin.jpg' : null);
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target === '_blank' || a.origin !== location.origin) return;
   try { if (OWN_GLYPH) sessionStorage.setItem('mx:prev', OWN_GLYPH); } catch (err) {}
@@ -286,9 +292,11 @@ document.addEventListener('click', function (e) {
   var WORDS = ['Collin', 'Stilwell', 'Security'], wi = 0, typed = '', cycle = null;
   var hint = document.getElementById('field-hint');
   var m = matrix(c, { text: WORDS[0], src: 'assets/collin.jpg', prev: PREV_GLYPH });
-  function startCycle() { if (reduce || cycle) return; cycle = setInterval(function () { wi = (wi + 1) % WORDS.length; m.setWord(WORDS[wi]); }, 10000); }
+  var name = function (w) { c.setAttribute('aria-label', w + ', drawn as a dot matrix'); };
+  function startCycle() { if (reduce || cycle) return; cycle = setInterval(function () { wi = (wi + 1) % WORDS.length; m.setWord(WORDS[wi]); name(WORDS[wi]); }, 10000); }
   function stopCycle() { if (cycle) { clearInterval(cycle); cycle = null; } }
   startCycle();
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stopCycle(); else startCycle(); });
   window.__fieldType = function (e) {
     if (e.key === 'Escape') { typed = ''; m.setWord(WORDS[wi]); startCycle(); if (hint) hint.textContent = 'move the cursor · type to rewrite'; return true; }
     if (e.key === 'Backspace') { typed = typed.slice(0, -1); if (!typed) { m.setWord(WORDS[wi]); startCycle(); } else m.setWord(typed); return true; }
@@ -300,19 +308,29 @@ document.addEventListener('click', function (e) {
 // ── live: the page's own last commit, and lectr's live corpus ──────────────
 (function () {
   var el = document.getElementById('commit');
-  if (el) fetch('https://api.github.com/repos/stilwellc/me/commits/main', { headers: { Accept: 'application/vnd.github+json' } })
+  // one GitHub call a session for the version pill, not one a page: the
+  // unauthenticated limit is 60 an hour per address
+  var paint = function (sha, date) { var ago = Math.round((Date.now() - new Date(date)) / 36e5); el.textContent = 'main @ ' + sha.slice(0, 7) + ' · ' + (ago < 1 ? 'just now' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago'); };
+  var cached = null; try { cached = JSON.parse(sessionStorage.getItem('commit') || 'null'); } catch (e) {}
+  if (el && cached && cached.sha && Date.now() - cached.at < 6e5) paint(cached.sha, cached.date);
+  else if (el) fetch('https://api.github.com/repos/stilwellc/me/commits/main', { headers: { Accept: 'application/vnd.github+json' } })
     .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (j) { if (!j || !j.sha) return; var ago = Math.round((Date.now() - new Date(j.commit.committer.date)) / 36e5);
-      el.textContent = 'main @ ' + j.sha.slice(0, 7) + ' · ' + (ago < 1 ? 'just now' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago'); }).catch(function () {});
-  var lots = document.getElementById('live-lots') || document.getElementById('cs-lots');
+    .then(function (j) { if (!j || !j.sha) return; paint(j.sha, j.commit.committer.date); try { sessionStorage.setItem('commit', JSON.stringify({ sha: j.sha, date: j.commit.committer.date, at: Date.now() })); } catch (e) {} }).catch(function () {});
+  var lots = document.getElementById('cs-lots');
   if (!lots) return;
   fetch('https://lectr.bid/data/ray/meta.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) {
     if (!m || !m.totalLots) return;
     var n = function (x) { return x.toLocaleString('en-US'); }, short = function (x) { return (x / 1e6).toFixed(2) + 'M'; };
     var ago = Math.round((Date.now() - new Date(m.lastCrawl)) / 36e5), when = ago < 1 ? 'under an hour ago' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago';
-    var a = document.getElementById('live-lots'); if (a) { a.textContent = n(m.totalLots); document.getElementById('live-sold').textContent = n(m.totalSold); document.getElementById('live-when').textContent = when; var d = document.getElementById('live-dot'); if (d && ago < 36) d.classList.add('on'); }
     var b = document.getElementById('cs-lots'); if (b) { b.textContent = short(m.totalLots); document.getElementById('cs-sold').textContent = short(m.totalSold); document.getElementById('cs-when').textContent = 'crawled ' + when; }
   }).catch(function () {});
+})();
+
+// ── the shortcuts dialog, rendered from one table so help and keymap agree
+(function () {
+  var grid = document.querySelector('#keys .keys-grid'); if (!grid || grid.children.length) return;
+  var ROWS = [['⌘K', 'command palette'], ['g h', 'home'], ['g w', 'work'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['t', 'toggle theme'], ['enter', 'on a focused header: replay picture → text'], ['a–z', 'on the home page: type into the letterform'], ['?', 'this']];
+  grid.innerHTML = ROWS.map(function (r) { return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + esc(k) + '</kbd>'; }).join(' ') + '</span><span>' + esc(r[1]) + '</span>'; }).join('');
 })();
 
 // ── command palette + shortcuts ────────────────────────────────────────────
@@ -320,10 +338,10 @@ document.addEventListener('click', function (e) {
   var pal = document.getElementById('pal'), inp = document.getElementById('pal-in'), list = document.getElementById('pal-list'), keys = document.getElementById('keys');
   if (!pal) return;
   var ITEMS = [
-    { t: 'Home', h: 'g h', u: 'index.html' }, { t: 'Work', h: 'g w', u: 'work.html' }, { t: 'Physical', h: 'g p', u: 'physical.html' }, { t: 'Project 1122', h: 'residence', u: '1122.html' }, { t: '3D prints', h: 'text → print', u: 'prints.html' }, { t: 'Wave panel', h: '3d prints', u: 'wave.html' }, { t: 'Security', h: 'g s', u: 'security.html' }, { t: 'Writing', h: 'g n', u: 'writing.html' }, { t: 'How we built the price-movement engine', h: 'lectr.bid', u: 'https://lectr.bid/blog/how-we-built-the-pricing-engine' }, { t: 'GitHub', h: 'g g', u: 'github.html' }, { t: 'About', h: 'g a', u: 'about.html' }, { t: 'Résumé', h: 'g r', u: 'resume.html' },
-    { t: 'lectr — case study', h: 'g l', u: 'lectr.html' }, { t: 'SecMCPHub — case study', h: '', u: 'secmcphub.html' }, { t: 'Soirée — case study', h: '', u: 'soiree.html' },
-    { t: 'Open lectr.bid', h: '↗', u: 'https://lectr.bid', x: 1 }, { t: 'Open Starling', h: '↗', u: 'https://starling-6s1.pages.dev', x: 1 }, { t: 'text2print (GitHub)', h: '↗', u: 'https://github.com/stilwellc/text2print', x: 1 }, { t: 'Open soiree.today', h: '↗', u: 'https://soiree.today', x: 1 },
-    { t: 'Email hello@collin.dev', h: '', u: 'mailto:hello@collin.dev' }, { t: 'GitHub', h: '↗', u: 'https://github.com/stilwellc', x: 1 }, { t: 'LinkedIn', h: '↗', u: 'https://www.linkedin.com/in/collin-stilwell/', x: 1 }, { t: 'Substack', h: '↗', u: 'https://collinsthoughts.substack.com', x: 1 },
+    { t: 'Home', h: 'g h', u: 'index.html' }, { t: 'Work', h: 'g w', u: 'work.html' }, { t: 'Physical', h: 'g p', u: 'physical.html' }, { t: 'Project 1122', h: 'residence', u: '1122.html' }, { t: '3D prints', h: 'text → print', u: 'prints.html' }, { t: 'Wave panel', h: '3D prints', u: 'wave.html' }, { t: 'Security', h: 'g s', u: 'security.html' }, { t: 'Writing', h: 'g n', u: 'writing.html' }, { t: 'GitHub', h: 'g g', u: 'github.html' }, { t: 'About', h: 'g a', u: 'about.html' }, { t: 'Résumé', h: 'g r', u: 'resume.html' },
+    { t: 'lectr — case study', h: 'g l', u: 'lectr.html' }, { t: 'SecMCPHub — case study', h: 'work', u: 'secmcphub.html' }, { t: 'Soirée — case study', h: 'work', u: 'soiree.html' }, { t: 'Starling', h: 'work', u: 'work.html#starling' }, { t: 'Elixir security', h: 'work', u: 'work.html#elixir' },
+    { t: 'Open lectr.bid', h: '↗', u: 'https://lectr.bid', x: 1 }, { t: 'How we built the price-movement engine', h: '↗', u: 'https://lectr.bid/blog/how-we-built-the-pricing-engine', x: 1 }, { t: 'Open Starling', h: '↗', u: 'https://starling-6s1.pages.dev', x: 1 }, { t: 'text2print (GitHub)', h: '↗', u: 'https://github.com/stilwellc/text2print', x: 1 }, { t: 'Open soiree.today', h: '↗', u: 'https://soiree.today', x: 1 },
+    { t: 'Email hello@collin.dev', h: 'mail', u: 'mailto:hello@collin.dev' }, { t: 'github.com/stilwellc', h: '↗', u: 'https://github.com/stilwellc', x: 1 }, { t: 'LinkedIn', h: '↗', u: 'https://www.linkedin.com/in/collin-stilwell/', x: 1 }, { t: 'Substack', h: '↗', u: 'https://collinsthoughts.substack.com', x: 1 },
     { t: 'Toggle theme', h: 't', fn: function () { window.__toggleTheme && window.__toggleTheme(); } }, { t: 'Shortcuts', h: '?', fn: function () { openKeys(); } }
   ];
   var sel = 0, shown = ITEMS;
@@ -331,13 +349,17 @@ document.addEventListener('click', function (e) {
     var q = inp.value.trim().toLowerCase();
     shown = ITEMS.filter(function (i) { return !q || i.t.toLowerCase().indexOf(q) >= 0; });
     sel = Math.min(sel, Math.max(0, shown.length - 1));
-    list.innerHTML = shown.map(function (i, k) { return '<li' + (k === sel ? ' class="on"' : '') + ' data-k="' + k + '"><span>' + i.t + '</span><span class="h">' + i.h + '</span></li>'; }).join('') || '<li><span class="h">nothing matches</span></li>';
+    list.innerHTML = shown.map(function (i, k) { return '<li role="option" id="pal-o' + k + '" aria-selected="' + (k === sel) + '"' + (k === sel ? ' class="on"' : '') + ' data-k="' + k + '"><span>' + esc(i.t) + '</span><span class="h">' + esc(i.h) + '</span></li>'; }).join('') || '<li><span class="h">nothing matches</span></li>';
   }
   function go(i) { if (!i) return; close(); if (i.fn) return i.fn(); if (i.x) window.open(i.u, '_blank', 'noopener'); else location.href = i.u; }
-  function open() { closeKeys(); pal.hidden = false; inp.value = ''; sel = 0; render(); inp.focus(); }
-  function close() { pal.hidden = true; inp.blur(); }
-  function openKeys() { close(); keys.hidden = false; }
+  var opener = null;
+  function open() { closeKeys(); opener = document.activeElement; pal.hidden = false; inp.value = ''; sel = 0; render(); inp.focus(); inp.setAttribute('aria-expanded', 'true'); }
+  function close() { pal.hidden = true; inp.setAttribute('aria-expanded', 'false'); inp.blur(); if (opener && opener.focus) { opener.focus(); opener = null; } }
+  function openKeys() { close(); keys.hidden = false; var box = keys.querySelector('.keys-box'); if (box) { box.tabIndex = -1; box.focus(); } }
   function closeKeys() { keys.hidden = true; }
+  inp.setAttribute('role', 'combobox'); inp.setAttribute('aria-expanded', 'false'); inp.setAttribute('aria-controls', 'pal-list'); inp.setAttribute('aria-autocomplete', 'list');
+  list.setAttribute('role', 'listbox');
+  pal.addEventListener('keydown', function (e) { if (e.key === 'Tab') { e.preventDefault(); inp.focus(); } });
   inp.addEventListener('input', function () { sel = 0; render(); });
   list.addEventListener('click', function (e) { var li = e.target.closest('li[data-k]'); if (li) go(shown[+li.dataset.k]); });
   pal.addEventListener('click', function (e) { if (e.target === pal) close(); });
@@ -381,7 +403,7 @@ document.addEventListener('click', function (e) {
     if (!rs || !rs.length) return;
     var own = rs.filter(function (r) { return !r.fork && r.name !== 'stilwellc' && r.name !== 'collin'; }).slice(0, 8);
     cells.innerHTML = own.map(function (r) {
-      return '<a class="cell" href="' + r.html_url + '" target="_blank" rel="noopener"><div class="top"><span class="pill mono">' + (r.language || 'repo') + '</span>' + (r.stargazers_count ? '<span class="pill mono">★ ' + r.stargazers_count + '</span>' : '') + '</div><h2>' + r.name + '<span class="arrow">↗</span></h2><p>' + (r.description || '') + '</p><div class="foot">pushed ' + r.pushed_at.slice(0, 10) + '</div></a>';
+      return '<a class="cell" href="' + r.html_url + '" target="_blank" rel="noopener"><div class="top"><span class="pill mono">' + esc(r.language || 'repo') + '</span>' + (r.stargazers_count ? '<span class="pill mono">★ ' + r.stargazers_count + '</span>' : '') + '</div><h2>' + esc(r.name) + '<span class="arrow">↗</span></h2>' + (r.description ? '<p>' + esc(r.description) + '</p>' : '<p class="none">no description yet</p>') + '<div class="foot">pushed ' + r.pushed_at.slice(0, 10) + '</div></a>';
     }).join('');
   }).catch(function () {});
   fetch('https://api.github.com/users/stilwellc/events/public?per_page=100', { headers: H }).then(function (r) { return r.ok ? r.json() : null; }).then(function (ev) {
@@ -397,6 +419,8 @@ document.addEventListener('click', function (e) {
       out += '<i class="' + (n >= 6 ? 'l3' : n >= 3 ? 'l2' : n >= 1 ? 'l1' : '') + '" title="' + k + ' · ' + n + ' push' + (n === 1 ? '' : 'es') + '"></i>';
     }
     grid.innerHTML = out;
+    grid.setAttribute('aria-label', 'Push activity: the last ' + pushes.length + ' pushes on a twelve-week grid');
+    var st = document.getElementById('gh-state'); if (st) st.textContent = 'live';
   }).catch(function () {});
 })();
 
@@ -417,14 +441,14 @@ document.addEventListener('click', function (e) {
   var j = function (u) { return fetch(u, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }); };
   j('https://lectr.bid/data/ray/comp-evidence.json').then(function (ce) {
     var rows = ce.byLot && ce.byLot[ID]; if (!rows || !rows.length) return;
-    document.getElementById('trace-comps').innerHTML = rows.map(function (c) { return '<li><span>' + c.h + ' · ' + c.d + '</span><span class="v">' + usd(c.p) + '</span></li>'; }).join('');
+    document.getElementById('trace-comps').innerHTML = rows.map(function (c) { return '<li><span>' + esc(c.h) + ' · ' + esc(c.d) + '</span><span class="v">' + usd(c.p) + '</span></li>'; }).join('');
     document.getElementById('trace-comps-src').textContent = '· live · generated ' + (ce.generatedAt || '').slice(0, 10);
   }).catch(function () {});
   j('https://lectr.bid/data/ray/receipts.json').then(function (rc) {
     var rows = (rc.rows || []).filter(function (r) { return r.p && r.r; }).slice(0, 5); if (!rows.length) return;
     document.getElementById('trace-rec').innerHTML = rows.map(function (r) {
       var t = r.t.length > 64 ? r.t.slice(0, 62) + '…' : r.t;
-      return '<li><span>' + t + ' · ' + r.h + ' · called ' + r.d + '</span><span class="v">called ' + usd(r.p) + ' → realized ' + usd(r.r) + '</span></li>';
+      return '<li><span>' + t + ' · ' + r.h + ' · called ' + esc(r.d) + '</span><span class="v">called ' + usd(r.p) + ' → realized ' + usd(r.r) + '</span></li>';
     }).join('');
     var g = rc.record && rc.record.vsbid && rc.record.vsbid.graded; if (g) document.getElementById('bt-graded').textContent = g.toLocaleString('en-US');
     document.getElementById('trace-rec-src').textContent = 'Live from lectr.bid, generated ' + (rc.generatedAt || '') + '.';
@@ -444,12 +468,12 @@ document.addEventListener('click', function (e) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   // headline lines rise one after another
   [].forEach.call(document.querySelectorAll('h1.display'), function (h) {
-    var lines = h.innerHTML.split(/<br\s*\/?>/i); if (!lines.length) return;
+    var lines = h.innerHTML.split(/<br\s*\/?>/i); if (!h.textContent.trim()) return;
     h.innerHTML = lines.map(function (l, i) { return '<span class="ln"><span class="li" style="animation-delay:' + (140 + i * 120) + 'ms">' + l + '</span></span>'; }).join('');
     h.classList.remove('rv', 'd1'); h.classList.add('split');
   });
   // below-the-fold blocks reveal on scroll; anything already in view is left alone
-  var blocks = document.querySelectorAll('.sec, .facts, .frame, .legs, .trace, .ledger, .two, .repos, .act, .cta, .prose, #trace-rec, .sheet, .room, .plates, .pairs, figure.plate.wide, .jobs');
+  var blocks = document.querySelectorAll('.sheet-h, .sec, .facts, .frame, .legs, .trace, .ledger, .two, .repos, .act, .cta, .prose, #trace-rec, .sheet, .room, .plates, .pairs, figure.plate.wide, .jobs');
   var vh = innerHeight, pending = [];
   [].forEach.call(blocks, function (b) { var r = b.getBoundingClientRect(); if (r.top > vh * 0.92) { (b.classList.contains('frame') ? b.querySelector('.cells') || b : b).classList.add('sr'); if (b.classList.contains('frame')) b.classList.add('sr'); pending.push(b); } });
   function show(b) { if (b.classList.contains('in')) return; b.classList.add('in'); var c = b.querySelector('.cells'); if (c) c.classList.add('in'); countUp(b); }
@@ -472,10 +496,9 @@ document.addEventListener('click', function (e) {
   // last resort: an invisible paragraph is a worse failure than a missed
   // animation, so anything still pending after four seconds is simply shown
   setTimeout(function () { pending.forEach(show); }, 4000);
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) pending.forEach(show);
   // ledes and statements arrive word by word
   [].forEach.call(document.querySelectorAll('.lede, .statement'), function (p) {
-    if (p.querySelector('a, b, span.dim')) { var dim = p.querySelector('span.dim'); if (!dim) return; }
+    if (p.querySelector('a, b')) return;
     var html = p.innerHTML, parts = html.split(/(<[^>]+>)/g), k = 0;
     p.innerHTML = parts.map(function (part) { if (!part || part[0] === '<') return part; return part.split(/(\s+)/).map(function (w) { if (!w.trim()) return w; return '<span class="w" style="transition-delay:' + (k++ * 28) + 'ms">' + w + '</span>'; }).join(''); }).join('');
     p.classList.add('wr'); requestAnimationFrame(function () { requestAnimationFrame(function () { p.classList.add('in'); }); });
