@@ -15,17 +15,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23161616'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-size='13' fill='%23FCFBFA'%3ECS%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..500&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="site.css?v=1790197937">
+<link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css?v=1790199672">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
-  <a class="brand" href="index.html"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
+  <a class="brand" href="./"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
   <nav aria-label="Site"><a class="pill" href="work.html">Work</a><a class="pill on" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
@@ -36,7 +36,7 @@
   <p class="lede one rv d2">A residence taken back to the studs, documented honestly, from as-found condition to design intent.</p>
 </div>
 
-  <div class="sheet rv d3" style="margin-top:2rem">
+  <div class="sheet rv d3" class="mt-2">
     <div class="row"><span class="k">status</span><span class="t">In progress</span><span class="v">2024 –</span></div>
     <div class="row"><span class="k">scope</span><span class="t">Full residence</span><span class="v">pre-war railroad plan</span></div>
     <div class="row"><span class="k">rooms</span><span class="t">Master bedroom, bedroom/office, living, dining, kitchen, bath</span><span class="v">6</span></div>
@@ -50,48 +50,48 @@
     <div class="room">
       <h3>Kitchen</h3>
       <p>Galley kitchen mid-plan. Flat-panel cabinets, granite counters, gas range, and a pass-through cut into the partition wall, the only opening between kitchen and dining room.</p>
-      <figure class="plate"><img src="assets/physical/before/kitchen1.webp" alt="Kitchen as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/kitchen2.webp" alt="Kitchen as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/kitchen3.webp" alt="Kitchen as found" loading="lazy"></figure></div>
+      <figure class="plate"><img src="assets/physical/before/kitchen1.webp" srcset="assets/physical/before/kitchen1-768.webp 768w, assets/physical/before/kitchen1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Kitchen as found" loading="lazy"></figure>
+      <div class="pairs"><figure class="plate"><img src="assets/physical/before/kitchen2.webp" srcset="assets/physical/before/kitchen2-768.webp 768w, assets/physical/before/kitchen2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Kitchen as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/kitchen3.webp" srcset="assets/physical/before/kitchen3-768.webp 768w, assets/physical/before/kitchen3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Kitchen as found" loading="lazy"></figure></div>
     </div>
     <div class="room">
       <h3>Living room</h3>
       <p>The long room on the entry side. Maple strip flooring, crown molding, a cast-iron radiator on the party wall, and a through-wall AC unit carrying the cooling load.</p>
-      <figure class="plate"><img src="assets/physical/before/livingroom1.webp" alt="Living room as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" alt="Living room as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" alt="Living room as found" loading="lazy"></figure></div>
+      <figure class="plate"><img src="assets/physical/before/livingroom1.webp" srcset="assets/physical/before/livingroom1-768.webp 768w, assets/physical/before/livingroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Living room as found" loading="lazy"></figure>
+      <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" srcset="assets/physical/before/livingroom3-768.webp 768w, assets/physical/before/livingroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Living room as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" srcset="assets/physical/before/livingroom4-768.webp 768w, assets/physical/before/livingroom4.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Living room as found" loading="lazy"></figure></div>
     </div>
     <div class="room">
       <h3>Dining room</h3>
       <p>Between kitchen and living space, lit by a single three-arm fixture. Gray walls throughout, the same coat as every other room in the unit.</p>
-      <figure class="plate"><img src="assets/physical/before/diningroom1.webp" alt="Dining room as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/diningroom3.webp" alt="Dining room as found" loading="lazy"></figure></div>
+      <figure class="plate"><img src="assets/physical/before/diningroom1.webp" srcset="assets/physical/before/diningroom1-768.webp 768w, assets/physical/before/diningroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room as found" loading="lazy"></figure>
+      <div class="pairs"><figure class="plate"><img src="assets/physical/before/diningroom3.webp" srcset="assets/physical/before/diningroom3-768.webp 768w, assets/physical/before/diningroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Dining room as found" loading="lazy"></figure></div>
     </div>
     <div class="room">
       <h3>Master bedroom</h3>
       <p>Tall window casings with panel bases, a double run of sliding-door closets, a ceiling fan, and a mix of radiator and through-wall AC carrying the room.</p>
-      <figure class="plate"><img src="assets/physical/before/bedroom1.webp" alt="Master bedroom as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/bedroom2.webp" alt="Master bedroom as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/bedroom3.webp" alt="Master bedroom as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/bedroom4.webp" alt="Master bedroom as found" loading="lazy"></figure></div>
+      <figure class="plate"><img src="assets/physical/before/bedroom1.webp" srcset="assets/physical/before/bedroom1-768.webp 768w, assets/physical/before/bedroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure>
+      <div class="pairs"><figure class="plate"><img src="assets/physical/before/bedroom2.webp" srcset="assets/physical/before/bedroom2-768.webp 768w, assets/physical/before/bedroom2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/bedroom3.webp" srcset="assets/physical/before/bedroom3-768.webp 768w, assets/physical/before/bedroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/bedroom4.webp" srcset="assets/physical/before/bedroom4-768.webp 768w, assets/physical/before/bedroom4.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure></div>
     </div>
     <div class="room">
       <h3>Bedroom / office</h3>
       <p>The second bedroom, doing double duty as the office at the rear of the plan. Pressed-tin ceiling, exposed steam riser, one tall window with a security grille: the oldest surfaces left in the unit.</p>
-      <figure class="plate"><img src="assets/physical/before/office1.webp" alt="Bedroom / office as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/office2.webp" alt="Bedroom / office as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/office3.webp" alt="Bedroom / office as found" loading="lazy"></figure></div>
+      <figure class="plate"><img src="assets/physical/before/office1.webp" srcset="assets/physical/before/office1-768.webp 768w, assets/physical/before/office1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bedroom / office as found" loading="lazy"></figure>
+      <div class="pairs"><figure class="plate"><img src="assets/physical/before/office2.webp" srcset="assets/physical/before/office2-768.webp 768w, assets/physical/before/office2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Bedroom / office as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/office3.webp" srcset="assets/physical/before/office3-768.webp 768w, assets/physical/before/office3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Bedroom / office as found" loading="lazy"></figure></div>
     </div>
     <div class="room">
       <h3>Bath</h3>
       <p>The single bath. Compact footprint: narrow vanity, glass-door shower, frosted double-hung window over the toilet.</p>
-      <figure class="plate"><img src="assets/physical/before/bathroom1.webp" alt="Bath as found" loading="lazy"></figure>
+      <figure class="plate"><img src="assets/physical/before/bathroom1.webp" srcset="assets/physical/before/bathroom1-768.webp 768w, assets/physical/before/bathroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bath as found" loading="lazy"></figure>
     </div>
   </div>
 
   <h2 class="sheet-h">Chapter II · the plan</h2>
   <p class="chapter">There are no after photographs yet; the work is in progress. What exists is the intent, drawn. The moves are few and deliberate: the double-closet wall boxing in the master bedroom consolidates to a single closet so the opening into the living room widens; the kitchen counter extends and squares off toward the dining room instead of dead-ending mid-plan; and a built-in lands at the bedroom-office end to replace a freestanding closet. The point of all three is the same: keep the long line of the railroad plan continuous, and let light travel the full length of it.</p>
   <div class="pairs plans">
-    <figure class="plate"><img src="assets/physical/plan-before.png" alt="Floor plan as found: railroad layout with master bedroom, living room, dining room, bathroom and bedroom-office" loading="lazy"><figcaption>Plan · as found</figcaption></figure>
-    <figure class="plate"><img src="assets/physical/plan-intent.png" alt="Floor plan as intended: consolidated master closet, widened living room opening, extended kitchen counter and new built-in at the bedroom-office" loading="lazy"><figcaption>Plan · intent</figcaption></figure>
+    <figure class="plate"><img src="assets/physical/plan-before.png" width="1160" height="497" alt="Floor plan as found: railroad layout with master bedroom, living room, dining room, bathroom and bedroom-office" loading="lazy"><figcaption>Plan · as found</figcaption></figure>
+    <figure class="plate"><img src="assets/physical/plan-intent.png" width="1263" height="496" alt="Floor plan as intended: consolidated master closet, widened living room opening, extended kitchen counter and new built-in at the bedroom-office" loading="lazy"><figcaption>Plan · intent</figcaption></figure>
   </div>
 
-  <p class="chapter" style="margin-top:2.5rem">The story continues here as the work completes, photographed the same way it started.</p>
+  <p class="chapter" class="mt-25">The story continues here as the work completes, photographed the same way it started.</p>
   <div class="cta"><a class="pill solid" href="prints.html">The prints</a><a class="pill ghost" href="physical.html">← Physical</a></div>
 
 </main>
@@ -106,12 +106,12 @@
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
 </div>
-<div class="keys" id="keys" hidden role="dialog" aria-label="Keyboard shortcuts">
+<div class="keys" id="keys" hidden role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
   <div class="keys-box">
     <div class="keys-h">Shortcuts</div>
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790197937"></script>
+<script src="site.js?v=1790199672"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
   var root = document.documentElement;
   function current() { var t = root.getAttribute('data-theme'); if (t) return t; return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
   function set(t) { root.setAttribute('data-theme', t); try { localStorage.setItem('theme', t); } catch (e) {} }
-  window.__toggleTheme = function () { set(current() === 'dark' ? 'light' : 'dark'); };
+  window.__toggleTheme = function () { set(current() === 'dark' ? 'light' : 'dark'); if (window.THEME) THEME.epoch++; if (window.__repaintStills) setTimeout(window.__repaintStills, 380); };
   var b = document.getElementById('theme'); if (b) b.addEventListener('click', window.__toggleTheme);
 })();
 
@@ -14,6 +14,12 @@
 // Phase 3: cells inside the text's letterform resolve left→right into solid
 // squares; the rest fall back to a faint dot field. Hover un-resolves cells
 // near the cursor; click replays from the picture. Reduced motion: text only.
+var GRAIN = null;
+function grainTile() { if (GRAIN) return GRAIN; GRAIN = document.createElement('canvas'); GRAIN.width = GRAIN.height = 256; var g = GRAIN.getContext('2d'), gd = g.createImageData(256, 256); for (var i = 0; i < gd.data.length; i += 4) { var v = 128 + (Math.random() * 90 - 45) | 0; gd.data[i] = gd.data[i + 1] = gd.data[i + 2] = v; gd.data[i + 3] = 255; } g.putImageData(gd, 0, 0); return GRAIN; }
+// theme colours, read once per frame across all engines, refreshed when the theme changes
+var THEME = { epoch: 0, at: -1, ink: '#161616', accent: '#FF5A1F' };
+function themeColors(now) { if (THEME.epoch !== THEME.seen || now - THEME.at > 150) { THEME.seen = THEME.epoch; THEME.at = now; var cs = getComputedStyle(document.body); THEME.ink = cs.color || THEME.ink; THEME.accent = cs.getPropertyValue('--accent').trim() || THEME.accent; } return THEME; }
+
 function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
 function matrix(c, opts) {
@@ -27,15 +33,15 @@ function matrix(c, opts) {
   // from. Film grain on top.
   var ctx = c.getContext('2d');
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  var dpr = opts.plate ? 1 : Math.min(2, window.devicePixelRatio || 1);   // a 5 px dot screen does not need a 2x bitmap
   var W, H, cols, rows, cell, N, th, t0 = 0, raf = 0, word = opts.text, img = null, prevImg = null, showPic = true;
   var maskF = null, pic = null, picPrev = null;          // fields: {v: Float32Array, e: Float32Array|null}
   var fc, fr, F = 5, vx, vy, tmpx, tmpy, pmx = -1, pmy = -1, pmt = 0;   // flow grid, F fine cells per flow cell
   var GAIN = 1.4, DECAY = 0.94, DIFF = 0.11, MAXV = 2.4;                 // in flow cells
-  var FILL_IN = 0.35, PREV_HOLD = 0.9, PIC_HOLD = 2.6, MORPH = 0.85, WORD_MORPH = 0.6, PRINT = 0.7;
-  var grain = null, gctx = null, A = null, B = null;
+  var FILL_IN = 0.35, PREV_HOLD = 0.9, PIC_HOLD = 2.6, MORPH = 0.85, WORD_MORPH = 0.6;
+  var grain = null, A = null, B = null, SR = null, CR = null, SC = null, CC = null, curK = 0;
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
-  var plate = !!opts.plate, settled = false;
+  var plate = !!opts.plate, still = !!opts.still, noFill = opts.filler === false, settled = false;
   var focus = [0.5, 0.5];
   if (c.dataset && c.dataset.focus) { var fp = c.dataset.focus.split(',').map(parseFloat); if (fp.length === 2 && !isNaN(fp[0]) && !isNaN(fp[1])) focus = fp; }
   function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
@@ -46,13 +52,13 @@ function matrix(c, opts) {
     var r = c.getBoundingClientRect();
     W = Math.max(1, Math.floor(r.width)); H = Math.max(1, Math.floor(r.height));
     c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cell = opts.cell || (W < 640 ? 3 : 4);
+    cell = opts.cell || (W < 640 ? 5 : 4);   // coarser on a phone, not finer
     cols = Math.floor(W / cell); rows = Math.floor(H / cell); N = cols * rows;
     th = new Float32Array(N); for (var i = 0; i < N; i++) th[i] = Math.random();
     fc = Math.ceil(cols / F) + 1; fr = Math.ceil(rows / F) + 1;
     vx = new Float32Array(fc * fr); vy = new Float32Array(fc * fr); tmpx = new Float32Array(fc * fr); tmpy = new Float32Array(fc * fr);
-    A = new Float32Array(rows); B = new Float32Array(cols);
-    if (!grain) { grain = document.createElement('canvas'); grain.width = grain.height = 256; gctx = grain.getContext('2d'); var gd = gctx.createImageData(256, 256); for (var g = 0; g < gd.data.length; g += 4) { var v = 128 + (Math.random() * 90 - 45) | 0; gd.data[g] = gd.data[g + 1] = gd.data[g + 2] = v; gd.data[g + 3] = 255; } gctx.putImageData(gd, 0, 0); }
+    A = new Float32Array(rows); B = new Float32Array(cols); SR = null;
+    grain = grainTile();
   }
   function buildMask(w) {
     // one cap height for every word, so "Wave" and "SecMCPHub" sit in the same
@@ -62,7 +68,7 @@ function matrix(c, opts) {
     mc.fillStyle = '#000'; mc.textBaseline = 'middle'; mc.textAlign = 'center';
     var fs = rows * 0.62, font = function (s) { return '300 ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
     mc.font = font(fs);
-    while (mc.measureText(w).width > cols * 0.92 && fs > 8) { fs -= 1; mc.font = font(fs); }
+    var mw = mc.measureText(w).width; if (mw > cols * 0.92) { fs = Math.max(8, Math.floor(fs * (cols * 0.92) / mw)); mc.font = font(fs); }
     mc.fillText(w, cols / 2, rows * 0.53);
     var px = mc.getImageData(0, 0, cols, rows).data, out = new Float32Array(N);
     for (var i = 0; i < N; i++) out[i] = px[i * 4 + 3] / 255;
@@ -116,13 +122,8 @@ function matrix(c, opts) {
     }
     return { v: out, e: edge };
   }
-  function sample(f, x, y) {
-    if (x < 0 || y < 0 || x > cols - 1 || y > rows - 1) return 0;
-    var x0 = x | 0, y0 = y | 0, x1 = x0 + 1 < cols ? x0 + 1 : x0, y1 = y0 + 1 < rows ? y0 + 1 : y0, fx = x - x0, fy = y - y0;
-    var a = f[y0 * cols + x0], b = f[y0 * cols + x1], cc = f[y1 * cols + x0], dd = f[y1 * cols + x1];
-    return (a * (1 - fx) + b * fx) * (1 - fy) + (cc * (1 - fx) + dd * fx) * fy;
-  }
   function flowAt(f, x, y) {
+    if (x < 0 || y < 0 || x > cols - 1 || y > rows - 1) return 0;   // bodies born beyond the band read no wind
     var gx = x / F, gy = y / F, x0 = gx | 0, y0 = gy | 0, x1 = x0 + 1 < fc ? x0 + 1 : x0, y1 = y0 + 1 < fr ? y0 + 1 : y0, fx = gx - x0, fy = gy - y0;
     return (f[y0 * fc + x0] * (1 - fx) + f[y0 * fc + x1] * fx) * (1 - fy) + (f[y1 * fc + x0] * (1 - fx) + f[y1 * fc + x1] * fx) * fy;
   }
@@ -168,9 +169,10 @@ function matrix(c, opts) {
     P.n = n; P.hx = hx; P.hy = hy; P.v = v; P.e = ee; P.t = tt; return P;
   }
   function byAngle(P) {
+    if (P._idx) return P._idx;
     var cx = cols / 2, cy = rows / 2, idx = new Array(P.n), key = new Float32Array(P.n), sq = rows / cols;
     for (var i = 0; i < P.n; i++) { idx[i] = i; key[i] = Math.atan2(P.hy[i] - cy, (P.hx[i] - cx) * sq) + 0.003 * Math.hypot(P.hx[i] - cx, P.hy[i] - cy); }
-    idx.sort(function (a, b) { return key[a] - key[b]; }); return idx;
+    idx.sort(function (a, b) { return key[a] - key[b]; }); P._idx = idx; return idx;
   }
   function makePairs(A, B) {
     var cx = cols / 2, cy = rows / 2, R = Math.hypot(cx, cy);
@@ -218,8 +220,8 @@ function matrix(c, opts) {
   }
   function sequence() {
     var s = [];
-    if (plate) {   // a plate gathers its photograph, holds, and is then lifted away
-      if (pic && !reduce) s.push({ f: null, kind: 'pic', hold: 0, dur: GATHER });
+    if (plate) {   // a plate gathers its photograph, holds, and is then lifted away; a still just holds
+      if (pic && !reduce && !still) s.push({ f: null, kind: 'pic', hold: 0, dur: GATHER });
       s.push({ f: pic || maskF, kind: pic ? 'pic' : 'word', hold: 1e9, dur: MORPH });
       SEQ = s; PARTS = s.map(function () { return null; }); PAIRS = s.map(function () { return null; }); gusted = s.map(function () { return false; }); return;
     }
@@ -236,7 +238,7 @@ function matrix(c, opts) {
   function frame(now) {
     var el = (now - t0) / 1000;
     ctx.clearRect(0, 0, W, H);
-    var inkCol = css('color') || '#161616', accent = css('--accent') || '#FF5A1F';
+    var th_ = themeColors(now), inkCol = th_.ink, accent = th_.accent;
     if (!reduce) stepFlow();
     var k = 0, u = 0, tt = el, morphing = false;
     while (k < SEQ.length - 1) {
@@ -246,12 +248,15 @@ function matrix(c, opts) {
       tt -= d; k++;
     }
     if (reduce) { k = SEQ.length - 1; morphing = false; }
+    curK = k;
     var fillIn = reduce ? 1 : Math.min(1, el / FILL_IN);
     var t = now / 1000;
     var amb = SEQ[k].kind === 'pic' ? 0.9 : 0.25;
     for (var yy = 0; yy < rows; yy++) A[yy] = amb * Math.sin(yy * 0.09 + t * 0.7);
     for (var xx = 0; xx < cols; xx++) B[xx] = Math.cos(xx * 0.05 - t * 0.45);
     var dashW = Math.max(1.2, cell * 0.55), sq = cell * 0.7, fillDot = cell * 0.22;
+    if (!SR) { SR = new Float32Array(rows); CR = new Float32Array(rows); SC = new Float32Array(cols); CC = new Float32Array(cols); for (var c2 = 0; c2 < cols; c2++) { SC[c2] = Math.sin(c2 * 0.05); CC[c2] = Math.cos(c2 * 0.05); } }
+    for (var r2 = 0; r2 < rows; r2++) { SR[r2] = Math.sin(t * 0.6 + r2 * 0.09); CR[r2] = Math.cos(t * 0.6 + r2 * 0.09); }
     var accentRects = [], inkRects = [], fillRects = [], fadeRects = [];
     var fillMask;
     if (morphing) {
@@ -297,8 +302,8 @@ function matrix(c, opts) {
       }
     }
     // filler: the band is always a full rectangle
-    if (fillIn > 0 && fillMask) for (var fy = 0; fy < rows; fy++) { var ay = A[fy]; for (var fx = 0; fx < cols; fx++) { var fi = fy * cols + fx; if (!fillMask[fi]) continue;
-      var fd = fillDot * (0.7 + 0.5 * th[fi]) * (0.85 + 0.15 * Math.sin(t * 0.6 + fx * 0.05 + fy * 0.09)), fo = (flowAt(vx, fx, fy) * F + ay * B[fx]) * cell * 0.3;
+    if (fillIn > 0 && fillMask && !noFill) for (var fy = 0; fy < rows; fy++) { var ay = A[fy]; for (var fx = 0; fx < cols; fx++) { var fi = fy * cols + fx; if (!fillMask[fi]) continue;
+      var fd = fillDot * (0.7 + 0.5 * th[fi]) * (0.85 + 0.15 * (SR[fy] * CC[fx] + CR[fy] * SC[fx])), fo = (flowAt(vx, fx, fy) * F + ay * B[fx]) * cell * 0.3;
       fillRects.push(fx * cell + (cell - fd) / 2 + fo, fy * cell + (cell - fd) / 2, fd); } }
     function paint(list, col, alpha, square) {
       if (!list.length) return; ctx.fillStyle = col; ctx.globalAlpha = alpha; ctx.beginPath();
@@ -312,7 +317,7 @@ function matrix(c, opts) {
     for (var z = 0; z < fadeRects.length; z += 6) { ctx.globalAlpha = 0.95 * fadeRects[z + 4]; ctx.fillStyle = fadeRects[z + 5] ? inkCol : accent; ctx.fillRect(fadeRects[z], fadeRects[z + 1], fadeRects[z + 2], fadeRects[z + 3]); }
     if (grain && !reduce) { ctx.globalAlpha = 0.22; ctx.globalCompositeOperation = 'source-atop'; var gx0 = -((Math.random() * 256) | 0), gy0 = -((Math.random() * 256) | 0); for (var gy = gy0; gy < H; gy += 256) for (var gx = gx0; gx < W; gx += 256) ctx.drawImage(grain, gx, gy); ctx.globalCompositeOperation = 'source-over'; }
     ctx.globalAlpha = 1;
-    if (plate && !settled && k === SEQ.length - 1 && !morphing && (reduce || el > GATHER + 0.45)) { settled = true; if (api.onSettled) api.onSettled(); raf = 0; return; }
+    if (plate && !settled && k === SEQ.length - 1 && !morphing && (still || reduce || el > GATHER + 0.45)) { settled = true; if (api.onSettled) api.onSettled(); raf = 0; return; }
     if (!reduce) raf = requestAnimationFrame(frame);
   }
   function run() { cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame); }
@@ -333,7 +338,7 @@ function matrix(c, opts) {
   function scatter(cb) {
     // the page is leaving: everything flies off the band, then the caller navigates
     if (reduce || !cols || !SEQ.length) { cb(); return; }
-    var cur = SEQ[SEQ.length - 1];
+    var cur = SEQ[Math.min(curK, SEQ.length - 1)]; if (!cur.f) cur = SEQ[SEQ.length - 1];
     SEQ = [{ f: cur.f, kind: cur.kind, hold: 0, dur: SCATTER }, { f: null, kind: cur.kind, hold: 1e9, dur: SCATTER }];
     PARTS = SEQ.map(function () { return null; }); PAIRS = SEQ.map(function () { return null; }); gusted = [true, true];
     t0 = performance.now(); run(); setTimeout(cb, SCATTER * 1000 + 40);
@@ -346,8 +351,15 @@ function matrix(c, opts) {
     });
     c.addEventListener('pointerleave', function () { pmx = pmy = -1; });
     c.addEventListener('click', function () { showPic = true; prevImg = null; play(); });
-    if (!c.hasAttribute('tabindex')) c.tabIndex = 0;
-    c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPic = true; prevImg = null; play(); } });
+    var hint = c.parentElement && c.parentElement.querySelector('.hint');
+    if (hint && hint.tagName !== 'BUTTON') {
+      var b = document.createElement('button'); b.type = 'button'; b.className = hint.className; b.id = hint.id;
+      var touch = matchMedia('(hover: none)').matches, verb = touch ? 'tap' : 'click';
+      var isPic = !!(opts.src && !/\.svg(\?|$)/i.test(opts.src)) && !c.id;
+      b.textContent = c.id === 'field' ? (touch ? 'tap to replay · type to rewrite' : 'move the cursor · type to rewrite') : verb + ' to replay · ' + (isPic ? 'picture' : 'glyph') + ' → text';
+      b.setAttribute('aria-label', 'Replay the header animation'); hint.replaceWith(b); hint = b;
+      hint.addEventListener('click', function () { showPic = true; prevImg = null; play(); });
+    }
     var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(play, 120); });
   }
   function start() {
@@ -367,6 +379,57 @@ function matrix(c, opts) {
   return api;
 }
 
+// ── the condensed masthead: a slim bar that arrives once the real masthead
+//    has scrolled away, so the site is one click away on a long page. A
+//    visual duplicate for pointer users; keyboard users have the original.
+(function () {
+  var mast = document.querySelector('header.mast'); if (!mast || document.querySelector('body > .home')) return;
+  var bar = document.createElement('div'); bar.className = 'topbar'; bar.setAttribute('aria-hidden', 'true');
+  var brand = mast.querySelector('.brand'), nav = mast.querySelector('nav');
+  if (!brand || !nav) return;
+  var b = brand.cloneNode(true), n = nav.cloneNode(true);
+  [].forEach.call(b.querySelectorAll('[id]'), function (e) { e.removeAttribute('id'); });
+  [].forEach.call(n.querySelectorAll('[id]'), function (e) { var id = e.id; e.removeAttribute('id'); e.addEventListener('click', function () { var o = document.getElementById(id); if (o) o.click(); }); });
+  [].forEach.call(b.querySelectorAll('a, button'), function (e) { e.tabIndex = -1; }); b.tabIndex = -1;
+  [].forEach.call(n.querySelectorAll('a, button'), function (e) { e.tabIndex = -1; });
+  bar.appendChild(b); bar.appendChild(n); document.body.appendChild(bar);
+  var on = false, t = 0;
+  function check() { var y = scrollY, edge = mast.offsetTop + mast.offsetHeight + 24, want = y > edge; if (want !== on) { on = want; document.body.classList.toggle('scrolled', on); } }
+  addEventListener('scroll', function () { var now = Date.now(); if (now - t < 60) return; t = now; check(); }, { passive: true });
+  addEventListener('resize', check); check();
+})();
+
+// ── case studies: a section index in the left margin, current section lit
+(function () {
+  var secs = [].slice.call(document.querySelectorAll('.cs .sec')); if (secs.length < 2) return;
+  var rail = document.createElement('nav'); rail.className = 'rail'; rail.setAttribute('aria-label', 'Sections');
+  var links = [];
+  secs.forEach(function (sec, i) {
+    var k = sec.querySelector('.k'); if (!k) return;
+    if (!sec.id) sec.id = 'sec-' + (i + 1);
+    var a = document.createElement('a'); a.href = '#' + sec.id; a.textContent = k.textContent.trim(); rail.appendChild(a); links.push([sec, a]);
+  });
+  if (links.length < 2) return;
+  var mainEl = document.querySelector('main'); if (mainEl) document.body.insertBefore(rail, mainEl); else document.body.appendChild(rail);
+  var cur = null;
+  function light(sec) { if (sec === cur) return; cur = sec; links.forEach(function (p) { var on = p[0] === sec; p[1].classList.toggle('on', on); if (on) p[1].setAttribute('aria-current', 'true'); else p[1].removeAttribute('aria-current'); }); }
+  function sweep() { var best = null, y = innerHeight * 0.38; links.forEach(function (p) { var r = p[0].getBoundingClientRect(); if (r.top <= y) best = p[0]; }); light(best || links[0][0]); }
+  var tick = false; addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; sweep(); }); } }, { passive: true }); addEventListener('resize', sweep); sweep();
+})();
+
+// ── work cards: a still line-screen strip of each product, same material as the headers
+(function () {
+  var cs = [].slice.call(document.querySelectorAll('canvas.thumb')); if (!cs.length) return;
+  var made = [];
+  var make = function (c) { made.push(matrix(c, { src: c.dataset.src, text: '', plate: true, still: true, cell: 4, fit: /\.svg(\?|$)/i.test(c.dataset.src) ? 'contain' : 'cover', filler: false })); };
+  if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); make(e.target); } }); }, { rootMargin: '240px 0px' }); cs.forEach(function (c) { io.observe(c); }); }
+  else cs.forEach(make);
+  var again = function () { made.forEach(function (m) { m.replay(); }); };
+  var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(again, 150); });
+  window.__repaintStills = again;
+  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', again); } catch (e) {}
+})();
+
 // ── plates gather the way the header does ──────────────────────────────────
 // Each figure.plate photograph, the first time it scrolls into view, is drawn
 // as bodies flying in from the edges; when they settle the veil lifts and the
@@ -375,29 +438,35 @@ function matrix(c, opts) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   var imgs = [].slice.call(document.querySelectorAll('figure.plate img'));
   if (!imgs.length) return;
-  var seen = new WeakSet();
-  function fire(img) { if (seen.has(img)) return; seen.add(img); io.unobserve(img); reveal(img); }
+  var seen = new WeakSet(), left = imgs.length, running = 0, queue = [];
+  function fire(img) { if (seen.has(img)) return; seen.add(img); io.unobserve(img); left--; if (running >= 2) { queue.push(img); setTimeout(function () { if (queue.indexOf(img) >= 0) { queue.splice(queue.indexOf(img), 1); img.classList.remove('veiled'); } }, 2200); } else reveal(img); }
+  function next() { running = Math.max(0, running - 1); var n = queue.shift(); if (n) reveal(n); }
   var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) fire(en.target); }); }, { threshold: 0.18 });
   imgs.forEach(function (img) { img.classList.add('veiled'); io.observe(img); });
   // the observer can sit idle in a background tab or a slow engine; a cheap
   // sweep on scroll makes sure a plate in view always gets its turn
   var sweepT = 0;
-  function sweep() { var now = Date.now(); if (now - sweepT < 120) return; sweepT = now; var h = innerHeight; imgs.forEach(function (img) { if (seen.has(img)) return; var r = img.getBoundingClientRect(); if (r.bottom > 0 && r.top < h * 0.92) fire(img); }); }
+  function sweep() { if (left <= 0) { removeEventListener('scroll', sweep); return; } var now = Date.now(); if (now - sweepT < 120) return; sweepT = now; var h = innerHeight; imgs.forEach(function (img) { if (seen.has(img)) return; var r = img.getBoundingClientRect(); if (r.bottom > 0 && r.top < h * 0.92) fire(img); }); }
   addEventListener('scroll', sweep, { passive: true }); addEventListener('resize', sweep); setTimeout(sweep, 400); setTimeout(sweep, 1500);
-  window.__revealPlate = fire;
+  window.__revealPlate = fire;   // test hook: reveal a plate without scrolling (the observer sleeps in a hidden tab)
+  addEventListener('beforeprint', function () { imgs.forEach(function (i) { i.classList.remove('veiled'); }); });
   function reveal(img) {
     var lift = function () { img.classList.remove('veiled'); };
     var go = function () {
       var fig = img.closest('figure'); if (!fig || !img.clientWidth) { lift(); return; }
-      var c = document.createElement('canvas'); c.className = 'plate-veil'; c.setAttribute('aria-hidden', 'true');
-      fig.style.position = 'relative';
-      c.style.left = img.offsetLeft + 'px'; c.style.top = img.offsetTop + 'px'; c.style.width = img.clientWidth + 'px'; c.style.height = img.clientHeight + 'px';
+      running++;
+      var done = false, c = document.createElement('canvas'), finish = function () { if (done) return; done = true; c.classList.add('done'); lift(); next(); setTimeout(function () { c.remove(); }, 700); };
+      setTimeout(finish, 3200);   // the backstop is armed before anything can throw
+      var onResize = function () { removeEventListener('resize', onResize); finish(); }; addEventListener('resize', onResize);
+      c.className = 'plate-veil'; c.setAttribute('aria-hidden', 'true');
+      var cs = getComputedStyle(img), pl = parseFloat(cs.paddingLeft) || 0, pt = parseFloat(cs.paddingTop) || 0, pr = parseFloat(cs.paddingRight) || 0, pb = parseFloat(cs.paddingBottom) || 0, bw = parseFloat(cs.borderLeftWidth) || 0;
+      c.style.left = (img.offsetLeft + bw + pl) + 'px'; c.style.top = (img.offsetTop + bw + pt) + 'px'; c.style.width = (img.clientWidth - pl - pr) + 'px'; c.style.height = (img.clientHeight - pt - pb) + 'px';
       fig.appendChild(c);
-      var m = matrix(c, { src: img.currentSrc || img.src, text: '', plate: true, cell: 5, fit: 'cover' });
-      var done = false, finish = function () { if (done) return; done = true; c.classList.add('done'); lift(); setTimeout(function () { c.remove(); }, 700); };
-      m.onSettled = finish; setTimeout(finish, 3200);   // backstop: the photograph always arrives
+      var area = img.clientWidth * img.clientHeight, cellPx = Math.max(5, Math.round(Math.sqrt(area / 20000)));   // big plates get a coarser screen
+      try { var m = matrix(c, { src: img.currentSrc || img.src, text: '', plate: true, cell: cellPx, fit: 'cover' }); m.onSettled = finish; } catch (e) { finish(); }
     };
-    if (img.complete && img.naturalWidth) go(); else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', lift, { once: true }); }
+    if (img.complete) { if (img.naturalWidth) go(); else lift(); }
+    else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', lift, { once: true }); setTimeout(function () { if (!img.complete) lift(); }, 6000); }
   }
 })();
 
@@ -411,12 +480,16 @@ document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target === '_blank' || a.origin !== location.origin) return;
   try { if (OWN_GLYPH) sessionStorage.setItem('mx:prev', OWN_GLYPH); } catch (err) {}
   // the header scatters, then the page goes (plain left-clicks to another page only)
-  if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+  if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button || a.hasAttribute('download')) return;
   if (a.pathname === location.pathname && a.hash) return;
-  var m = window.__mx && window.__mx[0]; if (!m || !m.scatter) return;
-  e.preventDefault(); var href = a.href; var went = false; var go = function () { if (!went) { went = true; location.href = href; } };
-  m.scatter(go); setTimeout(go, 700);
+  e.preventDefault(); leave(a.href);
 });
+// the one way to leave a page: remember the glyph, scatter the band, go
+function leave(href) {
+  try { if (OWN_GLYPH) sessionStorage.setItem('mx:prev', OWN_GLYPH); } catch (err) {}
+  var m = window.__mx && window.__mx[0], went = false, go = function () { if (!went) { went = true; location.href = href; } };
+  if (m && m.scatter) { m.scatter(go); setTimeout(go, 700); } else go();
+}
 
 // headers on landers + case studies
 [].forEach.call(document.querySelectorAll('canvas.matrix'), function (c) { var src = c.dataset.src || null; matrix(c, { text: c.dataset.text || '', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null }); });
@@ -449,6 +522,7 @@ document.addEventListener('click', function (e) {
   // unauthenticated limit is 60 an hour per address
   var paint = function (sha, date) { var ago = Math.round((Date.now() - new Date(date)) / 36e5); el.textContent = 'main @ ' + sha.slice(0, 7) + ' · ' + (ago < 1 ? 'just now' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago'); };
   var cached = null; try { cached = JSON.parse(sessionStorage.getItem('commit') || 'null'); } catch (e) {}
+  if (el && getComputedStyle(el).display === 'none') el = null;   // hidden on phones: no call for an invisible pill
   if (el && cached && cached.sha && Date.now() - cached.at < 6e5) paint(cached.sha, cached.date);
   else if (el) fetch('https://api.github.com/repos/stilwellc/me/commits/main', { headers: { Accept: 'application/vnd.github+json' } })
     .then(function (r) { return r.ok ? r.json() : null; })
@@ -486,14 +560,16 @@ document.addEventListener('click', function (e) {
     var q = inp.value.trim().toLowerCase();
     shown = ITEMS.filter(function (i) { return !q || i.t.toLowerCase().indexOf(q) >= 0; });
     sel = Math.min(sel, Math.max(0, shown.length - 1));
+    inp.setAttribute('aria-activedescendant', shown.length ? 'pal-o' + sel : '');
     list.innerHTML = shown.map(function (i, k) { return '<li role="option" id="pal-o' + k + '" aria-selected="' + (k === sel) + '"' + (k === sel ? ' class="on"' : '') + ' data-k="' + k + '"><span>' + esc(i.t) + '</span><span class="h">' + esc(i.h) + '</span></li>'; }).join('') || '<li><span class="h">nothing matches</span></li>';
   }
-  function go(i) { if (!i) return; close(); if (i.fn) return i.fn(); if (i.x) window.open(i.u, '_blank', 'noopener'); else location.href = i.u; }
+  function go(i) { if (!i) return; close(); if (i.fn) return i.fn(); if (i.x) window.open(i.u, '_blank', 'noopener'); else leave(i.u); }
   var opener = null;
   function open() { closeKeys(); opener = document.activeElement; pal.hidden = false; inp.value = ''; sel = 0; render(); inp.focus(); inp.setAttribute('aria-expanded', 'true'); }
   function close() { pal.hidden = true; inp.setAttribute('aria-expanded', 'false'); inp.blur(); if (opener && opener.focus) { opener.focus(); opener = null; } }
-  function openKeys() { close(); keys.hidden = false; var box = keys.querySelector('.keys-box'); if (box) { box.tabIndex = -1; box.focus(); } }
-  function closeKeys() { keys.hidden = true; }
+  function openKeys() { close(); opener = opener || document.activeElement; keys.hidden = false; var box = keys.querySelector('.keys-box'); if (box) { box.tabIndex = -1; box.focus(); } }
+  function closeKeys() { if (keys.hidden) return; keys.hidden = true; if (opener && opener.focus) { opener.focus(); opener = null; } }
+  keys.setAttribute('aria-modal', 'true'); keys.addEventListener('keydown', function (e) { if (e.key === 'Tab') e.preventDefault(); });
   inp.setAttribute('role', 'combobox'); inp.setAttribute('aria-expanded', 'false'); inp.setAttribute('aria-controls', 'pal-list'); inp.setAttribute('aria-autocomplete', 'list');
   list.setAttribute('role', 'listbox');
   pal.addEventListener('keydown', function (e) { if (e.key === 'Tab') { e.preventDefault(); inp.focus(); } });
@@ -517,11 +593,11 @@ document.addEventListener('click', function (e) {
     if (inField || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === '/') { e.preventDefault(); open(); return; }
     if (e.key === '?') { e.preventDefault(); openKeys(); return; }
+    if (window.__fieldType && window.__fieldType(e)) { e.preventDefault(); return; }   // on the home page the letterform gets the keys first
     if (e.key === 't') { window.__toggleTheme && window.__toggleTheme(); return; }
     var now = Date.now();
-    if (pending === 'g' && now - pt < 900) { pending = null; var map = { h: 'index.html', w: 'work.html', s: 'security.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' }; if (map[e.key]) { e.preventDefault(); location.href = map[e.key]; return; } }
+    if (pending === 'g' && now - pt < 900) { pending = null; var map = { h: 'index.html', w: 'work.html', s: 'security.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' }; if (map[e.key]) { e.preventDefault(); leave(map[e.key]); return; } }
     if (e.key === 'g') { pending = 'g'; pt = now; return; }
-    if (window.__fieldType && window.__fieldType(e)) e.preventDefault();
   });
 })();
 
@@ -585,7 +661,7 @@ document.addEventListener('click', function (e) {
     var rows = (rc.rows || []).filter(function (r) { return r.p && r.r; }).slice(0, 5); if (!rows.length) return;
     document.getElementById('trace-rec').innerHTML = rows.map(function (r) {
       var t = r.t.length > 64 ? r.t.slice(0, 62) + '…' : r.t;
-      return '<li><span>' + t + ' · ' + r.h + ' · called ' + esc(r.d) + '</span><span class="v">called ' + usd(r.p) + ' → realized ' + usd(r.r) + '</span></li>';
+      return '<li><span>' + esc(t) + ' · ' + esc(r.h) + ' · called ' + esc(r.d) + '</span><span class="v">called ' + usd(r.p) + ' → realized ' + usd(r.r) + '</span></li>';
     }).join('');
     var g = rc.record && rc.record.vsbid && rc.record.vsbid.graded; if (g) document.getElementById('bt-graded').textContent = g.toLocaleString('en-US');
     document.getElementById('trace-rec-src').textContent = 'Live from lectr.bid, generated ' + (rc.generatedAt || '') + '.';
