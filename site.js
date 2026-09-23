@@ -1,11 +1,3 @@
-// ── theme (explicit toggle persists; otherwise system) ─────────────────────
-(function () {
-  var root = document.documentElement;
-  function current() { var t = root.getAttribute('data-theme'); if (t) return t; return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
-  function set(t) { root.setAttribute('data-theme', t); try { localStorage.setItem('theme', t); } catch (e) {} }
-  window.__toggleTheme = function () { set(current() === 'dark' ? 'light' : 'dark'); if (window.THEME) THEME.epoch++; if (window.__repaintStills) setTimeout(window.__repaintStills, 380); };
-  var b = document.getElementById('theme'); if (b) b.addEventListener('click', window.__toggleTheme);
-})();
 
 // ── the matrix: picture → text, in cells ────────────────────────────────────
 // One engine for every header. A cell grid over the canvas. Phase 1 (if a
@@ -434,7 +426,6 @@ function matrix(c, opts) {
   var again = function () { made.forEach(function (m) { m.replay(); }); };
   var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(again, 150); });
   window.__repaintStills = again;
-  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', again); } catch (e) {}
 })();
 
 // ── plates gather the way the header does ──────────────────────────────────
@@ -549,7 +540,7 @@ function leave(href) {
 // ── the shortcuts dialog, rendered from one table so help and keymap agree
 (function () {
   var grid = document.querySelector('#keys .keys-grid'); if (!grid || grid.children.length) return;
-  var ROWS = [['⌘K', 'command palette'], ['g h', 'home'], ['g w', 'work'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['t', 'toggle theme'], ['enter', 'on a focused header: replay picture → text'], ['a–z', 'on the home page: type into the letterform'], ['?', 'this']];
+  var ROWS = [['⌘K', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['t', 'toggle theme'], ['enter', 'on a focused header: replay picture → text'], ['a–z', 'on the home page: type into the letterform'], ['?', 'this']];
   grid.innerHTML = ROWS.map(function (r) { return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + esc(k) + '</kbd>'; }).join(' ') + '</span><span>' + esc(r[1]) + '</span>'; }).join('');
 })();
 
@@ -558,11 +549,11 @@ function leave(href) {
   var pal = document.getElementById('pal'), inp = document.getElementById('pal-in'), list = document.getElementById('pal-list'), keys = document.getElementById('keys');
   if (!pal) return;
   var ITEMS = [
-    { t: 'Home', h: 'g h', u: 'index.html' }, { t: 'Work', h: 'g w', u: 'work.html' }, { t: 'Physical', h: 'g p', u: 'physical.html' }, { t: 'Project 1122', h: 'residence', u: '1122.html' }, { t: '3D prints', h: 'text → print', u: 'prints.html' }, { t: 'Wave panel', h: '3D prints', u: 'wave.html' }, { t: 'Security', h: 'g s', u: 'security.html' }, { t: 'Writing', h: 'g n', u: 'writing.html' }, { t: 'GitHub', h: 'g g', u: 'github.html' }, { t: 'About', h: 'g a', u: 'about.html' }, { t: 'Résumé', h: 'g r', u: 'resume.html' },
-    { t: 'lectr — case study', h: 'g l', u: 'lectr.html' }, { t: 'SecMCPHub — case study', h: 'work', u: 'secmcphub.html' }, { t: 'Soirée — case study', h: 'work', u: 'soiree.html' }, { t: 'Starling', h: 'work', u: 'work.html#starling' }, { t: 'Elixir security', h: 'work', u: 'work.html#elixir' },
+    { t: 'Home', h: 'g h', u: 'index.html' }, { t: 'Digital', h: 'g d', u: 'digital.html' }, { t: 'Physical', h: 'g p', u: 'physical.html' }, { t: 'Project 1122', h: 'residence', u: '1122.html' }, { t: '3D prints', h: 'text → print', u: 'prints.html' }, { t: 'Wave panel', h: '3D prints', u: 'wave.html' }, { t: 'Security', h: 'g s', u: 'security.html' }, { t: 'Writing', h: 'g n', u: 'writing.html' }, { t: 'GitHub', h: 'g g', u: 'github.html' }, { t: 'About', h: 'g a', u: 'about.html' }, { t: 'Résumé', h: 'g r', u: 'resume.html' },
+    { t: 'lectr — case study', h: 'g l', u: 'lectr.html' }, { t: 'SecMCPHub — case study', h: 'digital', u: 'secmcphub.html' }, { t: 'Soirée — case study', h: 'digital', u: 'soiree.html' }, { t: 'Starling', h: 'digital', u: 'digital.html#starling' }, { t: 'Elixir security', h: 'digital', u: 'digital.html#elixir' },
     { t: 'Open lectr.bid', h: '↗', u: 'https://lectr.bid', x: 1 }, { t: 'How we built the price-movement engine', h: '↗', u: 'https://lectr.bid/blog/how-we-built-the-pricing-engine', x: 1 }, { t: 'Open Starling', h: '↗', u: 'https://starling-6s1.pages.dev', x: 1 }, { t: 'text2print (GitHub)', h: '↗', u: 'https://github.com/stilwellc/text2print', x: 1 }, { t: 'Open soiree.today', h: '↗', u: 'https://soiree.today', x: 1 },
     { t: 'github.com/stilwellc', h: '↗', u: 'https://github.com/stilwellc', x: 1 }, { t: 'LinkedIn', h: '↗', u: 'https://www.linkedin.com/in/collin-stilwell/', x: 1 }, { t: 'Substack', h: '↗', u: 'https://collinsthoughts.substack.com', x: 1 },
-    { t: 'Toggle theme', h: 't', fn: function () { window.__toggleTheme && window.__toggleTheme(); } }, { t: 'Shortcuts', h: '?', fn: function () { openKeys(); } }
+    { t: 'Shortcuts', h: '?', fn: function () { openKeys(); } }
   ];
   var sel = 0, shown = ITEMS;
   function render() {
@@ -603,9 +594,8 @@ function leave(href) {
     if (e.key === '/') { e.preventDefault(); open(); return; }
     if (e.key === '?') { e.preventDefault(); openKeys(); return; }
     if (window.__fieldType && window.__fieldType(e)) { e.preventDefault(); return; }   // on the home page the letterform gets the keys first
-    if (e.key === 't') { window.__toggleTheme && window.__toggleTheme(); return; }
     var now = Date.now();
-    if (pending === 'g' && now - pt < 900) { pending = null; var map = { h: 'index.html', w: 'work.html', s: 'security.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' }; if (map[e.key]) { e.preventDefault(); leave(map[e.key]); return; } }
+    if (pending === 'g' && now - pt < 900) { pending = null; var map = { h: 'index.html', d: 'digital.html', s: 'security.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' }; if (map[e.key]) { e.preventDefault(); leave(map[e.key]); return; } }
     if (e.key === 'g') { pending = 'g'; pt = now; return; }
   });
 })();

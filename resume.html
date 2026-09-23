@@ -13,14 +13,13 @@
 <meta name="twitter:image" content="https://stilwellc.github.io/me/assets/og/resume.png">
 <link rel="canonical" href="https://stilwellc.github.io/me/resume.html">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23161616'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-size='13' fill='%23FCFBFA'%3ECS%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790206847">
+<link rel="stylesheet" href="site.css?v=1790207173">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
-<script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
 <style>
   .res .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; align-items: end; }
@@ -33,7 +32,7 @@
     /* the theme selectors are included so a dark-mode visitor does not print
        near-white text on white paper; the body-prefixed selectors outrank the
        site's centre-orientation block, which the old rules silently lost to */
-    :root, :root[data-theme="dark"], :root[data-theme="light"] { --ground: #fff; --ink: #111; --ink-2: #444; --ink-3: #777; --hair: #ddd; --hair-2: #ccc; }
+    :root { --ground: #fff; --ink: #111; --ink-2: #444; --ink-3: #777; --hair: #ddd; --hair-2: #ccc; }
     @page { margin: 14mm; }
     .mast, .foot, .print, .pal, .keys, .mhead, #palette-btn, #theme { display: none !important; }
     body { font-size: 12.5px; background: #fff; color: #111; }
@@ -49,7 +48,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./"><span class="n">Collin Stilwell</span><span class="r">Security</span><span class="pill mono" id="commit">v2026.09</span></a>
-  <nav aria-label="Site"><a class="pill" href="work.html">Work</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill on" href="resume.html">Résumé</a><button class="pill" id="theme" type="button" aria-label="Toggle theme" title="Toggle theme (t)">◐</button><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill on" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page res">
   <div class="mhead rv"><canvas class="matrix" data-text="Résumé" data-src="assets/resume.svg" aria-label="A paper plane, decoded into the word Résumé" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
@@ -104,7 +103,7 @@
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… work, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… digital, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -115,6 +114,6 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790206847"></script>
+<script src="site.js?v=1790207173"></script>
 </body>
 </html>
