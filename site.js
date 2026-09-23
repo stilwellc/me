@@ -33,7 +33,6 @@ function matrix(c, opts) {
   var fc, fr, F = 5, vx, vy, tmpx, tmpy, pmx = -1, pmy = -1, pmt = 0;   // flow grid, F fine cells per flow cell
   var GAIN = 1.4, DECAY = 0.94, DIFF = 0.11, MAXV = 2.4;                 // in flow cells
   var FILL_IN = 0.35, PREV_HOLD = 0.9, PIC_HOLD = 2.6, MORPH = 0.85, WORD_MORPH = 0.6, PRINT = 0.7;
-  var states = [], gusted = [], gustDir = 1;
   var grain = null, gctx = null, A = null, B = null;
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
   var focus = [0.5, 0.5];
@@ -147,74 +146,149 @@ function matrix(c, opts) {
     // into its next shape instead of switching to it
     for (var y = 0; y < fr; y++) { var g = 1.5 * (0.7 + 0.3 * Math.sin(y * 0.6)); for (var x = 0; x < fc; x++) { var i = y * fc + x; vx[i] = Math.max(-MAXV, Math.min(MAXV, vx[i] + dir * g)); vy[i] += 0.25 * Math.sin(x * 0.4 + y); } }
   }
-  function sequence() {
-    // what the band shows, in order; each state holds, then morphs into the next
-    var s = [];
-    if (picPrev && !reduce) s.push({ f: picPrev, kind: 'pic', hold: PREV_HOLD, sweep: 'lr' });
-    if (pic && showPic && !reduce) s.push({ f: pic, kind: 'pic', hold: PIC_HOLD, sweep: 'centre' });
-    s.push({ f: maskF, kind: 'word', hold: 1e9, sweep: 'lr' });
-    states = s; gusted = s.map(function () { return false; });
+  // ── particles ───────────────────────────────────────────────────────────
+  // Every drawn cell is a body with a home. A change of picture is not an
+  // interpolation in place: the bodies explode outward from the centre and
+  // are drawn back to their new homes, paired by angle so each one flies out
+  // and returns along its own bearing. The first picture gathers in from
+  // beyond the band's edges; leaving a page scatters it.
+  var SEQ = [], PARTS = [], PAIRS = [], gusted = [], gustDir = 1;
+  var GATHER = 1.05, EXPLODE = 0.32, SCATTER = 0.34;
+  function makeParticles(st) {
+    var fill = new Uint8Array(N), P = { n: 0, hx: null, hy: null, v: null, e: null, t: null, kind: st.kind, fill: fill };
+    if (!st.f) { fill.fill(1); P.hx = P.hy = P.v = P.e = P.t = new Float32Array(0); return P; }
+    var f = st.f.v, e = st.f.e, thr = st.kind === 'word' ? 0.3 : 0.06, n = 0;
+    var hx = new Float32Array(N), hy = new Float32Array(N), v = new Float32Array(N), ee = new Float32Array(N), tt = new Float32Array(N);
+    for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
+      var i = y * cols + x, val = f[i];
+      if (val < thr) { fill[i] = 1; continue; }
+      hx[n] = x; hy[n] = y; v[n] = val; ee[n] = e ? e[i] : 1; tt[n] = th[i]; n++;
+    }
+    P.n = n; P.hx = hx; P.hy = hy; P.v = v; P.e = ee; P.t = tt; return P;
   }
+  function byAngle(P) {
+    var cx = cols / 2, cy = rows / 2, idx = new Array(P.n), key = new Float32Array(P.n), sq = rows / cols;
+    for (var i = 0; i < P.n; i++) { idx[i] = i; key[i] = Math.atan2(P.hy[i] - cy, (P.hx[i] - cx) * sq) + 0.003 * Math.hypot(P.hx[i] - cx, P.hy[i] - cy); }
+    idx.sort(function (a, b) { return key[a] - key[b]; }); return idx;
+  }
+  function makePairs(A, B) {
+    var cx = cols / 2, cy = rows / 2, R = Math.hypot(cx, cy);
+    var gather = A.n === 0, scatter = B.n === 0, n = scatter ? A.n : B.n;
+    var Q = { n: n, gather: gather, scatter: scatter, sk: A.kind, tk: B.kind,
+      sx: new Float32Array(n), sy: new Float32Array(n), sv: new Float32Array(n), se: new Float32Array(n),
+      tx: new Float32Array(n), ty: new Float32Array(n), tv: new Float32Array(n), te: new Float32Array(n),
+      bx: new Float32Array(n), by: new Float32Array(n), t: new Float32Array(n), fill: new Uint8Array(N) };
+    for (var c = 0; c < N; c++) Q.fill[c] = A.fill[c] & B.fill[c];
+    var ia = A.n ? byAngle(A) : null, ib = B.n ? byAngle(B) : null;
+    for (var j = 0; j < n; j++) {
+      var a = scatter ? j : (gather ? -1 : ia[Math.floor(j * A.n / B.n)]), b = scatter ? -1 : ib[j];
+      var srcI = scatter ? ia[j] : a;
+      if (srcI >= 0) { Q.sx[j] = A.hx[srcI]; Q.sy[j] = A.hy[srcI]; Q.sv[j] = A.v[srcI]; Q.se[j] = A.e[srcI]; Q.t[j] = A.t[srcI]; }
+      if (b >= 0) { Q.tx[j] = B.hx[b]; Q.ty[j] = B.hy[b]; Q.tv[j] = B.v[b]; Q.te[j] = B.e[b]; if (srcI < 0) Q.t[j] = B.t[b]; }
+      if (gather) {
+        // born beyond the band's edge, on the target's own bearing
+        var ang = Math.atan2(Q.ty[j] - cy, Q.tx[j] - cx) + (Q.t[j] - 0.5) * 0.9, rad = R * (1.05 + 0.6 * Q.t[j]);
+        Q.sx[j] = cx + Math.cos(ang) * rad; Q.sy[j] = cy + Math.sin(ang) * rad; Q.sv[j] = Q.tv[j] * 0.5; Q.se[j] = Q.te[j]; Q.bx[j] = Q.sx[j]; Q.by[j] = Q.sy[j];
+      } else {
+        var dx = Q.sx[j] - cx, dy = (Q.sy[j] - cy) * (cols / rows), L = Math.hypot(dx, dy) || 1, rot = (Q.t[j] - 0.5) * 1.2, cs = Math.cos(rot), sn = Math.sin(rot);
+        var ux = (dx * cs - dy * sn) / L, uy = (dx * sn + dy * cs) / L, len = R * (scatter ? 0.9 : 0.45) * (0.5 + Q.t[j]);
+        Q.bx[j] = Q.sx[j] + ux * len; Q.by[j] = Q.sy[j] + uy * len * (rows / cols);
+        if (scatter) { Q.tx[j] = Q.bx[j] + ux * len; Q.ty[j] = Q.by[j] + uy * len * (rows / cols); Q.tv[j] = 0; Q.te[j] = Q.se[j]; }
+      }
+    }
+    // when there are more bodies than homes, the rest fly off and fade
+    if (!gather && !scatter && A.n > B.n) {
+      var used = new Uint8Array(A.n); for (var k = 0; k < n; k++) used[ia[Math.floor(k * A.n / B.n)]] = 1;
+      var extra = []; for (var m = 0; m < A.n; m++) if (!used[m]) extra.push(m);
+      var grow = function (arr, more) { var o = new Float32Array(arr.length + more); o.set(arr); return o; };
+      var base = n; n += extra.length;
+      ['sx', 'sy', 'sv', 'se', 'tx', 'ty', 'tv', 'te', 'bx', 'by', 't'].forEach(function (key) { Q[key] = grow(Q[key], extra.length); });
+      Q.die = new Uint8Array(n);
+      for (var q = 0; q < extra.length; q++) {
+        var s = extra[q], jj = base + q; Q.die[jj] = 1;
+        Q.sx[jj] = A.hx[s]; Q.sy[jj] = A.hy[s]; Q.sv[jj] = A.v[s]; Q.se[jj] = A.e[s]; Q.t[jj] = A.t[s];
+        var ddx = A.hx[s] - cx, ddy = (A.hy[s] - cy) * (cols / rows), LL = Math.hypot(ddx, ddy) || 1, ln = R * 0.6 * (0.5 + A.t[s]);
+        Q.bx[jj] = A.hx[s] + ddx / LL * ln; Q.by[jj] = A.hy[s] + ddy / LL * ln * (rows / cols); Q.tx[jj] = Q.bx[jj] + ddx / LL * ln; Q.ty[jj] = Q.by[jj] + ddy / LL * ln * (rows / cols); Q.tv[jj] = 0; Q.te[jj] = A.e[s];
+      }
+      Q.n = n;
+    }
+    return Q;
+  }
+  function sequence() {
+    var s = [];
+    if (!reduce) s.push({ f: null, kind: (picPrev ? 'pic' : (pic && showPic ? 'pic' : 'word')), hold: 0, dur: GATHER });   // the gather
+    if (picPrev && !reduce) s.push({ f: picPrev, kind: 'pic', hold: PREV_HOLD, dur: MORPH });
+    if (pic && showPic && !reduce) s.push({ f: pic, kind: 'pic', hold: PIC_HOLD, dur: MORPH });
+    s.push({ f: maskF, kind: 'word', hold: 1e9, dur: WORD_MORPH });
+    SEQ = s; PARTS = s.map(function () { return null; }); PAIRS = s.map(function () { return null; }); gusted = s.map(function () { return false; });
+  }
+  function partsAt(k) { return PARTS[k] || (PARTS[k] = makeParticles(SEQ[k])); }
+  function pairsAt(k) { return PAIRS[k] || (PAIRS[k] = makePairs(partsAt(k), partsAt(k + 1))); }
+  function eio(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  function eo(x) { return 1 - Math.pow(1 - x, 3); }
   function frame(now) {
     var el = (now - t0) / 1000;
     ctx.clearRect(0, 0, W, H);
     var inkCol = css('color') || '#161616', accent = css('--accent') || '#FF5A1F';
     if (!reduce) stepFlow();
-    // where are we in the sequence
-    var k = 0, u = 0, tt = el, morphing = false, morphT = MORPH;
-    while (k < states.length - 1) {
-      var d = states[k].kind === 'word' && states[k + 1].kind === 'word' ? WORD_MORPH : MORPH;
-      if (tt < states[k].hold) break;
-      tt -= states[k].hold;
-      if (tt < d) { morphing = true; u = tt / d; morphT = d; break; }
+    var k = 0, u = 0, tt = el, morphing = false;
+    while (k < SEQ.length - 1) {
+      if (tt < SEQ[k].hold) break;
+      tt -= SEQ[k].hold; var d = SEQ[k].dur;
+      if (tt < d) { morphing = true; u = tt / d; break; }
       tt -= d; k++;
     }
-    if (reduce) { k = states.length - 1; morphing = false; }
-    var SA = states[k], SB = morphing ? states[k + 1] : null;
-    if (morphing && !gusted[k]) { gusted[k] = true; states[k].dir = gustDir; gust(gustDir); gustDir = -gustDir; }
-    var sdir = SA.dir || 1;
-    var printIn = k === 0 ? 1 - Math.pow(1 - Math.min(1, el / PRINT), 3) : 1;
+    if (reduce) { k = SEQ.length - 1; morphing = false; }
     var fillIn = reduce ? 1 : Math.min(1, el / FILL_IN);
-    var t = now / 1000, half = cols / 2, dmax = Math.hypot(half, rows / 2);
-    // ambient drift, separable so it is cheap
-    var amb = SA.kind === 'pic' ? 0.9 : 0.25;
+    var t = now / 1000;
+    var amb = SEQ[k].kind === 'pic' ? 0.9 : 0.25;
     for (var yy = 0; yy < rows; yy++) A[yy] = amb * Math.sin(yy * 0.09 + t * 0.7);
     for (var xx = 0; xx < cols; xx++) B[xx] = Math.cos(xx * 0.05 - t * 0.45);
     var dashW = Math.max(1.2, cell * 0.55), sq = cell * 0.7, fillDot = cell * 0.22;
-    var accentRects = [], inkRects = [], fillRects = [];
-    var fA = SA.f, fB = SB ? SB.f : null, sweep = SB ? SB.sweep : null, up = u * 1.35;
-    for (var y = 0; y < rows; y++) {
-      var ay = A[y];
-      for (var x = 0; x < cols; x++) {
-        var i = y * cols + x, ax = ay * B[x];
-        var fxv = flowAt(vx, x, y) * F, fyv = flowAt(vy, x, y) * F;
-        var sxp = x - fxv - ax, syp = y - fyv - ax * 0.4;
-        // per-cell mix into the next state, along a dithered sweep
-        var mix = 0;
-        if (SB) { var dpos = sweep === 'centre' ? Math.abs(x - half) / half : (sdir > 0 ? x / cols : 1 - x / cols); mix = smooth((up - (0.7 * dpos + 0.3 * th[i])) / 0.28); }
-        var vA = sample(fA.v, sxp, syp), vB = fB ? sample(fB.v, sxp, syp) : 0;
-        if (SA.kind === 'word' && vA < 0.3) vA = 0; if (fB && SB.kind === 'word' && vB < 0.3) vB = 0;
-        if (SA.kind === 'pic' && vA < 0.06) vA = 0; if (fB && SB.kind === 'pic' && vB < 0.06) vB = 0;
-        var v = vA * (1 - mix) + vB * mix;
-        if (k === 0 && printIn < 1) { var pd = Math.hypot(x - half, y - rows / 2) / dmax; var pin = clamp01((printIn * 1.5 - (0.5 * pd + 0.5 * th[i])) / 0.2); v *= pin; }
-        if (v < 0.04) {
-          // filler: the band is always a full rectangle
-          if (fillIn > 0) { var fd = fillDot * (0.7 + 0.5 * th[i]) * (0.85 + 0.15 * Math.sin(t * 0.6 + x * 0.05 + y * 0.09)); fillRects.push(x * cell + (cell - fd) / 2 - fxv * cell * 0.3, y * cell + (cell - fd) / 2 - fyv * cell * 0.3, fd); }
-          continue;
+    var accentRects = [], inkRects = [], fillRects = [], fadeRects = [];
+    var fillMask;
+    if (morphing) {
+      var Q = pairsAt(k);
+      if (!gusted[k] && !Q.gather) { gusted[k] = true; gust(gustDir); gustDir = -gustDir; }
+      fillMask = Q.fill;
+      for (var j = 0; j < Q.n; j++) {
+        var st = Q.t[j], tj = Math.min(1, Math.max(0, (u - 0.12 * st) / 0.88)), x, y, mix, alpha = 1;
+        if (Q.gather) { var g = eio(tj); x = Q.sx[j] + (Q.tx[j] - Q.sx[j]) * g; y = Q.sy[j] + (Q.ty[j] - Q.sy[j]) * g; mix = g; }
+        else {
+          var ex = eo(Math.min(1, tj / EXPLODE)), cv = eio(Math.max(0, (tj - 0.22) / 0.78));
+          var px = Q.sx[j] + (Q.bx[j] - Q.sx[j]) * ex, py = Q.sy[j] + (Q.by[j] - Q.sy[j]) * ex;
+          if (Q.scatter || (Q.die && Q.die[j])) { x = px + (Q.tx[j] - Q.bx[j]) * cv; y = py + (Q.ty[j] - Q.by[j]) * cv; mix = 0; alpha = 1 - Math.min(1, Math.max(0, (tj - 0.15) / 0.55)); }
+          else { x = px + (Q.tx[j] - px) * cv; y = py + (Q.ty[j] - py) * cv; mix = cv; }
         }
-        // shape: dash for a picture, square for a word, blended by mix
-        var kindA = SA.kind, kindB = SB ? SB.kind : kindA;
-        var wA = kindA === 'pic' ? dashW * (0.85 + 0.6 * (fA.e ? fA.e[i] : 0)) : sq * (0.6 + 0.4 * vA);
-        var hA = kindA === 'pic' ? cell * (0.2 + 0.9 * vA) * (0.78 + 0.22 * (fA.e ? fA.e[i] : 1)) : wA;
-        var wB = !SB ? wA : (kindB === 'pic' ? dashW * (0.85 + 0.6 * (fB.e ? fB.e[i] : 0)) : sq * (0.6 + 0.4 * vB));
-        var hB = !SB ? hA : (kindB === 'pic' ? cell * (0.2 + 0.9 * vB) * (0.78 + 0.22 * (fB.e ? fB.e[i] : 1)) : wB);
-        if (SB && kindB === 'word' && kindA !== 'word') { var pop = 1 + 0.18 * Math.sin(Math.PI * clamp01((mix - 0.45) / 0.55)); wB *= pop; hB *= pop; }
-        var w = wA * (1 - mix) + wB * mix, h = hA * (1 - mix) + hB * mix;
-        if (h < 0.5) continue;
-        var toInk = (mix < 0.5 ? kindA : kindB) === 'word';
-        (toInk ? inkRects : accentRects).push(x * cell + (cell - w) / 2, y * cell + (cell - h) / 2, w, h);
+        if (alpha <= 0.02) continue;
+        var v = Q.sv[j] * (1 - mix) + Q.tv[j] * mix; if (v < 0.04 && !Q.gather) continue;
+        var kA = Q.sk, kB = Q.tk;
+        var wA = kA === 'pic' ? dashW * (0.85 + 0.6 * Q.se[j]) : sq * (0.6 + 0.4 * Q.sv[j]);
+        var hA = kA === 'pic' ? cell * (0.2 + 0.9 * Q.sv[j]) * (0.78 + 0.22 * Q.se[j]) : wA;
+        var wB = kB === 'pic' ? dashW * (0.85 + 0.6 * Q.te[j]) : sq * (0.6 + 0.4 * Q.tv[j]);
+        var hB = kB === 'pic' ? cell * (0.2 + 0.9 * Q.tv[j]) * (0.78 + 0.22 * Q.te[j]) : wB;
+        if (kB === 'word' && kA !== 'word') { var pop = 1 + 0.18 * Math.sin(Math.PI * Math.min(1, Math.max(0, (mix - 0.45) / 0.55))); wB *= pop; hB *= pop; }
+        var w = wA * (1 - mix) + wB * mix, h = hA * (1 - mix) + hB * mix; if (h < 0.5) continue;
+        var ox = (flowAt(vx, x, y) * F + A[Math.min(rows - 1, Math.max(0, y | 0))] * B[Math.min(cols - 1, Math.max(0, x | 0))]) * cell;
+        var X = x * cell + (cell - w) / 2 + ox, Y = y * cell + (cell - h) / 2;
+        var toInk = ((mix + (st - 0.5) * 0.3) < 0.5 ? kA : kB) === 'word';
+        if (alpha < 1) fadeRects.push(X, Y, w, h, alpha, toInk ? 1 : 0);
+        else (toInk ? inkRects : accentRects).push(X, Y, w, h);
+      }
+    } else {
+      var P = partsAt(k); fillMask = P.fill;
+      for (var i = 0; i < P.n; i++) {
+        var hx = P.hx[i], hy = P.hy[i], val = P.v[i];
+        var off = (flowAt(vx, hx, hy) * F + A[hy] * B[hx]) * cell;
+        var isW = P.kind === 'word', ww = isW ? sq * (0.6 + 0.4 * val) : dashW * (0.85 + 0.6 * P.e[i]);
+        var hh = isW ? ww : cell * (0.2 + 0.9 * val) * (0.78 + 0.22 * P.e[i]);
+        (isW ? inkRects : accentRects).push(hx * cell + (cell - ww) / 2 + off, hy * cell + (cell - hh) / 2 + off * 0.4, ww, hh);
       }
     }
+    // filler: the band is always a full rectangle
+    if (fillIn > 0 && fillMask) for (var fy = 0; fy < rows; fy++) { var ay = A[fy]; for (var fx = 0; fx < cols; fx++) { var fi = fy * cols + fx; if (!fillMask[fi]) continue;
+      var fd = fillDot * (0.7 + 0.5 * th[fi]) * (0.85 + 0.15 * Math.sin(t * 0.6 + fx * 0.05 + fy * 0.09)), fo = (flowAt(vx, fx, fy) * F + ay * B[fx]) * cell * 0.3;
+      fillRects.push(fx * cell + (cell - fd) / 2 + fo, fy * cell + (cell - fd) / 2, fd); } }
     function paint(list, col, alpha, square) {
       if (!list.length) return; ctx.fillStyle = col; ctx.globalAlpha = alpha; ctx.beginPath();
       if (square) for (var q = 0; q < list.length; q += 3) ctx.rect(list[q], list[q + 1], list[q + 2], list[q + 2]);
@@ -224,23 +298,34 @@ function matrix(c, opts) {
     paint(fillRects, inkCol, 0.13 * fillIn, true);
     paint(accentRects, accent, 0.95, false);
     paint(inkRects, inkCol, 0.92, false);
+    for (var z = 0; z < fadeRects.length; z += 6) { ctx.globalAlpha = 0.95 * fadeRects[z + 4]; ctx.fillStyle = fadeRects[z + 5] ? inkCol : accent; ctx.fillRect(fadeRects[z], fadeRects[z + 1], fadeRects[z + 2], fadeRects[z + 3]); }
     if (grain && !reduce) { ctx.globalAlpha = 0.22; ctx.globalCompositeOperation = 'source-atop'; var gx0 = -((Math.random() * 256) | 0), gy0 = -((Math.random() * 256) | 0); for (var gy = gy0; gy < H; gy += 256) for (var gx = gx0; gx < W; gx += 256) ctx.drawImage(grain, gx, gy); ctx.globalCompositeOperation = 'source-over'; }
     ctx.globalAlpha = 1;
-    if (!reduce) raf = requestAnimationFrame(frame);
+    if (!reduce && !(k === SEQ.length - 1 && !morphing && idle())) raf = requestAnimationFrame(frame); else if (!reduce) raf = requestAnimationFrame(frame);
   }
+  function idle() { return false; }
+  function run() { cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame); }
   function play() {
     buildGrid(); maskF = buildMask(word);
     picPrev = prevImg ? halftone(prevImg) : null; pic = (img && showPic) ? halftone(img) : null;
-    sequence(); t0 = performance.now();
-    cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame);
+    sequence(); t0 = performance.now(); run();
   }
   function setWord(w) {
     word = w; showPic = false;
     if (!cols) return play();
-    var old = maskF; maskF = buildMask(w);
-    if (reduce || !old) { states = [{ f: maskF, kind: 'word', hold: 1e9, sweep: 'lr' }]; gusted = [false]; }
-    else { states = [{ f: old, kind: 'word', hold: 0, sweep: 'lr' }, { f: maskF, kind: 'word', hold: 1e9, sweep: 'lr' }]; gusted = [false, false]; }
-    t0 = performance.now(); cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame);
+    var cur = SEQ.length ? SEQ[SEQ.length - 1] : null; maskF = buildMask(w);
+    if (reduce || !cur || !cur.f) { SEQ = [{ f: maskF, kind: 'word', hold: 1e9, dur: WORD_MORPH }]; }
+    else SEQ = [{ f: cur.f, kind: cur.kind, hold: 0, dur: WORD_MORPH }, { f: maskF, kind: 'word', hold: 1e9, dur: WORD_MORPH }];
+    PARTS = SEQ.map(function () { return null; }); PAIRS = SEQ.map(function () { return null; }); gusted = SEQ.map(function () { return false; });
+    t0 = performance.now(); run();
+  }
+  function scatter(cb) {
+    // the page is leaving: everything flies off the band, then the caller navigates
+    if (reduce || !cols || !SEQ.length) { cb(); return; }
+    var cur = SEQ[SEQ.length - 1];
+    SEQ = [{ f: cur.f, kind: cur.kind, hold: 0, dur: SCATTER }, { f: null, kind: cur.kind, hold: 1e9, dur: SCATTER }];
+    PARTS = SEQ.map(function () { return null; }); PAIRS = SEQ.map(function () { return null; }); gusted = [true, true];
+    t0 = performance.now(); run(); setTimeout(cb, SCATTER * 1000 + 40);
   }
   c.addEventListener('pointermove', function (e) {
     var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / (cell * F), y = (e.clientY - r.top) / (cell * F), now = performance.now();
@@ -262,9 +347,8 @@ function matrix(c, opts) {
   }
   if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('300 40px "Bricolage Grotesque"'), document.fonts.load('400 12px "Geist Mono"')]).then(start, start); else start();
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (!raf && !reduce) raf = requestAnimationFrame(frame); } else { cancelAnimationFrame(raf); raf = 0; } }); }, { threshold: 0 }).observe(c);
-  var api = { setWord: setWord, replay: play, get word() { return word; }, get fields() { return { pic: pic, prev: picPrev, mask: maskF, cols: cols, rows: rows }; },
-    // seek(seconds): draw the band as it looks that far into its sequence, once.
-    // For checking a moment of the animation without waiting for it.
+  var api = { setWord: setWord, replay: play, scatter: scatter, get word() { return word; }, get fields() { return { pic: pic, prev: picPrev, mask: maskF, cols: cols, rows: rows }; },
+    // seek(seconds): draw the band as it looks that far into its sequence, once
     seek: function (s) { cancelAnimationFrame(raf); t0 = performance.now() - s * 1000; frame(performance.now()); cancelAnimationFrame(raf); raf = 0; } };
   (window.__mx = window.__mx || []).push(api);
   return api;
@@ -279,6 +363,12 @@ var OWN_GLYPH = _own ? _own.dataset.src : (document.getElementById('field') ? 'a
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target === '_blank' || a.origin !== location.origin) return;
   try { if (OWN_GLYPH) sessionStorage.setItem('mx:prev', OWN_GLYPH); } catch (err) {}
+  // the header scatters, then the page goes (plain left-clicks to another page only)
+  if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+  if (a.pathname === location.pathname && a.hash) return;
+  var m = window.__mx && window.__mx[0]; if (!m || !m.scatter) return;
+  e.preventDefault(); var href = a.href; var went = false; var go = function () { if (!went) { went = true; location.href = href; } };
+  m.scatter(go); setTimeout(go, 700);
 });
 
 // headers on landers + case studies
