@@ -513,20 +513,8 @@ function leave(href) {
   };
 })();
 
-// ── live: the page's own last commit, and lectr's live corpus ──────────────
+// ── live: lectr's corpus count on the Digital page ─────────────────────────
 (function () {
-  var el = document.getElementById('commit');
-  // one GitHub call a session for the version pill, not one a page: the
-  // unauthenticated limit is 60 an hour per address
-  var fb = document.getElementById('foot-commit');
-  var paint = function (sha, date) { var ago = Math.round((Date.now() - new Date(date)) / 36e5); var s = 'main @ ' + sha.slice(0, 7) + ' · ' + (ago < 1 ? 'just now' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago'); if (el) el.textContent = s; if (fb) fb.textContent = s; };
-  var cached = null; try { cached = JSON.parse(sessionStorage.getItem('commit') || 'null'); } catch (e) {}
-  if (el && getComputedStyle(el).display === 'none') el = null;   // hidden on phones: no call for an invisible pill
-  if (!el && fb) el = fb;
-  if (el && cached && cached.sha && Date.now() - cached.at < 6e5) paint(cached.sha, cached.date);
-  else if (el) fetch('https://api.github.com/repos/stilwellc/me/commits/main', { headers: { Accept: 'application/vnd.github+json' } })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (j) { if (!j || !j.sha) return; paint(j.sha, j.commit.committer.date); try { sessionStorage.setItem('commit', JSON.stringify({ sha: j.sha, date: j.commit.committer.date, at: Date.now() })); } catch (e) {} }).catch(function () {});
   var lots = document.getElementById('cs-lots');
   if (!lots) return;
   fetch('https://lectr.bid/data/ray/meta.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (m) {
