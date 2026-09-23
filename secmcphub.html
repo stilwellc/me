@@ -18,7 +18,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790199672">
+<link rel="stylesheet" href="site.css?v=1790205593">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
@@ -31,15 +31,14 @@
 </header>
 <main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-text="SecMCPHub" data-src="assets/secmcphub.svg" aria-label="SecMCPHub, decoded" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
-  <p class="eyebrow rv"><a href="work.html">Work</a> · github.com/stilwellc/SecMCPHub</p>
+  <p class="eyebrow rv"><a href="work.html">Work</a> · <a href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">SecMCPHub on GitHub ↗</a></p>
   <h1 class="display rv d1">A security business review<br>that writes itself.</h1>
   <p class="lede rv d2">Security leaders spend the first week of every month rebuilding the same slides from three systems that don’t talk to each other. SecMCPHub is a set of Claude Code skills that pull those systems over MCP and render one self-contained HTML report, in a single command.</p>
 
-  <div class="facts rv d3">
-    <div><div class="n">1</div><div class="l">command<span class="sub">/security-report</span></div></div>
-    <div><div class="n">3</div><div class="l">source classes<span class="sub">vuln, GRC, incident</span></div></div>
-    <div><div class="n">1</div><div class="l">file<span class="sub">self-contained HTML</span></div></div>
-    <div><div class="n">0</div><div class="l">servers<span class="sub">runs in Claude Code</span></div></div>
+  <div class="facts three rv d3">
+    <div><div class="n">2</div><div class="l">skills<span class="sub">/security-report · /rewrite-dashboard</span></div></div>
+    <div><div class="n">3</div><div class="l">source classes<span class="sub">vuln · GRC · incident</span></div></div>
+    <div><div class="n">1</div><div class="l">file<span class="sub">self-contained HTML, no server</span></div></div>
   </div>
 
   <section class="sec">
@@ -59,31 +58,45 @@
     <div>
       <h2>Pull, compute, cross-reference, render.</h2>
       <p>The skill pulls from each configured MCP source, vulnerability findings in parallel batches, GRC paginated, incidents by project. It computes what a reviewer actually asks for: trend deltas against the history buffer, mean time to remediate, SLA compliance, and a weighted composite risk grade.</p>
-      <p>Then the part that makes it a dashboard instead of three reports. Findings are mapped to risk categories through CWE, incidents supply evidence against the same risks, and the two are chained into <b>attack paths</b> with gap proofs, so a control weakness, the vulnerabilities that exploit it, and the incidents that already did all appear in one view.</p>
+      <div class="stage four">
+        <div><div class="t">pull</div><div class="d">findings in batches · GRC paginated · incidents by project</div></div>
+        <div><div class="t">compute</div><div class="d">trend deltas · MTTR · SLA · composite grade</div></div>
+        <div><div class="t">cross-reference</div><div class="d">CWE → risk · incidents as evidence</div></div>
+        <div><div class="t">render</div><div class="d">one self-contained HTML file</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="k">the view</div>
+    <div>
+      <h2>Three reports become one view.</h2>
+      <p>The part that makes it a dashboard instead of three reports. Findings are mapped to risk categories through CWE, incidents supply evidence against the same risks, and the two are chained into <b>attack paths</b> with gap proofs, so a control weakness, the vulnerabilities that exploit it, and the incidents that already did all appear in one view.</p>
     </div>
   </section>
 
   <section class="sec">
     <div class="k">the design call</div>
     <div>
-      <h2>Reference-implementation agnostic on purpose.</h2>
+      <h2>No vendor, no server, on purpose.</h2>
       <p>Every organization runs a different vulnerability scanner, GRC platform, and ticketing system. The skills assume the three <b>categories</b> of source and nothing about the vendors: MCP tool names and field shapes are edited in one place. The report itself has no dependencies and no server, so it can be emailed, archived, or opened in five years.</p>
       <ul>
         <li><span>Language</span><span class="v">HTML · JSON · Markdown skills</span></li>
         <li><span>Runtime</span><span class="v">Claude Code + MCP</span></li>
-        <li><span>Published</span><span class="v">June 2026 · MIT-style bundle</span></li>
+        <li><span>Published</span><span class="v">June 2026 · public on GitHub</span></li>
       </ul>
     </div>
   </section>
 
   <div class="cta">
-    <a class="pill solid" href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">Open the repo</a>
+    <a class="pill solid" href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">Open the repo ↗</a>
     <a class="pill ghost" href="work.html">← Work</a>
   </div>
 </main>
 <footer class="foot">
-  <span>© 2026 Collin Stilwell · Hoboken, NJ</span>
-  <span><a href="mailto:hello@collin.dev">hello@collin.dev</a> · <a href="https://github.com/stilwellc" target="_blank" rel="noopener">github.com/stilwellc</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+  <span class="col">© 2026 Collin Stilwell · Hoboken, NJ</span>
+  <span class="links"><a href="mailto:hello@collin.dev">hello@collin.dev</a> · <a href="https://github.com/stilwellc" target="_blank" rel="noopener">github</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+  <span class="build">hand-built · no framework · <span id="foot-commit">v2026.09</span></span>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
@@ -98,6 +111,6 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790199672"></script>
+<script src="site.js?v=1790205593"></script>
 </body>
 </html>

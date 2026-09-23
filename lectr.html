@@ -18,25 +18,10 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790199672">
+<link rel="stylesheet" href="site.css?v=1790205593">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
-<style>
-  .trace { border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; max-width: 46em; margin: 1rem auto 0; text-align: center; }
-  .trow { padding: 16px 18px; border-bottom: 1px solid var(--hair); }
-  .trow .tl { font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-bottom: 0.5rem; }
-  .trow .tb { display: flex; flex-direction: column; gap: 0.3rem; align-items: center; color: var(--ink-2); }
-  .trow .tb b { color: var(--ink); font-weight: 500; }
-  .trow .tb b.big { font-weight: 300; font-size: clamp(1.8rem, 3.4vw, 3rem); letter-spacing: -0.03em; line-height: 1; }
-  .trow .tb .mono { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
-  .trow .tb a { color: var(--ink); }
-  .trace ul.tb { list-style: none; margin: 0; padding: 0; max-width: none; }
-  .trace ul.tb li { border-top: 1px solid var(--hair); padding: 0.45rem 0; }
-  .trace ul.tb li:first-child { border-top: 0; }
-  .trace ul.tb li:last-child { border-bottom: 0; }
-  .trace .basis { margin: 0; padding: 12px 18px; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
-</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -46,13 +31,13 @@
 </header>
 <main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.18" data-text="lectr" data-src="assets/shot-lectr.jpg" aria-label="lectr, decoded" role="img"></canvas><span class="hint">click to replay · picture → text</span></div>
-  <p class="eyebrow rv"><a href="work.html">Work</a> · lectr.bid</p>
+  <p class="eyebrow rv"><a href="work.html">Work</a> · <a href="https://lectr.bid" target="_blank" rel="noopener">lectr.bid ↗</a></p>
   <h1 class="display rv d1">Auction intelligence,<br>with every price traceable to a sale.</h1>
   <p class="lede rv d2">lectr watches eighteen auction houses, keeps every lot they have ever sold, and puts a value on what is coming up next. It runs itself every night. This is how it is built, and what it took to make it fast.</p>
 
   <div class="facts rv d3">
     <div><div class="n" id="cs-lots">1.14M</div><div class="l">lots in the corpus<span class="sub"><span id="cs-when">live</span></span></div></div>
-    <div><div class="n" id="cs-sold">1.11M</div><div class="l">sold results</div></div>
+    <div><div class="n">18</div><div class="l">houses, one crawler each</div></div>
     <div><div class="n">52<span class="u"> min</span></div><div class="l">full nightly, end to end</div></div>
     <div><div class="n">3</div><div class="l">gates before anything ships</div></div>
   </div>
@@ -61,8 +46,9 @@
     <div class="k">the corpus</div>
     <div>
       <h2>Eighteen houses, one book.</h2>
-      <p>Each house has its own crawler and its own segment of the corpus. Christie’s, Sotheby’s, Bonhams, Phillips, Wright, Goldin, REA, Huggins &amp; Scott, Lelands, Memory Lane, Hake’s, RR Auction, SCP, MLB and NFL Auctions, and LOTG. A house that fails can’t touch another house’s data, and a crawl that collapses its own segment refuses to overwrite the last good one.</p>
+      <p>Each house has its own crawler and its own segment of the corpus. A house that fails can’t touch another house’s data, and a crawl that collapses its own segment refuses to overwrite the last good one.</p>
       <p>Prices carry their basis. Hammer and buyer’s premium are reconciled per house so a Sotheby’s result and a Goldin result mean the same thing in a comparison.</p>
+      <p class="mono">Christie’s · Sotheby’s · Bonhams · Phillips · Wright · Goldin · REA · Huggins &amp; Scott · Lelands · Memory Lane · Hake’s · RR Auction · SCP · MLB Auctions · NFL Auctions · LOTG</p>
     </div>
   </section>
 
@@ -82,13 +68,13 @@
   <section class="sec">
     <div class="k">the gates</div>
     <div>
-      <h2>Nothing publishes unless three checks agree.</h2>
+      <h2>Nothing publishes unless three gates agree.</h2>
       <p><b>Corpus shrink.</b> If the reunioned book is more than 10% smaller than the last published one, an outage somewhere returned empty, and last-good stays live.</p>
       <p><b>Price bleed.</b> A broken feed stamps one price across a batch. The sentinel looks for a price repeating on many lots inside one sale date, and it is a <b>delta</b> gate: it only stops the publish for clusters that were not there yesterday, because a 25-year book legitimately carries hundreds of honest bid-increment ties. A backstop still refuses any single price on 500+ lots, baseline or not.</p>
       <pre class="code">[assemble] sanity gate OK: lots 1119724→1138521, sold 1095964→1110578
 [assemble] sentinel: 87 repeat signatures, 82 poison <b>(0 NEW vs baseline of 87)</b>
 [validate] Directional signal: <b>VALIDATED</b> — ships (monotonic beat-rate gradient)</pre>
-      <p><b>Engine holdout.</b> Before the value engine ships, it is replayed against a temporal holdout. The directional signal must carry: lots the engine calls cheap must beat their estimate more often than lots it calls rich, with a spread wide enough to mean something. A local wobble degrades the signal and says so; a failed spread blocks the release.</p>
+      <p><b>Engine holdout.</b> Before the value engine ships, it is replayed against a temporal holdout. The directional signal must carry: lots the engine calls cheap must beat their estimate more often than lots it calls rich, with a spread wide enough to mean something; the current spread is in the record below. A local wobble degrades the signal and says so; a failed spread blocks the release.</p>
     </div>
   </section>
 
@@ -108,7 +94,7 @@
 
 
   <section class="sec" id="trace">
-    <div class="k">one lot, traced</div>
+    <div class="k">the trace</div>
     <div>
       <h2>Every number here points at a sale.</h2>
       <p>One live lot, the engine’s call on it, and the realized prices the call is made of. The comps, the graded record and the backtest below are read from lectr.bid when this page loads; if that fails you see the 2026-09-20 snapshot and it says so.</p>
@@ -123,12 +109,18 @@
         </div>
         <div class="trow comps">
           <div class="tl">the comps <span id="trace-comps-src">· snapshot 2026-09-20</span></div>
-          <ul class="tb" id="trace-comps"><li><span>Bonhams · 2024-12-09</span><span class="v">$15,360</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$9,600</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$19,200</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,240</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,880</span></li><li><span>Bonhams · 2025-11-18</span><span class="v">$12,800</span></li><li><span>Bonhams · 2005-10-05</span><span class="v">$8,736</span></li><li><span>Bonhams · 2023-05-23</span><span class="v">$16,640</span></li><li><span>Bonhams · 2024-09-17</span><span class="v">$10,240</span></li><li><span>Phillips · 2020-12-03</span><span class="v">$5,292</span></li></ul>
+          <ul class="tb" id="trace-comps"><li><span>Bonhams · 2025-11-18</span><span class="v">$12,800</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,240</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,880</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$9,600</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$19,200</span></li><li><span>Bonhams · 2024-12-09</span><span class="v">$15,360</span></li><li><span>Bonhams · 2024-09-17</span><span class="v">$10,240</span></li><li><span>Bonhams · 2023-05-23</span><span class="v">$16,640</span></li><li><span>Phillips · 2020-12-03</span><span class="v">$5,292</span></li><li><span>Bonhams · 2005-10-05</span><span class="v">$8,736</span></li></ul>
         </div>
         <p class="basis">All-in realized vs hammer-basis estimate: the gap carries the buyer’s premium by design.</p>
       </div>
 
-      <h2 class="mt-sec">The record, graded.</h2>
+    </div>
+  </section>
+
+  <section class="sec" id="record">
+    <div class="k">the record</div>
+    <div>
+      <h2>The record, graded.</h2>
       <p>Calls are written down before the hammer and graded after it. The five most recent graded calls, then the backtest across the whole corpus. <span class="mono" id="trace-rec-src">Snapshot 2026-09-20.</span></p>
       <ul id="trace-rec"><li><span>97 Topps Chrome Refractor #138 Kobe Bryant rookie, BGS 9 · Goldin · called 2026-08-24</span><span class="v">called $50,020 → realized $73,200</span></li><li><span>2017 National Treasures rookie patch autograph, BGS 9 · Goldin · called 2026-08-24</span><span class="v">called $231,800 → realized $292,800</span></li><li><span>87 Fleer #57 Michael Jordan signed rookie, PSA EX 5 · Goldin · called 2026-08-24</span><span class="v">called $10,347 → realized $123,220</span></li><li><span>85 Star #101 Michael Jordan rookie, BGS NM-MT 8 · Goldin · called 2026-08-24</span><span class="v">called $32,803 → realized $119,560</span></li><li><span>95 Playboy Chromium refractor #85, PSA 10 · Goldin · called 2026-08-24</span><span class="v">called $38,026 → realized $23,790</span></li></ul>
       <div class="facts mt-125" id="trace-bt">
@@ -141,13 +133,14 @@
   </section>
 
   <div class="cta">
-    <a class="pill solid" href="https://lectr.bid" target="_blank" rel="noopener">Open lectr.bid</a>
+    <a class="pill solid" href="https://lectr.bid" target="_blank" rel="noopener">Open lectr.bid ↗</a>
     <a class="pill ghost" href="work.html">← Work</a>
   </div>
 </main>
 <footer class="foot">
-  <span>© 2026 Collin Stilwell · Hoboken, NJ</span>
-  <span><a href="mailto:hello@collin.dev">hello@collin.dev</a> · <a href="https://github.com/stilwellc" target="_blank" rel="noopener">github.com/stilwellc</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+  <span class="col">© 2026 Collin Stilwell · Hoboken, NJ</span>
+  <span class="links"><a href="mailto:hello@collin.dev">hello@collin.dev</a> · <a href="https://github.com/stilwellc" target="_blank" rel="noopener">github</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+  <span class="build">hand-built · no framework · <span id="foot-commit">v2026.09</span></span>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
@@ -162,6 +155,6 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790199672"></script>
+<script src="site.js?v=1790205593"></script>
 </body>
 </html>

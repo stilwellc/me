@@ -18,7 +18,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790199672">
+<link rel="stylesheet" href="site.css?v=1790205593">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <style>
@@ -30,8 +30,8 @@
   .repos .cell h2 { font-size: clamp(1.3rem, 2vw, 1.7rem); margin-top: 0.4rem; }
   .repos .cell p { font-size: 15px; }
   .act { margin-top: clamp(28px,4vw,56px); }
-  .act .grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 12px); gap: 3px; width: max-content; margin-top: 0.75rem; }
-  .act .grid i { display: block; width: 12px; height: 12px; border-radius: 3px; background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  .act .grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 12px); gap: 3px; width: max-content; margin-top: 0.75rem; padding: clamp(14px, 1.6vw, 20px); border: 1px solid var(--hair); border-radius: 14px; }
+  .act .grid i { display: block; width: 12px; height: 12px; border-radius: 2px; background: color-mix(in srgb, var(--ink) 6%, transparent); }
   .act .grid i.l1 { background: color-mix(in srgb, var(--ink) 28%, transparent); }
   .act .grid i.l2 { background: color-mix(in srgb, var(--ink) 55%, transparent); }
   .act .grid i.l3 { background: var(--ink); }
@@ -48,14 +48,14 @@
   <div class="mhead rv"><canvas class="matrix" data-text="GitHub" data-src="assets/github.svg" aria-label="A branch graph, decoded into the word GitHub" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
   <p class="eyebrow rv d1">GitHub · github.com/stilwellc</p>
   <h1 class="display rv d1">Public since 2017.<br>Shipping most weeks.</h1>
-  <p class="lede rv d2">Everything below is read live from the GitHub API when the page loads: the profile, the repositories, and the last hundred public pushes. If the API is rate-limited, you’ll see the last snapshot instead.</p>
+  <p class="lede one rv d2">Read live from the GitHub API on load: profile, repositories, and the pushes among the last hundred public events. If the API is rate-limited, the last snapshot stands.</p>
 </div>
-  <div class="gh-stats" id="gh-stats"><span><b id="gh-repos">18</b> public repos</span><span><b id="gh-since">2017</b> on GitHub</span><span><b id="gh-loc">New Jersey</b></span><span><b id="gh-pushes">100</b> recent pushes</span></div>
+  <div class="gh-stats" id="gh-stats"><span><b id="gh-repos">18</b> public repos</span><span><b id="gh-since">2017</b> on GitHub</span><span>based in <b id="gh-loc">New Jersey</b></span><span><b id="gh-pushes">92</b> pushes in the last 100 events</span></div>
 
   <section class="act rv d2">
     <h2 class="sheet-h">Public pushes</h2>
     <div class="grid" id="gh-grid" aria-label="Push activity"></div>
-    <p class="gh-note">The last 100 public pushes the API reports, on a twelve-week grid, newest on the right. <span class="lg" aria-hidden="true"><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i></span> fewer to more. <span id="gh-state">snapshot</span></p>
+    <p class="gh-note">Pushes among the last 100 public events, by day, newest on the right. <span class="lg" aria-hidden="true"><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i></span> fewer to more. <span id="gh-state">snapshot</span></p>
   </section>
 
   <section class="repos rv d3">
@@ -101,12 +101,14 @@
   </section>
 
   <div class="cta">
-    <a class="pill solid" href="https://github.com/stilwellc" target="_blank" rel="noopener">Open github.com/stilwellc</a>
+    <a class="pill solid" href="https://github.com/stilwellc" target="_blank" rel="noopener">Open github.com/stilwellc ↗</a>
+    <a class="pill ghost" href="work.html">Work</a>
   </div>
 </main>
 <footer class="foot">
-  <span>© 2026 Collin Stilwell · Hoboken, NJ</span>
-  <span><a href="mailto:hello@collin.dev">hello@collin.dev</a> · <a href="https://github.com/stilwellc" target="_blank" rel="noopener">github.com/stilwellc</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+  <span class="col">© 2026 Collin Stilwell · Hoboken, NJ</span>
+  <span class="links"><a href="mailto:hello@collin.dev">hello@collin.dev</a> · <a href="https://github.com/stilwellc" target="_blank" rel="noopener">github</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+  <span class="build">hand-built · no framework · <span id="foot-commit">v2026.09</span></span>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
@@ -121,6 +123,6 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790199672"></script>
+<script src="site.js?v=1790205593"></script>
 </body>
 </html>

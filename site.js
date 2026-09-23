@@ -40,6 +40,9 @@ function matrix(c, opts) {
   var GAIN = 1.4, DECAY = 0.94, DIFF = 0.11, MAXV = 2.4;                 // in flow cells
   var FILL_IN = 0.35, PREV_HOLD = 0.9, PIC_HOLD = 2.6, MORPH = 0.85, WORD_MORPH = 0.6;
   var grain = null, A = null, B = null, SR = null, CR = null, SC = null, CC = null, curK = 0;
+  // scratch rectangles, reused every frame: [x,y,w,h]* for ink and accent, [x,y,d]* for filler, [x,y,w,h,alpha,ink]* for fades
+  var RI = null, RA = null, RF = null, RD = null, nI = 0, nA = 0, nF = 0, nD = 0;
+  function grow(b, need) { if (b.length >= need) return b; var nb = new Float32Array(Math.max(need, b.length * 2)); nb.set(b); return nb; }
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
   var plate = !!opts.plate, still = !!opts.still, noFill = opts.filler === false, settled = false;
   var focus = [0.5, 0.5];
@@ -58,6 +61,7 @@ function matrix(c, opts) {
     fc = Math.ceil(cols / F) + 1; fr = Math.ceil(rows / F) + 1;
     vx = new Float32Array(fc * fr); vy = new Float32Array(fc * fr); tmpx = new Float32Array(fc * fr); tmpy = new Float32Array(fc * fr);
     A = new Float32Array(rows); B = new Float32Array(cols); SR = null;
+    var N0 = cols * rows; RI = new Float32Array(N0 * 4); RA = new Float32Array(N0 * 4); RF = new Float32Array(N0 * 3); RD = new Float32Array(N0 * 6);
     grain = grainTile();
   }
   function buildMask(w) {
@@ -257,7 +261,7 @@ function matrix(c, opts) {
     var dashW = Math.max(1.2, cell * 0.55), sq = cell * 0.7, fillDot = cell * 0.22;
     if (!SR) { SR = new Float32Array(rows); CR = new Float32Array(rows); SC = new Float32Array(cols); CC = new Float32Array(cols); for (var c2 = 0; c2 < cols; c2++) { SC[c2] = Math.sin(c2 * 0.05); CC[c2] = Math.cos(c2 * 0.05); } }
     for (var r2 = 0; r2 < rows; r2++) { SR[r2] = Math.sin(t * 0.6 + r2 * 0.09); CR[r2] = Math.cos(t * 0.6 + r2 * 0.09); }
-    var accentRects = [], inkRects = [], fillRects = [], fadeRects = [];
+    nI = nA = nF = nD = 0;
     var fillMask;
     if (morphing) {
       var Q = pairsAt(k);
@@ -288,8 +292,9 @@ function matrix(c, opts) {
         var ox = (flowAt(vx, x, y) * F + A[Math.min(rows - 1, Math.max(0, y | 0))] * B[Math.min(cols - 1, Math.max(0, x | 0))]) * cell;
         var X = x * cell + (cell - w) / 2 + ox, Y = y * cell + (cell - h) / 2;
         var toInk = ((mix + (st - 0.5) * 0.3) < 0.5 ? kA : kB) === 'word';
-        if (alpha < 1) fadeRects.push(X, Y, w, h, alpha, toInk ? 1 : 0);
-        else (toInk ? inkRects : accentRects).push(X, Y, w, h);
+        if (alpha < 1) { RD = grow(RD, nD + 6); RD[nD++] = X; RD[nD++] = Y; RD[nD++] = w; RD[nD++] = h; RD[nD++] = alpha; RD[nD++] = toInk ? 1 : 0; }
+        else if (toInk) { RI = grow(RI, nI + 4); RI[nI++] = X; RI[nI++] = Y; RI[nI++] = w; RI[nI++] = h; }
+        else { RA = grow(RA, nA + 4); RA[nA++] = X; RA[nA++] = Y; RA[nA++] = w; RA[nA++] = h; }
       }
     } else {
       var P = partsAt(k); fillMask = P.fill;
@@ -298,23 +303,25 @@ function matrix(c, opts) {
         var off = (flowAt(vx, hx, hy) * F + A[hy] * B[hx]) * cell;
         var isW = P.kind === 'word', ww = isW ? sq * (0.6 + 0.4 * val) : dashW * (0.85 + 0.6 * P.e[i]);
         var hh = isW ? ww : cell * (0.2 + 0.9 * val) * (0.78 + 0.22 * P.e[i]);
-        (isW ? inkRects : accentRects).push(hx * cell + (cell - ww) / 2 + off, hy * cell + (cell - hh) / 2 + off * 0.4, ww, hh);
+        var PX = hx * cell + (cell - ww) / 2 + off, PY = hy * cell + (cell - hh) / 2 + off * 0.4;
+        if (isW) { RI = grow(RI, nI + 4); RI[nI++] = PX; RI[nI++] = PY; RI[nI++] = ww; RI[nI++] = hh; }
+        else { RA = grow(RA, nA + 4); RA[nA++] = PX; RA[nA++] = PY; RA[nA++] = ww; RA[nA++] = hh; }
       }
     }
     // filler: the band is always a full rectangle
     if (fillIn > 0 && fillMask && !noFill) for (var fy = 0; fy < rows; fy++) { var ay = A[fy]; for (var fx = 0; fx < cols; fx++) { var fi = fy * cols + fx; if (!fillMask[fi]) continue;
       var fd = fillDot * (0.7 + 0.5 * th[fi]) * (0.85 + 0.15 * (SR[fy] * CC[fx] + CR[fy] * SC[fx])), fo = (flowAt(vx, fx, fy) * F + ay * B[fx]) * cell * 0.3;
-      fillRects.push(fx * cell + (cell - fd) / 2 + fo, fy * cell + (cell - fd) / 2, fd); } }
-    function paint(list, col, alpha, square) {
-      if (!list.length) return; ctx.fillStyle = col; ctx.globalAlpha = alpha; ctx.beginPath();
-      if (square) for (var q = 0; q < list.length; q += 3) ctx.rect(list[q], list[q + 1], list[q + 2], list[q + 2]);
-      else for (var q2 = 0; q2 < list.length; q2 += 4) ctx.rect(list[q2], list[q2 + 1], list[q2 + 2], list[q2 + 3]);
+      RF = grow(RF, nF + 3); RF[nF++] = fx * cell + (cell - fd) / 2 + fo; RF[nF++] = fy * cell + (cell - fd) / 2; RF[nF++] = fd; } }
+    function paint(list, n, col, alpha, square) {
+      if (!n) return; ctx.fillStyle = col; ctx.globalAlpha = alpha; ctx.beginPath();
+      if (square) for (var q = 0; q < n; q += 3) ctx.rect(list[q], list[q + 1], list[q + 2], list[q + 2]);
+      else for (var q2 = 0; q2 < n; q2 += 4) ctx.rect(list[q2], list[q2 + 1], list[q2 + 2], list[q2 + 3]);
       ctx.fill();
     }
-    paint(fillRects, inkCol, 0.13 * fillIn, true);
-    paint(accentRects, accent, 0.95, false);
-    paint(inkRects, inkCol, 0.92, false);
-    for (var z = 0; z < fadeRects.length; z += 6) { ctx.globalAlpha = 0.95 * fadeRects[z + 4]; ctx.fillStyle = fadeRects[z + 5] ? inkCol : accent; ctx.fillRect(fadeRects[z], fadeRects[z + 1], fadeRects[z + 2], fadeRects[z + 3]); }
+    paint(RF, nF, inkCol, 0.13 * fillIn, true);
+    paint(RA, nA, accent, 0.95, false);
+    paint(RI, nI, inkCol, 0.92, false);
+    for (var z = 0; z < nD; z += 6) { ctx.globalAlpha = 0.95 * RD[z + 4]; ctx.fillStyle = RD[z + 5] ? inkCol : accent; ctx.fillRect(RD[z], RD[z + 1], RD[z + 2], RD[z + 3]); }
     if (grain && !reduce) { ctx.globalAlpha = 0.22; ctx.globalCompositeOperation = 'source-atop'; var gx0 = -((Math.random() * 256) | 0), gy0 = -((Math.random() * 256) | 0); for (var gy = gy0; gy < H; gy += 256) for (var gx = gx0; gx < W; gx += 256) ctx.drawImage(grain, gx, gy); ctx.globalCompositeOperation = 'source-over'; }
     ctx.globalAlpha = 1;
     if (plate && !settled && k === SEQ.length - 1 && !morphing && (still || reduce || el > GATHER + 0.45)) { settled = true; if (api.onSettled) api.onSettled(); raf = 0; return; }
@@ -520,9 +527,11 @@ function leave(href) {
   var el = document.getElementById('commit');
   // one GitHub call a session for the version pill, not one a page: the
   // unauthenticated limit is 60 an hour per address
-  var paint = function (sha, date) { var ago = Math.round((Date.now() - new Date(date)) / 36e5); el.textContent = 'main @ ' + sha.slice(0, 7) + ' · ' + (ago < 1 ? 'just now' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago'); };
+  var fb = document.getElementById('foot-commit');
+  var paint = function (sha, date) { var ago = Math.round((Date.now() - new Date(date)) / 36e5); var s = 'main @ ' + sha.slice(0, 7) + ' · ' + (ago < 1 ? 'just now' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago'); if (el) el.textContent = s; if (fb) fb.textContent = s; };
   var cached = null; try { cached = JSON.parse(sessionStorage.getItem('commit') || 'null'); } catch (e) {}
   if (el && getComputedStyle(el).display === 'none') el = null;   // hidden on phones: no call for an invisible pill
+  if (!el && fb) el = fb;
   if (el && cached && cached.sha && Date.now() - cached.at < 6e5) paint(cached.sha, cached.date);
   else if (el) fetch('https://api.github.com/repos/stilwellc/me/commits/main', { headers: { Accept: 'application/vnd.github+json' } })
     .then(function (r) { return r.ok ? r.json() : null; })
@@ -533,7 +542,7 @@ function leave(href) {
     if (!m || !m.totalLots) return;
     var n = function (x) { return x.toLocaleString('en-US'); }, short = function (x) { return (x / 1e6).toFixed(2) + 'M'; };
     var ago = Math.round((Date.now() - new Date(m.lastCrawl)) / 36e5), when = ago < 1 ? 'under an hour ago' : ago < 48 ? ago + 'h ago' : Math.round(ago / 24) + 'd ago';
-    var b = document.getElementById('cs-lots'); if (b) { b.textContent = short(m.totalLots); document.getElementById('cs-sold').textContent = short(m.totalSold); document.getElementById('cs-when').textContent = 'crawled ' + when; }
+    var b = document.getElementById('cs-lots'); if (b) { b.textContent = short(m.totalLots); document.getElementById('cs-when').textContent = 'crawled ' + when; }
   }).catch(function () {});
 })();
 
@@ -614,7 +623,7 @@ function leave(href) {
   }).catch(function () {});
   fetch('https://api.github.com/users/stilwellc/repos?per_page=100&sort=pushed', { headers: H }).then(function (r) { return r.ok ? r.json() : null; }).then(function (rs) {
     if (!rs || !rs.length) return;
-    var own = rs.filter(function (r) { return !r.fork && r.name !== 'stilwellc' && r.name !== 'collin'; }).slice(0, 8);
+    var own = rs.filter(function (r) { return !r.fork && r.name !== 'stilwellc' && r.name !== 'collin' && r.name !== 'me' && !/assign|homework|coursework/i.test(r.name); }).slice(0, 8);
     cells.innerHTML = own.map(function (r) {
       return '<a class="cell" href="' + r.html_url + '" target="_blank" rel="noopener"><div class="top"><span class="pill mono">' + esc(r.language || 'repo') + '</span>' + (r.stargazers_count ? '<span class="pill mono">★ ' + r.stargazers_count + '</span>' : '') + '</div><h2>' + esc(r.name) + '<span class="arrow">↗</span></h2>' + (r.description ? '<p>' + esc(r.description) + '</p>' : '<p class="none">no description yet</p>') + '<div class="foot">pushed ' + r.pushed_at.slice(0, 10) + '</div></a>';
     }).join('');
@@ -623,18 +632,20 @@ function leave(href) {
     if (!ev) return;
     var pushes = ev.filter(function (e) { return e.type === 'PushEvent'; });
     document.getElementById('gh-pushes').textContent = pushes.length;
-    // 12 weeks × 7 days, newest column on the right
-    var days = {}; pushes.forEach(function (e) { var d = e.created_at.slice(0, 10); days[d] = (days[d] || 0) + 1; });
+    // the grid spans only the days the hundred events cover (the API keeps about 90 days, at most 300 events)
+    var days = {}, first = null; ev.forEach(function (e) { var d = e.created_at.slice(0, 10); if (!first || d < first) first = d; if (e.type === 'PushEvent') days[d] = (days[d] || 0) + 1; });
     var grid = document.getElementById('gh-grid'), now = new Date(), out = '';
-    for (var w = 11; w >= 0; w--) for (var d = 0; d < 7; d++) {
+    var span = first ? Math.round((now - new Date(first)) / 864e5) : 84, weeks = Math.min(12, Math.max(2, Math.ceil((span + 1) / 7)));
+    for (var w = weeks - 1; w >= 0; w--) for (var d = 0; d < 7; d++) {
       var dt = new Date(now); dt.setDate(now.getDate() - (w * 7 + (6 - d)));
       var k = dt.toISOString().slice(0, 10), n = days[k] || 0;
       out += '<i class="' + (n >= 6 ? 'l3' : n >= 3 ? 'l2' : n >= 1 ? 'l1' : '') + '" title="' + k + ' · ' + n + ' push' + (n === 1 ? '' : 'es') + '"></i>';
     }
     grid.innerHTML = out;
-    grid.setAttribute('aria-label', 'Push activity: the last ' + pushes.length + ' pushes on a twelve-week grid');
+    grid.setAttribute('aria-label', 'Push activity: ' + pushes.length + ' pushes over ' + weeks + ' weeks');
+    var note = document.querySelector('.gh-note'); if (note && first) note.insertAdjacentText('afterbegin', 'Since ' + first + '. ');
     var st = document.getElementById('gh-state'); if (st) st.textContent = 'live';
-  }).catch(function () {});
+  }).catch(function () {}).then(function () { var g = document.getElementById('gh-grid'); if (g && !g.children.length) { var a = g.closest('.act'); if (a) a.hidden = true; } });
 })();
 
 // lectr case study: one lot traced, read live from lectr.bid (CORS * on the data files)
@@ -654,11 +665,12 @@ function leave(href) {
   var j = function (u) { return fetch(u, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }); };
   j('https://lectr.bid/data/ray/comp-evidence.json').then(function (ce) {
     var rows = ce.byLot && ce.byLot[ID]; if (!rows || !rows.length) return;
+    rows = rows.slice().sort(function (a, b) { return a.d < b.d ? 1 : a.d > b.d ? -1 : 0; });
     document.getElementById('trace-comps').innerHTML = rows.map(function (c) { return '<li><span>' + esc(c.h) + ' · ' + esc(c.d) + '</span><span class="v">' + usd(c.p) + '</span></li>'; }).join('');
     document.getElementById('trace-comps-src').textContent = '· live · generated ' + (ce.generatedAt || '').slice(0, 10);
   }).catch(function () {});
   j('https://lectr.bid/data/ray/receipts.json').then(function (rc) {
-    var rows = (rc.rows || []).filter(function (r) { return r.p && r.r; }).slice(0, 5); if (!rows.length) return;
+    var seenT = {}; var rows = (rc.rows || []).filter(function (r) { if (!(r.p && r.r) || seenT[r.t]) return false; seenT[r.t] = 1; return true; }).slice(0, 5); if (!rows.length) return;
     document.getElementById('trace-rec').innerHTML = rows.map(function (r) {
       var t = r.t.length > 64 ? r.t.slice(0, 62) + '…' : r.t;
       return '<li><span>' + esc(t) + ' · ' + esc(r.h) + ' · called ' + esc(r.d) + '</span><span class="v">called ' + usd(r.p) + ' → realized ' + usd(r.r) + '</span></li>';
