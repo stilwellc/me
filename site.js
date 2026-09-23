@@ -35,6 +35,7 @@ function matrix(c, opts) {
   var FILL_IN = 0.35, PREV_HOLD = 0.9, PIC_HOLD = 2.6, MORPH = 0.85, WORD_MORPH = 0.6, PRINT = 0.7;
   var grain = null, gctx = null, A = null, B = null;
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
+  var plate = !!opts.plate, settled = false;
   var focus = [0.5, 0.5];
   if (c.dataset && c.dataset.focus) { var fp = c.dataset.focus.split(',').map(parseFloat); if (fp.length === 2 && !isNaN(fp[0]) && !isNaN(fp[1])) focus = fp; }
   function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
@@ -45,7 +46,7 @@ function matrix(c, opts) {
     var r = c.getBoundingClientRect();
     W = Math.max(1, Math.floor(r.width)); H = Math.max(1, Math.floor(r.height));
     c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cell = W < 640 ? 3 : 4;
+    cell = opts.cell || (W < 640 ? 3 : 4);
     cols = Math.floor(W / cell); rows = Math.floor(H / cell); N = cols * rows;
     th = new Float32Array(N); for (var i = 0; i < N; i++) th[i] = Math.random();
     fc = Math.ceil(cols / F) + 1; fr = Math.ceil(rows / F) + 1;
@@ -177,7 +178,8 @@ function matrix(c, opts) {
     var Q = { n: n, gather: gather, scatter: scatter, sk: A.kind, tk: B.kind,
       sx: new Float32Array(n), sy: new Float32Array(n), sv: new Float32Array(n), se: new Float32Array(n),
       tx: new Float32Array(n), ty: new Float32Array(n), tv: new Float32Array(n), te: new Float32Array(n),
-      bx: new Float32Array(n), by: new Float32Array(n), t: new Float32Array(n), fill: new Uint8Array(N) };
+      bx: new Float32Array(n), by: new Float32Array(n), t: new Float32Array(n), fill: new Uint8Array(N),
+      ax: new Float32Array(n), ay: new Float32Array(n) };   // momentum picked up from the flow field while in the air
     for (var c = 0; c < N; c++) Q.fill[c] = A.fill[c] & B.fill[c];
     var ia = A.n ? byAngle(A) : null, ib = B.n ? byAngle(B) : null;
     for (var j = 0; j < n; j++) {
@@ -202,7 +204,7 @@ function matrix(c, opts) {
       var extra = []; for (var m = 0; m < A.n; m++) if (!used[m]) extra.push(m);
       var grow = function (arr, more) { var o = new Float32Array(arr.length + more); o.set(arr); return o; };
       var base = n; n += extra.length;
-      ['sx', 'sy', 'sv', 'se', 'tx', 'ty', 'tv', 'te', 'bx', 'by', 't'].forEach(function (key) { Q[key] = grow(Q[key], extra.length); });
+      ['sx', 'sy', 'sv', 'se', 'tx', 'ty', 'tv', 'te', 'bx', 'by', 't', 'ax', 'ay'].forEach(function (key) { Q[key] = grow(Q[key], extra.length); });
       Q.die = new Uint8Array(n);
       for (var q = 0; q < extra.length; q++) {
         var s = extra[q], jj = base + q; Q.die[jj] = 1;
@@ -216,6 +218,11 @@ function matrix(c, opts) {
   }
   function sequence() {
     var s = [];
+    if (plate) {   // a plate gathers its photograph, holds, and is then lifted away
+      if (pic && !reduce) s.push({ f: null, kind: 'pic', hold: 0, dur: GATHER });
+      s.push({ f: pic || maskF, kind: pic ? 'pic' : 'word', hold: 1e9, dur: MORPH });
+      SEQ = s; PARTS = s.map(function () { return null; }); PAIRS = s.map(function () { return null; }); gusted = s.map(function () { return false; }); return;
+    }
     if (!reduce) s.push({ f: null, kind: (picPrev ? 'pic' : (pic && showPic ? 'pic' : 'word')), hold: 0, dur: GATHER });   // the gather
     if (picPrev && !reduce) s.push({ f: picPrev, kind: 'pic', hold: PREV_HOLD, dur: MORPH });
     if (pic && showPic && !reduce) s.push({ f: pic, kind: 'pic', hold: PIC_HOLD, dur: MORPH });
@@ -261,6 +268,10 @@ function matrix(c, opts) {
           else { x = px + (Q.tx[j] - px) * cv; y = py + (Q.ty[j] - py) * cv; mix = cv; }
         }
         if (alpha <= 0.02) continue;
+        // a body in the air takes the wind: the flow at its position adds to a
+        // drift that persists through the flight and bleeds off as it lands
+        if (!reduce && mix < 0.999) { var fxw = flowAt(vx, x, y), fyw = flowAt(vy, x, y); Q.ax[j] += fxw * F * 0.22; Q.ay[j] += fyw * F * 0.22; }
+        x += Q.ax[j] * (1 - mix); y += Q.ay[j] * (1 - mix);
         var v = Q.sv[j] * (1 - mix) + Q.tv[j] * mix; if (v < 0.04 && !Q.gather) continue;
         var kA = Q.sk, kB = Q.tk;
         var wA = kA === 'pic' ? dashW * (0.85 + 0.6 * Q.se[j]) : sq * (0.6 + 0.4 * Q.sv[j]);
@@ -301,9 +312,9 @@ function matrix(c, opts) {
     for (var z = 0; z < fadeRects.length; z += 6) { ctx.globalAlpha = 0.95 * fadeRects[z + 4]; ctx.fillStyle = fadeRects[z + 5] ? inkCol : accent; ctx.fillRect(fadeRects[z], fadeRects[z + 1], fadeRects[z + 2], fadeRects[z + 3]); }
     if (grain && !reduce) { ctx.globalAlpha = 0.22; ctx.globalCompositeOperation = 'source-atop'; var gx0 = -((Math.random() * 256) | 0), gy0 = -((Math.random() * 256) | 0); for (var gy = gy0; gy < H; gy += 256) for (var gx = gx0; gx < W; gx += 256) ctx.drawImage(grain, gx, gy); ctx.globalCompositeOperation = 'source-over'; }
     ctx.globalAlpha = 1;
-    if (!reduce && !(k === SEQ.length - 1 && !morphing && idle())) raf = requestAnimationFrame(frame); else if (!reduce) raf = requestAnimationFrame(frame);
+    if (plate && !settled && k === SEQ.length - 1 && !morphing && (reduce || el > GATHER + 0.45)) { settled = true; if (api.onSettled) api.onSettled(); raf = 0; return; }
+    if (!reduce) raf = requestAnimationFrame(frame);
   }
-  function idle() { return false; }
   function run() { cancelAnimationFrame(raf); if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame); }
   function play() {
     buildGrid(); maskF = buildMask(word);
@@ -327,16 +338,18 @@ function matrix(c, opts) {
     PARTS = SEQ.map(function () { return null; }); PAIRS = SEQ.map(function () { return null; }); gusted = [true, true];
     t0 = performance.now(); run(); setTimeout(cb, SCATTER * 1000 + 40);
   }
-  c.addEventListener('pointermove', function (e) {
-    var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / (cell * F), y = (e.clientY - r.top) / (cell * F), now = performance.now();
-    if (pmx >= 0 && vx) { var dt = Math.max(8, now - pmt) / 16.7; inject(x, y, (x - pmx) / dt, (y - pmy) / dt); }
-    pmx = x; pmy = y; pmt = now;
-  });
-  c.addEventListener('pointerleave', function () { pmx = pmy = -1; });
-  c.addEventListener('click', function () { showPic = true; prevImg = null; play(); });
-  if (!c.hasAttribute('tabindex')) c.tabIndex = 0;
-  c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPic = true; prevImg = null; play(); } });
-  var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(play, 120); });
+  if (!plate) {
+    c.addEventListener('pointermove', function (e) {
+      var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / (cell * F), y = (e.clientY - r.top) / (cell * F), now = performance.now();
+      if (pmx >= 0 && vx) { var dt = Math.max(8, now - pmt) / 16.7; inject(x, y, (x - pmx) / dt, (y - pmy) / dt); }
+      pmx = x; pmy = y; pmt = now;
+    });
+    c.addEventListener('pointerleave', function () { pmx = pmy = -1; });
+    c.addEventListener('click', function () { showPic = true; prevImg = null; play(); });
+    if (!c.hasAttribute('tabindex')) c.tabIndex = 0;
+    c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPic = true; prevImg = null; play(); } });
+    var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(play, 120); });
+  }
   function start() {
     if (reduce) { play(); return; }
     var pending = 0;
@@ -346,13 +359,47 @@ function matrix(c, opts) {
     if (!pending) play();
   }
   if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('300 40px "Bricolage Grotesque"'), document.fonts.load('400 12px "Geist Mono"')]).then(start, start); else start();
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (!raf && !reduce) raf = requestAnimationFrame(frame); } else { cancelAnimationFrame(raf); raf = 0; } }); }, { threshold: 0 }).observe(c);
+  if ('IntersectionObserver' in window && !plate) new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (!raf && !reduce) raf = requestAnimationFrame(frame); } else { cancelAnimationFrame(raf); raf = 0; } }); }, { threshold: 0 }).observe(c);
   var api = { setWord: setWord, replay: play, scatter: scatter, get word() { return word; }, get fields() { return { pic: pic, prev: picPrev, mask: maskF, cols: cols, rows: rows }; },
     // seek(seconds): draw the band as it looks that far into its sequence, once
     seek: function (s) { cancelAnimationFrame(raf); t0 = performance.now() - s * 1000; frame(performance.now()); cancelAnimationFrame(raf); raf = 0; } };
-  (window.__mx = window.__mx || []).push(api);
+  if (plate) (window.__plates = window.__plates || []).push(api); else (window.__mx = window.__mx || []).push(api);
   return api;
 }
+
+// ── plates gather the way the header does ──────────────────────────────────
+// Each figure.plate photograph, the first time it scrolls into view, is drawn
+// as bodies flying in from the edges; when they settle the veil lifts and the
+// photograph is underneath. Once per plate, never under reduced motion.
+(function () {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var imgs = [].slice.call(document.querySelectorAll('figure.plate img'));
+  if (!imgs.length) return;
+  var seen = new WeakSet();
+  function fire(img) { if (seen.has(img)) return; seen.add(img); io.unobserve(img); reveal(img); }
+  var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) fire(en.target); }); }, { threshold: 0.18 });
+  imgs.forEach(function (img) { img.classList.add('veiled'); io.observe(img); });
+  // the observer can sit idle in a background tab or a slow engine; a cheap
+  // sweep on scroll makes sure a plate in view always gets its turn
+  var sweepT = 0;
+  function sweep() { var now = Date.now(); if (now - sweepT < 120) return; sweepT = now; var h = innerHeight; imgs.forEach(function (img) { if (seen.has(img)) return; var r = img.getBoundingClientRect(); if (r.bottom > 0 && r.top < h * 0.92) fire(img); }); }
+  addEventListener('scroll', sweep, { passive: true }); addEventListener('resize', sweep); setTimeout(sweep, 400); setTimeout(sweep, 1500);
+  window.__revealPlate = fire;
+  function reveal(img) {
+    var lift = function () { img.classList.remove('veiled'); };
+    var go = function () {
+      var fig = img.closest('figure'); if (!fig || !img.clientWidth) { lift(); return; }
+      var c = document.createElement('canvas'); c.className = 'plate-veil'; c.setAttribute('aria-hidden', 'true');
+      fig.style.position = 'relative';
+      c.style.left = img.offsetLeft + 'px'; c.style.top = img.offsetTop + 'px'; c.style.width = img.clientWidth + 'px'; c.style.height = img.clientHeight + 'px';
+      fig.appendChild(c);
+      var m = matrix(c, { src: img.currentSrc || img.src, text: '', plate: true, cell: 5, fit: 'cover' });
+      var done = false, finish = function () { if (done) return; done = true; c.classList.add('done'); lift(); setTimeout(function () { c.remove(); }, 700); };
+      m.onSettled = finish; setTimeout(finish, 3200);   // backstop: the photograph always arrives
+    };
+    if (img.complete && img.naturalWidth) go(); else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', lift, { once: true }); }
+  }
+})();
 
 // the glyph travels with you: the page you leave hands its glyph to the page you enter,
 // which shows it first and dissolves it into its own. (sessionStorage, one hop)

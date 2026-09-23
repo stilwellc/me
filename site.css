@@ -417,3 +417,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-reduced-motion: reduce) {
   .pill, .pill::before, .pill.solid:hover, .cell, .cell h2 .arrow, .skip { transition: none !important; transform: none !important; }
 }
+
+/* ── plates gather in as bodies, then the photograph takes over ─────────── */
+body figure.plate img { transition: opacity .5s ease; }
+body figure.plate img.veiled { opacity: 0; }
+.plate-veil { position: absolute; pointer-events: none; transition: opacity .55s ease; }
+.plate-veil.done { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { body figure.plate img.veiled { opacity: 1; } }
