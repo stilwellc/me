@@ -728,6 +728,7 @@ function leave(href) {
 (function () {
   var ape = document.getElementById('ape'); if (!ape) return;
   var busy = false, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try { var seen = parseInt(localStorage.getItem('kaiju') || '0', 10); if (seen > 0) ape.title = 'survived \u00d7 ' + seen; } catch (e) {}
   function roar() {
     try {
       var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; var ac = new AC(), t = ac.currentTime;
@@ -815,8 +816,8 @@ function leave(href) {
       page.forEach(function (e) { e.classList.remove('egg-eaten', 'egg-spat'); e.style.transformOrigin = ''; });
       kong.remove(); tick.remove(); if (rain) rain.remove(); if (fleet) fleet.remove(); bub.remove(); body.classList.remove('quake');
       var n = 0; try { n = (parseInt(localStorage.getItem('kaiju') || '0', 10) || 0) + 1; localStorage.setItem('kaiju', n); } catch (e) {}
-      var tally = document.getElementById('kaiju-tally'); if (!tally) { tally = document.createElement('span'); tally.id = 'kaiju-tally'; tally.className = 'egg-tally'; ape.parentNode.appendChild(tally); }
-      tally.textContent = 'survived \u00d7 ' + n;
+      ape.title = 'survived \u00d7 ' + n;
+      var tally = document.createElement('span'); tally.className = 'egg-tally'; tally.textContent = 'survived \u00d7 ' + n; ape.appendChild(tally); setTimeout(function () { tally.remove(); }, 4200);
       root.classList.remove('egg'); document.title = title; if (icon && iconHref) icon.setAttribute('href', iconHref);
       (window.__mx || []).forEach(function (m) { if (m.replay) { var w = m.__word; if (w) m.setWord(w); m.replay(); } });
       busy = false;

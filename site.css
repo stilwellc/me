@@ -548,7 +548,8 @@ footer.foot .ape.roar { animation: ape-roar .8s var(--ease); }
 .egg-bubble::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 8px; height: 8px; background: var(--ink); transform: translateX(-50%) rotate(45deg); }
 @keyframes egg-bubble { 0% { transform: translate(-50%, -100%) scale(0); } 18% { transform: translate(-50%, -110%) scale(1.15); } 30% { transform: translate(-50%, -100%) scale(1); } 85% { transform: translate(-50%, -100%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -120%) scale(0.8); opacity: 0; } }
 footer.foot .ape { position: relative; }
-.egg-tally { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--ink-3); margin-left: 0.6rem; vertical-align: middle; }
+.egg-tally { position: absolute; left: 50%; top: 100%; transform: translate(-50%, 4px); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--ink-3); white-space: nowrap; pointer-events: none; animation: egg-tally 4.2s ease forwards; }
+@keyframes egg-tally { 0% { opacity: 0; transform: translate(-50%, 0); } 12% { opacity: 1; transform: translate(-50%, 4px); } 80% { opacity: 1; } 100% { opacity: 0; } }
 .egg-head { position: absolute; top: -120px; animation-name: egg-fall; animation-timing-function: cubic-bezier(.3, .1, .7, 1); animation-fill-mode: both; filter: drop-shadow(0 4px 6px rgba(22,22,22,0.25)); }
 @keyframes egg-fall { from { transform: translateY(0) rotate(0); } to { transform: translateY(120vh) rotate(var(--spin, 540deg)); } }
 .egg-kong { position: fixed; left: 50%; bottom: 0; z-index: 75; transform: translate(-50%, 104%); transition: transform 1.3s cubic-bezier(.2, .9, .2, 1.1); pointer-events: none; }
