@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<base href="/me/">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Not found — Collin Stilwell</title>
 <meta name="description" content="That page is not here.">
 <meta name="robots" content="noindex">
@@ -11,30 +15,31 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790218471">
+<link rel="stylesheet" href="site.css?v=1790222500">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="404" aria-label="The number 404, in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="404" aria-label="The number 404, decoded from the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv d1">Not found</p>
   <h1 class="display rv d1">That page is not here.</h1>
-  <p class="lede one rv d2">The address may have changed, or it never existed. Everything that does exist is one pill away.</p>
+  <p class="lede one rv d2">The address may have changed, or it never existed. Everything that does exist is one click below.</p>
 </div>
-  <div class="cta"><a class="pill solid" href="./">Home</a><a class="pill ghost" href="digital.html">Digital</a><a class="pill ghost" href="physical.html">Physical</a></div>
+  <div class="cta"><a class="pill solid" href="./">Home</a><a class="pill ghost" href="resume.html">Résumé</a><a class="pill ghost" href="security.html">Security</a></div>
 </main>
 <footer class="foot">
   <div class="foot-in">
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape.svg" width="45" height="56" alt=""></button>
     <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Résumé</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
-    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · Hoboken, NJ</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
@@ -50,7 +55,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790218471"></script>
-<script src="site.js?v=1790218471"></script>
+<script src="assets/engine.js?v=1790222500"></script>
+<script src="site.js?v=1790222500"></script>
 </body>
 </html>

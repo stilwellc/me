@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>About — Collin Stilwell</title>
-<meta name="description" content="About Collin Stilwell — security engineer who cares about craft.">
+<meta name="description" content="About Collin Stilwell: Senior Product Security Engineer at WeightWatchers, builder of lectr and text2print, and what he is working on now.">
 <meta property="og:title" content="About — Collin Stilwell">
-<meta property="og:description" content="About Collin Stilwell — security engineer who cares about craft.">
+<meta property="og:description" content="About Collin Stilwell: Senior Product Security Engineer at WeightWatchers, builder of lectr and text2print, and what he is working on now.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/about.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/about.png">
@@ -18,109 +21,123 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790218471">
+<link rel="stylesheet" href="site.css?v=1790222500">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill on" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill on" aria-current="page" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="About" data-src="assets/about.svg" aria-label="The New York skyline, decoded into the word About" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
-  <p class="eyebrow rv d1">About · Hoboken, NJ</p>
-  <h1 class="display rv d1">Security engineer who cares about craft.</h1>
-  
+  <div class="mhead rv"><canvas class="matrix" data-text="About" data-src="assets/about.svg" aria-label="The New York skyline, decoded into the word About" role="img"></canvas><span class="hint">click to replay</span></div>
+  <p class="eyebrow rv d1">About · New Jersey</p>
+  <h1 class="display rv d1">I like building things<br>that feel good to use.</h1>
+  <p class="links-line rv d2"><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a><span aria-hidden="true"> · </span><a href="https://github.com/stilwellc" target="_blank" rel="noopener">GitHub ↗</a><span aria-hidden="true"> · </span><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">Substack ↗</a></p>
 </div>
   <div class="sp-md"></div>
-  <div class="prose rv d2">
-    <p>I like building things that feel good to use.</p>
-    <p>Most of what I make sits between security tooling, data, and design. The question is usually the same: what would this look like if it were built by someone who had to use it every day?</p>
-    <p>The day job is product security. Four startups in a row, each program built from close to nothing. Before that, a global bank, learning how security is run at scale; then leaving to build.</p>
-  </div>
+  <div class="bio">
+    <input class="bio-r" type="radio" name="bio-len" id="bio-short" checked>
+    <input class="bio-r" type="radio" name="bio-len" id="bio-full">
+    <div class="bio-tog" role="group" aria-label="How much to read"><label class="pill mono" for="bio-short">Short</label><label class="pill mono" for="bio-full">Full</label></div>
 
-  <h2 class="sheet-h">Experience</h2>
-  <div class="jobs">
-    <div class="job">
-      <div class="k">Jun 2026 –</div>
-      <div>
-        <h3>WeightWatchers <span class="role">— Senior Product Security Engineer</span></h3>
-        <div class="loc">full-time · now</div>
-        <ul class="pts"><li>Rebuilding product security from a compliance function into an engineering one.</li><li>WW is expanding into clinical care and telehealth; the security team secures the AWS and Kubernetes environments underneath it.</li><li>The team is building AI agents for detection, triage and incident response.</li></ul>
-      </div>
+    <div class="prose">
+      <p>Most of what I make sits between security tooling, data, and design. The question is usually the same: what would this look like if it were built by someone who had to use it every day?</p>
+      <p>The day job is product security, most of it built from close to nothing at startups. Before that, a global bank, where I learned how security runs at scale.</p>
     </div>
-    <div class="job">
-      <div class="k">Nov 2025 – Jun 2026</div>
-      <div>
-        <h3>Remedy Meds <span class="role">— Senior Product Security Engineer II</span></h3>
-        <div class="loc">New York City · full-time · 0 → 1</div>
-        <ul class="pts"><li>A GLP-1 newcomer that acquired Thirty Madison and its brands.</li><li>Stayed on post-acquisition as the founding security team.</li><li>Built product security, corporate security and privacy, zero to one.</li></ul>
-      </div>
+
+    <h2 class="sheet-h">Now · Sep 2026</h2>
+    <div class="sheet now">
+      <a class="row" href="security.html"><span class="k">day job</span><span><span class="t">Senior Product Security Engineer at WeightWatchers<span class="arrow">→</span></span><span class="d">Rebuilding product security from a compliance function into an engineering one.</span></span></a>
+      <a class="row" href="lectr.html"><span class="k">building</span><span><span class="t">lectr<span class="arrow">→</span></span><span class="d">Auction intelligence over eighteen houses. It runs itself every night.</span></span></a>
+      <a class="row" href="text2print.html"><span class="k">printing</span><span><span class="t">text2print<span class="arrow">→</span></span><span class="d">Describe a thing. Get a file the printer accepts.</span></span></a>
+      <a class="row" href="fourwalls.html"><span class="k">in progress</span><span><span class="t">Four Walls<span class="arrow">→</span></span><span class="d">A residence taken back to the studs.</span></span></a>
+      <div class="row"><span class="k">off hours</span><span><span class="d"><a href="fourwalls.html">Four Walls</a>, <a href="prints.html">3D prints</a>, and <a href="#ape">the ape</a>, who lives in the footer.</span></span></div>
     </div>
-    <div class="job">
-      <div class="k">Apr 2023 – Jun 2026</div>
-      <div>
-        <h3>Thirty Madison <span class="role">— Senior Product Security Engineer, then Senior Product Security Engineer II (Feb 2025)</span></h3>
-        <div class="loc">New York City · full-time · $650M exit</div>
-        <ul class="pts"><li>A telehealth platform treating over a million people.</li><li>Built security for three years, through to the $650M exit.</li><li>Scaled security and privacy across every Thirty Madison brand: Nurx, Keeps, and Cove.</li></ul>
+
+    <div class="bio-long">
+      <h2 class="sheet-h">Experience</h2>
+      <div class="jobs">
+        <div class="job">
+          <div class="k">Jun 2026 – now</div>
+          <div>
+            <h3>WeightWatchers <span class="role">— Senior Product Security Engineer</span></h3>
+            <div class="loc">full-time · moving into clinical care and telehealth</div>
+            <ul class="pts"><li>Rebuilding product security from a compliance function into an engineering one.</li><li>Securing the AWS and Kubernetes platform under WeightWatchers’ move into clinical care and telehealth.</li><li>Building AI agents for detection, triage, and incident response with the security team.</li></ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="k">Nov 2025 – Jun 2026</div>
+          <div>
+            <h3>Remedy Meds <span class="role">— Senior Product Security Engineer II</span></h3>
+            <div class="loc">New York City · full-time · GLP-1 care · acquired Thirty Madison and its brands</div>
+            <ul class="pts"><li>Stayed on after Remedy acquired Thirty Madison to found the security team.</li><li>Built product security, corporate security, and privacy from nothing.</li></ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="k">Apr 2023 – Jun 2026</div>
+          <div>
+            <h3>Thirty Madison <span class="role">— Senior Product Security Engineer; II from Feb 2025</span></h3>
+            <div class="loc">New York City · full-time · telehealth for over a million people · $650M exit</div>
+            <ul class="pts"><li>Built security for three years, through the $650M exit.</li><li>Scaled security and privacy across every Thirty Madison brand: Nurx, Keeps, and Cove.</li></ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="k">Nov 2021 – Apr 2023</div>
+          <div>
+            <h3>Podium <span class="role">— Application Security Engineer; Tech Lead, Product Security from Jul 2022</span></h3>
+            <div class="loc">New York City · full-time · 100k+ local businesses · $201M Series D</div>
+            <ul class="pts"><li>Secured the payments and fintech platform from proof of concept to billions of dollars in payment volume.</li><li>Built out the product security team for about 200 engineers.</li><li>Top contributor to Podium’s open Elixir secure-coding curriculum; wrote Semgrep rules for Ash Framework authorization.</li></ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="k">Jul 2020 – Nov 2021</div>
+          <div>
+            <h3>TD <span class="role">— Associate, Enterprise Security</span></h3>
+            <div class="loc">New York City · full-time · security engineering and application security, global Corporate and Investment Banking</div>
+          </div>
+        </div>
+        <div class="job">
+          <div class="k">May – Aug 2019</div>
+          <div>
+            <h3>TD <span class="role">— Summer Analyst, Enterprise Security</span></h3>
+            <div class="loc">Greater Philadelphia · internship · US Consumer Banking</div>
+            <ul class="pts"><li>Managed internal and third-party cyber risk on the business information security officer (BISO) team.</li></ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="k">May – Aug 2018</div>
+          <div>
+            <h3>New Jersey State Police <span class="role">— Intern, Network Engineering</span></h3>
+            <div class="loc">Regional Operations &amp; Intelligence Center, New Jersey’s primary fusion center · internship</div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="job">
-      <div class="k">Nov 2021 – Apr 2023</div>
-      <div>
-        <h3>Podium <span class="role">— Application Security Engineer; Tech Lead, Product Security (Jul 2022 – Apr 2023)</span></h3>
-        <div class="loc">New York City · full-time · $201M Series D</div>
-        <ul class="pts"><li>Vertical SaaS powering 100k+ local businesses. Joined right before the $201M Series D.</li><li>Secured the Payments and Fintech platform from proof of concept to billions of dollars in GPV.</li><li>Built out the Product Security team supporting about 200 engineers.</li><li>Top contributor to Podium’s open, enterprise-oriented Elixir secure-coding curriculum; wrote Semgrep rules for Ash Framework authorization.</li></ul>
-      </div>
-    </div>
-    <div class="job">
-      <div class="k">Jul 2020 – Nov 2021</div>
-      <div>
-        <h3>TD <span class="role">— Associate, Enterprise Security</span></h3>
-        <div class="loc">New York City · full-time</div>
-        <ul class="pts"><li>Security engineering and application security teams across global Corporate and Investment Banking.</li></ul>
-      </div>
-    </div>
-    <div class="job">
-      <div class="k">May – Aug 2019</div>
-      <div>
-        <h3>TD <span class="role">— Summer Analyst, Enterprise Security</span></h3>
-        <div class="loc">Greater Philadelphia · internship</div>
-        <ul class="pts"><li>US Consumer Banking BISO team, managing internal and third-party cyber risk.</li></ul>
-      </div>
-    </div>
-    <div class="job">
-      <div class="k">May – Aug 2018</div>
-      <div>
-        <h3>New Jersey State Police <span class="role">— Intern, Network Engineering</span></h3>
-        <div class="loc">Regional Operations & Intelligence Center · internship</div>
-        <ul class="pts"><li>New Jersey’s primary fusion center for data and intelligence production.</li></ul>
+
+      <h2 class="sheet-h">Education</h2>
+      <div class="jobs">
+        <div class="job">
+          <div class="k">2021–2023</div>
+          <div>
+            <h3>New York University <span class="role">— M.S. Cyber Security program</span></h3>
+            <div class="loc">Cyber Fellowship recipient</div>
+            <ul class="pts"><li>Research: stablecoin payments in e-commerce.</li></ul>
+          </div>
+        </div>
+        <div class="job">
+          <div class="k">2016–2020</div>
+          <div>
+            <h3>Rowan University <span class="role">— B.S. Computer Science, cum laude</span></h3>
+            <div class="loc">Concentration in cyber defense</div>
+            <ul class="pts"><li>Built Brumby Code Checker (2019–2020) with Rowan and ASRC Federal Mission Solutions for Lockheed Martin systems: a redundancy scanner for C++, Java, and Ada. Blended three similarity measures (cosine, ordered naive, and longest common subsequence) into one weighted score.</li></ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <h2 class="sheet-h">Education</h2>
-  <div class="jobs">
-    <div class="job">
-      <div class="k">2021 – 2023</div>
-      <div>
-        <h3>New York University <span class="role">— M.S. Cyber Security program</span></h3>
-        <div class="loc">Cyber Fellowship recipient</div>
-        <ul class="pts"><li>Research: leveraging blockchain transactions in e-commerce through stablecoins.</li></ul>
-      </div>
-    </div>
-    <div class="job">
-      <div class="k">2016 – 2020</div>
-      <div>
-        <h3>Rowan University <span class="role">— B.S. Computer Science, cum laude</span></h3>
-        <div class="loc">Concentration in cyber defense</div>
-        <ul class="pts"><li>Brumby Code Checker (2019 – 2020): a redundancy scanner for C++, Java and Ada built with Rowan and ASRC Federal Mission Solutions for Lockheed Martin systems. Three similarity algorithms, cosine, ordered naive and longest common subsequence, blended into one weighted score.</li></ul>
-      </div>
-    </div>
-  </div>
-
 
   <div class="cta"><a class="pill solid" href="resume.html">Résumé</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
 </main>
@@ -129,7 +146,7 @@
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape.svg" width="45" height="56" alt=""></button>
     <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Résumé</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
-    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · Hoboken, NJ</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
@@ -145,7 +162,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790218471"></script>
-<script src="site.js?v=1790218471"></script>
+<script src="assets/engine.js?v=1790222500"></script>
+<script src="site.js?v=1790222500"></script>
 </body>
 </html>

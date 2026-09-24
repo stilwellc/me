@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Colophon — Collin Stilwell</title>
-<meta name="description" content="How this site is built: no framework, six font files, one line-screen engine, and a playground to try it.">
+<meta name="description" content="How this site is built: no framework, three font files, one line-screen engine, and a playground to try it.">
 <meta property="og:title" content="Colophon — Collin Stilwell">
-<meta property="og:description" content="How this site is built: no framework, six font files, one line-screen engine, and a playground to try it.">
+<meta property="og:description" content="How this site is built: no framework, three font files, one line-screen engine, and a playground to try it.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/colophon.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/colophon.png">
@@ -18,40 +21,40 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790218471">
+<link rel="stylesheet" href="site.css?v=1790222500">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-text="Colophon" aria-label="The word Colophon, gathered from the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv">Colophon · how this site is built</p>
   <h1 class="display rv d1">Hand-built.<br>No framework, no build step.</h1>
-  <p class="lede rv d2">Fifteen HTML files, one stylesheet, one script, six font files, and a line-screen engine drawn on a canvas. It is served as static files from GitHub Pages, sets no cookies, and runs no analytics.</p>
+  <p class="lede rv d2">Seventeen pages, one stylesheet, two shared scripts, three font files, and a line-screen engine drawn on a canvas. It is served as static files from GitHub Pages, sets no cookies, and runs no analytics.</p>
 
   <div class="facts rv d3">
-    <div><div class="n">15</div><div class="l">pages<span class="sub">plain HTML, one shared script</span></div></div>
-    <div><div class="n">0</div><div class="l">frameworks<span class="sub">three.js on the wave page only, when asked</span></div></div>
-    <div><div class="n">6</div><div class="l">font files<span class="sub">self-hosted, 220 KB, no third-party origin</span></div></div>
-    <div><div class="n">1.3k</div><div class="l">lines of CSS and JS<span class="sub">everything on every page</span></div></div>
+    <div><div class="n">17</div><div class="l">pages<span class="sub">plain HTML, two shared scripts</span></div></div>
+    <div><div class="n">0</div><div class="l">frameworks<span class="sub">three.js on the wave and text2print pages, when asked</span></div></div>
+    <div><div class="n">3</div><div class="l">font files<span class="sub">self-hosted, 129 KB, no third-party origin</span></div></div>
+    <div><div class="n">0</div><div class="l">cookies<span class="sub">no analytics, no third-party scripts</span></div></div>
   </div>
 
   <section class="sec">
     <div class="k">the ground</div>
     <div>
       <h2>Eggshell, ink, one accent.</h2>
-      <p>The page is a sheet of paper: an off-white ground, near-black ink, three greys for hierarchy, hairlines for registration, and one orange for the one thing on the page that is alive. Type is Geist for reading, Geist Mono for labels and values, and Bricolage Grotesque, set light, for the display sizes and the name in the masthead. Two widths: forty-four rems for prose, sixty for objects.</p>
+      <p>The page is a sheet of paper: an off-white ground, near-black ink, three grays for hierarchy, hairlines for registration, and one orange for the one thing on the page that is alive. Two widths: forty-four rems for prose, sixty for objects.</p>
       <ul>
         <li><span>Ground</span><span class="v">#FCFBFA</span></li>
         <li><span>Ink</span><span class="v">#161616 · #6B6C6A · #737470</span></li>
         <li><span>Hairlines</span><span class="v">#E6E5E2 · #D6D5D1</span></li>
         <li><span>Accent</span><span class="v">#FF5A1F</span></li>
-        <li><span>Type</span><span class="v">Geist 300–500 · Geist Mono 400–500 · Bricolage Grotesque 200–500</span></li>
       </ul>
     </div>
   </section>
@@ -60,8 +63,8 @@
     <div class="k">the line screen</div>
     <div>
       <h2>Every header is the same machine.</h2>
-      <p>A band is a grid of cells, four pixels on a side. A word is drawn to an offscreen canvas and sampled into that grid to make a mask. A picture is sampled the same way, at twice the resolution, stretched for local contrast and given an edge channel, so a photograph becomes a field of dashes and a glyph becomes squares. Cells that carry nothing get a filler dot, which is why every band is a full rectangle whatever it holds.</p>
-      <p>The dots are bodies. Each has a home in the current field and a target in the next; pairs are made by angle around the centre so the picture turns into the word without crossing itself. A page load gathers the bodies in from outside the band, a change explodes them and remakes them, leaving a page scatters them, and a light wind from a flow field gives the flight some weight. The whole thing is one file with no dependencies.</p>
+      <p>A band is a grid of cells, four pixels on a side. A word is drawn to an offscreen canvas and sampled into that grid to make a mask. A picture is sampled the same way, at twice the resolution, stretched for local contrast and given an edge channel, so a photograph becomes a field of dashes and a line drawing becomes squares. Cells that carry nothing get a filler dot, which is why every band is a full rectangle whatever it holds.</p>
+      <p>The dots are bodies. Each has a home in the current field and a target in the next; pairs are made by angle around the center so the picture turns into the word without crossing itself. A page load gathers the bodies in from outside the band, a change explodes them and remakes them, leaving a page scatters them, and a light wind from a flow field gives the flight some weight. The whole thing is one file with no dependencies.</p>
       <figure class="plate wide play-plate">
         <canvas id="play" role="img" aria-label="The playground line screen"></canvas>
         <figcaption>The playground · your word, your picture</figcaption>
@@ -71,7 +74,13 @@
         <label class="pill mono file">Use a picture <input id="play-pic" type="file" accept="image/*"></label>
         <button class="pill mono" type="button" id="play-again">Replay</button>
       </div>
-      <p class="cap-note">Pictures never leave the browser. The file is read into the canvas and forgotten when the page closes.</p>
+      <div class="play-presets" role="group" aria-label="Try a picture">
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/collin.jpg" data-label="Snoopy at a laptop">Snoopy</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/ape.svg" data-label="The ape">The ape</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/physical/wave/header.jpg" data-label="The wave panel">The wave</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/physical/plan-intent.png" data-label="The Four Walls plan">Four Walls</button>
+      </div>
+      <p class="cap-note">Your picture never leaves this tab. The file is read into the canvas and forgotten when the page closes.</p>
     </div>
   </section>
 
@@ -79,13 +88,33 @@
     <div class="k">the build</div>
     <div>
       <h2>Files on a disk, served as they are.</h2>
-      <p>There is no bundler, no template layer and no client router. Each page carries its own markup, the shared stylesheet, and the shared script; a cache-busting version on those two files is the whole deployment story. Photographs ship with width and height and a small variant for phones. Social cards are rendered by a small page in the repository with the same line-screen code, once, and committed.</p>
+      <p>There is no bundler, no template layer, and no client router. Each page carries its own markup, the shared stylesheet, and the two shared scripts; a cache-busting version on those files is the whole deployment story. Photographs ship with width and height and a small variant for phones. Social cards are rendered by a small page in the repository with the same line-screen code, once, and committed.</p>
       <ul>
         <li><span>Hosting</span><span class="v">GitHub Pages, from the main branch</span></li>
         <li><span>Fonts</span><span class="v">six woff2 files, preloaded, swap</span></li>
         <li><span>Live data</span><span class="v">GitHub API on the GitHub page · lectr.bid on the lectr study</span></li>
         <li><span>Tracking</span><span class="v">none</span></li>
         <li><span>Source</span><span class="v"><a href="https://github.com/stilwellc/me" target="_blank" rel="noopener">github.com/stilwellc/me ↗</a></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="k">the threat model</div>
+    <div>
+      <h2>Threat model of this page.</h2>
+      <p>A portfolio is a small target, but it runs code in your browser and reads data from other people’s servers, so it gets the same treatment as anything else.</p>
+      <ul class="tm">
+        <li><span>Visitors, the integrity of the pages, and the owner’s exact location</span><span class="v">protects</span></li>
+        <li><span>GitHub Pages serves every file; the repository is the source of truth</span><span class="v">boundary</span></li>
+        <li><span>JSON from api.github.com on the GitHub page</span><span class="v">boundary</span></li>
+        <li><span>JSON from lectr.bid on the lectr study, where auction titles are untrusted text</span><span class="v">boundary</span></li>
+        <li><span>three.js, served from this origin, on the wave and text2print pages</span><span class="v">boundary</span></li>
+        <li><span>Content-Security-Policy with script-src 'self': no inline or third-party script runs</span><span class="v">control</span></li>
+        <li><span>Every external string is escaped before it reaches the page</span><span class="v">control</span></li>
+        <li><span>No cookies, no analytics, no third-party scripts</span><span class="v">control</span></li>
+        <li><span>GitHub Pages sends no custom response headers, so no frame-ancestors and no Permissions-Policy</span><span class="v">gap</span></li>
+        <li><span>Found something? <a href="https://stilwellc.github.io/.well-known/security.txt">/.well-known/security.txt</a>, or <a href="https://github.com/stilwellc/me/security" target="_blank" rel="noopener">GitHub private vulnerability reporting ↗</a></span><span class="v">report</span></li>
       </ul>
     </div>
   </section>
@@ -98,8 +127,8 @@
         <li><span>Labels</span><span class="v">one style: mono, 11 px, uppercase, wide</span></li>
         <li><span>Arrows</span><span class="v">→ inside the site · ↗ out of it</span></li>
         <li><span>Widths</span><span class="v">44 rem for reading · 60 rem for objects</span></li>
-        <li><span>Colour</span><span class="v">light only · accent for what moves</span></li>
-        <li><span>Keyboard</span><span class="v">⌘K palette · g then a letter · ? for the sheet</span></li>
+        <li><span>Color</span><span class="v">light only · accent for what moves</span></li>
+        <li><span>Keyboard</span><span class="v">⌘K palette · g then a letter · ? for shortcuts</span></li>
       </ul>
     </div>
   </section>
@@ -114,7 +143,7 @@
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape.svg" width="45" height="56" alt=""></button>
     <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Résumé</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
-    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · Hoboken, NJ</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
@@ -130,23 +159,8 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790218471"></script>
-<script src="site.js?v=1790218471"></script>
-<script>
-(function () {
-  // the playground: a second engine, fed by the reader
-  var c = document.getElementById('play'), inp = document.getElementById('play-word'), file = document.getElementById('play-pic'), again = document.getElementById('play-again');
-  if (!c || typeof matrix !== 'function') return;
-  var word = 'Hello', src = null, m = null;
-  function build() {
-    var n = document.createElement('canvas'); n.id = 'play'; n.setAttribute('role', 'img'); n.setAttribute('aria-label', 'The playground line screen');
-    c.replaceWith(n); c = n; m = matrix(c, { src: src, text: word });
-  }
-  build();
-  inp.addEventListener('input', function () { var v = inp.value.trim().slice(0, 14); if (!v) return; word = v; if (m && m.setWord) m.setWord(word); });
-  file.addEventListener('change', function () { var f = file.files && file.files[0]; if (!f || !/^image\//.test(f.type)) return; if (src) URL.revokeObjectURL(src); src = URL.createObjectURL(f); build(); });
-  again.addEventListener('click', function () { if (m && m.replay) m.replay(); });
-})();
-</script>
+<script src="assets/engine.js?v=1790222500"></script>
+<script src="site.js?v=1790222500"></script>
+<script src="assets/colophon-page.js"></script>
 </body>
 </html>

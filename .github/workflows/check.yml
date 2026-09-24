@@ -1,0 +1,20 @@
+name: check
+on: [push, pull_request]
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pillow
+      - run: python3 _tools/static-check.py
+      - run: python3 _tools/check-exif.py
+      - run: npm i --no-save playwright@1 && npx playwright install --with-deps chromium
+      - run: |
+          mkdir -p /tmp/pages && ln -s "$PWD" /tmp/pages/me
+          python3 -m http.server 8080 --directory /tmp/pages >/dev/null 2>&1 &
+          sleep 1
+          node _tools/smoke.js http://localhost:8080/me/

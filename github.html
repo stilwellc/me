@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>GitHub — Collin Stilwell</title>
-<meta name="description" content="Collin Stilwell on GitHub: live profile, repositories, and recent activity.">
+<meta name="description" content="Collin Stilwell on GitHub: profile, repositories, and recent pushes.">
 <meta property="og:title" content="GitHub — Collin Stilwell">
-<meta property="og:description" content="Collin Stilwell on GitHub: live profile, repositories, and recent activity.">
+<meta property="og:description" content="Collin Stilwell on GitHub: profile, repositories, and recent pushes.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/github.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/github.png">
@@ -18,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790218471">
+<link rel="stylesheet" href="site.css?v=1790222500">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <style>
 
@@ -35,65 +38,72 @@
   .act .grid i.l2 { background: color-mix(in srgb, var(--ink) 55%, transparent); }
   .act .grid i.l3 { background: var(--ink); }
 </style>
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill on" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="GitHub" data-src="assets/github.svg" aria-label="A branch graph, decoded into the word GitHub" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="GitHub" data-src="assets/github.svg" aria-label="A branch graph, decoded into the word GitHub" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv d1">GitHub · github.com/stilwellc</p>
   <h1 class="display rv d1">Public since 2017.<br>Shipping most weeks.</h1>
-  <p class="lede one rv d2">Read live from the GitHub API on load: profile, repositories, and the pushes among the last hundred public events. If the API is rate-limited, the last snapshot stands.</p>
+  <p class="lede one rv d2">Read from the GitHub API when the page loads: profile, repositories, and recent pushes. If GitHub is rate-limiting, or scripts are off, you’re looking at the snapshot from Sep 23, 2026.</p>
 </div>
-  <div class="gh-stats" id="gh-stats"><span><b id="gh-repos">18</b> public repos</span><span><b id="gh-since">2017</b> on GitHub</span><span>based in <b id="gh-loc">New Jersey</b></span><span><b id="gh-pushes">92</b> pushes in the last 100 events</span></div>
+  <div class="gh-stats" id="gh-stats"><span><b id="gh-repos">18</b> public repos</span><span><b id="gh-since">2017</b> on GitHub</span><span>based in <b id="gh-loc">New Jersey</b></span><span><b id="gh-pushes">100</b> of the last 100 public events were pushes</span></div>
 
   <section class="act rv d2">
     <h2 class="sheet-h">Public pushes</h2>
-    <div class="grid" id="gh-grid" aria-label="Push activity"></div>
-    <p class="gh-note">Pushes among the last 100 public events, by day, newest on the right. <span class="lg" aria-hidden="true"><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i></span> fewer to more. <span id="gh-state">snapshot</span></p>
+    <div class="grid" id="gh-grid" role="img" aria-label="Push activity: 100 pushes over 5 weeks"><i class="" title="2026-08-21 · 0 pushes"></i><i class="" title="2026-08-22 · 0 pushes"></i><i class="" title="2026-08-23 · 0 pushes"></i><i class="" title="2026-08-24 · 0 pushes"></i><i class="l1" title="2026-08-25 · 1 push"></i><i class="l1" title="2026-08-26 · 2 pushes"></i><i class="l3" title="2026-08-27 · 6 pushes"></i><i class="l3" title="2026-08-28 · 8 pushes"></i><i class="l2" title="2026-08-29 · 3 pushes"></i><i class="l3" title="2026-08-30 · 9 pushes"></i><i class="" title="2026-08-31 · 0 pushes"></i><i class="" title="2026-09-01 · 0 pushes"></i><i class="" title="2026-09-02 · 0 pushes"></i><i class="l1" title="2026-09-03 · 2 pushes"></i><i class="l2" title="2026-09-04 · 3 pushes"></i><i class="" title="2026-09-05 · 0 pushes"></i><i class="l1" title="2026-09-06 · 1 push"></i><i class="" title="2026-09-07 · 0 pushes"></i><i class="" title="2026-09-08 · 0 pushes"></i><i class="" title="2026-09-09 · 0 pushes"></i><i class="l3" title="2026-09-10 · 9 pushes"></i><i class="l3" title="2026-09-11 · 13 pushes"></i><i class="l3" title="2026-09-12 · 8 pushes"></i><i class="" title="2026-09-13 · 0 pushes"></i><i class="" title="2026-09-14 · 0 pushes"></i><i class="" title="2026-09-15 · 0 pushes"></i><i class="" title="2026-09-16 · 0 pushes"></i><i class="" title="2026-09-17 · 0 pushes"></i><i class="" title="2026-09-18 · 0 pushes"></i><i class="l3" title="2026-09-19 · 8 pushes"></i><i class="l1" title="2026-09-20 · 1 push"></i><i class="l2" title="2026-09-21 · 4 pushes"></i><i class="l1" title="2026-09-22 · 2 pushes"></i><i class="l3" title="2026-09-23 · 6 pushes"></i><i class="l3" title="2026-09-24 · 14 pushes"></i></div>
+    <p class="gh-note">Pushes among the last 100 public events, by day, newest on the right. <span class="lg" aria-hidden="true"><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i></span> fewer to more. <span id="gh-state">snapshot · Sep 23, 2026</span></p>
   </section>
 
   <section class="repos rv d3">
     <h2 class="sheet-h">Repositories · newest push first</h2>
     <div class="frame"><div class="cells" id="gh-cells">
-<a class="cell" href="https://github.com/stilwellc/lectr" target="_blank" rel="noopener">
+<a class="cell" data-repo="lectr" href="https://github.com/stilwellc/lectr" target="_blank" rel="noopener">
   <div class="top"><span class="pill mono">TypeScript</span></div>
   <h2>lectr<span class="arrow">↗</span></h2>
-  <p>Auction-market intelligence for the collectibles market — every estimate, read against every hammer.</p>
-  <div class="foot">pushed 2026-09-10</div>
+  <p>Auction intelligence over 1.1M lots from 18 houses: a value engine with a public backtest, rebuilt every night.</p>
+  <div class="foot">pushed 2026-09-23</div>
 </a>
-<a class="cell" href="https://github.com/stilwellc/starling" target="_blank" rel="noopener">
+<a class="cell" data-repo="starling" href="https://github.com/stilwellc/starling" target="_blank" rel="noopener">
   <div class="top"><span class="pill mono">TypeScript</span></div>
   <h2>starling<span class="arrow">↗</span></h2>
-  <p>Deep-value eBay deal board powered by lectr — Buy It Now listings deep under corpus value, risk-ranked and evidence-backed.</p>
-  <div class="foot">pushed 2026-09-10</div>
+  <p>eBay listings priced well under what lectr says they’re worth.</p>
+  <div class="foot">pushed 2026-09-23</div>
 </a>
-<a class="cell" href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">
+<a class="cell" data-repo="text2print" href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">
   <div class="top"><span class="pill mono">Python</span></div>
   <h2>text2print<span class="arrow">↗</span></h2>
-  <p>Claude Code skill for parametric 3D printing with CadQuery.</p>
-  <div class="foot">pushed 2026-07-08</div>
+  <p>Describe a thing. Get a file the printer accepts.</p>
+  <div class="foot">pushed 2026-09-21</div>
 </a>
-<a class="cell" href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">
-  <div class="top"><span class="pill mono">HTML</span></div>
-  <h2>SecMCPHub<span class="arrow">↗</span></h2>
-  <p>Automated security MBR dashboard generated by Claude Code skills over MCP.</p>
-  <div class="foot">pushed 2026-06-02</div>
-</a>
-<a class="cell" href="https://github.com/stilwellc/soiree" target="_blank" rel="noopener">
+<a class="cell" data-repo="soiree" href="https://github.com/stilwellc/soiree" target="_blank" rel="noopener">
   <div class="top"><span class="pill mono">JavaScript</span></div>
   <h2>soiree<span class="arrow">↗</span></h2>
-  <p>Curated pop-up events for NYC, Hoboken/Jersey City and Philadelphia.</p>
+  <p>What’s actually happening tonight, scraped from the people who post it.</p>
   <div class="foot">pushed 2026-07-13</div>
 </a>
-<a class="cell" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener">
+<a class="cell" data-repo="Mobi" href="https://github.com/stilwellc/Mobi" target="_blank" rel="noopener">
+  <div class="top"><span class="pill mono">TypeScript</span></div>
+  <h2>Mobi<span class="arrow">↗</span></h2>
+  <p>co.stil, a studio site for the software and the physical work.</p>
+  <div class="foot">pushed 2026-07-12</div>
+</a>
+<a class="cell" data-repo="SecMCPHub" href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">
+  <div class="top"><span class="pill mono">HTML</span></div>
+  <h2>SecMCPHub<span class="arrow">↗</span></h2>
+  <p>A security business review that writes itself, over MCP.</p>
+  <div class="foot">pushed 2026-06-02</div>
+</a>
+<a class="cell" data-repo="ash-semgrep-rules" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener">
   <div class="top"><span class="pill mono">Semgrep</span></div>
   <h2>ash-semgrep-rules<span class="arrow">↗</span></h2>
-  <p>Static-analysis rules for Ash Framework authorization.</p>
+  <p>Semgrep rules that catch Ash Framework authorization gaps.</p>
   <div class="foot">pushed 2025-11-13</div>
 </a>
     </div></div>
@@ -109,7 +119,7 @@
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape.svg" width="45" height="56" alt=""></button>
     <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Résumé</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
-    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · Hoboken, NJ</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
@@ -125,7 +135,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790218471"></script>
-<script src="site.js?v=1790218471"></script>
+<script src="assets/engine.js?v=1790222500"></script>
+<script src="site.js?v=1790222500"></script>
 </body>
 </html>

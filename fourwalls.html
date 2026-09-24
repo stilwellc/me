@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Four Walls — Collin Stilwell</title>
 <meta name="description" content="A residence taken back to the studs, documented as found and as intended.">
 <meta property="og:title" content="Four Walls — Collin Stilwell">
@@ -18,80 +21,111 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790218471">
+<link rel="stylesheet" href="site.css?v=1790222500">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill on" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill on" aria-current="page" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="Four Walls" data-src="assets/physical/before/livingroom1.webp" data-focus="0.5,0.5" aria-label="The living room as found, decoded into the words Four Walls" role="img"></canvas><span class="hint">click to replay · picture → text</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="Four Walls" data-src="assets/physical/before/livingroom1.webp" data-focus="0.5,0.5" aria-label="The living room as found, decoded into the words Four Walls" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv d1"><a href="physical.html">Physical</a> · residence</p>
   <h1 class="display rv d1">Four Walls</h1>
   <p class="lede one rv d2">A residence taken back to the studs, documented as found and as intended.</p>
 </div>
 
   <div class="sheet rv d3 mt-2">
-    <div class="row"><span class="k">status</span><span class="t">In progress</span><span class="v">2024 –</span></div>
+    <div class="row"><span class="k">status</span><span class="t">In progress</span><span class="v">2024 – now</span></div>
     <div class="row"><span class="k">scope</span><span class="t">Full residence</span><span class="v">pre-war railroad plan</span></div>
     <div class="row"><span class="k">rooms</span><span class="t">Kitchen, living, dining, master bedroom, bedroom/office, bath</span><span class="v">6</span></div>
+    <div class="row"><span class="k">updated</span><span class="t">Last updated September 2026</span><span class="v">Sep 2026</span></div>
   </div>
 
-  <figure class="plate wide rv d3"><img width="1400" height="875" fetchpriority="high" src="assets/physical/fourwalls-iso.jpg" alt="The building, drawn in isometric: four stories of brick over a raised stoop"><figcaption>The building</figcaption></figure>
+  <figure class="plate wide plan-hero rv d3"><img width="1263" height="496" fetchpriority="high" src="assets/physical/plan-intent.png" alt="Floor plan as intended: one long line of rooms from the master bedroom through living and dining to the bath and the bedroom-office"><figcaption>The plan · as intended</figcaption></figure>
 
+  <div class="chapter-wrap" id="as-found">
   <h2 class="sheet-h">Chapter I · as found</h2>
-  <p class="chapter">A pre-war railroad plan: one long line of rooms, gray paint over every wall, maple strip floors throughout, steam heat and window units doing the climate work. This is the unit exactly as it was handed over. Nothing staged, nothing retouched.</p>
+  <p class="chapter">A pre-war railroad plan: one long line of rooms, gray paint over every wall, maple strip floors throughout, steam heat and window units doing the climate work. Photographed as handed over.</p>
   <div class="rooms">
-    <div class="room">
-      <h3>Kitchen</h3>
-      <p>Galley kitchen mid-plan. Flat-panel cabinets, granite counters, gas range, and a pass-through cut into the partition wall, the only opening between kitchen and dining room.</p>
-      <figure class="plate"><img src="assets/physical/before/kitchen1.webp" srcset="assets/physical/before/kitchen1-768.webp 768w, assets/physical/before/kitchen1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Kitchen as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/kitchen2.webp" srcset="assets/physical/before/kitchen2-768.webp 768w, assets/physical/before/kitchen2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Kitchen as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/kitchen3.webp" srcset="assets/physical/before/kitchen3-768.webp 768w, assets/physical/before/kitchen3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Kitchen as found" loading="lazy"></figure></div>
-    </div>
-    <div class="room">
-      <h3>Living room</h3>
-      <p>The long room on the entry side. Crown molding, a cast-iron radiator on the party wall, and a through-wall AC unit carrying the cooling load.</p>
-      <figure class="plate"><img src="assets/physical/before/livingroom1.webp" srcset="assets/physical/before/livingroom1-768.webp 768w, assets/physical/before/livingroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Living room as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" srcset="assets/physical/before/livingroom3-768.webp 768w, assets/physical/before/livingroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Living room as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" srcset="assets/physical/before/livingroom4-768.webp 768w, assets/physical/before/livingroom4.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Living room as found" loading="lazy"></figure></div>
-    </div>
-    <div class="room">
-      <h3>Dining room</h3>
-      <p>Between kitchen and living space, lit by a single three-arm fixture.</p>
-      <figure class="plate"><img src="assets/physical/before/diningroom1.webp" srcset="assets/physical/before/diningroom1-768.webp 768w, assets/physical/before/diningroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/diningroom3.webp" srcset="assets/physical/before/diningroom3-768.webp 768w, assets/physical/before/diningroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Dining room as found" loading="lazy"></figure></div>
-    </div>
-    <div class="room">
-      <h3>Master bedroom</h3>
-      <p>Tall window casings with panel bases, a double run of sliding-door closets, a ceiling fan, and a mix of radiator and through-wall AC carrying the room.</p>
-      <figure class="plate"><img src="assets/physical/before/bedroom1.webp" srcset="assets/physical/before/bedroom1-768.webp 768w, assets/physical/before/bedroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/bedroom2.webp" srcset="assets/physical/before/bedroom2-768.webp 768w, assets/physical/before/bedroom2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/bedroom3.webp" srcset="assets/physical/before/bedroom3-768.webp 768w, assets/physical/before/bedroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/bedroom4.webp" srcset="assets/physical/before/bedroom4-768.webp 768w, assets/physical/before/bedroom4.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom as found" loading="lazy"></figure></div>
-    </div>
-    <div class="room">
-      <h3>Bedroom / office</h3>
-      <p>The second bedroom, doing double duty as the office at the rear of the plan. Pressed-tin ceiling, exposed steam riser, one tall window with a security grille: the oldest surfaces left in the unit.</p>
-      <figure class="plate"><img src="assets/physical/before/office1.webp" srcset="assets/physical/before/office1-768.webp 768w, assets/physical/before/office1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bedroom / office as found" loading="lazy"></figure>
-      <div class="pairs"><figure class="plate"><img src="assets/physical/before/office2.webp" srcset="assets/physical/before/office2-768.webp 768w, assets/physical/before/office2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Bedroom / office as found" loading="lazy"></figure><figure class="plate"><img src="assets/physical/before/office3.webp" srcset="assets/physical/before/office3-768.webp 768w, assets/physical/before/office3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Bedroom / office as found" loading="lazy"></figure></div>
-    </div>
-    <div class="room">
-      <h3>Bath</h3>
-      <p>The single bath. Compact footprint: narrow vanity, glass-door shower, frosted double-hung window over the toilet.</p>
-      <figure class="plate"><img src="assets/physical/before/bathroom1.webp" srcset="assets/physical/before/bathroom1-768.webp 768w, assets/physical/before/bathroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bath as found" loading="lazy"></figure>
-    </div>
+    <section class="sec room" id="kitchen">
+      <div class="k">kitchen</div>
+      <div>
+        <h3>Galley kitchen, mid-plan.</h3>
+        <p>Flat-panel cabinets, granite counters, gas range, and a pass-through cut into the partition wall, the only opening between kitchen and dining room.</p>
+        <figure class="plate"><img src="assets/physical/before/kitchen1.webp" srcset="assets/physical/before/kitchen1-768.webp 768w, assets/physical/before/kitchen1-1152.webp 1152w, assets/physical/before/kitchen1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Kitchen as found, straight on: white flat-panel cabinets, dark granite counters, a gas range under a microwave, and the pass-through on the left" loading="lazy" decoding="async"><figcaption>Kitchen · the pass-through at left is the only opening to the dining room</figcaption></figure>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/kitchen2.webp" srcset="assets/physical/before/kitchen2-768.webp 768w, assets/physical/before/kitchen2-1152.webp 1152w, assets/physical/before/kitchen2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Kitchen from the living-room side: the counter run ending at the partition, with the pass-through above it" loading="lazy" decoding="async"><figcaption>Kitchen · where the counter dead-ends at the partition</figcaption></figure><figure class="plate"><img src="assets/physical/before/kitchen3.webp" srcset="assets/physical/before/kitchen3-768.webp 768w, assets/physical/before/kitchen3-1152.webp 1152w, assets/physical/before/kitchen3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Kitchen close up: dishwasher, sink, and range in one run under a single row of upper cabinets" loading="lazy" decoding="async"><figcaption>Kitchen · range, sink, and dishwasher in one short run</figcaption></figure></div>
+      </div>
+    </section>
+    <section class="sec room" id="living-room">
+      <div class="k">living room</div>
+      <div>
+        <h3>The long room on the entry side.</h3>
+        <p>Crown molding, a cast-iron radiator on the party wall, and a through-wall AC unit carrying the cooling load.</p>
+        <figure class="plate"><img src="assets/physical/before/livingroom1.webp" srcset="assets/physical/before/livingroom1-768.webp 768w, assets/physical/before/livingroom1-1152.webp 1152w, assets/physical/before/livingroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Living room looking down the length of the plan: the entry door on the left and the kitchen pass-through at the far end" loading="lazy" decoding="async"><figcaption>Living room · the entry wall, with the kitchen at the end of the line</figcaption></figure>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" srcset="assets/physical/before/livingroom3-768.webp 768w, assets/physical/before/livingroom3-1152.webp 1152w, assets/physical/before/livingroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Living room from the opposite corner: an empty TV bracket on the wall and two doors along the far side" loading="lazy" decoding="async"><figcaption>Living room · crown molding runs the full length of the room</figcaption></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" srcset="assets/physical/before/livingroom4-768.webp 768w, assets/physical/before/livingroom4-1152.webp 1152w, assets/physical/before/livingroom4.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Living room along the long wall: a white cast-iron radiator and an exposed riser in the corner" loading="lazy" decoding="async"><figcaption>Living room · the radiator and riser on the long wall</figcaption></figure></div>
+      </div>
+    </section>
+    <section class="sec room" id="dining-room">
+      <div class="k">dining room</div>
+      <div>
+        <h3>Between kitchen and living space.</h3>
+        <p>Lit by a single three-arm fixture.</p>
+        <figure class="plate"><img src="assets/physical/before/diningroom1.webp" srcset="assets/physical/before/diningroom1-768.webp 768w, assets/physical/before/diningroom1-1152.webp 1152w, assets/physical/before/diningroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room looking toward the end of the plan: a three-arm ceiling fixture over maple strip floors" loading="lazy" decoding="async"><figcaption>Dining room · the three-arm fixture, the only light in the room</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/diningroom3.webp" srcset="assets/physical/before/diningroom3-768.webp 768w, assets/physical/before/diningroom3-1152.webp 1152w, assets/physical/before/diningroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room from the other end: the same fixture, with two doors along the right-hand wall" loading="lazy" decoding="async"><figcaption>Dining room · the line of the plan, looking back</figcaption></figure>
+      </div>
+    </section>
+    <section class="sec room" id="master-bedroom">
+      <div class="k">master bedroom</div>
+      <div>
+        <h3>Closets, casings, and a ceiling fan.</h3>
+        <p>Tall window casings with panel bases, a double run of sliding-door closets, a ceiling fan, and a mix of radiator and through-wall AC carrying the room.</p>
+        <figure class="plate"><img src="assets/physical/before/bedroom1.webp" srcset="assets/physical/before/bedroom1-768.webp 768w, assets/physical/before/bedroom1-1152.webp 1152w, assets/physical/before/bedroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Master bedroom: tall window casings with paneled bases, a radiator and riser in the far corner" loading="lazy" decoding="async"><figcaption>Master bedroom · paneled casings, radiator and riser in the corner</figcaption></figure>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/bedroom2.webp" srcset="assets/physical/before/bedroom2-768.webp 768w, assets/physical/before/bedroom2-1152.webp 1152w, assets/physical/before/bedroom2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom: two sets of white sliding-door closets side by side on one wall" loading="lazy" decoding="async"><figcaption>Master bedroom · the double closet the plan consolidates</figcaption></figure><figure class="plate"><img src="assets/physical/before/bedroom3.webp" srcset="assets/physical/before/bedroom3-768.webp 768w, assets/physical/before/bedroom3-1152.webp 1152w, assets/physical/before/bedroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Master bedroom toward the second window, with a through-wall AC unit beneath it" loading="lazy" decoding="async"><figcaption>Master bedroom · through-wall AC under the second window</figcaption></figure></div>
+        <figure class="plate"><img src="assets/physical/before/bedroom4.webp" srcset="assets/physical/before/bedroom4-768.webp 768w, assets/physical/before/bedroom4-1152.webp 1152w, assets/physical/before/bedroom4.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Master bedroom looking past the closets into the hall that runs back through the unit" loading="lazy" decoding="async"><figcaption>Master bedroom · the closet wall and the hall beyond it</figcaption></figure>
+      </div>
+    </section>
+    <section class="sec room" id="bedroom-office">
+      <div class="k">bedroom / office</div>
+      <div>
+        <h3>The oldest surfaces left in the unit.</h3>
+        <p>The second bedroom, doing double duty as the office at the rear of the plan. Pressed-tin ceiling, exposed steam riser, one tall window with a security grille.</p>
+        <figure class="plate"><img src="assets/physical/before/office1.webp" srcset="assets/physical/before/office1-768.webp 768w, assets/physical/before/office1-1152.webp 1152w, assets/physical/before/office1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bedroom-office: a pressed-tin ceiling, an exposed steam riser, and a radiator under the tall window" loading="lazy" decoding="async"><figcaption>Bedroom / office · pressed-tin ceiling and exposed steam riser</figcaption></figure>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/office2.webp" srcset="assets/physical/before/office2-768.webp 768w, assets/physical/before/office2-1152.webp 1152w, assets/physical/before/office2.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Bedroom-office from the window side: a sliding-door closet and the door out to the hall" loading="lazy" decoding="async"><figcaption>Bedroom / office · the closet and the door to the hall</figcaption></figure><figure class="plate"><img src="assets/physical/before/office3.webp" srcset="assets/physical/before/office3-768.webp 768w, assets/physical/before/office3-1152.webp 1152w, assets/physical/before/office3.webp 1536w" sizes="(max-width: 760px) 92vw, 470px" width="1536" height="1024" alt="Bedroom-office corner: the pressed-tin ceiling meeting the crown, with the radiator below" loading="lazy" decoding="async"><figcaption>Bedroom / office · where the tin ceiling meets the crown</figcaption></figure></div>
+      </div>
+    </section>
+    <section class="sec room" id="bath">
+      <div class="k">bath</div>
+      <div>
+        <h3>The single bath.</h3>
+        <p>Compact footprint: narrow vanity, glass-door shower, frosted double-hung window over the toilet.</p>
+        <figure class="plate"><img src="assets/physical/before/bathroom1.webp" srcset="assets/physical/before/bathroom1-768.webp 768w, assets/physical/before/bathroom1-1152.webp 1152w, assets/physical/before/bathroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bath: a narrow white vanity with a mirrored cabinet, the toilet, and the edge of the glass-door shower" loading="lazy" decoding="async"><figcaption>Bath · narrow vanity, toilet, and the shower door at right</figcaption></figure>
+      </div>
+    </section>
+  </div>
   </div>
 
-  <h2 class="sheet-h">Chapter II · the plan</h2>
+  <div class="chapter-wrap" id="as-intended">
+  <h2 class="sheet-h">Chapter II · as intended</h2>
   <p class="chapter">What exists is the intent, drawn. The moves are few and deliberate: the double-closet wall boxing in the master bedroom consolidates to a single closet so the opening into the living room widens; the kitchen counter extends and squares off toward the dining room instead of dead-ending mid-plan; and a built-in lands at the bedroom-office end to replace a freestanding closet. The point of all three is the same: keep the long line of the railroad plan continuous, and let light travel the full length of it.</p>
-  <div class="pairs plans">
-    <figure class="plate"><img src="assets/physical/plan-before.png" width="1160" height="497" alt="Floor plan as found: railroad layout with master bedroom, living room, dining room, bathroom and bedroom-office" loading="lazy"><figcaption>Plan · as found</figcaption></figure>
-    <figure class="plate"><img src="assets/physical/plan-intent.png" width="1263" height="496" alt="Floor plan as intended: consolidated master closet, widened living room opening, extended kitchen counter and new built-in at the bedroom-office" loading="lazy"><figcaption>Plan · intent</figcaption></figure>
+  <figure class="plan-toggle">
+    <input class="pt-r" type="radio" name="plan" id="plan-found" checked>
+    <input class="pt-r" type="radio" name="plan" id="plan-intent">
+    <div class="pt-switch" aria-hidden="false"><label class="pill mono" for="plan-found">As found</label><label class="pill mono" for="plan-intent">As intended</label></div>
+    <div class="pt-stage">
+      <img class="pt-a" src="assets/physical/plan-before.png" width="1160" height="497" alt="Floor plan as found: railroad layout with master bedroom, living room, dining room, bathroom and bedroom-office" loading="lazy" decoding="async">
+      <img class="pt-b" src="assets/physical/plan-intent.png" width="1263" height="496" alt="Floor plan as intended: consolidated master closet, widened living room opening, extended kitchen counter and new built-in at the bedroom-office" loading="lazy" decoding="async">
+    </div>
+    <figcaption><span class="pt-ca">Plan · as found</span><span class="pt-cb">Plan · as intended</span></figcaption>
+  </figure>
   </div>
 
-  <p class="chapter mt-25">The story continues here as the work completes, photographed the same way it started.</p>
-  <div class="cta"><a class="pill solid" href="physical.html">Physical</a><a class="pill ghost" href="prints.html">The prints</a></div>
+  <p class="chapter mt-25">More when the work is done, photographed the same way.</p>
+  <div class="cta"><a class="pill solid" href="physical.html">Physical</a><a class="pill ghost" href="prints.html">3D prints</a></div>
 
 </main>
 <footer class="foot">
@@ -99,7 +133,7 @@
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape.svg" width="45" height="56" alt=""></button>
     <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Résumé</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
-    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · Hoboken, NJ</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
@@ -115,7 +149,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790218471"></script>
-<script src="site.js?v=1790218471"></script>
+<script src="assets/engine.js?v=1790222500"></script>
+<script src="site.js?v=1790222500"></script>
 </body>
 </html>

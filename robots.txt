@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+Disallow: /me/vault.html
 Sitemap: https://stilwellc.github.io/me/sitemap.xml

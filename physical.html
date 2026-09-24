@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Physical — Collin Stilwell</title>
-<meta name="description" content="Design that leaves the screen: Four Walls, a residence rebuilt from the studs, and objects printed into the world.">
+<meta name="description" content="Design that leaves the screen: Four Walls, a residence taken back to the studs, and objects printed into the world with text2print.">
 <meta property="og:title" content="Physical — Collin Stilwell">
-<meta property="og:description" content="Design that leaves the screen: Four Walls, a residence rebuilt from the studs, and objects printed into the world.">
+<meta property="og:description" content="Design that leaves the screen: Four Walls, a residence taken back to the studs, and objects printed into the world with text2print.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/physical.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/physical.png">
@@ -18,28 +21,48 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790218471">
+<link rel="stylesheet" href="site.css?v=1790222500">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill on" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill on" aria-current="page" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="Physical" data-src="assets/physical/fourwalls-iso-sm.jpg" aria-label="The building in isometric, decoded into the word Physical" role="img"></canvas><span class="hint">click to replay · picture → text</span></div>
-  <p class="eyebrow rv d1">Physical · spaces, objects, fabrication</p>
+  <div class="mhead rv"><canvas class="matrix" data-text="Physical" data-src="assets/physical/plan-intent.png" aria-label="A floor plan, decoded into the word Physical" role="img"></canvas><span class="hint">click to replay</span></div>
+  <p class="eyebrow rv d1">Physical · 3 projects</p>
   <h1 class="display rv d1">Design that leaves the screen.</h1>
-  <p class="lede one rv d2">A residence rebuilt from the studs, and objects printed into the world.</p>
+  <p class="lede one rv d2">A residence taken back to the studs, and objects printed into the world.</p>
 </div>
+  <div class="frame rv d2"><div class="cells three">
+<a class="cell" href="fourwalls.html">
+  <img class="pic plan" src="assets/physical/plan-intent.png" width="1263" height="496" alt="" loading="lazy" decoding="async"><div class="top"><span class="pill mono">residence</span><span class="when mono">2024 – now</span></div>
+  <h2>Four Walls<span class="arrow">→</span></h2>
+  <p>Redesigned room by room, photographed before a wall came down.</p>
+  <div class="foot">in progress · 6 rooms</div>
+</a>
+<a class="cell" href="prints.html">
+  <img class="pic" src="assets/physical/wave/tasteful/run.jpg" width="1200" height="750" alt="" loading="lazy" decoding="async"><div class="top"><span class="pill mono">objects</span><span class="when mono">2025 – now</span></div>
+  <h2>3D prints<span class="arrow">→</span></h2>
+  <p>Lighting, furniture parts, a wall panel, and a kaiju bust.</p>
+  <div class="foot">5 pieces · PLA and PLA+</div>
+</a>
+<a class="cell" href="text2print.html">
+  <img class="pic" src="assets/physical/prints/ape/hero.jpg" width="1200" height="750" alt="" loading="lazy" decoding="async"><div class="top"><span class="pill mono">tool · case study</span><span class="when mono">Feb 2026</span></div>
+  <h2>text2print<span class="arrow">→</span></h2>
+  <p>Describe a thing. Get a file the printer accepts.</p>
+  <div class="foot">the skill behind the prints</div>
+</a>
+</div></div>
 
-  <h2 class="sheet-h rv d3">Projects</h2>
+  <h2 class="sheet-h rv d3">Inside 3D prints</h2>
   <div class="sheet rv d3">
-    <a class="row" href="fourwalls.html"><span class="k">2024 –</span><span><span class="t">Four Walls<span class="arrow">→</span></span><span class="d">A residence taken back to the studs. Redesigned room by room, documented as found and as intended.</span></span><span class="v">in progress</span></a>
-    <a class="row" href="prints.html"><span class="k">2025 –</span><span><span class="t">3D prints<span class="arrow">→</span></span><span class="d">The pipeline, the lighting and furniture parts it has produced, and the wave panel behind the desk.</span></span><span class="v">text → CAD → PLA</span></a>
-    <a class="row" href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener"><span class="k">skill</span><span><span class="t">text2print<span class="arrow">↗</span></span><span class="d">The Claude Code skill behind the prints.</span></span><span class="v">github</span></a>
+    <a class="row" href="wave.html"><span class="k">wall panel</span><span><span class="t">Wave panel<span class="arrow">→</span></span><span class="d">Twelve printed tiles, one continuous wave. Every tile in 3D, and downloadable.</span></span><span class="v">View in 3D</span></a>
+    <a class="row" href="text2print.html#proof"><span class="k">bust</span><span><span class="t">Sofubi ape<span class="arrow">→</span></span><span class="d">A six-inch kaiju bust in five printable shells.</span></span><span class="v">≈370 g · 26 parts</span></a>
   </div>
 
   <div class="cta"><a class="pill solid" href="fourwalls.html">Four Walls</a><a class="pill ghost" href="digital.html">Digital</a></div>
@@ -50,7 +73,7 @@
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape.svg" width="45" height="56" alt=""></button>
     <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Résumé</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
-    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · Hoboken, NJ</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
@@ -66,7 +89,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790218471"></script>
-<script src="site.js?v=1790218471"></script>
+<script src="assets/engine.js?v=1790222500"></script>
+<script src="site.js?v=1790222500"></script>
 </body>
 </html>

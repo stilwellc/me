@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Résumé — Collin Stilwell</title>
-<meta name="description" content="Collin Stilwell — résumé. Senior Product Security Engineer at WeightWatchers; previously Remedy Meds, Thirty Madison, Podium, TD.">
+<meta name="description" content="Collin Stilwell — résumé. Senior Product Security Engineer at WeightWatchers; previously Remedy Meds, Thirty Madison, Podium, and TD.">
 <meta property="og:title" content="Résumé — Collin Stilwell">
-<meta property="og:description" content="Collin Stilwell — résumé. Senior Product Security Engineer at WeightWatchers; previously Remedy Meds, Thirty Madison, Podium, TD.">
+<meta property="og:description" content="Collin Stilwell — résumé. Senior Product Security Engineer at WeightWatchers; previously Remedy Meds, Thirty Madison, Podium, and TD.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/resume.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/resume.png">
@@ -18,90 +21,132 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790218471">
+<link rel="stylesheet" href="site.css?v=1790222500">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <style>
   .res .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; align-items: end; }
   .res h1.display { font-size: clamp(2.2rem, 5vw, 3.6rem); }
-  .res .contact { font-family: var(--mono); font-size: 12px; color: var(--ink-2); line-height: 1.8; text-align: right; }
+  .res .contact { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); line-height: 1.8; text-align: right; }
+  .res .contact > * { display: block; }
   .res section { margin-top: clamp(28px, 4vw, 44px); }
-  .res .lrow .d { max-width: none; }
+  .res .lrow h3.t { margin: 0; font-size: 17px; font-weight: 500; line-height: 1.4; letter-spacing: 0; font-family: inherit; }
+  .res .lrow .loc { margin: 0.15rem 0 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); }
+  .res .lrow ul.d { list-style: none; margin: 0.15rem 0 0; padding: 0; max-width: none; }
+  .res .lrow ul.d li { display: inline; }
+  .res .lrow ul.d li + li::before { content: " "; }
+  .res .lrow p.d { margin: 0; max-width: none; }
+  .res .lrow.tools p.d { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.02em; line-height: 1.7; }
   .res .print { margin-top: 2rem; }
+  .res .head-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+  .res .contact a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+  .res .contact a:hover { color: var(--ink); text-decoration-color: var(--ink); }
+  .res .lrow h3.t a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+  .res .lrow h3.t a:hover { text-decoration-color: var(--ink); }
+  @media (max-width: 760px) { .res .contact { text-align: left; } }
   @media print {
     /* the theme selectors are included so a dark-mode visitor does not print
        near-white text on white paper; the body-prefixed selectors outrank the
-       site's centre-orientation block, which the old rules silently lost to */
-    :root { --ground: #fff; --ink: #111; --ink-2: #444; --ink-3: #777; --hair: #ddd; --hair-2: #ccc; }
-    @page { margin: 14mm; }
-    .mast, .foot, .print, .pal, .keys, .mhead, #palette-btn, #theme { display: none !important; }
-    body { font-size: 12.5px; background: #fff; color: #111; }
+       site's center-orientation block, which the old rules silently lost to */
+    :root { --ground: #fff; --ink: #111; --ink-2: #444; --ink-3: #666; --hair: #ddd; --hair-2: #ccc; }
+    @page { size: Letter; margin: 9.5mm 12.5mm; }
+    .mast, .foot, .topbar, .rail, .print, .pal, .keys, .mhead, .head-pills, #palette-btn, #theme, .skip { display: none !important; }
+    html, body { font-size: 10pt; background: #fff; color: #111; }
     body .page { padding: 0; }
     body .res { max-width: none; }
-    body .res h1.display { font-size: 28pt; line-height: 1.05; }
-    body .res section { margin-top: 18pt; }
-    body .res .lrow { break-inside: avoid; }
+    body .res, body .res * { text-align: left !important; }
+    body .res .rv { opacity: 1 !important; transform: none !important; filter: none !important; }
+    body .res .head { display: block; }
+    body .res .eyebrow { display: none; }
+    body .res h1.display { font-size: 20pt; line-height: 1.05; margin: 0; }
+    body .res .statement { margin: 3pt 0 0 !important; font-size: 11pt; max-width: none; }
+    body .res .contact { margin-top: 4pt; font-size: 8.5pt; line-height: 1.4; }
+    body .res .contact > * { display: inline; }
+    body .res .contact > * + *::before { content: " · "; color: #888; }
+    body .res .contact .substack { display: none; }   /* the Writing row links the essay; keeps contact on one line */
+    body .res a { color: inherit !important; text-decoration: none !important; }
+    body .res section { margin-top: 5.5pt; }
+    body .res .sheet-h { margin: 0 0 1pt !important; font-size: 7.5pt; text-align: left; break-after: avoid; page-break-after: avoid; }
+    body .res .ledger { max-width: none; margin: 0; }
+    body .res .lrow { grid-template-columns: 7.2rem minmax(0,1fr); gap: 0 10pt; padding: 2pt 0; break-inside: avoid; page-break-inside: avoid; }
+    body .res .lrow .k { font-size: 7.5pt; }
+    body .res .lrow h3.t { font-size: 9.8pt; line-height: 1.3; }
+    body .res .lrow .loc { font-size: 7.5pt; margin-top: 0; }
+    body .res .lrow ul.d, body .res .lrow p.d { font-size: 8.9pt; line-height: 1.28; margin-top: 0.5pt; color: #333; }
+    body .res .lrow.tools p.d { font-size: 8pt; }
+    /* Tools prints as one line: the heading sits in the date column */
+    body .res .tools-sec { display: grid; grid-template-columns: 7.2rem minmax(0,1fr); gap: 0 10pt; align-items: baseline; border-top: 1px solid var(--hair); padding-top: 3pt; }
+    body .res .tools-sec .sheet-h { margin: 0 !important; }
+    body .res .tools-sec .ledger, body .res .tools-sec .lrow { border: 0; display: block; padding: 0; }
+    body .res .tools-sec .lrow .k { display: none; }
   }
 </style>
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill on" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill on" aria-current="page" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page res">
-  <div class="mhead rv"><canvas class="matrix" data-text="Résumé" data-src="assets/resume.svg" aria-label="A paper plane, decoded into the word Résumé" role="img"></canvas><span class="hint">click to replay · glyph → text</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="Résumé" data-src="assets/resume.svg" aria-label="A paper plane, decoded into the word Résumé" role="img"></canvas><span class="hint">click to replay</span></div>
   <div class="head rv">
     <div>
-      <p class="eyebrow">Résumé · 2018 – 2026</p>
+      <p class="eyebrow">Résumé · 2018–2026</p>
       <h1 class="display">Collin Stilwell</h1>
       <p class="statement" style="margin-top:.75rem">Senior Product Security Engineer · WeightWatchers</p>
+      <div class="head-pills"><a class="pill solid" href="assets/Collin-Stilwell-Resume.pdf" download="Collin-Stilwell-Resume.pdf">PDF ↓</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
     </div>
-    <div class="contact">Hoboken, NJ<br>github.com/stilwellc<br>linkedin.com/in/collin-stilwell<br>collinsthoughts.substack.com</div>
+    <p class="contact"><span>New Jersey</span><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github.com/stilwellc</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin.com/in/collin-stilwell</a><a class="substack" href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">collinsthoughts.substack.com</a><a class="site" href="https://stilwellc.github.io/me/">stilwellc.github.io/me</a></p>
   </div>
   <section class="rv d1">
     <h2 class="sheet-h">Experience</h2>
     <div class="ledger">
-      <div class="lrow"><div class="k">2026 –</div><div><div class="t">WeightWatchers — Senior Product Security Engineer</div><div class="d">Rebuilding product security from a compliance function into an engineering one as WW expands into clinical care and telehealth.</div></div></div>
-      <div class="lrow"><div class="k">2025 – 2026</div><div><div class="t">Remedy Meds — Senior Product Security Engineer II</div><div class="d">Stayed on post-acquisition as the founding security team. Built product security, corporate security and privacy from zero.</div></div></div>
-      <div class="lrow"><div class="k">2023 – 2026</div><div><div class="t">Thirty Madison — Senior Product Security Engineer, then Senior Product Security Engineer II</div><div class="d">Built security for three years through to the $650M exit. Scaled security and privacy across Nurx, Keeps and Cove, a telehealth platform treating over a million people.</div></div></div>
-      <div class="lrow"><div class="k">2021 – 2023</div><div><div class="t">Podium — Application Security Engineer; Tech Lead, Product Security (2022 – 2023)</div><div class="d">Joined right before the $201M Series D. Secured the payments and fintech platform from proof of concept to billions in GPV. Built the product security team supporting about 200 engineers. Top contributor to Podium’s open Elixir secure-coding curriculum; Semgrep rules for Ash Framework authorization.</div></div></div>
-      <div class="lrow"><div class="k">2020 – 2021</div><div><div class="t">TD — Associate, Enterprise Security</div><div class="d">Security engineering and application security across global corporate and investment banking.</div></div></div>
-      <div class="lrow"><div class="k">2019</div><div><div class="t">TD — Summer Analyst, Enterprise Security</div><div class="d">US consumer banking BISO team; internal and third-party cyber risk.</div></div></div>
-      <div class="lrow"><div class="k">2018</div><div><div class="t">New Jersey State Police — Intern, Network Engineering</div><div class="d">Regional Operations &amp; Intelligence Center, the state’s fusion center for data and intelligence.</div></div></div>
-    </div>
-  </section>
-  <section class="rv d2">
-    <h2 class="sheet-h">Education</h2>
-    <div class="ledger">
-      <div class="lrow"><div class="k">2021 – 2023</div><div><div class="t">New York University — M.S. Cyber Security program</div><div class="d">Cyber Fellowship recipient. Research: leveraging blockchain transactions in e-commerce through stablecoins.</div></div></div>
-      <div class="lrow"><div class="k">2016 – 2020</div><div><div class="t">Rowan University — B.S. Computer Science, cum laude</div><div class="d">Concentration in cyber defense.</div></div></div>
+      <div class="lrow"><div class="k">2026 – now</div><div><h3 class="t">WeightWatchers — Senior Product Security Engineer</h3><ul class="d"><li>Rebuilding product security from a compliance function into an engineering one as WeightWatchers moves into clinical care.</li><li>Securing the AWS and Kubernetes platform underneath it, and building AI agents for detection, triage, and incident response.</li></ul></div></div>
+      <div class="lrow"><div class="k">2025–2026</div><div><h3 class="t">Remedy Meds — Senior Product Security Engineer II</h3><p class="loc">New York City · GLP-1 care · acquired Thirty Madison</p><ul class="d"><li>Stayed on after the acquisition as the founding security team.</li><li>Built product security, corporate security, and privacy from nothing.</li></ul></div></div>
+      <div class="lrow"><div class="k">2023–2026</div><div><h3 class="t">Thirty Madison — Senior Product Security Engineer; II from 2025</h3><p class="loc">New York City · telehealth for over a million people · $650M exit</p><ul class="d"><li>Built security for three years, through the $650M exit.</li><li>Scaled security and privacy across Nurx, Keeps, and Cove.</li></ul></div></div>
+      <div class="lrow"><div class="k">2021–2023</div><div><h3 class="t">Podium — Application Security Engineer; Tech Lead, Product Security (2022–2023)</h3><p class="loc">New York City · 100k+ local businesses · $201M Series D</p><ul class="d"><li>Secured payments from proof of concept to billions in payment volume.</li><li>Built the product security team for about 200 engineers.</li><li>Top contributor to Podium’s open Elixir secure-coding curriculum; wrote Semgrep rules for Ash Framework authorization.</li></ul></div></div>
+      <div class="lrow"><div class="k">2020–2021</div><div><h3 class="t">TD — Associate, Enterprise Security</h3><p class="loc">New York City · global Corporate and Investment Banking</p><ul class="d"><li>On the security engineering and application security teams.</li></ul></div></div>
+      <div class="lrow"><div class="k">2019</div><div><h3 class="t">TD — Summer Analyst, Enterprise Security</h3><p class="loc">Greater Philadelphia · US Consumer Banking</p><ul class="d"><li>Managed internal and third-party cyber risk on the business information security officer (BISO) team.</li></ul></div></div>
+      <div class="lrow"><div class="k">2018</div><div><h3 class="t">New Jersey State Police — Intern, Network Engineering</h3><p class="loc">Regional Operations &amp; Intelligence Center, the state’s fusion center</p></div></div>
     </div>
   </section>
   <section class="rv d2">
     <h2 class="sheet-h">Selected work</h2>
     <div class="ledger">
-      <div class="lrow"><div class="k">lectr.bid</div><div><div class="t">Auction intelligence platform</div><div class="d">1.1M-lot corpus across 18 auction houses; value engine with a published backtest record; staged nightly pipeline (crawl matrix → assemble → deploy) with three publish gates. Cut the nightly from ~130 to 52 minutes with output-identical rewrites. TypeScript, Next.js, Cloudflare R2/Pages, GitHub Actions, Supabase.</div></div></div>
-      <div class="lrow"><div class="k">SecMCPHub</div><div><div class="t">Automated security MBR dashboard</div><div class="d">Claude Code skills that pull vulnerability-management, GRC, and incident data over MCP and render a single self-contained HTML report: trend deltas, MTTR, SLA compliance, a weighted composite risk grade, CWE-mapped cross-source attack paths.</div></div></div>
-      <div class="lrow"><div class="k">Brumby</div><div><div class="t">Redundancy scanner</div><div class="d">Redundancy scanner for C++, Java and Ada, built with Rowan University and ASRC Federal Mission Solutions for Lockheed Martin systems. Three similarity algorithms (cosine, ordered naive, longest common subsequence) blended into one weighted score. 2019 – 2020.</div></div></div>
-      <div class="lrow"><div class="k">soiree.today</div><div><div class="t">Event aggregator</div><div class="d">780 experiences across NYC, Hoboken/Jersey City, and Philadelphia, 391 free; scraped from the sources that post them, normalized, sorted by real dates. Node.js, Cloudflare.</div></div></div>
+      <div class="lrow"><div class="k">lectr.bid</div><div><h3 class="t"><a href="lectr.html">lectr — auction intelligence</a></h3><ul class="d"><li>Built an auction-intelligence platform over 1.1M lots from 18 houses: a value engine with a public backtest, and a nightly pipeline behind three publish gates.</li><li>Cut the nightly from ~130 to 52 min without changing an output.</li><li>TypeScript, Next.js, Cloudflare R2/Pages, GitHub Actions, Supabase.</li></ul></div></div>
+      <div class="lrow"><div class="k">SecMCPHub</div><div><h3 class="t"><a href="secmcphub.html">SecMCPHub — a monthly security business review</a></h3><ul class="d"><li>Built Claude Code skills that pull vulnerability-management, GRC, and incident data over MCP and render one self-contained HTML report: trend deltas, MTTR, SLA compliance, a weighted composite risk grade, and CWE-mapped attack paths across sources.</li></ul></div></div>
+      <div class="lrow"><div class="k">soiree.today</div><div><h3 class="t"><a href="soiree.html">Soirée — events aggregator</a></h3><ul class="d"><li>Built an events aggregator for NYC, Hoboken/Jersey City, and Philadelphia: scraped at the source, dates normalized, placeholders labeled.</li><li>Node.js, Cloudflare.</li></ul></div></div>
+    </div>
+  </section>
+  <section class="rv d2">
+    <h2 class="sheet-h">Education</h2>
+    <div class="ledger">
+      <div class="lrow"><div class="k">2021–2023</div><div><h3 class="t">New York University — M.S. Cyber Security program</h3><ul class="d"><li>Cyber Fellowship recipient.</li><li>Research: stablecoin payments in e-commerce.</li></ul></div></div>
+      <div class="lrow"><div class="k">2016–2020</div><div><h3 class="t">Rowan University — B.S. Computer Science, cum laude</h3><ul class="d"><li>Concentration in cyber defense.</li><li>Built Brumby Code Checker, a redundancy scanner for C++, Java, and Ada, with ASRC Federal Mission Solutions for Lockheed Martin systems.</li></ul></div></div>
     </div>
   </section>
   <section class="rv d3">
     <h2 class="sheet-h">Writing</h2>
     <div class="ledger">
-      <div class="lrow"><div class="k">2026-05</div><div><div class="t">Building an Application Security Program That Actually Works</div><div class="d">Substack. Four legs, a build order, and the seven failures that sink programs.</div></div></div>
+      <div class="lrow"><div class="k">May 2026</div><div><h3 class="t"><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Building an Application Security Program That Actually Works</a></h3><ul class="d"><li>Substack. Four legs, a build order, and the seven failures that sink programs.</li></ul></div></div>
     </div>
   </section>
-  <div class="actions print"><button class="pill solid" type="button" onclick="window.print()">Print / save as PDF</button></div>
+  <section class="rv d3 tools-sec">
+    <h2 class="sheet-h">Tools</h2>
+    <div class="ledger">
+      <div class="lrow tools"><div class="k"></div><p class="d">AWS&nbsp;· Kubernetes&nbsp;· Semgrep&nbsp;· threat&nbsp;modeling&nbsp;· MCP&nbsp;· Elixir&nbsp;· TypeScript&nbsp;· Python&nbsp;· Next.js&nbsp;· Cloudflare&nbsp;· GitHub&nbsp;Actions</p></div>
+    </div>
+  </section>
+  <div class="actions print"><button class="pill solid" type="button" data-print>Print</button></div>
 </main>
 <footer class="foot">
   <div class="foot-in">
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape.svg" width="45" height="56" alt=""></button>
     <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Résumé</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
-    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · Hoboken, NJ</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
@@ -117,7 +162,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790218471"></script>
-<script src="site.js?v=1790218471"></script>
+<script src="assets/engine.js?v=1790222500"></script>
+<script src="site.js?v=1790222500"></script>
 </body>
 </html>

@@ -17,9 +17,9 @@
 // word as resolved squares on the right, a mono footer. Same cell logic as site.js.
 (function () {
   var q = new URLSearchParams(location.search);
-  var word = q.get('text') || 'Collin', src = q.get('src'), sub = q.get('sub') || 'collin stilwell';
+  var word = q.get('text') || 'Collin', src = q.get('src'), sub = q.get('sub') || 'Senior Product Security Engineer';
   var c = document.getElementById('c'), ctx = c.getContext('2d');
-  var W = 1200, H = 630, cell = 14, cols = Math.floor(W / cell), rows = Math.floor((H - 80) / cell);
+  var W = 1200, H = 630, cell = 14, cols = Math.floor(W / cell), rows = Math.floor((H - 120) / cell);
   var INK = '#161616', GROUND = '#FCFBFA';
   function halftone(img, x0, y0, w, h) {
     var p = document.createElement('canvas'); p.width = cols; p.height = rows; var pc = p.getContext('2d');
@@ -57,13 +57,14 @@
       else if (mask[i]) { var s = cell * 0.62; ctx.globalAlpha = 0.92; ctx.fillRect(cx - s / 2, cy - s / 2, s, s); }
       else { ctx.globalAlpha = 0.14; ctx.fillRect(cx - 0.5, cy - 0.5, 1, 1); }
     }
-    ctx.globalAlpha = 1; ctx.font = '400 15px "Geist Mono", Menlo, monospace'; ctx.fillStyle = '#6B6C6A'; ctx.textBaseline = 'middle';
-    ctx.textAlign = 'left'; ctx.fillText(sub, 40, H - 34);
-    ctx.textAlign = 'right'; ctx.fillText('security engineer · builds like a designer', W - 40, H - 34);
+    ctx.globalAlpha = 1; ctx.fillStyle = '#E4E1DB'; ctx.fillRect(40, H - 96, W - 80, 1);
+    ctx.textBaseline = 'middle'; ctx.fillStyle = INK; ctx.textAlign = 'left';
+    ctx.font = '500 34px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; ctx.fillText('Collin Stilwell', 40, H - 50);
+    ctx.fillStyle = '#55564F'; ctx.textAlign = 'right'; ctx.font = '400 24px "Geist Mono", Menlo, monospace'; ctx.fillText(sub, W - 40, H - 50);
     document.title = 'ready';
   }
   function go() { if (!src) return draw(null); var img = new Image(); img.onload = function () { draw(img); }; img.onerror = function () { draw(null); }; img.src = src; }
-  if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('300 40px "Bricolage Grotesque"'), document.fonts.load('400 15px "Geist Mono"')]).then(go, go); else go();
+  if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('300 40px "Bricolage Grotesque"'), document.fonts.load('400 24px "Geist Mono"'), document.fonts.load('500 34px "Bricolage Grotesque"')]).then(go, go); else go();
 })();
 </script>
 </body>
