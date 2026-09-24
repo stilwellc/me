@@ -421,7 +421,7 @@ body figure.plate { position: relative; }
 .cell canvas.thumb { display: block; width: 100%; height: 96px; border-radius: 8px; margin: 0 0 0.35rem; background: color-mix(in srgb, var(--ink) 2.5%, transparent); }
 
 /* ── light mode: a dark render sits in an eggshell mat, like a print in a
-   frame; dark mode keeps the plate flush. The room photographs on railroad are
+   frame; dark mode keeps the plate flush. The room photographs on four walls are
    light photographs and stay unmatted. ──────────────────────────────────── */
 body figure.plate.print img, body figure.plate.wide img, body figure.plate.detail img, body .eb figure.plate img {
   padding: 10px; background: var(--ground); border-color: var(--hair-2); border-radius: 12px; }
