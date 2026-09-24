@@ -446,7 +446,7 @@ body.scrolled .topbar { transform: none; pointer-events: auto; }
 .topbar nav { display: flex; gap: 0.35rem; flex-wrap: nowrap; }
 .topbar .pill { font-size: 12px; padding: 4px 10px; }
 .topbar .pill::before { display: none; }
-@media (max-width: 760px) { .topbar nav .pill:not(#x):not(.mono):not([aria-label="Toggle theme"]) { display: none; } .topbar nav .pill.on { display: inline-flex; } }
+@media (max-width: 760px) { .topbar nav .pill:not(.mono):not(.on) { display: none; } }
 @media (prefers-reduced-motion: reduce) { .topbar { transition: none; } }
 .topbar { overflow: hidden; }
 @media print { .topbar, .rail, .plate-veil, .skip { display: none !important; } body figure.plate img.veiled { opacity: 1; } }
@@ -506,3 +506,18 @@ body .play-ctl input[type=text] { font: inherit; font-family: var(--mono); font-
 body .play-ctl input[type=text]:focus { outline: 1.5px solid var(--ink); outline-offset: 2px; }
 body .play-ctl .pill.file { cursor: pointer; position: relative; overflow: hidden; }
 body .play-ctl .pill.file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+/* phones: the mobile audit, Sep 23 */
+@media (max-width: 600px) {
+  body .sec li { grid-template-columns: 1fr; gap: 0.25rem; }
+  body .sec li .v { justify-self: start; text-align: left; white-space: normal; }
+  body pre.code.tree { white-space: pre; overflow-x: auto; overflow-wrap: normal; }
+  body .mhead .hint { top: auto; bottom: -18px; right: 0; left: auto; }
+  body .mhead canvas.matrix, main.cs:has(.facts) .mhead canvas.matrix { height: clamp(150px, 46vw, 210px); }
+  body .page h1.display, body .cs h1.display, body h1.display { font-size: 1.7rem; }
+  body .sec > div { min-width: 0; max-width: 100%; }
+  body pre.code.tree { max-width: 100%; }
+  body .gh-stats { flex-direction: column; gap: 0.25rem; align-items: center; }
+  .gh-note #gh-state { display: block; margin-top: 0.4rem; }
+  body .trow .tl { text-wrap: balance; }
+}
+@media (max-width: 480px) { .stage.four { grid-template-columns: 1fr; } .stage.four > div { border-right: 0; } }

@@ -18,7 +18,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790209375">
+<link rel="stylesheet" href="site.css?v=1790209719">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 </head>
@@ -45,7 +45,7 @@
     <div>
       <h2>Skills, a template, and two mapping tables.</h2>
       <p>The bundle is deliberately small. Two skills: <b>/security-report</b> does the weekly refresh, <b>/rewrite-dashboard</b> rebuilds the renderer on the rare occasion the UI changes. One HTML template whose data and rendering live in separate script blocks, so a refresh only ever touches data. A rolling KPI history for sparklines and deltas, and two JSON maps that do the real work: CWE → risk category, and IR project → risk.</p>
-      <pre class="code">mbr-dashboard/
+      <pre class="code tree">mbr-dashboard/
 ├── skills/        security-report.md · rewrite-dashboard.md
 ├── dashboard/     security-posture-report.html   <b>← renderer + empty data block</b>
 └── data/          security-metrics-history.json · cwe-risk-mapping.json · ir-risk-mapping.json</pre>
@@ -110,6 +110,6 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790209375"></script>
+<script src="site.js?v=1790209719"></script>
 </body>
 </html>
