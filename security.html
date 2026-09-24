@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226692">
+<link rel="stylesheet" href="site.css?v=1790227232">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -78,7 +78,7 @@
       <div class="leg"><span class="leg-k">guardrails <b>1/4</b></span><h3>Security by default</h3><p>Tiered SAST with an AI false-positive filter, auto-merged dependency patches, a threat model for every project at planning.</p></div>
       <div class="leg"><span class="leg-k">human pass <b>2/4</b></span><h3>Reactionary security</h3><p>Design review where the default model flags risk, pentest findings, bug bounty, incidents.</p></div>
       <div class="leg"><span class="leg-k">primitives <b>3/4</b></span><h3>Security by design</h3><p>Paved-road libraries and secure primitives.</p></div>
-      <div class="leg"><span class="leg-k">feedback <b>4/4</b></span><h3>Feedback and metrics</h3><p>Overrides feed back into rule tuning. A rule blocks only once its measured false-positive rate is under <strong>5%</strong>.</p></div>
+      <div class="leg"><span class="leg-k">feedback <b>4/4</b></span><h3>Feedback and metrics</h3><p>Overrides feed back into rule tuning.</p></div>
     </div>
   </section>
 
@@ -98,7 +98,7 @@
     <a class="essay" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">
       <span class="ok">Substack · May 2026 · ≈3,200 words</span>
       <h3>Building an Application Security Program That Actually Works <span class="arrow" aria-hidden="true">↗</span></h3>
-      <p>The program above in full: the four parts, the build order, and the failures that sink programs.</p>
+      <p>Covers the four parts, the build order, and seven common failures.</p>
     </a>
   </section>
 
@@ -115,7 +115,7 @@
       <div class="rule-say">
         <span class="ok">one of seven rules</span>
         <h3>Missing actor</h3>
-        <p>Flags Ash changesets and queries built without an <code>actor:</code>. Without one, the resource’s policies may not run. Calls that pass a real actor are skipped.</p>
+        <p>Flags Ash changesets and queries built without an <code>actor:</code>. Without one, the resource’s policies may not run. Calls that pass a non-nil actor are skipped.</p>
         <a class="rule-link" href="https://github.com/stilwellc/ash-semgrep-rules/blob/main/ash-changeset-missing-actor.yaml" target="_blank" rel="noopener">ash-changeset-missing-actor.yaml ↗</a>
       </div>
       <pre class="code rule-code" tabindex="0" aria-label="Semgrep rule ash-changeset-missing-actor"><span class="yk">rules:</span>
@@ -161,7 +161,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226692"></script>
-<script src="site.js?v=1790226692"></script>
+<script src="assets/engine.js?v=1790227232"></script>
+<script src="site.js?v=1790227232"></script>
 </body>
 </html>

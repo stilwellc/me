@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Wave panel — Collin Stilwell</title>
-<meta name="description" content="A parametric slat wall panel for behind the desk: 48 by 14 inches, twelve printed tiles, a map of where each one goes, and every tile downloadable.">
+<meta name="description" content="Parametric slat wall panel, 48 × 14 in, printed as twelve tiles. Tile map and downloadable STLs.">
 <meta property="og:title" content="Wave panel — Collin Stilwell">
-<meta property="og:description" content="A parametric slat wall panel for behind the desk: 48 by 14 inches, twelve printed tiles, a map of where each one goes, and every tile downloadable.">
+<meta property="og:description" content="Parametric slat wall panel, 48 × 14 in, printed as twelve tiles. Tile map and downloadable STLs.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/wave.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/wave.png">
@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226692">
+<link rel="stylesheet" href="site.css?v=1790227232">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <style>
   .cap-note { max-width: var(--col); margin: 0.9rem auto 1.6rem; color: var(--ink-2); font-size: 15.5px; line-height: 1.55; text-align: left; text-wrap: pretty; }
@@ -76,7 +76,7 @@
   <div class="mhead rv"><canvas class="matrix" data-text="Wave" data-src="assets/physical/wave/header.jpg" aria-label="The full wave panel render, decoded into the word Wave" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv d1"><a href="prints.html">3D prints</a> · wall panel</p>
   <h1 class="display rv d1">Wave panel</h1>
-  <p class="lede one rv d2">A parametric slat relief for behind the desk. One continuous wave, 48 by 14 inches, printed as twelve tiles and painted as one object.</p>
+  <p class="lede one rv d2">A parametric slat relief for behind the desk, printed as twelve tiles and painted as one.</p>
 </div>
 
   <h2 class="sheet-h" id="full-run">Full run</h2>
@@ -85,11 +85,11 @@
     <figcaption>Full run · twelve tiles</figcaption>
   </figure>
   <div class="wave-ctl"><a class="pill mono" id="hero-3d" href="#tiles">View in 3D</a></div>
-  <p class="cap-note">Twelve tiles print flat, dowel together on their shared edges, glue to a board and take one coat of matte paint as a single object. The wave runs continuously across every seam, and the seams themselves sit in its troughs.</p>
+  <p class="cap-note">Tiles print flat, dowel together, glue to a board, and get one coat of matte paint. Seams sit in the wave’s troughs.</p>
   <div class="sheet kv"><div class="row"><span class="k">run</span><span class="t">48 × 14 in · 6 × 2 tiles of 203 × 178 mm</span></div><div class="row"><span class="k">slats</span><span class="t">9 per tile · 22.6 mm pitch · 6.4 → 4.8 mm, printed hollow</span></div><div class="row"><span class="k">crests</span><span class="t">knife edge · 45° flanks following the wave</span></div><div class="row"><span class="k">wave</span><span class="t">two ridges + swell, short wave, diagonal wave, vertical ripple · peaks on the flanks · calm behind the monitor · ends taper into the wall</span></div><div class="row"><span class="k">print</span><span class="t">0.8 mm nozzle · 0.32 mm · 1 wall · 12% · ≈2 kg PLA+</span></div></div>
 
   <h2 class="sheet-h" id="tiles">Twelve tiles</h2>
-  <p class="cap-note">Where each tile sits, drawn from the panel’s own height field. The plan is the whole run in contours; each cell below is one tile, showing its nine slat crests at a scale shared across all twelve. Pick one to see it and download it.</p>
+  <p class="cap-note">Tile map, drawn from the panel’s height field. Each cell shows one tile’s nine slat crests at a shared scale; select one to view or download it.</p>
   <div class="tilemap">
     <div class="tm-plan"><i class="tm-field"></i><i class="tm-seam v" style="left:16.6667%"></i><i class="tm-seam v" style="left:33.3333%"></i><i class="tm-seam v" style="left:50.0000%"></i><i class="tm-seam v" style="left:66.6667%"></i><i class="tm-seam v" style="left:83.3333%"></i><i class="tm-seam h"></i><span class="tm-pc" style="left:0.0000%;top:0%">r1 c0</span><span class="tm-pc" style="left:16.6667%;top:0%">r1 c1</span><span class="tm-pc" style="left:33.3333%;top:0%">r1 c2</span><span class="tm-pc" style="left:50.0000%;top:0%">r1 c3</span><span class="tm-pc" style="left:66.6667%;top:0%">r1 c4</span><span class="tm-pc" style="left:83.3333%;top:0%">r1 c5</span><span class="tm-pc" style="left:0.0000%;top:50%">r0 c0</span><span class="tm-pc" style="left:16.6667%;top:50%">r0 c1</span><span class="tm-pc" style="left:33.3333%;top:50%">r0 c2</span><span class="tm-pc" style="left:50.0000%;top:50%">r0 c3</span><span class="tm-pc" style="left:66.6667%;top:50%">r0 c4</span><span class="tm-pc" style="left:83.3333%;top:50%">r0 c5</span></div>
     <p class="tm-h">plan · crest 3 to 64 mm, contours every 8 mm · row 0 is the bottom row, column 0 the left</p>
@@ -103,19 +103,19 @@
   <div class="wave-ctl"><button class="pill mono" type="button" id="tile-3d" aria-pressed="false">View in 3D</button><button class="pill mono" type="button" id="run-3d" aria-pressed="false">Full run in 3D</button><a class="pill mono" id="tile-dl" href="assets/physical/wave/tasteful/wave_tile_r0_c0.stl" download>Download STL</a></div>
 
   <h2 class="sheet-h">Earlier builds</h2>
-  <p class="cap-note">The same wave, printed three ways. These two are kept because the reasons they lost are the design argument: filament cost first, then the way the slats read.</p>
+  <p class="cap-note">Two earlier builds of the same wave, dropped for filament cost and for how the slats read.</p>
   <div class="earlier">
     <div class="eb wave-view" data-build="v1">
       <figure class="plate"><img data-role="img" loading="lazy" decoding="async" src="assets/physical/wave/v1/run.jpg" alt="First build, full run"><figcaption data-role="cap">Full run · 10 tiles</figcaption></figure>
       <h3 class="eb-t">First cut</h3>
-      <p class="eb-w">Twenty solid slats a tile, closest to the reference panel and the reason the project nearly stopped: roughly 6 kg of filament, and fins thin enough to snap on the way to the wall.</p>
+      <p class="eb-w">Closest to the reference panel. Dropped for filament use and fins thin enough to snap in handling.</p>
       <div class="sheet kv"><div class="row"><span class="k">run</span><span class="t">50 × 20 in · 5 × 2 tiles of 250 mm</span></div><div class="row"><span class="k">slats</span><span class="t">20 per tile · 12.5 mm pitch · 3.6 → 2.4 mm solid</span></div><div class="row"><span class="k">print</span><span class="t">0.4 mm nozzle · full back plate · ≈6 kg</span></div></div>
       <div class="wave-ctl"><label>Tile <select data-role="sel"><option value="-1">Full run</option><option value="0">r0 c0</option><option value="1">r0 c1</option><option value="2">r0 c2</option><option value="3">r0 c3</option><option value="4">r0 c4</option><option value="5">r1 c0</option><option value="6">r1 c1</option><option value="7">r1 c2</option><option value="8">r1 c3</option><option value="9">r1 c4</option></select></label><button class="pill mono" type="button" data-role="v3d" aria-pressed="false">View in 3D</button><a class="pill mono" data-role="dl" href="#" aria-disabled="true" download>Download STL</a></div>
     </div>
     <div class="eb wave-view" data-build="light">
       <figure class="plate"><img data-role="img" loading="lazy" decoding="async" src="assets/physical/wave/light/run.jpg" alt="Lightweight build, full run"><figcaption data-role="cap">Full run · 10 tiles</figcaption></figure>
       <h3 class="eb-t">Lighter</h3>
-      <p class="eb-w">Chunky hollow fins in place of thin solid ones, which answered both the brittleness and the cost. Still 2.8 kg, and the slats read as a fence more than a wave.</p>
+      <p class="eb-w">Thicker hollow fins fixed the brittleness and cut filament. Dropped because the slats read as a fence.</p>
       <div class="sheet kv"><div class="row"><span class="k">run</span><span class="t">50 × 20 in · 5 × 2 tiles of 250 mm</span></div><div class="row"><span class="k">slats</span><span class="t">14 per tile · 17.9 mm pitch · 6 → 4.5 mm hollow</span></div><div class="row"><span class="k">print</span><span class="t">0.4 mm nozzle · 2 walls · 15% · ≈2.8 kg</span></div></div>
       <div class="wave-ctl"><label>Tile <select data-role="sel"><option value="-1">Full run</option><option value="0">r0 c0</option><option value="1">r0 c1</option><option value="2">r0 c2</option><option value="3">r0 c3</option><option value="4">r0 c4</option><option value="5">r1 c0</option><option value="6">r1 c1</option><option value="7">r1 c2</option><option value="8">r1 c3</option><option value="9">r1 c4</option></select></label><button class="pill mono" type="button" data-role="v3d" aria-pressed="false">View in 3D</button><a class="pill mono" data-role="dl" href="#" aria-disabled="true" download>Download STL</a></div>
     </div>
@@ -146,7 +146,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226692"></script>
-<script src="site.js?v=1790226692"></script>
+<script src="assets/engine.js?v=1790227232"></script>
+<script src="site.js?v=1790227232"></script>
 </body>
 </html>

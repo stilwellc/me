@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>3D prints — Collin Stilwell</title>
-<meta name="description" content="What text2print has made so far: lighting, furniture parts, a wall panel, and a kaiju bust.">
+<meta name="description" content="3D prints made with text2print: lighting, furniture parts, a wall panel, and a kaiju bust.">
 <meta property="og:title" content="3D prints — Collin Stilwell">
-<meta property="og:description" content="What text2print has made so far: lighting, furniture parts, a wall panel, and a kaiju bust.">
+<meta property="og:description" content="3D prints made with text2print: lighting, furniture parts, a wall panel, and a kaiju bust.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/prints.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/prints.png">
@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226692">
+<link rel="stylesheet" href="site.css?v=1790227232">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -35,14 +35,14 @@
 <div class="lander-head">
   <div class="mhead rv"><canvas class="matrix" data-text="3D prints" data-layers="1" data-src="assets/physical/prints/wall-sconce.jpg" aria-label="A printed wall sconce, decoded into the words 3D prints" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv d1"><a href="physical.html">Physical</a> · text → CAD → PLA</p>
-  <h1 class="display rv d1">Describe a thing. Print it.</h1>
-  <p class="lede one rv d2">A text-to-print pipeline and the library it has produced so far.</p>
+  <h1 class="display rv d1">Objects made with text2print.</h1>
+  <p class="lede one rv d2">The text2print pipeline and the five pieces it has produced.</p>
 </div>
 
   <h2 class="sheet-h rv d3">Pipeline</h2>
   <div class="sheet rv d3">
     <div class="row"><span class="k">01</span><span><span class="t">Brief</span><span class="d">What it has to do, where it mounts.</span></span><span class="v">words</span></div>
-    <div class="row"><span class="k">02</span><span><span class="t">Build</span><span class="d">CadQuery, phase by phase, with a yes at each gate.</span></span><span class="v">cadquery</span></div>
+    <div class="row"><span class="k">02</span><span><span class="t">Build</span><span class="d">CadQuery, phase by phase, with approval at each gate.</span></span><span class="v">cadquery</span></div>
     <div class="row"><span class="k">03</span><span><span class="t">Verify</span><span class="d">printcheck, overhangs, and the slicer, headless.</span></span><span class="v">stl · 3mf</span></div>
   </div>
 
@@ -50,26 +50,26 @@
   <div class="plates rv d3">
     <figure class="plate print">
       <img src="assets/physical/prints/wall-sconce.jpg" alt="Wall sconce, studio render of the printed part" loading="lazy">
-      <figcaption><span class="k">01</span><b>Wall sconce</b><span class="d">A wall-mounted shade that turns a bare fixture into a soft, indirect wash of light.</span><span class="v">PLA · 199 × 140 × 191 mm · printed</span><details class="note"><summary>Backstory</summary><p>I wanted the print itself to be the finished object. The shell is the diffuser, so there is no glass, no fabric, no post-processing. Most of the work was in the wall thickness: thin enough to glow, thick enough to hide the bulb.</p></details></figcaption>
+      <figcaption><span class="k">01</span><b>Wall sconce</b><span class="d">Wall-mounted shade over a bare fixture, for indirect light.</span><span class="v">PLA · 199 × 140 × 191 mm · printed</span><details class="note"><summary>Backstory</summary><p>The printed shell is the diffuser, with no glass, fabric, or post-processing. Most of the work was wall thickness, thin enough to glow and thick enough to hide the bulb.</p></details></figcaption>
     </figure>
     <figure class="plate print">
       <img src="assets/physical/prints/tolomeo-scaled.jpg" alt="Tolomeo, scaled, studio render of the printed part" loading="lazy">
-      <figcaption><span class="k">02</span><b>Tolomeo, scaled</b><span class="d">A scaled study of Artemide’s Tolomeo desk lamp: the balance-arm geometry at desk-model size.</span><span class="v">PLA · 57 × 23 × 65 mm · printed</span><details class="note"><summary>Backstory</summary><p>Printed to understand the balance-arm mechanism in my hands instead of on a screen, how the pivot spacing and proportions actually resolve. It is a study of a protected design, so it stays a study.</p></details></figcaption>
+      <figcaption><span class="k">02</span><b>Tolomeo, scaled</b><span class="d">Scaled study of the balance arm on Artemide’s Tolomeo desk lamp.</span><span class="v">PLA · 57 × 23 × 65 mm · printed</span><details class="note"><summary>Backstory</summary><p>Printed to study the balance arm’s pivot spacing and proportions in hand. It copies a protected design, so it stays a study.</p></details></figcaption>
     </figure>
     <figure class="plate print">
       <img src="assets/physical/prints/usm-haller-thread-foot.jpg" alt="USM Haller thread foot, studio render of the printed part" loading="lazy">
-      <figcaption><span class="k">03</span><b>USM Haller thread foot</b><span class="d">A replacement threaded leveling foot for the USM Haller modular system.</span><span class="v">PLA · 36 × 36 × 32 mm · in use</span><details class="note"><summary>Backstory</summary><p>One of the leveling feet on my Haller unit needed replacing, and the thread is the whole problem. I measured it, modeled it, and printed until it screwed in like the original. The clearance tuning taught me more about FDM tolerances than anything else here.</p></details></figcaption>
+      <figcaption><span class="k">03</span><b>USM Haller thread foot</b><span class="d">A replacement threaded leveling foot for the USM Haller modular system.</span><span class="v">PLA · 36 × 36 × 32 mm · in use</span><details class="note"><summary>Backstory</summary><p>Replaces a leveling foot on my Haller unit. I measured the thread, modeled it, and reprinted until it screwed in like the original. Tuning its clearance taught me more about FDM tolerances than any other piece here.</p></details></figcaption>
     </figure>
     <a class="plate print" href="wave.html">
       <figure class="plate print m-0">
       <img src="assets/physical/wave/tasteful/run.jpg" alt="Wave panel, full run render" loading="lazy">
-      <figcaption><span class="k">04</span><b>Wave panel<span class="arrow">→</span></b><span class="d">A parametric slat relief for behind the desk: 48 by 14 inches, twelve tiles, painted as one object. Every tile in 3D, and downloadable.</span><span class="v">PLA+ · 12 tiles of 203 × 178 mm · ≈2 kg</span></figcaption>
+      <figcaption><span class="k">04</span><b>Wave panel<span class="arrow">→</span></b><span class="d">48 × 14 in parametric slat relief behind the desk. Every tile viewable and downloadable.</span><span class="v">PLA+ · 12 tiles of 203 × 178 mm · ≈2 kg</span></figcaption>
       </figure>
     </a>
     <a class="plate print finale" href="text2print.html">
       <figure class="plate print m-0">
       <img src="assets/physical/prints/ape/hero.jpg" width="1200" height="750" alt="Sofubi ape bust, three-quarter render" loading="lazy">
-      <figcaption><span class="k">05</span><b>Sofubi ape bust<span class="arrow">→</span></b><span class="d">A six-inch kaiju ape, sculpted as a signed-distance field and split into five printable shells with zero islands.</span><span class="v">PLA+ · 150 × 165 × 161 mm · ≈370 g · sliced</span></figcaption>
+      <figcaption><span class="k">05</span><b>Sofubi ape bust<span class="arrow">→</span></b><span class="d">Six-inch kaiju ape, SDF-sculpted, split into five island-free printable shells.</span><span class="v">PLA+ · 150 × 165 × 161 mm · ≈370 g · sliced</span></figcaption>
       </figure>
     </a>
   </div>
@@ -98,7 +98,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226692"></script>
-<script src="site.js?v=1790226692"></script>
+<script src="assets/engine.js?v=1790227232"></script>
+<script src="site.js?v=1790227232"></script>
 </body>
 </html>

@@ -78,7 +78,7 @@ var PAGES = [
   { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'digital', w: 'SecMCPHub', k: 'security review', cs: 1 },
   { u: 'soiree.html', t: 'Soirée, a case study', h: 'digital', w: 'Soirée', k: 'events tonight', cs: 1 },
   { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing cadquery', cs: 1 },
-  { u: 'colophon.html', t: 'Colophon', h: 'how it is built', w: 'Colophon', k: 'playground' }
+  { u: 'colophon.html', t: 'Colophon', h: 'stack and build', w: 'Colophon', k: 'playground' }
 ];
 function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('/').pop().toLowerCase() || 'index.html'; for (var i = 0; i < PAGES.length; i++) if (PAGES[i].u === f) return PAGES[i]; return null; }
 
@@ -394,7 +394,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
 // ── the shortcuts dialog, rendered from one table so help and keymap agree
 (function () {
   var grid = document.querySelector('#keys .keys-grid'); if (!grid) return;
-  var ROWS = [['⌘K', 'command palette'], ['/', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['enter', 'on Replay: play the header again'], ['a–z', 'write your own word into the home header'], ['?', 'this']];
+  var ROWS = [['⌘K', 'command palette'], ['/', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['enter', 'on Replay: replay the header'], ['a–z', 'type a word into the home header'], ['?', 'this']];
   grid.innerHTML = ROWS.map(function (r) { return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + h(k) + '</kbd>'; }).join(' ') + '</span><span>' + h(r[1]) + '</span>'; }).join('');
 })();
 
@@ -561,11 +561,11 @@ function flagCheck(s) {
   var FEAT = ['lectr', 'starling', 'text2print', 'soiree', 'Mobi', 'SecMCPHub', 'ash-semgrep-rules'];
   var DESC = {
     lectr: 'Auction intelligence over 1.1M lots from 18 houses: a value engine with a public backtest, rebuilt every night.',
-    starling: 'eBay listings priced well under what lectr says they’re worth.',
-    text2print: 'Describe a thing. Get a file the printer accepts.',
-    soiree: 'What’s actually happening tonight, scraped from the people who post it.',
-    Mobi: 'co.stil, a studio site for the software and the physical work.',
-    SecMCPHub: 'A security business review that writes itself, over MCP.',
+    starling: 'eBay listings priced under what lectr says they’re worth.',
+    text2print: 'Claude Code skill that turns a text description into a printable file.',
+    soiree: 'Tonight’s events, scraped from the people who post them.',
+    Mobi: 'co.stil, a studio site for my software and physical work.',
+    SecMCPHub: 'Claude Code skills that build a monthly security review from MCP data.',
     "ash-semgrep-rules": 'Semgrep rules that catch Ash Framework authorization gaps.'
   };
   var LANG = { 'ash-semgrep-rules': 'Semgrep' };

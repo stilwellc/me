@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226692">
+<link rel="stylesheet" href="site.css?v=1790227232">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -35,7 +35,7 @@
 <main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-text="Colophon" aria-label="The word Colophon, gathered from the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv">Colophon · how this site is built</p>
-  <h1 class="display rv d1">Hand-built.<br>No framework, no build step.</h1>
+  <h1 class="display rv d1">Static HTML.<br>No framework, no build step.</h1>
   <p class="lede rv d2">Seventeen pages, one stylesheet, two shared scripts, three font files, and a line-screen engine drawn on a canvas. It is served as static files from GitHub Pages, sets no cookies, and runs no analytics.</p>
 
   <div class="facts rv d3">
@@ -49,7 +49,7 @@
     <div class="k">the ground</div>
     <div>
       <h2>Eggshell, ink, one accent.</h2>
-      <p>The page is a sheet of paper: an off-white ground, near-black ink, three grays for hierarchy, hairlines for registration, and one orange for the one thing on the page that is alive. Two widths: forty-four rems for prose, sixty for objects.</p>
+      <p>Off-white ground, near-black ink, grays for hierarchy, hairlines for registration, and one orange accent for what moves.</p>
       <ul>
         <li><span>Ground</span><span class="v">#FCFBFA</span></li>
         <li><span>Ink</span><span class="v">#161616 · #6B6C6A · #737470</span></li>
@@ -62,12 +62,12 @@
   <section class="sec">
     <div class="k">the line screen</div>
     <div>
-      <h2>Every header is the same machine.</h2>
-      <p>A band is a grid of cells, four pixels on a side. A word is drawn to an offscreen canvas and sampled into that grid to make a mask. A picture is sampled the same way, at twice the resolution, stretched for local contrast and given an edge channel, so a photograph becomes a field of dashes and a line drawing becomes squares. Cells that carry nothing get a filler dot, which is why every band is a full rectangle whatever it holds.</p>
-      <p>The dots are bodies. Each has a home in the current field and a target in the next; pairs are made by angle around the center so the picture turns into the word without crossing itself. A page load gathers the bodies in from outside the band, a change explodes them and remakes them, leaving a page scatters them, and a light wind from a flow field gives the flight some weight. The whole thing is one file with no dependencies.</p>
+      <h2>One engine draws every header.</h2>
+      <p>Each header is a grid of 4 px cells. A word is sampled into the grid as a mask; a picture is sampled at twice the resolution with local contrast and an edge channel, so photos become dashes and line drawings become squares. Empty cells get a filler dot, so every band is a full rectangle.</p>
+      <p>Each dot moves from a spot in the current image to one in the next, paired by angle around the center so paths don’t cross. Dots gather on load, explode and re-form on change, scatter on exit, and drift in a flow-field wind. One file, no dependencies.</p>
       <figure class="plate wide play-plate">
         <canvas id="play" role="img" aria-label="The playground line screen"></canvas>
-        <figcaption>The playground · your word, your picture</figcaption>
+        <figcaption>Playground · your word and picture</figcaption>
       </figure>
       <div class="wave-ctl play-ctl">
         <label>Word <input id="play-word" type="text" maxlength="14" value="Hello" autocomplete="off" spellcheck="false"></label>
@@ -80,18 +80,18 @@
         <button class="pill mono" type="button" aria-pressed="false" data-src="assets/physical/wave/header.jpg" data-label="The wave panel">The wave</button>
         <button class="pill mono" type="button" aria-pressed="false" data-src="assets/physical/plan-intent.png" data-label="The Four Walls plan">Four Walls</button>
       </div>
-      <p class="cap-note">Your picture never leaves this tab. The file is read into the canvas and forgotten when the page closes.</p>
+      <p class="cap-note">Your picture stays in this tab and is discarded when the page closes.</p>
     </div>
   </section>
 
   <section class="sec">
     <div class="k">the build</div>
     <div>
-      <h2>Files on a disk, served as they are.</h2>
+      <h2>Hosting and build.</h2>
       <p>There is no bundler, no template layer, and no client router. Each page carries its own markup, the shared stylesheet, and the two shared scripts; a cache-busting version on those files is the whole deployment story. Photographs ship with width and height and a small variant for phones. Social cards are rendered by a small page in the repository with the same line-screen code, once, and committed.</p>
       <ul>
         <li><span>Hosting</span><span class="v">GitHub Pages, from the main branch</span></li>
-        <li><span>Fonts</span><span class="v">six woff2 files, preloaded, swap</span></li>
+        <li><span>Fonts</span><span class="v">three woff2 files, preloaded, swap</span></li>
         <li><span>Live data</span><span class="v">GitHub API on the GitHub page · lectr.bid on the lectr study</span></li>
         <li><span>Tracking</span><span class="v">none</span></li>
         <li><span>Source</span><span class="v"><a href="https://github.com/stilwellc/me" target="_blank" rel="noopener">github.com/stilwellc/me ↗</a></span></li>
@@ -103,7 +103,7 @@
     <div class="k">the threat model</div>
     <div>
       <h2>Threat model of this page.</h2>
-      <p>A portfolio is a small target, but it runs code in your browser and reads data from other people’s servers, so it gets the same treatment as anything else.</p>
+      <p>The site runs code in your browser and reads data from other servers.</p>
       <ul class="tm">
         <li><span>Visitors, the integrity of the pages, and the owner’s exact location</span><span class="v">protects</span></li>
         <li><span>GitHub Pages serves every file; the repository is the source of truth</span><span class="v">boundary</span></li>
@@ -122,7 +122,7 @@
   <section class="sec">
     <div class="k">the rules</div>
     <div>
-      <h2>Few decisions, made once.</h2>
+      <h2>Design rules.</h2>
       <ul>
         <li><span>Labels</span><span class="v">one style: mono, 11 px, uppercase, wide</span></li>
         <li><span>Arrows</span><span class="v">→ inside the site · ↗ out of it</span></li>
@@ -159,8 +159,8 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226692"></script>
-<script src="site.js?v=1790226692"></script>
+<script src="assets/engine.js?v=1790227232"></script>
+<script src="site.js?v=1790227232"></script>
 <script src="assets/colophon-page.js"></script>
 </body>
 </html>

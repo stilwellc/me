@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Soirée, a case study — Collin Stilwell</title>
-<meta name="description" content="Soirée: what’s actually happening tonight in NYC, Hoboken/Jersey City, and Philadelphia, scraped from the people who post it.">
+<meta name="description" content="Soirée lists tonight’s events in NYC, Hoboken/Jersey City and Philadelphia, scraped from venue and community calendars.">
 <meta property="og:title" content="Soirée, a case study — Collin Stilwell">
-<meta property="og:description" content="Soirée: what’s actually happening tonight in NYC, Hoboken/Jersey City, and Philadelphia, scraped from the people who post it.">
+<meta property="og:description" content="Soirée lists tonight’s events in NYC, Hoboken/Jersey City and Philadelphia, scraped from venue and community calendars.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/soiree.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/soiree.png">
@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226692">
+<link rel="stylesheet" href="site.css?v=1790227232">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -35,8 +35,8 @@
 <main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.18" data-text="Soirée" data-src="assets/shot-soiree.jpg" aria-label="The Soirée home page, decoded into the word Soirée" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://soiree.today" target="_blank" rel="noopener">soiree.today ↗</a></p>
-  <h1 class="display rv d1">What’s actually happening<br>tonight.</h1>
-  <p class="lede rv d2">When Soirée started, fewer than half the events it scraped carried a real date. The listings are scattered across venue calendars, community boards, and a few good newsletters. Soirée gathers them, fixes the dates, and shows you tonight.</p>
+  <h1 class="display rv d1">Tonight’s events in NYC,<br>Hoboken, and Philadelphia.</h1>
+  <p class="lede rv d2">Soirée scrapes event listings, fixes their dates, and shows what’s on tonight.</p>
 
   <div class="facts three rv d3">
     <div><div class="n" data-live="soiree-count">445</div><div class="l">events listed<span class="sub" data-live="soiree-when">as of Sep 23, 2026</span></div></div>
@@ -49,16 +49,16 @@
   <section class="sec" id="problem">
     <div class="k">the problem</div>
     <div>
-      <h2>Dates are the hard part.</h2>
-      <p>Event sources are inconsistent in one specific way: many post recurring or open-ended listings with no date at all. Sorting a feed by “date” when half the dates are placeholders produces garbage.</p>
+      <h2>Most listings had no real date.</h2>
+      <p>When Soirée started, fewer than half the scraped events carried a real date. Many sources post recurring or open-ended listings with none.</p>
     </div>
   </section>
 
   <section class="sec" id="build">
     <div class="k">the build · the rule</div>
     <div>
-      <h2>Real dates first. Placeholders say so.</h2>
-      <p>Soirée’s rule is simple and strict. Events with real dates sort first, by date. Placeholder dates render as <b>ongoing</b> rather than pretending to be a day. A placeholder event that stops appearing at its source is automatically marked past, so nothing needs manual cleanup and history is preserved.</p>
+      <h2>Real dates first, placeholders marked ongoing.</h2>
+      <p>Events with real dates sort first. Placeholder dates render as <b>ongoing</b> and are marked past, with history kept, once they vanish from their source.</p>
       <figure class="datefix" aria-label="The date rule on one listing: a placeholder date of Sep 12 becomes ongoing">
         <div class="df-cell"><span class="df-k">before</span><span class="df-v">Sep 12 <span class="df-n">(placeholder)</span></span><span class="df-d">sorted as if it were a real day</span></div>
         <div class="df-cell after"><span class="df-k">after</span><span class="df-v">ongoing</span><span class="df-d">sorted after every real date</span></div>
@@ -69,15 +69,15 @@
   <section class="sec" id="run">
     <div class="k">the run · sources</div>
     <div>
-      <h2>Scraped from the people who post them.</h2>
-      <p>One scraper per source, each tuned to it: NYC For Free, The Local Girl for Hoboken and Jersey City, Time Out New York, and the museum calendars at MoMA, the Guggenheim, and the New Museum. Each source gets its own success-rate target and its own timeout, because a slow community board and a fast museum feed shouldn’t share one.</p>
+      <h2>One scraper per source.</h2>
+      <p>NYC For Free, The Local Girl (Hoboken and Jersey City), Time Out New York, and the MoMA, Guggenheim and New Museum calendars. Each scraper has its own success-rate target and timeout.</p>
     </div>
   </section>
 
   <section class="sec" id="proof">
     <div class="k">the proof · tonight</div>
     <div>
-      <h2>Tonight, today, this week, free.</h2>
+      <h2>On tonight, live from soiree.today.</h2>
       <ol id="tonight" class="tonight" aria-label="On tonight, live from soiree.today"></ol>
       <ul>
         <li><span>Browse by</span><span class="v">tonight · today · this week · free only</span></li>
@@ -91,7 +91,7 @@
     <div class="k">the call</div>
     <div>
       <h2>Say “ongoing” rather than guess a day.</h2>
-      <p>A listing without a real date is still worth showing; it just can’t pretend to be tonight. Honest labels beat a full-looking calendar.</p>
+      <p>A listing without a real date still shows, but never as tonight.</p>
     </div>
   </section>
 
@@ -125,7 +125,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226692"></script>
-<script src="site.js?v=1790226692"></script>
+<script src="assets/engine.js?v=1790227232"></script>
+<script src="site.js?v=1790227232"></script>
 </body>
 </html>

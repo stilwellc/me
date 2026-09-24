@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226692">
+<link rel="stylesheet" href="site.css?v=1790227232">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -35,12 +35,12 @@
 <main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.45" data-text="text2print" data-src="assets/physical/prints/ape/hero.jpg" aria-label="The sofubi ape bust, decoded into the word text2print" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">text2print on GitHub ↗</a></p>
-  <h1 class="display rv d1">Describe a thing.<br>Get a file the printer accepts.</h1>
-  <p class="lede rv d2">text2print is a Claude Code skill that turns a sentence into CadQuery code, checks it the way a printer would, and holds the model back until four gates say yes. Its hardest job so far, a six-inch kaiju bust in five shells, passed with zero islands; the wave panel behind the desk came out of it too.</p>
+  <h1 class="display rv d1">A Claude Code skill that<br>models parts for 3D printing.</h1>
+  <p class="lede rv d2">text2print turns a sentence into CadQuery code, checks printability, and waits for four approvals before delivery.</p>
 
   <div class="facts rv d3">
     <div><div class="n">10</div><div class="l">phases<span class="sub">requirements → delivered</span></div></div>
-    <div><div class="n">4</div><div class="l">gates<span class="sub">nothing prints without a yes</span></div></div>
+    <div><div class="n">4</div><div class="l">gates<span class="sub">each needs an approval</span></div></div>
     <div><div class="n">6</div><div class="l">material profiles<span class="sub">PLA · PETG · ABS · ASA · TPU · PA-CF</span></div></div>
     <div><div class="n">0</div><div class="l">islands on the ape’s five shells<span class="sub">printcheck, every layer</span></div></div>
   </div>
@@ -48,9 +48,8 @@
   <section class="sec" id="problem">
     <div class="k">the problem</div>
     <div>
-      <h2>CAD is where objects stall.</h2>
-      <p>Most things I want to print are simple to say and slow to model: a replacement foot for a table, a sconce that is its own diffuser, a relief panel that has to print in tiles. The slow part is not the idea, it is the hour in a modeler and the two failed prints after it. The skill exists so the sentence is the input and a verified file is the output.</p>
-      <p>Verified is the word that matters. A model that looks right on screen and fails on the bed is worse than no model, so every phase is checked before the next one starts, and the last check is the slicer itself.</p>
+      <h2>Modeling is the slow part.</h2>
+      <p>The skill takes a sentence and returns a verified file. Each phase is checked before the next starts; the last check is the slicer.</p>
     </div>
   </section>
 
@@ -58,13 +57,13 @@
     <div class="k">the build</div>
     <div>
       <h2>One skill, four modes, ten phases.</h2>
-      <p>A new design walks from requirements through a repository search, real-world dimensions and a design brief before any geometry exists. Then a phased build: base shape, features, a structural pass that checks fill ratio, wall thickness, cantilevers and steep overhangs against the material’s rules, and a finishing pass. The other three modes start from an existing STL: use it as reference, fix its overhangs with a ray-cast ceiling map and a manifold fill, or audit it for printability.</p>
+      <p>A new design runs requirements, repository search, dimensions and a design brief before any geometry, then base shape, features, a structural pass against the material’s rules, and a finish. The other three modes take an existing STL to reference, fix overhangs in, or audit.</p>
       <div class="stage">
         <div><div class="t">brief</div><div class="d">requirements · repo search · dimensions · design brief</div></div>
         <div><div class="t">build</div><div class="d">base shape · features · structural pass · finish</div></div>
         <div><div class="t">verify</div><div class="d">printcheck · overhangs · PrusaSlicer, headless</div></div>
       </div>
-      <p>The rules live in the skill as tables, twelve of them: material profiles with shrinkage and bridge limits, clearance and press fits per material, snap-arm geometry with strain limits, living hinges, print-in-place joints, minimum feature sizes, heat-insert and screw dimensions, board mounting patterns, and structural rules for cantilevers and thin walls. The code reads the table instead of guessing.</p>
+      <p>Twelve rule tables cover materials, fits, snap arms, living hinges, print-in-place joints, minimum features, fasteners, board mounts and thin walls.</p>
     </div>
   </section>
 
@@ -72,25 +71,25 @@
     <div class="k">the run</div>
     <div>
       <h2>A studio that watches the folder.</h2>
-      <p>A single-file Flask app on port 7384 watches the working directory for STLs, renders and a state file, and streams changes to the browser. It shows the model on a 256 mm print plate with its dimensions and triangle count, the ten-phase rail, the render gallery, the parameter table, the slicer report and the activity log. Every STL the skill exports appears there within half a second.</p>
+      <p>A single-file Flask app on port 7384 streams each new STL, render and state change to the browser within half a second. It shows the model on a 256 mm plate, the phase rail, parameters, slicer report and activity log.</p>
       <figure class="plate wide"><img src="assets/physical/text2print/studio.webp" width="1600" height="1000" alt="The text2print studio: pipeline rail on the left, a verification banner asking to approve phase two, and a bowl on the print plate" loading="lazy"><figcaption>The studio · phase 2 gate, waiting for a yes</figcaption></figure>
-      <p class="after-plate">The gates are the point of the studio. At <b>design-brief</b>, <b>phase-1-base</b>, <b>phase-2-features</b> and <b>final-review</b> the skill writes the question into the state file, the studio shows an approve-or-change banner, and a background watcher waits up to thirty minutes for the click. The skill cannot proceed past a gate on its own; a change request comes back as a note and the phase is redone.</p>
+      <p class="after-plate">At <b>design-brief</b>, <b>phase-1-base</b>, <b>phase-2-features</b> and <b>final-review</b>, the skill writes a question to the state file, the studio shows an approve-or-change banner, and a watcher waits up to 30 minutes. The skill can’t pass a gate on its own; a change request redoes the phase.</p>
     </div>
   </section>
 
   <section class="sec" id="proof">
     <div class="k">the proof</div>
     <div>
-      <h2>Checked the way the printer would.</h2>
-      <p><b>printcheck</b> slices the mesh every 0.4 mm and looks for islands, material with nothing under it, which are fatal. It measures overhang area past a 50° slope, first-layer contact and features thinner than 0.9 mm, and reports island positions in world coordinates so they can be found on the part. <b>overhangs</b> measures steep exterior faces only, probing 1.5 mm along each normal to exclude inner skins, because a naive count of every steep face cried wolf on hollow parts.</p>
-      <p>Then the real slicer. PrusaSlicer runs headless with named profiles, a 0.4 mm nozzle at 0.16 mm layers for the bust, 0.08 mm for the eye plugs, a 0.8 mm nozzle at 0.32 mm for the wave tiles, and its log is read for warnings. A control test proved the log is worth reading: a deliberately floating pin trips “Floating object part, Loose extrusions”, so a clean log means something.</p>
+      <h2>printcheck, overhangs, then PrusaSlicer.</h2>
+      <p><b>printcheck</b> slices the mesh every 0.4 mm and reports islands (unsupported material, fatal) in world coordinates, plus overhang area past 50°, first-layer contact and features under 0.9 mm. <b>overhangs</b> measures only steep exterior faces, probing 1.5 mm along each normal to skip inner skins that falsely flagged hollow parts.</p>
+      <p>PrusaSlicer then runs headless with named profiles (0.4 mm nozzle at 0.16 mm layers for the bust, 0.08 mm for the eye plugs, 0.8 mm nozzle at 0.32 mm for the wave tiles) and its log is checked for warnings. In a control test, a deliberately floating pin triggered “Floating object part, Loose extrusions”.</p>
       <div class="pairs">
         <figure class="plate"><img src="assets/physical/prints/ape/front.jpg" width="1200" height="750" alt="The sofubi ape bust, straight on" loading="lazy"><figcaption>The bust · front</figcaption></figure>
         <figure class="plate"><img src="assets/physical/prints/ape/profile.jpg" width="1200" height="750" alt="The sofubi ape bust in profile" loading="lazy"><figcaption>The bust · profile</figcaption></figure>
         <figure class="plate"><img src="assets/physical/prints/ape/mouth.jpg" width="1200" height="750" alt="The mouth: curved canines and incisors on gum pads" loading="lazy"><figcaption>Fang plugs and incisors</figcaption></figure>
         <figure class="plate"><img src="assets/physical/prints/ape/face-part.webp" width="1200" height="750" alt="The face shell in print orientation, on its back, with pin bosses and ribs" loading="lazy"><figcaption>The face shell · print orientation</figcaption></figure>
       </div>
-      <p>The ape is the hardest thing it has produced: a six-inch kaiju bust sculpted as a signed-distance field on a 0.5 mm grid, hollowed to a 2 mm wall with an exact distance transform, and split into five shells at the base ring and the skull’s widest line, with pins, ribs and a chamfer at every seam. Horns, fangs and eyes print as separate plugs at finer layers. All five shells are watertight and pass printcheck with zero islands.</p>
+      <p>The ape is a six-inch kaiju bust: a signed-distance field on a 0.5 mm grid, hollowed to a 2 mm wall, split into five pinned shells. Horns, fangs and eyes print as separate plugs at finer layers. All five shells are watertight with zero islands.</p>
       <figure class="plate wide" id="ape-fig"><img src="assets/physical/prints/ape/hero.jpg" width="1200" height="750" alt="The sofubi ape bust, three-quarter view: two horns, round eyes, and fangs over a ring base" loading="lazy" decoding="async"><figcaption>The bust · three-quarter</figcaption></figure>
       <div class="wave-ctl"><button class="pill mono" type="button" data-v3d="ape-fig" data-build="ape" data-stl="assets/physical/prints/ape/ape.stl" aria-pressed="false">Rotate the bust in 3D</button></div>
       <ul>
@@ -105,8 +104,8 @@
     <div class="k">the call</div>
     <div>
       <h2>Sculpt in a field, split with a plane.</h2>
-      <p>Organic shapes fight constructive solid geometry, so the bust is a field: every feature is a distance function blended into the last, and the mesh is only extracted at the end. Hollowing is a distance transform of that field, which is exact where offsetting a mesh is not. The split is a plane through the same field, so the two halves share a surface to the voxel, and the seams are pinned butt joints. Tongue-and-groove was tried: it halved bed contact and went non-manifold.</p>
-      <p>Most of the lessons were about what a shape reads as at six inches. Hashed fur read as scales and shed eight hundred crumbs in the slicer, so it became a continuous raked shingle. Rimmed eyes read as goggles. Puck ears read as headphones. Brow furrows read as cassette slots. The rule that came out of it: at toy scale, one clear idea per feature, and the detail goes into the small areas a printer can actually hold.</p>
+      <p>Every feature is a distance function blended into the last; the mesh is extracted at the end. Hollowing by distance transform is exact where mesh offsetting is not. Seams are pinned butt joints; tongue-and-groove halved bed contact and went non-manifold.</p>
+      <p>Hashed fur read as scales and left 800 crumbs in the slicer, so it became a continuous raked shingle; rimmed eyes read as goggles, puck ears as headphones, brow furrows as cassette slots. At six inches, each feature gets one clear idea, with fine detail only in small areas a printer can hold.</p>
       <ul>
         <li><span>Language</span><span class="v">Python 3.10–3.12 · CadQuery · trimesh · manifold3d</span></li>
         <li><span>Runtime</span><span class="v">Claude Code skill · PrusaSlicer CLI</span></li>
@@ -147,7 +146,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226692"></script>
-<script src="site.js?v=1790226692"></script>
+<script src="assets/engine.js?v=1790227232"></script>
+<script src="site.js?v=1790227232"></script>
 </body>
 </html>

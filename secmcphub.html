@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226692">
+<link rel="stylesheet" href="site.css?v=1790227232">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -35,8 +35,8 @@
 <main id="main" class="page cs">
   <div class="mhead rv"><canvas class="matrix" data-text="SecMCPHub" data-src="assets/secmcphub.svg" aria-label="A report with rising bars, decoded into the word SecMCPHub" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">SecMCPHub on GitHub ↗</a></p>
-  <h1 class="display rv d1">A monthly security review<br>that writes itself.</h1>
-  <p class="lede rv d2">Security leaders spend the first week of every month rebuilding the same slides from three systems that don’t talk to each other. SecMCPHub is a set of Claude Code skills that pull those systems over the Model Context Protocol (MCP) and render one self-contained HTML report, in a single command.</p>
+  <h1 class="display rv d1">A monthly security report<br>from one command.</h1>
+  <p class="lede rv d2">Claude Code skills that pull vulnerability, GRC and incident data over MCP into one HTML report.</p>
 
   <div class="facts three rv d3">
     <div><div class="n">1</div><div class="l">command<span class="sub">/security-report</span></div></div>
@@ -51,7 +51,7 @@
     <div class="k">the build · shape</div>
     <div>
       <h2>Skills, a template, and two mapping tables.</h2>
-      <p>The bundle is deliberately small. Two skills: <b>/security-report</b> does the refresh, <b>/rewrite-dashboard</b> rebuilds the renderer on the rare occasion the UI changes. One HTML template whose data and rendering live in separate script blocks, so a refresh only ever touches data. A rolling KPI history for sparklines and deltas, and two JSON maps that do the real work: CWE → risk category, and IR project → risk.</p>
+      <p><b>/security-report</b> refreshes the data; <b>/rewrite-dashboard</b> rebuilds the renderer. Data and rendering sit in separate script blocks, so a refresh only touches data.</p>
       <pre class="code tree">SecMCPHub/
 ├── security-report.md             <b>← skill: the refresh</b>
 ├── rewrite-dashboard.md           <b>← skill: rebuild the renderer</b>
@@ -66,7 +66,7 @@
     <div class="k">the run</div>
     <div>
       <h2>Pull, compute, cross-reference, render.</h2>
-      <p>The skill pulls from each configured MCP source, vulnerability findings in parallel batches, GRC paginated, incidents by project. It computes what a reviewer actually asks for: trend deltas against the history buffer, mean time to remediate, SLA compliance, and a weighted composite risk grade.</p>
+      <p>Trend deltas are computed against the KPI history file.</p>
       <div class="stage four">
         <div><div class="t">pull</div><div class="d">findings in batches · GRC paginated · incidents by project</div></div>
         <div><div class="t">compute</div><div class="d">trend deltas · MTTR · SLA · composite grade</div></div>
@@ -80,15 +80,15 @@
     <div class="k">the proof · one view</div>
     <div>
       <h2>Three reports become one view.</h2>
-      <p>The part that makes it a dashboard instead of three reports. Findings are mapped to risk categories through CWE, incidents supply evidence against the same risks, and the two are chained into <b>attack paths</b> that show where the control gap is, so a control weakness, the vulnerabilities that exploit it, and the incidents that already did all appear in one view.</p>
+      <p>Findings map to risk categories through CWE, and incidents are evidence against the same risks. The two chain into <b>attack paths</b> linking a control gap, the vulnerabilities that exploit it, and the incidents that already did.</p>
     </div>
   </section>
 
   <section class="sec" id="call">
     <div class="k">the call</div>
     <div>
-      <h2>No vendor, no server, on purpose.</h2>
-      <p>Every organization runs a different vulnerability scanner, GRC platform, and ticketing system. The skills assume the three <b>categories</b> of source and nothing about the vendors: MCP tool names and field shapes are edited in one place. The report itself is one file with no server and no build step, so it can be shared and archived like any other document.</p>
+      <h2>No vendor assumptions, no server.</h2>
+      <p>The skills target three <b>categories</b> of source; vendor-specific MCP tool names and field shapes are set in one place. The report is one file with no server or build step.</p>
       <ul>
         <li><span>Language</span><span class="v">HTML · JSON · Markdown skills</span></li>
         <li><span>Runtime</span><span class="v">Claude Code + MCP</span></li>
@@ -128,7 +128,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226692"></script>
-<script src="site.js?v=1790226692"></script>
+<script src="assets/engine.js?v=1790227232"></script>
+<script src="site.js?v=1790227232"></script>
 </body>
 </html>

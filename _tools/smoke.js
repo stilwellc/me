@@ -19,7 +19,7 @@ const pages = [''].concat(fs.readdirSync('.').filter(f => f.endsWith('.html') &&
       if (tag === 'desk' && p !== '404.html') {
         const fps = await pg.evaluate(async () => {
           window.scrollTo(0, document.body.scrollHeight); window.dispatchEvent(new Event('resize'));
-          await new Promise(r => setTimeout(r, 600));
+          await new Promise(r => setTimeout(r, 3000));
           let n = 0; const t = performance.now(); const orig = window.requestAnimationFrame;
           window.requestAnimationFrame = f => orig(x => { n++; f(x); });
           await new Promise(r => setTimeout(r, 1000)); window.requestAnimationFrame = orig;
