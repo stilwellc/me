@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226253">
+<link rel="stylesheet" href="site.css?v=1790226594">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -36,36 +36,32 @@
   <div class="mhead rv"><canvas class="matrix" data-text="Security" data-src="assets/security.svg" aria-label="A row of space invaders and a cannon, decoded into the word Security" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv d1">Security · the day job</p>
   <h1 class="display rv d1">Guardrails,<br>not gates.</h1>
-  <p class="lede one rv d2">Product security at startups and at scale, most of it built from close to nothing. The job is making the secure path the fast path.</p>
+  <p class="lede one rv d2">Product security at a bank, three startups, and now WeightWatchers.</p>
 </div>
 
   <div class="facts rv d3">
-    <div><div class="n">2018</div><div class="l">in security since<span class="sub">the state fusion center</span></div></div>
-    <div><div class="n">~200</div><div class="l">engineers supported<span class="sub">Podium</span></div></div>
-    <div><div class="n">1M+</div><div class="l">patients behind the work<span class="sub">Nurx, Keeps, and Cove</span></div></div>
-    <div><div class="n">&lt;5<span class="u">%</span></div><div class="l">false positives before a rule may block<span class="sub">the bar, measured over a quarter</span></div></div>
+    <div><div class="n">2018</div><div class="l">in security since<span class="sub">NJ State Police internship</span></div></div>
+    <div><div class="n">~200</div><div class="l">engineers covered<span class="sub">at Podium</span></div></div>
+    <div><div class="n">1M+</div><div class="l">patients<span class="sub">Nurx, Keeps, and Cove</span></div></div>
+    <div><div class="n">&lt;5<span class="u">%</span></div><div class="l">false positives before a rule can block<span class="sub">measured over a quarter</span></div></div>
   </div>
 
   <section class="sx" id="loop" aria-labelledby="loop-h">
     <h2 class="sheet-h" id="loop-h">The loop</h2>
-    <p class="sx-why">Most programs run the first one and watch the queue grow. The second one makes the bug class go away.</p>
     <figure class="loops">
       <div class="lane is-old" aria-label="The usual loop: find, triage, ticket">
         <span class="lane-k">the usual loop</span>
         <ol class="lane-steps"><li>find</li><li>triage</li><li>ticket</li></ol>
-        <span class="lane-v">the queue grows</span>
       </div>
-      <div class="lane is-new" aria-label="The loop I run: build, default, enforce">
-        <span class="lane-k">the loop I run</span>
+      <div class="lane is-new" aria-label="How I run it: build, default, enforce">
+        <span class="lane-k">how I run it</span>
         <ol class="lane-steps"><li>build</li><li>default</li><li>enforce</li></ol>
-        <span class="lane-v">the class goes away</span>
       </div>
     </figure>
   </section>
 
   <section class="sx" id="beliefs" aria-labelledby="beliefs-h">
     <h2 class="sheet-h" id="beliefs-h">What I believe</h2>
-    <p class="sx-why">Positions from the essay, each one a decision the program makes on purpose.</p>
     <a class="belief-lead" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Stop fixing bugs.<br>Start removing bug classes.<span class="arrow" aria-hidden="true">↗</span></a>
     <ul class="belief-grid">
       <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">blocking</span>Rules earn the right to block: a false-positive rate under 5% over a quarter, never straight to Block.</a></li>
@@ -78,18 +74,16 @@
 
   <section class="sx" id="program" aria-labelledby="program-h">
     <h2 class="sheet-h" id="program-h">The program</h2>
-    <p class="sx-why">Four parts, each covering what the others miss.</p>
     <div class="legs">
       <div class="leg"><span class="leg-k">guardrails <b>1/4</b></span><h3>Security by default</h3><p>Tiered SAST with an AI false-positive filter, auto-merged dependency patches, a threat model for every project at planning.</p></div>
       <div class="leg"><span class="leg-k">human pass <b>2/4</b></span><h3>Reactionary security</h3><p>Design review where the default model flags risk, pentest findings, bug bounty, incidents.</p></div>
-      <div class="leg"><span class="leg-k">primitives <b>3/4</b></span><h3>Security by design</h3><p>Paved roads. Primitives that make the right thing the easy thing.</p></div>
-      <div class="leg"><span class="leg-k">feedback <b>4/4</b></span><h3>Feedback and metrics</h3><p>Every override feeds the loop. A rule blocks only once its measured false-positive rate is under <strong>5%</strong>.</p></div>
+      <div class="leg"><span class="leg-k">primitives <b>3/4</b></span><h3>Security by design</h3><p>Paved-road libraries and secure primitives.</p></div>
+      <div class="leg"><span class="leg-k">feedback <b>4/4</b></span><h3>Feedback and metrics</h3><p>Overrides feed back into rule tuning. A rule blocks only once its measured false-positive rate is under <strong>5%</strong>.</p></div>
     </div>
   </section>
 
   <section class="sx" id="order" aria-labelledby="order-h">
     <h2 class="sheet-h" id="order-h">Build order</h2>
-    <p class="sx-why">Order matters more than calendar. Each stop needs the one before it.</p>
     <ol class="track">
       <li><span class="st">Foundation</span><span class="sd">SAST in advisory mode, auto-merged patches, a default threat modeler</span></li>
       <li><span class="st">Promotion</span><span class="sd">First rules to the Comment tier, the first paved-road library</span></li>
@@ -97,36 +91,34 @@
       <li><span class="st">Design</span><span class="sd">Security champions, a pattern library, Comment → Block promotions</span></li>
       <li><span class="st">Maturity</span><span class="sd">Three tiers with the AI filter, a public bounty, enforced libraries</span></li>
     </ol>
-    <p class="build-note">From <a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Building an Application Security Program That Actually Works ↗</a></p>
+    <p class="build-note">From the essay <a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Building an Application Security Program That Actually Works ↗</a></p>
   </section>
 
   <section class="sx" id="roles" aria-labelledby="roles-h">
-    <h2 class="sheet-h" id="roles-h">Where it was built</h2>
-    <p class="sx-why">Five teams, from a state fusion center to a public company.</p>
+    <h2 class="sheet-h" id="roles-h">Roles</h2>
     <ol class="spine">
-      <li class="now"><span class="when">2026 – now</span><div><h3>WeightWatchers</h3><p>Senior Product Security Engineer. Rebuilding product security from a compliance function into an engineering one.</p></div><span class="scope">now</span></li>
-      <li><span class="when">2023–2026</span><div><h3>Thirty Madison → Remedy Meds</h3><p>Three years building security for Nurx, Keeps, and Cove, telehealth for over a million people, through the $650M exit. When Remedy Meds acquired Thirty Madison, stayed on as the founding security team: product security, corporate security, and privacy.</p></div><span class="scope">founding team</span></li>
-      <li><span class="when">2021–2023</span><div><h3>Podium</h3><p>Secured payments from proof of concept to billions in payment volume, and built the product security team for about 200 engineers, through the $201M Series D.</p></div><span class="scope">~200 engineers</span></li>
-      <li><span class="when">2019–2021</span><div><h3>TD</h3><p>Enterprise security across global corporate and investment banking, full-time from 2020; a summer on the US consumer bank’s cyber risk team in 2019.</p></div><span class="scope">bank</span></li>
-      <li><span class="when">2018</span><div><h3>New Jersey State Police</h3><p>Network engineering intern at the Regional Operations &amp; Intelligence Center, the state’s fusion center.</p></div><span class="scope">intern</span></li>
+      <li class="now"><span class="when">2026 – now</span><div><h3>WeightWatchers</h3><p>Senior Product Security Engineer. Moving product security from a compliance function to an engineering one.</p></div><span class="scope">now</span></li>
+      <li><span class="when">2023–2026</span><div><h3>Thirty Madison → Remedy Meds</h3><p>Security for Nurx, Keeps, and Cove through the $650M exit. After Remedy Meds acquired Thirty Madison, stayed on as the founding security team for product security, corporate security, and privacy.</p></div><span class="scope">founding team</span></li>
+      <li><span class="when">2021–2023</span><div><h3>Podium</h3><p>Application security engineer, then tech lead for product security. Payments security from proof of concept to billions in volume. Built the team covering ~200 engineers.</p></div><span class="scope">~200 engineers</span></li>
+      <li><span class="when">2019–2021</span><div><h3>TD</h3><p>Enterprise security for corporate and investment banking, 2020–2021. Cyber risk summer analyst, US consumer bank, 2019.</p></div><span class="scope">bank</span></li>
+      <li><span class="when">2018</span><div><h3>New Jersey State Police</h3><p>Network engineering intern, Regional Operations &amp; Intelligence Center.</p></div><span class="scope">intern</span></li>
     </ol>
   </section>
 
   <section class="sx" id="open" aria-labelledby="open-h">
-    <h2 class="sheet-h" id="open-h">In the open</h2>
-    <p class="sx-why">Work anyone can read, run, or fork.</p>
+    <h2 class="sheet-h" id="open-h">Open source</h2>
     <div class="opens">
-      <a class="open" href="secmcphub.html"><span class="ok">2026 · case study</span><h3>SecMCPHub <span class="arrow" aria-hidden="true">→</span></h3><p>A monthly security review that writes itself, over MCP.</p></a>
-      <a class="open" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener"><span class="ok">2025 · GitHub</span><h3>Ash Semgrep rules <span class="arrow" aria-hidden="true">↗</span></h3><p>Seven rules that catch Ash Framework authorization gaps, from missing policies to jobs with no actor.</p></a>
-      <a class="open" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener"><span class="ok">2023 · GitHub</span><h3>Elixir secure coding <span class="arrow" aria-hidden="true">↗</span></h3><p>Top contributor to Podium’s open secure-coding curriculum.</p></a>
+      <a class="open" href="secmcphub.html"><span class="ok">2026 · case study</span><h3>SecMCPHub <span class="arrow" aria-hidden="true">→</span></h3><p>Claude Code skills that turn vulnerability, GRC, and incident data into one monthly report.</p></a>
+      <a class="open" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener"><span class="ok">2025 · GitHub</span><h3>Ash Semgrep rules <span class="arrow" aria-hidden="true">↗</span></h3><p>Seven Semgrep rules for authorization gaps in Ash Framework apps.</p></a>
+      <a class="open" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener"><span class="ok">2023 · GitHub</span><h3>Elixir secure coding <span class="arrow" aria-hidden="true">↗</span></h3><p>Podium’s open secure-coding curriculum. Top contributor.</p></a>
     </div>
-    <p class="open-foot">Earlier: <b>Brumby Code Checker</b>, a redundancy scanner for C++, Java, and Ada, built at Rowan with ASRC Federal for Lockheed Martin systems (2019–2020).</p>
+    <p class="open-foot">Also: <b>Brumby Code Checker</b> (Rowan, 2019–2020), a redundancy scanner for C++, Java, and Ada, built with ASRC Federal for Lockheed Martin systems.</p>
 
     <div class="rule">
       <div class="rule-say">
-        <span class="ok">one of the seven</span>
-        <h3>A query with no one behind it</h3>
-        <p>An Ash changeset or query built without a real <code>actor:</code> runs outside policy enforcement. The rule flags every call site that forgets it, and stays quiet when the actor is there.</p>
+        <span class="ok">one of seven rules</span>
+        <h3>Missing actor</h3>
+        <p>Flags Ash changesets and queries built without an <code>actor:</code>. Without one, the resource’s policies may not run. Calls that pass a real actor are skipped.</p>
         <a class="rule-link" href="https://github.com/stilwellc/ash-semgrep-rules/blob/main/ash-changeset-missing-actor.yaml" target="_blank" rel="noopener">ash-changeset-missing-actor.yaml ↗</a>
       </div>
       <pre class="code rule-code" tabindex="0" aria-label="Semgrep rule ash-changeset-missing-actor"><span class="yk">rules:</span>
@@ -172,7 +164,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226253"></script>
-<script src="site.js?v=1790226253"></script>
+<script src="assets/engine.js?v=1790226594"></script>
+<script src="site.js?v=1790226594"></script>
 </body>
 </html>

@@ -970,12 +970,12 @@ body .lander-head + .frame { margin-top: clamp(28px, 4vw, 48px); }
 
 /* ── security: composed sections ─────────────────────────────────────────── */
 body .sx { max-width: var(--wide); margin: clamp(64px, 8vw, 112px) auto 0; }
-body .sx > .sheet-h { margin-top: 0; }
+body .sx > .sheet-h { margin-top: 0; margin-bottom: clamp(18px, 2.4vw, 28px); }
 body .sx-why { max-width: 32em; margin: 0.35rem auto clamp(20px, 2.6vw, 32px); text-align: center; color: var(--ink-2); font-size: 15px; text-wrap: balance; }
 
 /* the loop: two lanes, the usual one muted and dashed, the one I run in ink with orange arrows */
 body .loops { margin: 0; border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
-body .lane { display: grid; grid-template-columns: 9rem minmax(0, 1fr) 11rem; align-items: center; gap: 1.25rem; padding: clamp(18px, 2.4vw, 28px) clamp(18px, 2.6vw, 32px); }
+body .lane { display: grid; grid-template-columns: 9rem minmax(0, 1fr) 9rem; align-items: center; gap: 1.25rem; padding: clamp(18px, 2.4vw, 28px) clamp(18px, 2.6vw, 32px); }
 body .lane + .lane { border-top: 1px solid var(--hair); }
 body .lane-k, body .lane-v { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
 body .lane-v { text-align: right; }
