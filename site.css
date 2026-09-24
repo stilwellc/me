@@ -571,9 +571,9 @@ footer.foot .foot-meta { display: flex; flex-wrap: wrap; justify-content: space-
 footer.foot .foot-copy { color: var(--ink-3); }
 footer.foot .foot-build { color: var(--ink-3); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
 footer.foot .foot-build:hover { color: var(--ink); text-decoration-color: var(--ink-3); }
-footer.foot .ape { position: relative; display: block; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .25s var(--ease), filter .25s ease; transform-origin: 50% 85%; filter: drop-shadow(0 2px 3px rgba(22,22,22,0.22)); }
+footer.foot .ape { position: relative; display: block; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .25s var(--ease), filter .25s ease, opacity .25s ease; transform-origin: 50% 85%; opacity: 0.82; filter: saturate(0.85); }
 footer.foot .ape img { display: block; width: 100%; height: 100%; }
-footer.foot .ape:hover { transform: translateY(-4px) scale(1.08) rotate(-4deg); filter: drop-shadow(0 6px 8px rgba(22,22,22,0.28)); }
+footer.foot .ape:hover { transform: translateY(-3px) scale(1.12) rotate(-4deg); opacity: 1; filter: saturate(1) drop-shadow(0 4px 6px rgba(22,22,22,0.22)); }
 /* desktop: row one is the map and the outbound links; row two, under its own hairline, is the colophon line with the ape at the right edge */
 @media (min-width: 761px) {
   footer.foot .foot-in { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-rows: auto auto; grid-template-areas: "map map map" "meta out ape"; align-items: center; column-gap: 2.5rem; }
@@ -581,12 +581,12 @@ footer.foot .ape:hover { transform: translateY(-4px) scale(1.08) rotate(-4deg); 
   footer.foot .foot-map { grid-area: map; padding: 26px 0 22px; gap: 0.35rem 1.6rem; }
   footer.foot .foot-meta { grid-area: meta; padding: 20px 0 22px; justify-content: flex-start; gap: 0.4rem 1.6rem; }
   footer.foot .foot-out { grid-area: out; padding: 20px 0 22px; gap: 1.6rem; }
-  footer.foot .ape { grid-area: ape; justify-self: end; width: 50px; height: 62px; margin: 8px 0 8px 0; }
+  footer.foot .ape { grid-area: ape; justify-self: end; width: 32px; height: 40px; margin: 6px 0; }
 }
 /* phones: the ape stands at the left; the page map runs in two columns beside him, then the outbound links; the colophon line closes the block under a hairline */
 @media (max-width: 760px) {
-  footer.foot .foot-in { grid-template-columns: 64px minmax(0, 1fr); grid-template-areas: "ape map" "ape out" "meta meta"; column-gap: 1.1rem; padding-top: 22px; }
-  footer.foot .ape { grid-area: ape; align-self: start; width: 64px; height: 80px; margin-top: 2px; }
+  footer.foot .foot-in { grid-template-columns: 40px minmax(0, 1fr); grid-template-areas: "ape map" "ape out" "meta meta"; column-gap: 1rem; padding-top: 22px; }
+  footer.foot .ape { grid-area: ape; align-self: start; width: 40px; height: 50px; margin-top: 0; }
   footer.foot .foot-map { grid-area: map; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem 1rem; align-content: start; }
   footer.foot .foot-map a::after { display: none; }
   footer.foot .foot-out { grid-area: out; margin-top: 0.9rem; padding-top: 0.75rem; border-top: 1px solid var(--hair); gap: 1.1rem; flex-wrap: wrap; white-space: normal; }
