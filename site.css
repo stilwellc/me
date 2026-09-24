@@ -459,7 +459,7 @@ body figure.plate img.veiled { opacity: 0; }
 
 /* ── work cards carry a still of the line screen ─────────────────────────── */
 body figure.plate { position: relative; }
-.cell canvas.thumb { display: block; width: 100%; height: 96px; border-radius: 8px; margin: 0 0 0.35rem; background: color-mix(in srgb, var(--ink) 2.5%, transparent); }
+
 
 /* ── OBJECT plates: a dark render sits in an eggshell mat, like a print in a
    frame. The room photographs on four walls are PHOTO plates and stay bare. ── */
@@ -504,7 +504,7 @@ body.scrolled .rail { transition-delay: 0s; }
 @media (min-width: 1400px) { .rail { display: flex; } }
 html { scroll-padding-top: 4.5rem; }
 
-@media (max-width: 760px) { .cell canvas.thumb { height: auto; aspect-ratio: 5 / 2; } }
+
 /* utilities that replace the last inline styles */
 .sp-md { height: clamp(20px, 3vw, 40px); }
 .mt-2 { margin-top: 2rem !important; }
@@ -799,12 +799,12 @@ footer.foot .ape.ape-hi { opacity: 1; filter: grayscale(0) drop-shadow(0 4px 6px
 }
 
 /* d1 · Digital thumbnails: 16:10, and on hover the screen lifts off the real picture */
-.cell .thumb-wrap { position: relative; display: block; margin: 0 0 0.35rem; border-radius: 8px; overflow: hidden; }
-body .cell .thumb-wrap canvas.thumb, body .cell canvas.thumb { height: auto; aspect-ratio: 16 / 10; }
-body .cell .thumb-wrap canvas.thumb { margin: 0; }
-.cell .thumb-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity var(--t3) var(--out); pointer-events: none; background: var(--ground); }
-@media (hover: hover) { .cell:hover .thumb-img[src], .cell:focus-visible .thumb-img[src] { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .cell .thumb-img { transition: none; } }
+
+
+
+
+
+
 .sec-chip[hidden] { display: none; }
 
 /* ── about, résumé, security, colophon, github ─────────────────── */
@@ -971,3 +971,13 @@ body .wave-ctl + .sheet, body figure.plate + .wave-ctl { margin-top: 0.9rem; }
 
 /* landers: the card frame sits a beat below the lede now the duplicate "Projects" label is gone (i3) */
 body .lander-head + .frame { margin-top: clamp(28px, 4vw, 48px); }
+
+/* ── Digital cards: the real picture, framed; the line screen only arrives over it ── */
+.cell .thumb-wrap { position: relative; display: block; aspect-ratio: 16 / 10; margin: 0 0 0.35rem; border-radius: 8px; overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); box-shadow: inset 0 0 0 1px var(--line); }
+.cell .thumb-img { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity var(--t3) var(--out), transform var(--t3) var(--out); }
+.cell .thumb-wrap.is-mark .thumb-img { object-fit: contain; padding: 18%; }
+.cell .thumb-wrap.veiled .thumb-img { opacity: 0; }
+.cell .thumb-wrap canvas.thumb { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; transition: opacity var(--t3) var(--out); }
+.cell .thumb-wrap canvas.thumb.done { opacity: 0; }
+@media (hover: hover) { .cell:hover .thumb-img, .cell:focus-visible .thumb-img { transform: scale(1.025); } }
+@media (prefers-reduced-motion: reduce) { .cell .thumb-img { transition: none; } .cell:hover .thumb-img { transform: none; } }

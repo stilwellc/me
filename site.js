@@ -157,26 +157,36 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var tick = false; addEventListener('scroll', function () { shut(); if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; sweep(); }); } }, { passive: true }); addEventListener('resize', sweep); sweep();
 })();
 
-// ── work cards: a still line-screen strip of each product, same material as the headers
+// ── work cards: the real picture of each product, framed. The line screen is
+// only its entrance: the first time a card scrolls into view the dots gather
+// over it and dissolve into the picture underneath. Reduced motion: just the picture.
 (function () {
-  var cs = [].slice.call(document.querySelectorAll('canvas.thumb')); if (!cs.length || typeof matrix !== 'function') return;
-  var made = [];
-  // pointer devices: hovering a card lifts the screen off the real picture
-  if (matchMedia('(hover: hover)').matches) cs.forEach(function (c) {
-    var wrap = document.createElement('span'); wrap.className = 'thumb-wrap'; c.parentNode.insertBefore(wrap, c); wrap.appendChild(c);
-    var im = document.createElement('img'); im.className = 'thumb-img'; im.alt = ''; im.setAttribute('aria-hidden', 'true'); im.decoding = 'async'; im.loading = 'lazy';
+  var cs = [].slice.call(document.querySelectorAll('canvas.thumb')); if (!cs.length) return;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, canRun = typeof matrix === 'function' && !reduce;
+  var pending = [];
+  cs.forEach(function (c) {
+    var src = c.dataset.src || '', svg = /\.svg(\?|$)/i.test(src);
+    var wrap = document.createElement('span'); wrap.className = 'thumb-wrap' + (svg ? ' is-mark' : ''); c.parentNode.insertBefore(wrap, c);
+    var im = document.createElement('img'); im.className = 'thumb-img'; im.alt = ''; im.setAttribute('aria-hidden', 'true'); im.decoding = 'async'; im.loading = 'lazy'; im.src = src;
     var f = (c.dataset.focus || '0.5,0.5').split(','); im.style.objectPosition = (parseFloat(f[0]) * 100) + '% ' + (parseFloat(f[1]) * 100) + '%';
-    if (/\.svg(\?|$)/i.test(c.dataset.src || '')) im.style.objectFit = 'contain';
-    var card = c.closest('a, .cell'), load = function () { if (!im.src) im.src = c.dataset.src; };
-    if (card) { card.addEventListener('pointerenter', load); card.addEventListener('focusin', load); }
     wrap.appendChild(im);
+    if (!canRun) { c.remove(); return; }
+    wrap.appendChild(c); wrap.classList.add('veiled'); pending.push(c);
   });
-  var make = function (c) { made.push(matrix(c, { src: c.dataset.src, text: '', plate: true, still: true, cell: 4, fit: /\.svg(\?|$)/i.test(c.dataset.src) ? 'contain' : 'cover', filler: false })); };
-  if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); make(e.target); } }); }, { rootMargin: '240px 0px' }); cs.forEach(function (c) { io.observe(c); }); }
-  else cs.forEach(make);
-  var again = function () { made.forEach(function (m) { m.replay(); }); };
-  var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(again, 150); });
-  window.__repaintStills = again;
+  if (!pending.length) return;
+  function lift(c, m) {
+    if (c.__lifted) return; c.__lifted = true;
+    var wrap = c.parentNode; wrap.classList.remove('veiled'); c.classList.add('done');
+    setTimeout(function () { if (m && m.destroy) m.destroy(); c.remove(); }, 700);
+  }
+  function run(c) {
+    var m = null; setTimeout(function () { lift(c, m); }, 3200);
+    try { m = matrix(c, { src: c.dataset.src, text: '', plate: true, cell: 4, fit: /\.svg(\?|$)/i.test(c.dataset.src) ? 'contain' : 'cover', filler: false }); m.onSettled = function () { lift(c, m); }; }
+    catch (e) { lift(c, m); }
+  }
+  if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); run(e.target); } }); }, { threshold: 0.25 }); pending.forEach(function (c) { io.observe(c); }); }
+  else pending.forEach(function (c) { lift(c, null); });
+  window.__repaintStills = function () {};
 })();
 
 // ── plates arrive, quietly ──────────────────────────────────────────────────
@@ -261,7 +271,7 @@ document.addEventListener('click', function (e) {
   if (OWN_GLYPH) ssSet('mx:prev', OWN_GLYPH);
   if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button || a.hasAttribute('download')) return;
   if (a.pathname === location.pathname && a.hash) return;
-  var th = a.querySelector('canvas.thumb');
+  var th = a.querySelector('.thumb-wrap, canvas.thumb');
   if (th) { var r = th.getBoundingClientRect(); ssSet('mx:from', JSON.stringify({ p: (a.pathname.split('/').pop() || 'index.html').toLowerCase(), r: { x: r.left, y: r.top, w: r.width, h: r.height } })); }
   e.preventDefault(); leave(a.href);
 });
