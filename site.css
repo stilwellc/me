@@ -583,7 +583,6 @@ footer.foot .ape:hover { transform: translateY(-4px) scale(1.08) rotate(-4deg); 
   footer.foot .foot-out { grid-area: out; padding: 20px 0 22px; gap: 1.6rem; }
   footer.foot .ape { grid-area: ape; justify-self: end; width: 50px; height: 62px; margin: 8px 0 8px 0; }
 }
-}
 /* phones: the ape stands at the left; the page map runs in two columns beside him, then the outbound links; the colophon line closes the block under a hairline */
 @media (max-width: 760px) {
   footer.foot .foot-in { grid-template-columns: 64px minmax(0, 1fr); grid-template-areas: "ape map" "ape out" "meta meta"; column-gap: 1.1rem; padding-top: 22px; }
