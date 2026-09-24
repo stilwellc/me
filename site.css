@@ -523,9 +523,9 @@ body .play-ctl .pill.file input { position: absolute; inset: 0; opacity: 0; curs
 }
 @media (max-width: 480px) { .stage.four { grid-template-columns: 1fr; } .stage.four > div { border-right: 0; } }
 /* the ape, cut from the photograph in two tones, beside the build line */
-footer.foot .ape { display: inline-block; vertical-align: middle; width: 47px; height: 48px; margin: -12px 0 -12px 0.8rem; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 6px; transition: transform .25s var(--ease); transform-origin: 50% 80%; }
+footer.foot .ape { display: inline-block; vertical-align: middle; width: 45px; height: 56px; margin: -18px 0 -18px 0.9rem; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .25s var(--ease), filter .25s ease; transform-origin: 50% 85%; filter: drop-shadow(0 2px 3px rgba(22,22,22,0.22)); }
 footer.foot .ape img { display: block; width: 100%; height: 100%; }
-footer.foot .ape:hover { transform: translateY(-3px) rotate(-5deg); }
+footer.foot .ape:hover { transform: translateY(-4px) scale(1.08) rotate(-4deg); filter: drop-shadow(0 6px 8px rgba(22,22,22,0.28)); }
 footer.foot .ape:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 3px; }
 footer.foot .ape.roar { animation: ape-roar .8s var(--ease); }
 @keyframes ape-roar { 0% { transform: scale(1); } 25% { transform: scale(1.7) rotate(-8deg); } 45% { transform: scale(1.6) rotate(8deg); } 65% { transform: scale(1.7) rotate(-6deg); } 100% { transform: scale(1); } }
