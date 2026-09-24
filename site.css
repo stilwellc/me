@@ -837,22 +837,10 @@ body .sheet.now .row { grid-template-columns: 6.5rem minmax(0, 1fr); }
 @media (max-width: 600px) { body .sheet.now .row { grid-template-columns: 1fr; } }
 
 /* security · k3: the Semgrep rule and its one-line caption */
-body .rule-cap { max-width: var(--col); margin: 0.2rem auto 0; font-size: 14px; color: var(--ink-2); text-align: left; text-wrap: pretty; }
-body .rule-cap code { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
 
 /* security · k4: "Things I believe" — one line per position, hairline between */
-body .beliefs { max-width: var(--col); margin: 0 auto; padding: 0; list-style: none; border-top: 1px solid var(--hair); text-align: left; }
-body .beliefs li { border-bottom: 1px solid var(--hair); }
-body .beliefs a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: baseline; padding: 0.85rem 0; color: var(--ink); font-size: 17px; line-height: 1.45; font-weight: 300; text-wrap: pretty; }
-body .beliefs a .arrow { font-size: 13px; color: var(--ink-3); transition: transform 120ms cubic-bezier(.2,.7,.1,1), color 120ms ease; }
-body .beliefs a:hover .arrow { color: var(--ink); transform: translate(2px, -2px); }
 
 /* security · build order from the essay: five stops in one row */
-body .build-order { max-width: var(--col); margin: 0 auto; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); counter-reset: stop; }
-body .build-order li { padding: 0.8rem 0.6rem 0.9rem 0; font-size: 14.5px; color: var(--ink); text-align: left; counter-increment: stop; }
-body .build-order li::before { content: "0" counter(stop); display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-3); margin-bottom: 0.3rem; }
-body .build-order li span { display: block; color: var(--ink-3); font-size: 12.5px; line-height: 1.45; margin-top: 0.2rem; }
-@media (max-width: 600px) { body .build-order { grid-template-columns: 1fr 1fr; border-bottom: 0; } body .build-order li { border-bottom: 1px solid var(--hair); } body .build-order li:last-child { grid-column: 1 / -1; } }
 body .build-note { max-width: var(--col); margin: 0.6rem auto 0; font-size: 14px; color: var(--ink-2); text-align: left; }
 
 /* colophon · f12: playground preset chips */
@@ -860,8 +848,6 @@ body .play-presets { display: flex; flex-wrap: wrap; justify-content: center; ga
 body .play-presets .pill[aria-pressed="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
 
 /* security · inline links in the rule caption and build-order note */
-body .rule-cap a, body .build-note a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
-body .rule-cap a:hover, body .build-note a:hover { text-decoration-color: var(--ink); }
 
 /* colophon · s10: links inside the threat-model rows */
 body .sec ul.tm li a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
@@ -981,3 +967,125 @@ body .lander-head + .frame { margin-top: clamp(28px, 4vw, 48px); }
 .cell .thumb-wrap canvas.thumb.done { opacity: 0; }
 @media (hover: hover) { .cell:hover .thumb-img, .cell:focus-visible .thumb-img { transform: scale(1.025); } }
 @media (prefers-reduced-motion: reduce) { .cell .thumb-img { transition: none; } .cell:hover .thumb-img { transform: none; } }
+
+/* ── security: composed sections ─────────────────────────────────────────── */
+body .sx { max-width: var(--wide); margin: clamp(64px, 8vw, 112px) auto 0; }
+body .sx > .sheet-h { margin-top: 0; }
+body .sx-why { max-width: 32em; margin: 0.35rem auto clamp(20px, 2.6vw, 32px); text-align: center; color: var(--ink-2); font-size: 15px; text-wrap: balance; }
+
+/* the loop: two lanes, the usual one muted and dashed, the one I run in ink with orange arrows */
+body .loops { margin: 0; border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
+body .lane { display: grid; grid-template-columns: 9rem minmax(0, 1fr) 11rem; align-items: center; gap: 1.25rem; padding: clamp(18px, 2.4vw, 28px) clamp(18px, 2.6vw, 32px); }
+body .lane + .lane { border-top: 1px solid var(--hair); }
+body .lane-k, body .lane-v { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+body .lane-v { text-align: right; }
+body .lane-steps { display: flex; align-items: center; justify-content: center; gap: 0; margin: 0; padding: 0; list-style: none; }
+body .lane-steps li { font-family: var(--display); font-weight: 300; font-size: clamp(1.15rem, 1.9vw, 1.6rem); letter-spacing: -0.02em; padding: 0.4em 0.95em; border-radius: 999px; border: 1px solid var(--hair-2); white-space: nowrap; }
+body .lane-steps li + li { position: relative; margin-left: 2.2em; }
+body .lane-steps li + li::before { content: "→"; position: absolute; left: -1.75em; top: 50%; width: 1em; transform: translateY(-50%); text-align: center; }
+body .lane.is-old .lane-steps li { color: var(--ink-3); border-style: dashed; }
+body .lane.is-old .lane-steps li + li::before { color: var(--ink-3); }
+body .lane.is-new { background: color-mix(in srgb, var(--ink) 2.5%, var(--ground)); }
+body .lane.is-new .lane-steps li { color: var(--ground); background: var(--ink); border-color: var(--ink); }
+body .lane.is-new .lane-steps li + li::before { color: var(--accent); }
+body .lane.is-new .lane-v { color: var(--ink); }
+@media (max-width: 760px) {
+  body .lane { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; text-align: center; }
+  body .lane-v { text-align: center; }
+  body .lane-steps li { font-size: 1.05rem; padding: 0.35em 0.75em; }
+  body .lane-steps li + li { margin-left: 1.6em; }
+  body .lane-steps li + li::before { left: -1.3em; }
+}
+
+/* what I believe: one lead line set large, the rest in a registration frame */
+body .belief-lead { display: block; max-width: 22em; margin: 0 auto clamp(24px, 3vw, 36px); text-align: center; font-family: var(--display); font-weight: 300; font-size: clamp(1.7rem, 3.6vw, 2.8rem); line-height: 1.12; letter-spacing: -0.03em; color: var(--ink); text-decoration: none; text-wrap: balance; }
+body .belief-lead .arrow { font-size: 0.45em; vertical-align: 0.9em; margin-left: 0.3em; color: var(--ink-3); }
+body .belief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--hair); border-left: 1px solid var(--hair); border-radius: 14px; overflow: hidden; border: 1px solid var(--hair); }
+body .belief-grid li { border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+body .belief-grid li:nth-child(2n) { border-right: 0; }
+body .belief-grid li.wide { grid-column: 1 / -1; border-right: 0; border-bottom: 0; }
+body .belief-grid a { display: block; text-align: left; height: 100%; padding: clamp(18px, 2.2vw, 26px) clamp(18px, 2.4vw, 28px); color: var(--ink); text-decoration: none; font-size: clamp(1rem, 1.35vw, 1.12rem); line-height: 1.45; transition: background-color var(--t2) var(--out); }
+body .belief-grid .bk { display: block; margin-bottom: 0.55rem; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+@media (hover: hover) { body .belief-grid a:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); } body .belief-lead:hover .arrow { color: var(--ink); } }
+@media (max-width: 760px) { body .belief-grid { grid-template-columns: minmax(0, 1fr); } body .belief-grid li { border-right: 0; } }
+
+/* the program: four legs in a 2x2 frame */
+body .legs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
+body .leg { padding: clamp(20px, 2.6vw, 32px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); text-align: left; }
+body .leg:nth-child(2n) { border-right: 0; }
+body .leg:nth-last-child(-n+2) { border-bottom: 0; }
+body .leg-k { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+body .leg-k b { font-weight: 400; letter-spacing: 0.04em; }
+body .leg h3 { margin: clamp(22px, 3vw, 40px) 0 0.5rem; font-family: var(--display); font-weight: 400; font-size: clamp(1.3rem, 2vw, 1.65rem); letter-spacing: -0.02em; line-height: 1.15; }
+body .leg p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; max-width: 30em; }
+body .leg p strong { color: var(--accent); font-weight: 500; }
+@media (max-width: 760px) { body .legs { grid-template-columns: minmax(0, 1fr); } body .leg { border-right: 0; } body .leg:nth-last-child(2) { border-bottom: 1px solid var(--hair); } }
+
+/* build order: a track with five stops; phones get a spine */
+body .track { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.25rem; margin: 0; padding: 0; list-style: none; counter-reset: stop; }
+body .track::before { content: ""; position: absolute; left: 0; right: 0; top: 2.05rem; border-top: 1px solid var(--hair-2); }
+body .track li { position: relative; counter-increment: stop; text-align: left; }
+body .track li::before { content: "0" counter(stop); display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-3); }
+body .track li::after { content: ""; position: absolute; left: 0; top: calc(2.05rem - 5px); width: 9px; height: 9px; border-radius: 50%; background: var(--ground); border: 1px solid var(--ink); }
+body .track li:last-child::after { background: var(--accent); border-color: var(--accent); }
+body .track .st { display: block; margin-top: 2.1rem; font-family: var(--display); font-size: 1.15rem; letter-spacing: -0.015em; }
+body .track .sd { display: block; margin-top: 0.4rem; color: var(--ink-2); font-size: 13.5px; line-height: 1.5; }
+body .sx .build-note { max-width: none; margin-top: 1.4rem; text-align: center; }
+@media (max-width: 760px) {
+  body .track { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; padding-left: 1.6rem; }
+  body .track::before { left: 4px; right: auto; top: 0.4rem; bottom: 0.4rem; border-top: 0; border-left: 1px solid var(--hair-2); }
+  body .track li::after { left: -1.6rem; top: 0.25rem; }
+  body .track .st { margin-top: 0.25rem; }
+}
+
+/* where it was built: a spine of roles, the current one in orange */
+body .spine { position: relative; max-width: var(--col); margin: 0 auto; padding: 0; list-style: none; }
+body .spine::before { content: ""; position: absolute; left: 8.25rem; top: 0.6rem; bottom: 0.6rem; border-left: 1px solid var(--hair-2); }
+body .spine li { position: relative; text-align: left; display: grid; grid-template-columns: 7.25rem minmax(0, 1fr) auto; gap: 2rem; padding: 0 0 clamp(22px, 2.8vw, 34px); align-items: baseline; }
+body .spine li::after { content: ""; position: absolute; left: calc(8.25rem - 4px); top: 0.45rem; width: 9px; height: 9px; border-radius: 50%; background: var(--ground); border: 1px solid var(--ink); }
+body .spine li.now::after { background: var(--accent); border-color: var(--accent); }
+body .spine .when { font-family: var(--mono); font-size: 12px; color: var(--ink-3); text-align: right; }
+body .spine h3 { margin: 0 0 0.35rem; font-family: var(--display); font-weight: 400; font-size: 1.25rem; letter-spacing: -0.02em; }
+body .spine p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+body .spine .scope { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); border: 1px solid var(--hair-2); border-radius: 999px; padding: 5px 10px; white-space: nowrap; }
+body .spine li.now .scope { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+@media (max-width: 760px) {
+  body .spine { padding-left: 1.6rem; }
+  body .spine::before { left: 4px; }
+  body .spine li { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
+  body .spine li::after { left: -1.6rem; top: 0.3rem; }
+  body .spine .when { text-align: left; }
+  body .spine .scope { justify-self: start; margin-top: 0.3rem; }
+}
+
+/* in the open: three framed cards, then the rule beside what it catches */
+body .opens { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
+body .open { display: block; padding: clamp(18px, 2.4vw, 28px); border-right: 1px solid var(--hair); color: var(--ink); text-decoration: none; text-align: left; transition: background-color var(--t2) var(--out); }
+body .open:last-child { border-right: 0; }
+body .ok { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+body .open h3 { margin: 1.6rem 0 0.4rem; font-family: var(--display); font-weight: 400; font-size: 1.25rem; letter-spacing: -0.02em; }
+body .open h3 .arrow { color: var(--ink-3); font-size: 0.8em; transition: transform var(--t2) var(--out), color var(--t1) linear; display: inline-block; }
+body .open p { margin: 0; color: var(--ink-2); font-size: 14.5px; line-height: 1.55; }
+@media (hover: hover) { body .open:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); } body .open:hover h3 .arrow { color: var(--ink); transform: translate(2px, -2px); } }
+body .open-foot { max-width: none; margin: 0.9rem 0 0; font-size: 13.5px; color: var(--ink-3); text-align: center; }
+body .open-foot b { font-weight: 500; color: var(--ink-2); }
+body .rule { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.45fr); margin-top: clamp(28px, 3.6vw, 44px); border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
+body .rule-say { padding: clamp(20px, 2.6vw, 32px); text-align: left; border-right: 1px solid var(--hair); }
+body .rule-say h3 { margin: 1.6rem 0 0.6rem; font-family: var(--display); font-weight: 400; font-size: clamp(1.3rem, 2vw, 1.6rem); letter-spacing: -0.02em; line-height: 1.15; }
+body .rule-say p { margin: 0 0 1.1rem; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+body .rule-say code { font-family: var(--mono); font-size: 13px; color: var(--ink); }
+body .rule-link { font-family: var(--mono); font-size: 12px; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+body .rule-link:hover { text-decoration-color: var(--ink); }
+body .rule pre.rule-code { white-space: pre; margin: 0; border: 0; border-radius: 0; background: color-mix(in srgb, var(--ink) 3%, var(--ground)); padding: clamp(18px, 2.4vw, 28px); font-size: 11.5px; line-height: 1.75; overflow-x: auto; max-width: none; min-width: 0; }
+body .rule-code .yk { color: var(--ink-3); }
+body .rule-code .yh { color: var(--accent); }
+body .rule-code .yp { color: var(--ink); }
+body .rule-code .yn { color: var(--ink); background: color-mix(in srgb, var(--accent) 12%, transparent); border-radius: 3px; padding: 0 2px; }
+@media (max-width: 760px) {
+  body .opens { grid-template-columns: minmax(0, 1fr); }
+  body .open { border-right: 0; border-bottom: 1px solid var(--hair); }
+  body .open:last-child { border-bottom: 0; }
+  body .rule { grid-template-columns: minmax(0, 1fr); }
+  body .rule-say { border-right: 0; border-bottom: 1px solid var(--hair); }
+  body .rule pre.rule-code { font-size: 11px; }
+}

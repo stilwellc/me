@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790225566">
+<link rel="stylesheet" href="site.css?v=1790226028">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -39,71 +39,116 @@
   <p class="lede one rv d2">Product security at startups and at scale, most of it built from close to nothing. The job is making the secure path the fast path.</p>
 </div>
 
-  <h2 class="sheet-h rv d3">Roles</h2>
-  <div class="sheet rv d3">
-    <div class="row"><span class="k">2026 –</span><span><span class="t">WeightWatchers</span><span class="d">Senior Product Security Engineer. Rebuilding product security from a compliance function into an engineering one.</span></span><span class="v">now</span></div>
-    <div class="row"><span class="k">2023–2026</span><span><span class="t">Thirty Madison → Remedy Meds</span><span class="d">Three years building security for Nurx, Keeps, and Cove, telehealth for over a million people, through the $650M exit. When Remedy Meds acquired Thirty Madison, stayed on as the founding security team: product security, corporate security, and privacy.</span></span><span class="v">founding team</span></div>
-    <div class="row"><span class="k">2021–2023</span><span><span class="t">Podium</span><span class="d">Joined just before the $201M Series D. Secured payments from proof of concept to billions in payment volume, and built the product security team for about 200 engineers.</span></span><span class="v">~200 engineers</span></div>
-    <div class="row"><span class="k">2019–2021</span><span><span class="t">TD</span><span class="d">Enterprise security across global corporate and investment banking, full-time from 2020; a summer on the US consumer bank’s cyber risk team in 2019.</span></span><span class="v">bank</span></div>
-    <div class="row"><span class="k">2018</span><span><span class="t">New Jersey State Police</span><span class="d">Network engineering intern at the Regional Operations &amp; Intelligence Center, the state’s fusion center.</span></span><span class="v">intern</span></div>
+  <div class="facts rv d3">
+    <div><div class="n">2018</div><div class="l">in security since<span class="sub">the state fusion center</span></div></div>
+    <div><div class="n">~200</div><div class="l">engineers supported<span class="sub">Podium</span></div></div>
+    <div><div class="n">1M+</div><div class="l">patients behind the work<span class="sub">Nurx, Keeps, and Cove</span></div></div>
+    <div><div class="n">&lt;5<span class="u">%</span></div><div class="l">false positives before a rule may block<span class="sub">the bar, measured over a quarter</span></div></div>
   </div>
 
-  <h2 class="sheet-h">Things I believe</h2>
-  <ul class="beliefs">
-    <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span>Stop fixing bugs. Start removing bug classes.</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-    <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span>Rules earn the right to block: a proven false-positive rate under 5% over a quarter, never straight to Block.</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-    <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span>AI runs between rule evaluation and PR action, never in front of SAST.</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-    <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span>Pattern presence is not reachability. A “Critical” behind a network ACL is not Critical.</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-    <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span>Triage SLA matters more than bounty amount.</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-    <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span>Build the safe primitive first, then write the rule blocking the unsafe one.</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-    <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span>Find → triage → ticket is the wrong loop. Build → default → enforce is the right one.</span><span class="arrow" aria-hidden="true">↗</span></a></li>
-  </ul>
+  <section class="sx" id="loop" aria-labelledby="loop-h">
+    <h2 class="sheet-h" id="loop-h">The loop</h2>
+    <p class="sx-why">Most programs run the first one and watch the queue grow. The second one makes the bug class go away.</p>
+    <figure class="loops">
+      <div class="lane is-old" aria-label="The usual loop: find, triage, ticket">
+        <span class="lane-k">the usual loop</span>
+        <ol class="lane-steps"><li>find</li><li>triage</li><li>ticket</li></ol>
+        <span class="lane-v">the queue grows</span>
+      </div>
+      <div class="lane is-new" aria-label="The loop I run: build, default, enforce">
+        <span class="lane-k">the loop I run</span>
+        <ol class="lane-steps"><li>build</li><li>default</li><li>enforce</li></ol>
+        <span class="lane-v">the class goes away</span>
+      </div>
+    </figure>
+  </section>
 
-  <h2 class="sheet-h">Program · four legs</h2>
-  <div class="sheet kv">
-    <div class="row"><span class="k">guardrails</span><span><span class="t">Security by default</span><span class="d">Tiered SAST with an AI false-positive filter, auto-merged dependency patches, a threat model for every project at planning.</span></span></div>
-    <div class="row"><span class="k">human pass</span><span><span class="t">Reactionary security</span><span class="d">The human pass: design review where the default model flags risk, pentest findings, bug bounty, incidents.</span></span></div>
-    <div class="row"><span class="k">primitives</span><span><span class="t">Security by design</span><span class="d">Paved roads. Primitives that make the right thing the easy thing.</span></span></div>
-    <div class="row"><span class="k">feedback</span><span><span class="t">Feedback and metrics</span><span class="d">Every override feeds the loop. Rules earn the right to block with a measured false-positive rate under 5%.</span></span></div>
-  </div>
+  <section class="sx" id="beliefs" aria-labelledby="beliefs-h">
+    <h2 class="sheet-h" id="beliefs-h">What I believe</h2>
+    <p class="sx-why">Positions from the essay, each one a decision the program makes on purpose.</p>
+    <a class="belief-lead" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Stop fixing bugs.<br>Start removing bug classes.<span class="arrow" aria-hidden="true">↗</span></a>
+    <ul class="belief-grid">
+      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">blocking</span>Rules earn the right to block: a false-positive rate under 5% over a quarter, never straight to Block.</a></li>
+      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">AI</span>AI runs between rule evaluation and PR action, never in front of SAST.</a></li>
+      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">severity</span>Pattern presence is not reachability. A “Critical” behind a network ACL is not Critical.</a></li>
+      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">bounty</span>Triage SLA matters more than bounty amount.</a></li>
+      <li class="wide"><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">primitives</span>Build the safe primitive first, then write the rule blocking the unsafe one.</a></li>
+    </ul>
+  </section>
 
-  <h2 class="sheet-h">Build order</h2>
-  <ol class="build-order">
-    <li>Foundation<span>SAST in advisory mode, auto-merged patches, a default threat modeler</span></li>
-    <li>Promotion<span>First rules to the Comment tier, the first paved-road library</span></li>
-    <li>Depth + AI<span>AI as PR commenter, a private bug bounty, the metrics dashboard</span></li>
-    <li>Design<span>Security champions, a pattern library, Comment → Block promotions</span></li>
-    <li>Maturity<span>Three tiers with the AI filter, a public bounty, enforced libraries</span></li>
-  </ol>
-  <p class="build-note">Order matters more than calendar. From <a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Building an Application Security Program That Actually Works ↗</a></p>
+  <section class="sx" id="program" aria-labelledby="program-h">
+    <h2 class="sheet-h" id="program-h">The program</h2>
+    <p class="sx-why">Four parts, each covering what the others miss.</p>
+    <div class="legs">
+      <div class="leg"><span class="leg-k">guardrails <b>1/4</b></span><h3>Security by default</h3><p>Tiered SAST with an AI false-positive filter, auto-merged dependency patches, a threat model for every project at planning.</p></div>
+      <div class="leg"><span class="leg-k">human pass <b>2/4</b></span><h3>Reactionary security</h3><p>Design review where the default model flags risk, pentest findings, bug bounty, incidents.</p></div>
+      <div class="leg"><span class="leg-k">primitives <b>3/4</b></span><h3>Security by design</h3><p>Paved roads. Primitives that make the right thing the easy thing.</p></div>
+      <div class="leg"><span class="leg-k">feedback <b>4/4</b></span><h3>Feedback and metrics</h3><p>Every override feeds the loop. A rule blocks only once its measured false-positive rate is under <strong>5%</strong>.</p></div>
+    </div>
+  </section>
 
-  <h2 class="sheet-h">In the open</h2>
-  <div class="sheet">
-    <a class="row" href="secmcphub.html"><span class="k">2026</span><span><span class="t">SecMCPHub<span class="arrow">→</span></span><span class="d">A security business review that writes itself, over MCP.</span></span><span class="v">case study</span></a>
-    <a class="row" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener"><span class="k">2025</span><span><span class="t">Ash Semgrep rules<span class="arrow">↗</span></span><span class="d">Seven rules that catch Ash Framework authorization gaps, from missing policies to jobs with no actor.</span></span><span class="v">GitHub</span></a>
-    <a class="row" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener"><span class="k">2023</span><span><span class="t">Elixir secure coding<span class="arrow">↗</span></span><span class="d">Top contributor to Podium’s open, enterprise-oriented curriculum.</span></span><span class="v">GitHub</span></a>
-    <div class="row"><span class="k">2019–2020</span><span><span class="t">Brumby Code Checker</span><span class="d">Redundancy scanner for C++, Java, and Ada, with Rowan and ASRC Federal for Lockheed Martin systems.</span></span><span class="v">Rowan</span></div>
-  </div>
+  <section class="sx" id="order" aria-labelledby="order-h">
+    <h2 class="sheet-h" id="order-h">Build order</h2>
+    <p class="sx-why">Order matters more than calendar. Each stop needs the one before it.</p>
+    <ol class="track">
+      <li><span class="st">Foundation</span><span class="sd">SAST in advisory mode, auto-merged patches, a default threat modeler</span></li>
+      <li><span class="st">Promotion</span><span class="sd">First rules to the Comment tier, the first paved-road library</span></li>
+      <li><span class="st">Depth + AI</span><span class="sd">AI as PR commenter, a private bug bounty, the metrics dashboard</span></li>
+      <li><span class="st">Design</span><span class="sd">Security champions, a pattern library, Comment → Block promotions</span></li>
+      <li><span class="st">Maturity</span><span class="sd">Three tiers with the AI filter, a public bounty, enforced libraries</span></li>
+    </ol>
+    <p class="build-note">From <a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Building an Application Security Program That Actually Works ↗</a></p>
+  </section>
 
-  <h2 class="sheet-h">One of the rules</h2>
-  <pre class="code" aria-label="Semgrep rule ash-changeset-missing-actor">rules:
-  - id: ash-changeset-missing-actor
-    languages: [elixir]
-    severity: HIGH
-    message: &gt;
+  <section class="sx" id="roles" aria-labelledby="roles-h">
+    <h2 class="sheet-h" id="roles-h">Where it was built</h2>
+    <p class="sx-why">Five teams, from a state fusion center to a public company.</p>
+    <ol class="spine">
+      <li class="now"><span class="when">2026 – now</span><div><h3>WeightWatchers</h3><p>Senior Product Security Engineer. Rebuilding product security from a compliance function into an engineering one.</p></div><span class="scope">now</span></li>
+      <li><span class="when">2023–2026</span><div><h3>Thirty Madison → Remedy Meds</h3><p>Three years building security for Nurx, Keeps, and Cove, telehealth for over a million people, through the $650M exit. When Remedy Meds acquired Thirty Madison, stayed on as the founding security team: product security, corporate security, and privacy.</p></div><span class="scope">founding team</span></li>
+      <li><span class="when">2021–2023</span><div><h3>Podium</h3><p>Secured payments from proof of concept to billions in payment volume, and built the product security team for about 200 engineers, through the $201M Series D.</p></div><span class="scope">~200 engineers</span></li>
+      <li><span class="when">2019–2021</span><div><h3>TD</h3><p>Enterprise security across global corporate and investment banking, full-time from 2020; a summer on the US consumer bank’s cyber risk team in 2019.</p></div><span class="scope">bank</span></li>
+      <li><span class="when">2018</span><div><h3>New Jersey State Police</h3><p>Network engineering intern at the Regional Operations &amp; Intelligence Center, the state’s fusion center.</p></div><span class="scope">intern</span></li>
+    </ol>
+  </section>
+
+  <section class="sx" id="open" aria-labelledby="open-h">
+    <h2 class="sheet-h" id="open-h">In the open</h2>
+    <p class="sx-why">Work anyone can read, run, or fork.</p>
+    <div class="opens">
+      <a class="open" href="secmcphub.html"><span class="ok">2026 · case study</span><h3>SecMCPHub <span class="arrow" aria-hidden="true">→</span></h3><p>A monthly security review that writes itself, over MCP.</p></a>
+      <a class="open" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener"><span class="ok">2025 · GitHub</span><h3>Ash Semgrep rules <span class="arrow" aria-hidden="true">↗</span></h3><p>Seven rules that catch Ash Framework authorization gaps, from missing policies to jobs with no actor.</p></a>
+      <a class="open" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener"><span class="ok">2023 · GitHub</span><h3>Elixir secure coding <span class="arrow" aria-hidden="true">↗</span></h3><p>Top contributor to Podium’s open secure-coding curriculum.</p></a>
+    </div>
+    <p class="open-foot">Earlier: <b>Brumby Code Checker</b>, a redundancy scanner for C++, Java, and Ada, built at Rowan with ASRC Federal for Lockheed Martin systems (2019–2020).</p>
+
+    <div class="rule">
+      <div class="rule-say">
+        <span class="ok">one of the seven</span>
+        <h3>A query with no one behind it</h3>
+        <p>An Ash changeset or query built without a real <code>actor:</code> runs outside policy enforcement. The rule flags every call site that forgets it, and stays quiet when the actor is there.</p>
+        <a class="rule-link" href="https://github.com/stilwellc/ash-semgrep-rules/blob/main/ash-changeset-missing-actor.yaml" target="_blank" rel="noopener">ash-changeset-missing-actor.yaml ↗</a>
+      </div>
+      <pre class="code rule-code" tabindex="0" aria-label="Semgrep rule ash-changeset-missing-actor"><span class="yk">rules:</span>
+  - <span class="yk">id:</span> ash-changeset-missing-actor
+    <span class="yk">languages:</span> [elixir]
+    <span class="yk">severity:</span> <span class="yh">HIGH</span>
+    <span class="yk">message:</span> &gt;
       Ash changeset or query executed without a valid `actor:` context.
       Nil or placeholder actors may bypass policy enforcement.
-    patterns:
-      - pattern-either:
-          - pattern: Ash.Changeset.for_$ACTION($RESOURCE, $INPUT)
-          - pattern: Ash.Query.for_read($RESOURCE, $ACTION)
-      - pattern-not: Ash.Changeset.for_$ACTION($RESOURCE, $INPUT, actor: ($ACTOR &amp; !nil))
-      - pattern-not: Ash.Query.for_read($RESOURCE, $ACTION, actor: ($ACTOR &amp; !nil))</pre>
-  <p class="rule-cap">Catches an Ash changeset or query built without a real <code>actor:</code>, which runs outside policy enforcement. From <a href="https://github.com/stilwellc/ash-semgrep-rules/blob/main/ash-changeset-missing-actor.yaml" target="_blank" rel="noopener">ash-changeset-missing-actor.yaml ↗</a>, metadata trimmed.</p>
+    <span class="yk">patterns:</span>
+      - <span class="yk">pattern-either:</span>
+          - <span class="yk">pattern:</span> <span class="yp">Ash.Changeset.for_$ACTION($RESOURCE, $INPUT)</span>
+          - <span class="yk">pattern:</span> <span class="yp">Ash.Query.for_read($RESOURCE, $ACTION)</span>
+      - <span class="yk">pattern-not:</span> <span class="yn">Ash.Changeset.for_$ACTION($RESOURCE, $INPUT, actor: ($ACTOR &amp; !nil))</span>
+      - <span class="yk">pattern-not:</span> <span class="yn">Ash.Query.for_read($RESOURCE, $ACTION, actor: ($ACTOR &amp; !nil))</span></pre>
+    </div>
+  </section>
 
   <div class="cta">
     <a class="pill solid" href="resume.html">Résumé</a>
     <a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a class="pill ghost" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Read the essay ↗</a>
   </div>
 </main>
 <footer class="foot">
@@ -127,7 +172,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790225566"></script>
-<script src="site.js?v=1790225566"></script>
+<script src="assets/engine.js?v=1790226028"></script>
+<script src="site.js?v=1790226028"></script>
 </body>
 </html>
