@@ -537,6 +537,7 @@ footer.foot .ape.roar { animation: ape-roar .8s var(--ease); }
 .egg-tick span { display: inline-block; padding-right: 2em; animation: egg-tick 9s linear infinite; }
 @keyframes egg-tick { to { transform: translateX(-100%); } }
 .egg-rain { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.egg-banana { line-height: 1; }
 .egg-head { position: absolute; top: -120px; animation-name: egg-fall; animation-timing-function: cubic-bezier(.3, .1, .7, 1); animation-fill-mode: both; filter: drop-shadow(0 4px 6px rgba(22,22,22,0.25)); }
 @keyframes egg-fall { from { transform: translateY(0) rotate(0); } to { transform: translateY(120vh) rotate(var(--spin, 540deg)); } }
 .egg-kong { position: fixed; left: 50%; bottom: 0; z-index: 75; transform: translate(-50%, 104%); transition: transform 1.3s cubic-bezier(.2, .9, .2, 1.1); pointer-events: none; }

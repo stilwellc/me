@@ -744,9 +744,11 @@ function leave(href) {
   function heads(n) {
     var frag = document.createDocumentFragment();
     for (var i = 0; i < n; i++) {
-      var im = document.createElement('img'); im.src = 'assets/ape.svg'; im.alt = ''; im.className = 'egg-head';
+      var banana = Math.random() < 0.45, im;
+      if (banana) { im = document.createElement('span'); im.textContent = '\uD83C\uDF4C'; im.className = 'egg-head egg-banana'; }
+      else { im = document.createElement('img'); im.src = 'assets/ape.svg'; im.alt = ''; im.className = 'egg-head'; }
       var size = 22 + Math.random() * 64;
-      im.style.cssText = 'left:' + (Math.random() * 100) + 'vw;width:' + size + 'px;animation-delay:' + (Math.random() * 2.4) + 's;animation-duration:' + (2.2 + Math.random() * 2.2) + 's;--spin:' + ((Math.random() > 0.5 ? 1 : -1) * (360 + Math.random() * 720)) + 'deg';
+      im.style.cssText = 'left:' + (Math.random() * 100) + 'vw;' + (banana ? 'font-size:' + size + 'px;' : 'width:' + size + 'px;') + 'animation-delay:' + (Math.random() * 2.4) + 's;animation-duration:' + (2.2 + Math.random() * 2.2) + 's;--spin:' + ((Math.random() > 0.5 ? 1 : -1) * (360 + Math.random() * 720)) + 'deg';
       frag.appendChild(im);
     }
     var box = document.createElement('div'); box.className = 'egg-rain'; box.setAttribute('aria-hidden', 'true'); box.appendChild(frag); document.body.appendChild(box); return box;
@@ -770,7 +772,7 @@ function leave(href) {
     } else {
       body.classList.add('quake'); at(900, function () { body.classList.remove('quake'); });
       at(150, function () { tick.classList.add('in'); });
-      at(400, function () { rain = heads(innerWidth < 640 ? 22 : 44); });
+      at(400, function () { rain = heads(innerWidth < 640 ? 34 : 70); });
       at(1400, function () { kong.classList.add('up'); });
       at(3600, function () {
         // eaten: the page shrinks into the mouth
