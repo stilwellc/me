@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>text2print — a case study — Collin Stilwell</title>
+<meta name="description" content="text2print: a Claude Code skill that turns a sentence into a print-ready model, with four gates and a slicer check before anything is delivered.">
+<meta property="og:title" content="text2print — a case study — Collin Stilwell">
+<meta property="og:description" content="text2print: a Claude Code skill that turns a sentence into a print-ready model, with four gates and a slicer check before anything is delivered.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://stilwellc.github.io/me/text2print.html">
+<meta property="og:image" content="https://stilwellc.github.io/me/assets/og/text2print.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://stilwellc.github.io/me/assets/og/text2print.png">
+<link rel="canonical" href="https://stilwellc.github.io/me/text2print.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23161616'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-size='13' fill='%23FCFBFA'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css?v=1790209375">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="mast">
+  <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
+  <nav aria-label="Site"><a class="pill on" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="github.html">GitHub</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+</header>
+<main id="main" class="page cs">
+  <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.45" data-text="text2print" data-src="assets/physical/prints/ape/hero.jpg" aria-label="The sofubi ape bust, decoded into the word text2print" role="img"></canvas><span class="hint">click to replay · picture → text</span></div>
+  <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">text2print on GitHub ↗</a></p>
+  <h1 class="display rv d1">Describe a thing.<br>Get a file the printer accepts.</h1>
+  <p class="lede rv d2">text2print is a Claude Code skill that turns a sentence into CadQuery code, checks the result the way a printer would, and refuses to hand over a model until four gates have been passed. The sofubi ape bust and the wave panel behind the desk both came out of it.</p>
+
+  <div class="facts rv d3">
+    <div><div class="n">10</div><div class="l">phases<span class="sub">requirements → delivered</span></div></div>
+    <div><div class="n">4</div><div class="l">gates<span class="sub">nothing prints without a yes</span></div></div>
+    <div><div class="n">6</div><div class="l">material profiles<span class="sub">PLA · PETG · ABS · ASA · TPU · PA-CF</span></div></div>
+    <div><div class="n">0</div><div class="l">islands on the ape’s five shells<span class="sub">printcheck, every layer</span></div></div>
+  </div>
+
+  <section class="sec">
+    <div class="k">the problem</div>
+    <div>
+      <h2>CAD is where objects stall.</h2>
+      <p>Most things I want to print are simple to say and slow to model: a replacement foot for a table, a sconce that is its own diffuser, a relief panel that has to print in tiles. The slow part is not the idea, it is the hour in a modeller and the two failed prints after it. The skill exists so the sentence is the input and a verified file is the output.</p>
+      <p>Verified is the word that matters. A model that looks right on screen and fails on the bed is worse than no model, so every phase is checked before the next one starts, and the last check is the slicer itself.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="k">the build</div>
+    <div>
+      <h2>One skill, four modes, ten phases.</h2>
+      <p>A new design walks from requirements through a repository search, real-world dimensions and a design brief before any geometry exists. Then a phased build: base shape, features, a structural pass that checks fill ratio, wall thickness, cantilevers and steep overhangs against the material’s rules, and a finishing pass. The other three modes start from an existing STL: use it as reference, fix its overhangs with a ray-cast ceiling map and a manifold fill, or audit it for printability.</p>
+      <div class="stage">
+        <div><div class="t">brief</div><div class="d">requirements · repo search · dimensions · design brief</div></div>
+        <div><div class="t">build</div><div class="d">base shape · features · structural pass · finish</div></div>
+        <div><div class="t">verify</div><div class="d">printcheck · overhangs · PrusaSlicer, headless</div></div>
+      </div>
+      <p>The rules live in the skill as tables, twelve of them: material profiles with shrinkage and bridge limits, clearance and press fits per material, snap-arm geometry with strain limits, living hinges, print-in-place joints, minimum feature sizes, heat-insert and screw dimensions, board mounting patterns, and structural rules for cantilevers and thin walls. The code reads the table instead of guessing.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="k">the run</div>
+    <div>
+      <h2>A studio that watches the folder.</h2>
+      <p>A single-file Flask app on port 7384 watches the working directory for STLs, renders and a state file, and streams changes to the browser. It shows the model on a 256 mm print plate with its dimensions and triangle count, the ten-phase rail, the render gallery, the parameter table, the slicer report and the activity log. Every STL the skill exports appears there within half a second.</p>
+      <figure class="plate wide"><img src="assets/physical/text2print/studio.png" width="1600" height="1000" alt="The text2print studio: pipeline rail on the left, a verification banner asking to approve phase two, and a bowl on the print plate" loading="lazy"><figcaption>The studio · phase 2 gate, waiting for a yes</figcaption></figure>
+      <p>The gates are the point of the studio. At <b>design-brief</b>, <b>phase-1-base</b>, <b>phase-2-features</b> and <b>final-review</b> the skill writes the question into the state file, the studio shows an approve-or-change banner, and a background watcher waits up to thirty minutes for the click. The skill cannot proceed past a gate on its own; a change request comes back as a note and the phase is redone.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="k">the proof</div>
+    <div>
+      <h2>Checked the way the printer would.</h2>
+      <p><b>printcheck</b> slices the mesh every 0.4 mm and looks for islands, material with nothing under it, which are fatal. It measures overhang area past a 50° slope, first-layer contact and features thinner than 0.9 mm, and reports island positions in world coordinates so they can be found on the part. <b>overhangs</b> measures steep exterior faces only, probing 1.5 mm along each normal to exclude inner skins, because a naive count of every steep face cried wolf on hollow parts.</p>
+      <p>Then the real slicer. PrusaSlicer runs headless with named profiles, a 0.4 mm nozzle at 0.16 mm layers for the bust, 0.08 mm for the eye plugs, a 0.8 mm nozzle at 0.32 mm for the wave tiles, and its log is read for warnings. A control test proved the log is worth reading: a deliberately floating pin trips “Floating object part, Loose extrusions”, so a clean log means something.</p>
+      <div class="pairs">
+        <figure class="plate"><img src="assets/physical/prints/ape/front.jpg" width="1200" height="750" alt="The sofubi ape bust, straight on" loading="lazy"><figcaption>The bust · front</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/prints/ape/profile.jpg" width="1200" height="750" alt="The sofubi ape bust in profile" loading="lazy"><figcaption>The bust · profile</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/prints/ape/mouth.jpg" width="1200" height="750" alt="The mouth: curved canines and incisors on gum pads" loading="lazy"><figcaption>Fang plugs and incisors</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/prints/ape/face-part.png" width="1200" height="750" alt="The face shell in print orientation, on its back, with pin bosses and ribs" loading="lazy"><figcaption>The face shell · print orientation</figcaption></figure>
+      </div>
+      <p>The ape is the hardest thing it has produced: a six-inch kaiju bust sculpted as a signed-distance field on a 0.5 mm grid, hollowed to a 2 mm wall with an exact distance transform, and split into five shells at the base ring and the skull’s widest line, with pins, ribs and a chamfer at every seam. Horns, fangs and eyes print as separate plugs at finer layers. All five shells are watertight and pass printcheck with zero islands.</p>
+      <ul>
+        <li><span>Bust</span><span class="v">150 × 165 × 161 mm · 2.7 M triangles</span></li>
+        <li><span>Filament</span><span class="v">≈370 g PLA+ across 26 parts · ≈52 h</span></li>
+        <li><span>Wave panel</span><span class="v">12 tiles · 2,000 g · ≈51 h · 0 supports</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="k">the design call</div>
+    <div>
+      <h2>Sculpt in a field, split with a plane.</h2>
+      <p>Organic shapes fight constructive solid geometry, so the bust is a field: every feature is a distance function blended into the last, and the mesh is only extracted at the end. Hollowing is a distance transform of that field, which is exact where offsetting a mesh is not. The split is a plane through the same field, so the two halves share a surface to the voxel, and the seams are butt joints with pins rather than tongue-and-groove, which halved bed contact and went non-manifold when tried.</p>
+      <p>Most of what was learned is what a shape reads as at six inches. Hashed fur read as scales and shed eight hundred crumbs in the slicer, so it became a continuous raked shingle. Rimmed eyes read as goggles. Puck ears read as headphones. Brow furrows read as cassette slots. The rule that came out of it: at toy scale, one clear idea per feature, and the detail goes into the small areas a printer can actually hold.</p>
+      <ul>
+        <li><span>Language</span><span class="v">Python 3.10–3.12 · CadQuery · trimesh · manifold3d</span></li>
+        <li><span>Runtime</span><span class="v">Claude Code skill · PrusaSlicer CLI</span></li>
+        <li><span>Published</span><span class="v">February 2026 · MIT · 61 commits</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="pill solid" href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">Open the repo ↗</a>
+    <a class="pill ghost" href="prints.html">3D prints</a>
+    <a class="pill ghost" href="digital.html">Digital</a>
+  </div>
+</main>
+<footer class="foot">
+  <span class="col">© 2026 Collin Stilwell · Hoboken, NJ</span>
+  <span class="links"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
+  <span class="build"><a href="colophon.html">hand-built · no framework</a></span>
+</footer>
+<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="pal-box">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… digital, physical, security, writing, github, about, résumé" autocomplete="off" spellcheck="false">
+    <ul id="pal-list"></ul>
+    <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
+  </div>
+</div>
+<div class="keys" id="keys" hidden role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+  <div class="keys-box">
+    <div class="keys-h">Shortcuts</div>
+    <div class="keys-grid"></div>
+  </div>
+</div>
+<script src="site.js?v=1790209375"></script>
+</body>
+</html>

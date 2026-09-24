@@ -493,3 +493,16 @@ html { scroll-padding-top: 4.5rem; }
 @media (max-width: 760px) { .stage.four { grid-template-columns: repeat(2, minmax(0,1fr)); } .stage.four > div:nth-child(2n) { border-right: 0; } .stage.four > div { border-bottom: 1px solid var(--hair); } .stage.four > div:nth-last-child(-n+2) { border-bottom: 0; } }
 body figure.plate.print figcaption b .arrow { margin-left: 0.25em; color: var(--ink-3); display: inline-block; transition: transform 160ms ease; }
 body a.plate.print:hover figcaption b .arrow { transform: translateX(3px); }
+/* the wave tiles in 3D: a canvas that takes the plate's place */
+body figure.plate .v3d { position: relative; width: 100%; aspect-ratio: 16 / 10; border: 1px solid var(--hair-2); border-radius: 12px; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); overflow: hidden; touch-action: none; }
+body figure.plate .v3d canvas { display: block; width: 100% !important; height: 100% !important; cursor: grab; }
+body figure.plate .v3d canvas:active { cursor: grabbing; }
+body figure.plate .v3d .v3d-state { position: absolute; left: 12px; bottom: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-3); }
+body figure.plate.is-3d > img { display: none; }
+body .wave-ctl .pill.on { background: var(--pill); color: var(--pill-ink); border-color: var(--pill); }
+/* colophon playground */
+body figure.plate.play-plate canvas { display: block; width: 100%; height: clamp(220px, 34vh, 420px); border: 1px solid var(--hair); border-radius: 10px; background: color-mix(in srgb, var(--ink) 2.5%, transparent); }
+body .play-ctl input[type=text] { font: inherit; font-family: var(--mono); font-size: 12.5px; color: var(--ink); background: var(--ground); border: 1px solid var(--hair-2); border-radius: 999px; padding: 6px 12px; width: 11em; }
+body .play-ctl input[type=text]:focus { outline: 1.5px solid var(--ink); outline-offset: 2px; }
+body .play-ctl .pill.file { cursor: pointer; position: relative; overflow: hidden; }
+body .play-ctl .pill.file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }

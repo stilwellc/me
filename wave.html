@@ -18,7 +18,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790207602">
+<link rel="stylesheet" href="site.css?v=1790209375">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <style>
   .cap-note { max-width: var(--col); margin: 0.9rem auto 1.6rem; color: var(--ink-2); font-size: 15.5px; line-height: 1.55; text-align: left; text-wrap: pretty; }
@@ -93,7 +93,7 @@
     <img id="tile-img" loading="lazy" decoding="async" width="1200" height="750" src="assets/physical/wave/tasteful/r0_c0.jpg" alt="Selected tile render">
     <figcaption id="tile-cap">r0 · c0 · 276 KB</figcaption>
   </figure>
-  <div class="wave-ctl"><a class="pill mono" id="tile-dl" href="assets/physical/wave/tasteful/wave_tile_r0_c0.stl" download>Download STL</a></div>
+  <div class="wave-ctl"><button class="pill mono" type="button" id="tile-3d" aria-pressed="false">View in 3D</button><button class="pill mono" type="button" id="run-3d" aria-pressed="false">Full run in 3D</button><a class="pill mono" id="tile-dl" href="assets/physical/wave/tasteful/wave_tile_r0_c0.stl" download>Download STL</a></div>
 
   <h2 class="sheet-h">Earlier builds</h2>
   <p class="cap-note">The same wave, printed three ways. These two are kept because the reasons they lost are the design argument: filament cost first, then the way the slats read.</p>
@@ -103,18 +103,19 @@
       <h3 class="eb-t">First cut</h3>
       <p class="eb-w">Twenty solid slats a tile, closest to the reference panel and the reason the project nearly stopped: roughly 6 kg of filament, and fins thin enough to snap on the way to the wall.</p>
       <div class="sheet kv"><div class="row"><span class="k">run</span><span class="t">50 × 20 in · 5 × 2 tiles of 250 mm</span></div><div class="row"><span class="k">slats</span><span class="t">20 per tile · 12.5 mm pitch · 3.6 → 2.4 mm solid</span></div><div class="row"><span class="k">print</span><span class="t">0.4 mm nozzle · full back plate · ≈ 6 kg</span></div></div>
-      <div class="wave-ctl"><label>Tile <select data-role="sel"><option value="-1">Full run</option><option value="0">r0 c0</option><option value="1">r0 c1</option><option value="2">r0 c2</option><option value="3">r0 c3</option><option value="4">r0 c4</option><option value="5">r1 c0</option><option value="6">r1 c1</option><option value="7">r1 c2</option><option value="8">r1 c3</option><option value="9">r1 c4</option></select></label><a class="pill mono" data-role="dl" href="#" aria-disabled="true" download>Download STL</a></div>
+      <div class="wave-ctl"><label>Tile <select data-role="sel"><option value="-1">Full run</option><option value="0">r0 c0</option><option value="1">r0 c1</option><option value="2">r0 c2</option><option value="3">r0 c3</option><option value="4">r0 c4</option><option value="5">r1 c0</option><option value="6">r1 c1</option><option value="7">r1 c2</option><option value="8">r1 c3</option><option value="9">r1 c4</option></select></label><button class="pill mono" type="button" data-role="v3d" aria-pressed="false">3D</button><a class="pill mono" data-role="dl" href="#" aria-disabled="true" download>Download STL</a></div>
     </div>
     <div class="eb wave-view" data-build="light">
       <figure class="plate"><img data-role="img" loading="lazy" decoding="async" src="assets/physical/wave/light/run.jpg" alt="Lightweight build, full run"><figcaption data-role="cap">Full run · 10 tiles</figcaption></figure>
       <h3 class="eb-t">Lighter</h3>
       <p class="eb-w">Chunky hollow fins in place of thin solid ones, which answered both the brittleness and the cost. Still 2.8 kg, and the slats read as a fence more than a wave.</p>
       <div class="sheet kv"><div class="row"><span class="k">run</span><span class="t">50 × 20 in · 5 × 2 tiles of 250 mm</span></div><div class="row"><span class="k">slats</span><span class="t">14 per tile · 17.9 mm pitch · 6 → 4.5 mm hollow</span></div><div class="row"><span class="k">print</span><span class="t">0.4 mm nozzle · 2 walls · 15% · ≈ 2.8 kg</span></div></div>
-      <div class="wave-ctl"><label>Tile <select data-role="sel"><option value="-1">Full run</option><option value="0">r0 c0</option><option value="1">r0 c1</option><option value="2">r0 c2</option><option value="3">r0 c3</option><option value="4">r0 c4</option><option value="5">r1 c0</option><option value="6">r1 c1</option><option value="7">r1 c2</option><option value="8">r1 c3</option><option value="9">r1 c4</option></select></label><a class="pill mono" data-role="dl" href="#" aria-disabled="true" download>Download STL</a></div>
+      <div class="wave-ctl"><label>Tile <select data-role="sel"><option value="-1">Full run</option><option value="0">r0 c0</option><option value="1">r0 c1</option><option value="2">r0 c2</option><option value="3">r0 c3</option><option value="4">r0 c4</option><option value="5">r1 c0</option><option value="6">r1 c1</option><option value="7">r1 c2</option><option value="8">r1 c3</option><option value="9">r1 c4</option></select></label><button class="pill mono" type="button" data-role="v3d" aria-pressed="false">3D</button><a class="pill mono" data-role="dl" href="#" aria-disabled="true" download>Download STL</a></div>
     </div>
   </div>
 
   <div class="cta"><a class="pill solid" href="1122.html">Project 1122</a><a class="pill ghost" href="prints.html">3D prints</a></div>
+<script src="assets/wave3d.js?v=4"></script>
 <script>
 (function () {
   var TILES = {"v1": [{"id": "r0_c0", "stl": "assets/physical/wave/v1/wave_tile_r0_c0.stl", "img": "assets/physical/wave/v1/r0_c0.jpg", "kb": 533}, {"id": "r0_c1", "stl": "assets/physical/wave/v1/wave_tile_r0_c1.stl", "img": "assets/physical/wave/v1/r0_c1.jpg", "kb": 521}, {"id": "r0_c2", "stl": "assets/physical/wave/v1/wave_tile_r0_c2.stl", "img": "assets/physical/wave/v1/r0_c2.jpg", "kb": 461}, {"id": "r0_c3", "stl": "assets/physical/wave/v1/wave_tile_r0_c3.stl", "img": "assets/physical/wave/v1/r0_c3.jpg", "kb": 533}, {"id": "r0_c4", "stl": "assets/physical/wave/v1/wave_tile_r0_c4.stl", "img": "assets/physical/wave/v1/r0_c4.jpg", "kb": 533}, {"id": "r1_c0", "stl": "assets/physical/wave/v1/wave_tile_r1_c0.stl", "img": "assets/physical/wave/v1/r1_c0.jpg", "kb": 511}, {"id": "r1_c1", "stl": "assets/physical/wave/v1/wave_tile_r1_c1.stl", "img": "assets/physical/wave/v1/r1_c1.jpg", "kb": 520}, {"id": "r1_c2", "stl": "assets/physical/wave/v1/wave_tile_r1_c2.stl", "img": "assets/physical/wave/v1/r1_c2.jpg", "kb": 533}, {"id": "r1_c3", "stl": "assets/physical/wave/v1/wave_tile_r1_c3.stl", "img": "assets/physical/wave/v1/r1_c3.jpg", "kb": 533}, {"id": "r1_c4", "stl": "assets/physical/wave/v1/wave_tile_r1_c4.stl", "img": "assets/physical/wave/v1/r1_c4.jpg", "kb": 533}], "light": [{"id": "r0_c0", "stl": "assets/physical/wave/light/wave_tile_r0_c0.stl", "img": "assets/physical/wave/light/r0_c0.jpg", "kb": 428}, {"id": "r0_c1", "stl": "assets/physical/wave/light/wave_tile_r0_c1.stl", "img": "assets/physical/wave/light/r0_c1.jpg", "kb": 420}, {"id": "r0_c2", "stl": "assets/physical/wave/light/wave_tile_r0_c2.stl", "img": "assets/physical/wave/light/r0_c2.jpg", "kb": 378}, {"id": "r0_c3", "stl": "assets/physical/wave/light/wave_tile_r0_c3.stl", "img": "assets/physical/wave/light/r0_c3.jpg", "kb": 428}, {"id": "r0_c4", "stl": "assets/physical/wave/light/wave_tile_r0_c4.stl", "img": "assets/physical/wave/light/r0_c4.jpg", "kb": 428}, {"id": "r1_c0", "stl": "assets/physical/wave/light/wave_tile_r1_c0.stl", "img": "assets/physical/wave/light/r1_c0.jpg", "kb": 412}, {"id": "r1_c1", "stl": "assets/physical/wave/light/wave_tile_r1_c1.stl", "img": "assets/physical/wave/light/r1_c1.jpg", "kb": 419}, {"id": "r1_c2", "stl": "assets/physical/wave/light/wave_tile_r1_c2.stl", "img": "assets/physical/wave/light/r1_c2.jpg", "kb": 428}, {"id": "r1_c3", "stl": "assets/physical/wave/light/wave_tile_r1_c3.stl", "img": "assets/physical/wave/light/r1_c3.jpg", "kb": 428}, {"id": "r1_c4", "stl": "assets/physical/wave/light/wave_tile_r1_c4.stl", "img": "assets/physical/wave/light/r1_c4.jpg", "kb": 428}], "tasteful": [{"id": "r0_c0", "stl": "assets/physical/wave/tasteful/wave_tile_r0_c0.stl", "img": "assets/physical/wave/tasteful/r0_c0.jpg", "kb": 276}, {"id": "r0_c1", "stl": "assets/physical/wave/tasteful/wave_tile_r0_c1.stl", "img": "assets/physical/wave/tasteful/r0_c1.jpg", "kb": 299}, {"id": "r0_c2", "stl": "assets/physical/wave/tasteful/wave_tile_r0_c2.stl", "img": "assets/physical/wave/tasteful/r0_c2.jpg", "kb": 299}, {"id": "r0_c3", "stl": "assets/physical/wave/tasteful/wave_tile_r0_c3.stl", "img": "assets/physical/wave/tasteful/r0_c3.jpg", "kb": 299}, {"id": "r0_c4", "stl": "assets/physical/wave/tasteful/wave_tile_r0_c4.stl", "img": "assets/physical/wave/tasteful/r0_c4.jpg", "kb": 299}, {"id": "r0_c5", "stl": "assets/physical/wave/tasteful/wave_tile_r0_c5.stl", "img": "assets/physical/wave/tasteful/r0_c5.jpg", "kb": 275}, {"id": "r1_c0", "stl": "assets/physical/wave/tasteful/wave_tile_r1_c0.stl", "img": "assets/physical/wave/tasteful/r1_c0.jpg", "kb": 273}, {"id": "r1_c1", "stl": "assets/physical/wave/tasteful/wave_tile_r1_c1.stl", "img": "assets/physical/wave/tasteful/r1_c1.jpg", "kb": 299}, {"id": "r1_c2", "stl": "assets/physical/wave/tasteful/wave_tile_r1_c2.stl", "img": "assets/physical/wave/tasteful/r1_c2.jpg", "kb": 299}, {"id": "r1_c3", "stl": "assets/physical/wave/tasteful/wave_tile_r1_c3.stl", "img": "assets/physical/wave/tasteful/r1_c3.jpg", "kb": 299}, {"id": "r1_c4", "stl": "assets/physical/wave/tasteful/wave_tile_r1_c4.stl", "img": "assets/physical/wave/tasteful/r1_c4.jpg", "kb": 299}, {"id": "r1_c5", "stl": "assets/physical/wave/tasteful/wave_tile_r1_c5.stl", "img": "assets/physical/wave/tasteful/r1_c5.jpg", "kb": 274}]};
@@ -138,11 +139,27 @@
       });
     });
     pick(0);
+    // 3D: the tile that is lit, or the whole run laid out on its grid
+    var fig = img.closest('figure'), v = new Wave3D.Viewer(fig, 'tasteful'), b1 = document.getElementById('tile-3d'), b2 = document.getElementById('run-3d'), mode = '', cur = 0;
+    var set = function (m) {
+      mode = m; b1.setAttribute('aria-pressed', m === 'tile'); b2.setAttribute('aria-pressed', m === 'run'); b1.classList.toggle('on', m === 'tile'); b2.classList.toggle('on', m === 'run');
+      if (!m) { v.hide(); return; }
+      if (m === 'tile') { v.show([TILES.tasteful[cur]]); pick0(cur); } else { v.show(TILES.tasteful); cap.textContent = 'full run \u00b7 twelve tiles \u00b7 3.5 MB'; }
+      fig.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    };
+    b1.addEventListener('click', function () { set(mode === 'tile' ? '' : 'tile'); });
+    b2.addEventListener('click', function () { set(mode === 'run' ? '' : 'run'); });
+    var pick0 = pick; pick = function (i) { pick0(i); cur = i; if (mode === 'tile') v.show([TILES.tasteful[i]]); };
+    cells.forEach(function (c) { c.addEventListener('click', function () { cur = +c.dataset.tile; if (mode === 'tile') v.show([TILES.tasteful[cur]]); }); });
   }
   // the two earlier builds keep a small select of their own
   document.querySelectorAll('.wave-view').forEach(function (v) {
     var key = v.dataset.build, i2 = v.querySelector('[data-role=img]'), c2 = v.querySelector('[data-role=cap]'),
         sel = v.querySelector('[data-role=sel]'), d2 = v.querySelector('[data-role=dl]'), run = i2.getAttribute('src');
+    var fig2 = i2.closest('figure'), v2 = new Wave3D.Viewer(fig2, key), b3 = v.querySelector('[data-role=v3d]'), on3 = false;
+    var show3 = function () { var i = parseInt(sel.value, 10); v2.show(i < 0 ? TILES[key] : [TILES[key][i]]); };
+    b3.addEventListener('click', function () { on3 = !on3; b3.setAttribute('aria-pressed', on3); b3.classList.toggle('on', on3); if (on3) show3(); else v2.hide(); });
+    sel.addEventListener('change', function () { if (on3) show3(); });
     sel.addEventListener('change', function () {
       var i = parseInt(sel.value, 10);
       if (i < 0) { i2.src = run; c2.textContent = 'Full run \u00b7 ' + TILES[key].length + ' tiles'; d2.setAttribute('aria-disabled', 'true'); d2.removeAttribute('href'); return; }
@@ -156,7 +173,7 @@
 <footer class="foot">
   <span class="col">© 2026 Collin Stilwell · Hoboken, NJ</span>
   <span class="links"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github</a> · <a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin</a> · <a href="resume.html">résumé</a></span>
-  <span class="build">hand-built · no framework</span>
+  <span class="build"><a href="colophon.html">hand-built · no framework</a></span>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
@@ -171,6 +188,6 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="site.js?v=1790207602"></script>
+<script src="site.js?v=1790209375"></script>
 </body>
 </html>
