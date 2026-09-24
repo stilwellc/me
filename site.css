@@ -571,9 +571,10 @@ footer.foot .foot-meta { display: flex; flex-wrap: wrap; justify-content: space-
 footer.foot .foot-copy { color: var(--ink-3); }
 footer.foot .foot-build { color: var(--ink-3); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
 footer.foot .foot-build:hover { color: var(--ink); text-decoration-color: var(--ink-3); }
-footer.foot .ape { position: relative; display: block; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .25s var(--ease), filter .25s ease, opacity .25s ease; transform-origin: 50% 85%; opacity: 0.82; filter: saturate(0.85); }
+footer.foot .ape { position: relative; display: block; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .25s var(--ease), filter .25s ease, opacity .25s ease; transform-origin: 50% 85%; opacity: 0.78; filter: grayscale(1); }
 footer.foot .ape img { display: block; width: 100%; height: 100%; }
-footer.foot .ape:hover { transform: translateY(-3px) scale(1.12) rotate(-4deg); opacity: 1; filter: saturate(1) drop-shadow(0 4px 6px rgba(22,22,22,0.22)); }
+footer.foot .ape:hover { transform: translateY(-3px) scale(1.12) rotate(-4deg); opacity: 1; filter: grayscale(1) drop-shadow(0 4px 6px rgba(22,22,22,0.22)); }
+:root.egg footer.foot .ape, :root.egg footer.foot .ape:hover { opacity: 1; filter: grayscale(0) drop-shadow(0 4px 6px rgba(22,22,22,0.22)); }
 /* desktop: row one is the map and the outbound links; row two, under its own hairline, is the colophon line with the ape at the right edge */
 @media (min-width: 761px) {
   footer.foot .foot-in { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-rows: auto auto; grid-template-areas: "map map map" "meta out ape"; align-items: center; column-gap: 2.5rem; }
