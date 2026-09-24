@@ -741,6 +741,23 @@ function leave(href) {
       setTimeout(function () { ac.close(); }, 2500);
     } catch (e) {}
   }
+  function chomp(ac, t) {
+    var buf = ac.createBuffer(1, ac.sampleRate * 0.12, ac.sampleRate), d = buf.getChannelData(0); for (var j = 0; j < d.length; j++) d[j] = (Math.random() * 2 - 1) * Math.pow(1 - j / d.length, 2);
+    var n = ac.createBufferSource(); n.buffer = buf; var f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 500; var g = ac.createGain(); g.gain.value = 0.5; n.connect(f); f.connect(g); g.connect(ac.destination); n.start(t);
+  }
+  function boing(ac, t) {
+    var o = ac.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(900, t + 0.35); var g = ac.createGain(); g.gain.setValueAtTime(0.35, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.5);
+  }
+  function sfx(kind) {
+    try { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; var ac = new AC(), t = ac.currentTime;
+      if (kind === 'chew') for (var i = 0; i < 7; i++) chomp(ac, t + i * 0.34); else boing(ac, t);
+      setTimeout(function () { ac.close(); }, 3000); } catch (e) {}
+  }
+  function planes(n) {
+    var box = document.createElement('div'); box.className = 'egg-planes'; box.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < n; i++) { var sp = document.createElement('span'); sp.textContent = '\u2708\uFE0F'; sp.style.cssText = 'top:' + (8 + Math.random() * 40) + 'vh;animation-delay:' + (i * 0.9) + 's;animation-duration:' + (3.2 + Math.random() * 1.6) + 's;font-size:' + (26 + Math.random() * 22) + 'px;' + (i % 2 ? 'animation-name:egg-fly-back;' : ''); box.appendChild(sp); }
+    document.body.appendChild(box); return box;
+  }
   function heads(n) {
     var frag = document.createDocumentFragment();
     for (var i = 0; i < n; i++) {
@@ -758,13 +775,14 @@ function leave(href) {
     var root = document.documentElement, body = document.body, page = [].slice.call(body.children).filter(function (e) { return /^(HEADER|MAIN|FOOTER)$/.test(e.tagName); });
     var title = document.title, icon = document.querySelector('link[rel=icon]'), iconHref = icon && icon.getAttribute('href');
     roar();
+    var bub = document.createElement('span'); bub.className = 'egg-bubble'; bub.textContent = 'RAWR'; ape.appendChild(bub);
     ape.classList.remove('roar'); void ape.offsetWidth; ape.classList.add('roar');
     root.classList.add('egg'); document.title = '🦍 KAIJU ALERT'; if (icon) icon.setAttribute('href', 'assets/ape.svg');
-    (window.__mx || []).forEach(function (m) { if (m.scatter) m.scatter(function () {}); });
+    (window.__mx || []).forEach(function (m) { if (m.setWord) { m.__word = m.word; m.setWord('RAWR'); } });
     // the ticker
     var tick = document.createElement('div'); tick.className = 'egg-tick'; tick.setAttribute('role', 'status'); tick.innerHTML = '<span>' + new Array(9).join('⚠ KAIJU ALERT · ') + '</span><span aria-hidden="true">' + new Array(9).join('⚠ KAIJU ALERT · ') + '</span>'; body.appendChild(tick);
     var kong = document.createElement('div'); kong.className = 'egg-kong'; kong.setAttribute('aria-hidden', 'true'); kong.innerHTML = '<img src="assets/ape.svg" alt="">'; body.appendChild(kong);
-    var rain = null, timers = [];
+    var rain = null, fleet = null, timers = [], caught = 0;
     var at = function (ms, fn) { timers.push(setTimeout(fn, ms)); };
     if (reduce) {
       at(200, function () { tick.classList.add('in'); });
@@ -773,17 +791,18 @@ function leave(href) {
       body.classList.add('quake'); at(900, function () { body.classList.remove('quake'); });
       at(150, function () { tick.classList.add('in'); });
       at(400, function () { rain = heads(innerWidth < 640 ? 34 : 70); });
-      at(1400, function () { kong.classList.add('up'); });
+      at(1400, function () { kong.classList.add('up'); fleet = planes(innerWidth < 640 ? 2 : 4); });
+      at(2400, function () { if (!rain) return; var r = kong.querySelector('img').getBoundingClientRect(); [].forEach.call(rain.querySelectorAll('.egg-banana'), function (b) { var x = parseFloat(b.style.left) / 100 * innerWidth; if (x > r.left + r.width * 0.25 && x < r.right - r.width * 0.25) { caught++; b.classList.add('egg-caught'); } }); });
       at(3600, function () {
         // eaten: the page shrinks into the mouth
         var r = kong.querySelector('img').getBoundingClientRect(), ox = r.left + r.width * 0.5, oy = r.top + r.height * 0.76;
         page.forEach(function (e) { var b = e.getBoundingClientRect(); e.style.transformOrigin = (ox - b.left) + 'px ' + (oy - b.top) + 'px'; e.classList.add('egg-eaten'); });
         body.classList.add('quake');
       });
-      at(4900, function () { body.classList.remove('quake'); kong.classList.add('chew'); tick.querySelectorAll('span').forEach(function (sp) { sp.textContent = new Array(9).join('NOM NOM NOM · '); }); });
+      at(4900, function () { body.classList.remove('quake'); kong.classList.add('chew'); sfx('chew'); tick.querySelectorAll('span').forEach(function (sp) { sp.textContent = new Array(7).join('NOM NOM NOM · \uD83C\uDF4C ' + caught + ' CAUGHT · '); }); });
       at(7400, function () {
         // spat back out
-        kong.classList.remove('chew'); kong.classList.add('spit');
+        kong.classList.remove('chew'); kong.classList.add('spit'); sfx('boing');
         page.forEach(function (e) { e.classList.remove('egg-eaten'); e.classList.add('egg-spat'); });
         tick.querySelectorAll('span').forEach(function (sp) { sp.textContent = new Array(9).join('OK BYE · '); });
         body.classList.add('quake'); at(700, function () { body.classList.remove('quake'); });
@@ -794,9 +813,12 @@ function leave(href) {
     function finish() {
       timers.forEach(clearTimeout);
       page.forEach(function (e) { e.classList.remove('egg-eaten', 'egg-spat'); e.style.transformOrigin = ''; });
-      kong.remove(); tick.remove(); if (rain) rain.remove(); body.classList.remove('quake');
+      kong.remove(); tick.remove(); if (rain) rain.remove(); if (fleet) fleet.remove(); bub.remove(); body.classList.remove('quake');
+      var n = 0; try { n = (parseInt(localStorage.getItem('kaiju') || '0', 10) || 0) + 1; localStorage.setItem('kaiju', n); } catch (e) {}
+      var tally = document.getElementById('kaiju-tally'); if (!tally) { tally = document.createElement('span'); tally.id = 'kaiju-tally'; tally.className = 'egg-tally'; ape.parentNode.appendChild(tally); }
+      tally.textContent = 'survived \u00d7 ' + n;
       root.classList.remove('egg'); document.title = title; if (icon && iconHref) icon.setAttribute('href', iconHref);
-      (window.__mx || []).forEach(function (m) { if (m.replay) m.replay(); });
+      (window.__mx || []).forEach(function (m) { if (m.replay) { var w = m.__word; if (w) m.setWord(w); m.replay(); } });
       busy = false;
     }
     document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { document.removeEventListener('keydown', esc); finish(); } });
