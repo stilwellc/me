@@ -724,35 +724,79 @@ function leave(href) {
   }
 })();
 
-// ── the ape. Press him and the whole page goes kaiju for six seconds ────────
+// ── the ape. Press him and it all goes wrong for about eleven seconds ───────
 (function () {
   var ape = document.getElementById('ape'); if (!ape) return;
-  var busy = false;
+  var busy = false, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function roar() {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; var ac = new AC(), t = ac.currentTime;
+      var g = ac.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.55, t + 0.09); g.gain.setValueAtTime(0.55, t + 0.7); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
+      var f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(1400, t); f.frequency.exponentialRampToValueAtTime(180, t + 1.5); f.Q.value = 6;
+      var ws = ac.createWaveShaper(), curve = new Float32Array(256); for (var i = 0; i < 256; i++) { var x = i / 128 - 1; curve[i] = Math.tanh(x * 4); } ws.curve = curve;
+      ws.connect(f); f.connect(g); g.connect(ac.destination);
+      [[70, 34, 'sawtooth'], [93, 45, 'square'], [140, 52, 'sawtooth']].forEach(function (p) { var o = ac.createOscillator(); o.type = p[2]; o.frequency.setValueAtTime(p[0], t); o.frequency.exponentialRampToValueAtTime(p[1], t + 1.3); var v = ac.createGain(); v.gain.value = 0.5; o.connect(v); v.connect(ws); o.start(t); o.stop(t + 1.7); });
+      var buf = ac.createBuffer(1, ac.sampleRate * 1.6, ac.sampleRate), d = buf.getChannelData(0); for (var j = 0; j < d.length; j++) d[j] = (Math.random() * 2 - 1) * 0.35;
+      var n = ac.createBufferSource(); n.buffer = buf; n.connect(ws); n.start(t); n.stop(t + 1.6);
+      setTimeout(function () { ac.close(); }, 2500);
+    } catch (e) {}
+  }
+  function heads(n) {
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < n; i++) {
+      var im = document.createElement('img'); im.src = 'assets/ape.svg'; im.alt = ''; im.className = 'egg-head';
+      var size = 22 + Math.random() * 64;
+      im.style.cssText = 'left:' + (Math.random() * 100) + 'vw;width:' + size + 'px;animation-delay:' + (Math.random() * 2.4) + 's;animation-duration:' + (2.2 + Math.random() * 2.2) + 's;--spin:' + ((Math.random() > 0.5 ? 1 : -1) * (360 + Math.random() * 720)) + 'deg';
+      frag.appendChild(im);
+    }
+    var box = document.createElement('div'); box.className = 'egg-rain'; box.setAttribute('aria-hidden', 'true'); box.appendChild(frag); document.body.appendChild(box); return box;
+  }
   ape.addEventListener('click', function () {
     if (busy) return; busy = true;
+    var root = document.documentElement, body = document.body, page = [].slice.call(body.children).filter(function (e) { return /^(HEADER|MAIN|FOOTER)$/.test(e.tagName); });
+    var title = document.title, icon = document.querySelector('link[rel=icon]'), iconHref = icon && icon.getAttribute('href');
+    roar();
     ape.classList.remove('roar'); void ape.offsetWidth; ape.classList.add('roar');
-    document.body.classList.add('quake'); setTimeout(function () { document.body.classList.remove('quake'); }, 750);
-    document.documentElement.classList.add('egg');
-    // every band on the page lets go of its dots
+    root.classList.add('egg'); document.title = '🦍 KAIJU ALERT'; if (icon) icon.setAttribute('href', 'assets/ape.svg');
     (window.__mx || []).forEach(function (m) { if (m.scatter) m.scatter(function () {}); });
-    // and the page itself becomes the screen: the bust gathers across the whole viewport, then the word
-    var veil = document.createElement('div'); veil.className = 'egg-veil'; veil.setAttribute('aria-hidden', 'true');
-    var c = document.createElement('canvas'); c.dataset.focus = '0.5,0.42'; veil.appendChild(c); document.body.appendChild(veil);
-    setTimeout(function () { veil.classList.add('in'); }, 20);
-    var m = null;
-    try { m = matrix(c, { src: 'assets/physical/prints/ape/front.jpg', text: 'KAIJU', cell: innerWidth < 640 ? 5 : 6, fit: 'cover' }); } catch (e) {}
-    var done = function () {
-      veil.classList.remove('in');
-      setTimeout(function () {
-        veil.remove(); document.documentElement.classList.remove('egg');
-        if (m) { var i = (window.__mx || []).indexOf(m); if (i >= 0) window.__mx.splice(i, 1); }
-        (window.__mx || []).forEach(function (e) { if (e.replay) e.replay(); });
-        busy = false;
-      }, 500);
-    };
-    var end = function () { if (m && m.scatter) { m.scatter(done); setTimeout(done, 900); } else done(); };
-    setTimeout(end, m ? 6200 : 1200);
-    veil.addEventListener('click', end, { once: true });
-    document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { document.removeEventListener('keydown', esc); end(); } });
+    // the ticker
+    var tick = document.createElement('div'); tick.className = 'egg-tick'; tick.setAttribute('role', 'status'); tick.innerHTML = '<span>' + new Array(9).join('⚠ KAIJU ALERT · ') + '</span><span aria-hidden="true">' + new Array(9).join('⚠ KAIJU ALERT · ') + '</span>'; body.appendChild(tick);
+    var kong = document.createElement('div'); kong.className = 'egg-kong'; kong.setAttribute('aria-hidden', 'true'); kong.innerHTML = '<img src="assets/ape.svg" alt="">'; body.appendChild(kong);
+    var rain = null, timers = [];
+    var at = function (ms, fn) { timers.push(setTimeout(fn, ms)); };
+    if (reduce) {
+      at(200, function () { tick.classList.add('in'); });
+      at(2600, finish);
+    } else {
+      body.classList.add('quake'); at(900, function () { body.classList.remove('quake'); });
+      at(150, function () { tick.classList.add('in'); });
+      at(400, function () { rain = heads(innerWidth < 640 ? 22 : 44); });
+      at(1400, function () { kong.classList.add('up'); });
+      at(3600, function () {
+        // eaten: the page shrinks into the mouth
+        var r = kong.querySelector('img').getBoundingClientRect(), ox = r.left + r.width * 0.5, oy = r.top + r.height * 0.76;
+        page.forEach(function (e) { var b = e.getBoundingClientRect(); e.style.transformOrigin = (ox - b.left) + 'px ' + (oy - b.top) + 'px'; e.classList.add('egg-eaten'); });
+        body.classList.add('quake');
+      });
+      at(4900, function () { body.classList.remove('quake'); kong.classList.add('chew'); tick.querySelectorAll('span').forEach(function (sp) { sp.textContent = new Array(9).join('NOM NOM NOM · '); }); });
+      at(7400, function () {
+        // spat back out
+        kong.classList.remove('chew'); kong.classList.add('spit');
+        page.forEach(function (e) { e.classList.remove('egg-eaten'); e.classList.add('egg-spat'); });
+        tick.querySelectorAll('span').forEach(function (sp) { sp.textContent = new Array(9).join('OK BYE · '); });
+        body.classList.add('quake'); at(700, function () { body.classList.remove('quake'); });
+      });
+      at(8600, function () { kong.classList.remove('up'); tick.classList.remove('in'); });
+      at(9600, finish);
+    }
+    function finish() {
+      timers.forEach(clearTimeout);
+      page.forEach(function (e) { e.classList.remove('egg-eaten', 'egg-spat'); e.style.transformOrigin = ''; });
+      kong.remove(); tick.remove(); if (rain) rain.remove(); body.classList.remove('quake');
+      root.classList.remove('egg'); document.title = title; if (icon && iconHref) icon.setAttribute('href', iconHref);
+      (window.__mx || []).forEach(function (m) { if (m.replay) m.replay(); });
+      busy = false;
+    }
+    document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { document.removeEventListener('keydown', esc); finish(); } });
   });
 })();
