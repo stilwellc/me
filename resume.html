@@ -21,62 +21,94 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790226028">
+<link rel="stylesheet" href="site.css?v=1790226253">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <style>
-  .res .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; align-items: end; }
-  .res h1.display { font-size: clamp(2.2rem, 5vw, 3.6rem); }
-  .res .contact { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); line-height: 1.8; text-align: right; }
+  /* the page is the document: a sheet of paper on the ground, letterhead on top,
+     experience and work in the main column, the rest in a side column. Print
+     drops the sheet and runs everything as one column on one Letter page. */
+  body main.res .doc-top { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; margin-top: 0.5rem; }
+  body main.res .doc-top .eyebrow { margin: 0; }
+  .res .head-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+  body main.res .doc { max-width: var(--wide); margin: clamp(22px, 3vw, 36px) auto 0; background: var(--paper); border: 1px solid var(--hair); border-radius: 6px; box-shadow: 0 1px 0 rgba(22,22,22,0.03), 0 18px 48px -24px rgba(22,22,22,0.18); padding: clamp(24px, 5vw, 64px) clamp(20px, 5.4vw, 72px); text-align: left; }
+  body main.res .doc .head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem 2.5rem; align-items: end; padding-bottom: clamp(18px, 2.4vw, 28px); border-bottom: 1px solid var(--ink); text-align: left; }
+  body main.res .doc h1.display { margin: 0; font-size: clamp(2rem, 4.4vw, 3.2rem); line-height: 1; letter-spacing: -0.035em; font-weight: 300; text-align: left; }
+  body main.res .doc .statement { margin: 0.6rem 0 0; max-width: none; font-size: clamp(1rem, 1.5vw, 1.15rem); color: var(--ink-2); text-align: left; }
+  body main.res .doc .contact { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); line-height: 1.85; text-align: right; }
   .res .contact > * { display: block; }
-  .res section { margin-top: clamp(28px, 4vw, 44px); }
-  .res .lrow h3.t { margin: 0; font-size: 17px; font-weight: 500; line-height: 1.4; letter-spacing: 0; font-family: inherit; }
-  .res .lrow .loc { margin: 0.15rem 0 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); }
-  .res .lrow ul.d { list-style: none; margin: 0.15rem 0 0; padding: 0; max-width: none; }
-  .res .lrow ul.d li { display: inline; }
-  .res .lrow ul.d li + li::before { content: " "; }
-  .res .lrow p.d { margin: 0; max-width: none; }
-  .res .lrow.tools p.d { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.02em; line-height: 1.7; }
-  .res .print { margin-top: 2rem; }
-  .res .head-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
   .res .contact a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
   .res .contact a:hover { color: var(--ink); text-decoration-color: var(--ink); }
+  body main.res .doc-body { display: grid; grid-template-columns: minmax(0, 1fr) 15.5rem; gap: 0 clamp(28px, 3.6vw, 48px); margin-top: clamp(20px, 2.6vw, 30px); }
+  body main.res .doc-side { border-left: 1px solid var(--hair); padding-left: clamp(20px, 2.6vw, 32px); }
+  body main.res .d-sec { margin: 0 0 clamp(22px, 3vw, 34px); }
+  body main.res .d-sec .sheet-h { margin: 0 0 0.4rem; text-align: left; }
+  body main.res .ledger { max-width: none; margin: 0; border-top: 0; }
+  body main.res .lrow { grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1.25rem; padding: 0.95rem 0; border-bottom: 1px solid var(--hair); }
+  body main.res .lrow:last-child { border-bottom: 0; }
+  body main.res .lrow .k { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); padding-top: 0.2rem; }
+  body main.res .lrow.now .k { color: var(--accent); }
+  body main.res .lrow.now .k::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 0.45rem; border-radius: 50%; background: var(--accent); vertical-align: 1px; }
+  .res .lrow h3.t { margin: 0; font-size: 16.5px; font-weight: 500; line-height: 1.35; letter-spacing: -0.005em; font-family: inherit; }
+  .res .lrow .loc { margin: 0.2rem 0 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3); }
+  .res .lrow ul.d { list-style: none; margin: 0.45rem 0 0; padding: 0; max-width: none; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+  .res .lrow ul.d li { position: relative; padding-left: 1em; }
+  .res .lrow ul.d li + li { margin-top: 0.2rem; }
+  .res .lrow ul.d li::before { content: "–"; position: absolute; left: 0; color: var(--ink-3); }
+  .res .lrow p.d { margin: 0; max-width: none; }
   .res .lrow h3.t a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
   .res .lrow h3.t a:hover { text-decoration-color: var(--ink); }
-  @media (max-width: 760px) { .res .contact { text-align: left; } }
+  /* the side column: dates sit above their entry */
+  body main.res .doc-side .lrow { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; padding: 0.75rem 0; }
+  body main.res .doc-side .lrow h3.t { font-size: 15px; }
+  body main.res .doc-side .lrow ul.d { font-size: 14px; }
+  body main.res .doc-side .tools .k { display: none; }
+  .res .lrow.tools p.d { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; line-height: 1.9; color: var(--ink-2); }
+  @media (max-width: 900px) {
+    body main.res .doc-body { grid-template-columns: minmax(0, 1fr); }
+    body main.res .doc-side { border-left: 0; padding-left: 0; border-top: 1px solid var(--ink); padding-top: clamp(18px, 3vw, 26px); }
+  }
+  @media (max-width: 640px) {
+    body main.res .doc { padding: 22px 18px 8px; border-radius: 4px; }
+    body main.res .doc .head { grid-template-columns: minmax(0, 1fr); }
+    body main.res .doc .contact { text-align: left; }
+    body main.res .lrow { grid-template-columns: minmax(0, 1fr); gap: 0.2rem; }
+  }
   @media print {
-    /* the theme selectors are included so a dark-mode visitor does not print
-       near-white text on white paper; the body-prefixed selectors outrank the
-       site's center-orientation block, which the old rules silently lost to */
-    :root { --ground: #fff; --ink: #111; --ink-2: #444; --ink-3: #666; --hair: #ddd; --hair-2: #ccc; }
+    :root { --ground: #fff; --paper: #fff; --ink: #111; --ink-2: #444; --ink-3: #666; --hair: #ddd; --hair-2: #ccc; --accent: #111; }
     @page { size: Letter; margin: 9.5mm 12.5mm; }
-    .mast, .foot, .topbar, .rail, .print, .pal, .keys, .mhead, .head-pills, #palette-btn, #theme, .skip { display: none !important; }
+    .mast, .foot, .topbar, .rail, .pal, .keys, .mhead, .doc-top, .skip { display: none !important; }
     html, body { font-size: 10pt; background: #fff; color: #111; }
     body .page { padding: 0; }
     body .res { max-width: none; }
     body .res, body .res * { text-align: left !important; }
-    body .res .rv { opacity: 1 !important; transform: none !important; filter: none !important; }
-    body .res .head { display: block; }
-    body .res .eyebrow { display: none; }
-    body .res h1.display { font-size: 20pt; line-height: 1.05; margin: 0; }
-    body .res .statement { margin: 3pt 0 0 !important; font-size: 11pt; max-width: none; }
-    body .res .contact { margin-top: 4pt; font-size: 8.5pt; line-height: 1.4; }
+    body .res .rv { opacity: 1 !important; transform: none !important; filter: none !important; animation: none !important; }
+    body main.res .doc { max-width: none; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: #fff; }
+    body main.res .doc .head { display: block; padding: 0; border: 0; }
+    body main.res .doc h1.display { font-size: 20pt; line-height: 1.05; margin: 0; }
+    body main.res .doc .statement { margin: 3pt 0 0 !important; font-size: 11pt; color: #111; }
+    body main.res .doc .contact { margin-top: 4pt; font-size: 8.5pt; line-height: 1.4; }
     body .res .contact > * { display: inline; }
     body .res .contact > * + *::before { content: " · "; color: #888; }
-    body .res .contact .substack { display: none; }   /* the Writing row links the essay; keeps contact on one line */
+    body .res .contact .substack { display: none; }
     body .res a { color: inherit !important; text-decoration: none !important; }
-    body .res section { margin-top: 5.5pt; }
-    body .res .sheet-h { margin: 0 0 1pt !important; font-size: 7.5pt; text-align: left; break-after: avoid; page-break-after: avoid; }
-    body .res .ledger { max-width: none; margin: 0; }
-    body .res .lrow { grid-template-columns: 7.2rem minmax(0,1fr); gap: 0 10pt; padding: 2pt 0; break-inside: avoid; page-break-inside: avoid; }
-    body .res .lrow .k { font-size: 7.5pt; }
-    body .res .lrow h3.t { font-size: 9.8pt; line-height: 1.3; }
+    body main.res .doc-body { display: block; margin-top: 0; }
+    body main.res .doc-side { border: 0; padding: 0; }
+    body main.res .d-sec { margin: 5.5pt 0 0; }
+    body .res .sheet-h { margin: 0 0 1pt !important; font-size: 7.5pt; text-align: left; break-after: avoid; page-break-after: avoid; border-bottom: 1px solid var(--hair); }
+    body main.res .lrow, body main.res .doc-side .lrow { grid-template-columns: 7.2rem minmax(0,1fr); gap: 0 10pt; padding: 2pt 0; border-bottom: 1px solid var(--hair); break-inside: avoid; page-break-inside: avoid; }
+    body main.res .lrow .k { font-size: 7.5pt; padding: 0; color: #666; }
+    body main.res .lrow.now .k::before { display: none; }
+    body .res .lrow h3.t, body main.res .doc-side .lrow h3.t { font-size: 9.8pt; line-height: 1.3; }
     body .res .lrow .loc { font-size: 7.5pt; margin-top: 0; }
-    body .res .lrow ul.d, body .res .lrow p.d { font-size: 8.9pt; line-height: 1.28; margin-top: 0.5pt; color: #333; }
-    body .res .lrow.tools p.d { font-size: 8pt; }
-    /* Tools prints as one line: the heading sits in the date column */
+    body .res .lrow ul.d, body main.res .doc-side .lrow ul.d, body .res .lrow p.d { font-size: 8.9pt; line-height: 1.28; margin-top: 0.5pt; color: #333; }
+    body .res .lrow ul.d li { display: inline; padding: 0; }
+    body .res .lrow ul.d li::before { content: none; }
+    body .res .lrow ul.d li + li::before { content: " "; position: static; }
+    body .res .lrow ul.d li + li { margin: 0; }
+    body .res .lrow.tools p.d { font-size: 8pt; line-height: 1.4; }
     body .res .tools-sec { display: grid; grid-template-columns: 7.2rem minmax(0,1fr); gap: 0 10pt; align-items: baseline; border-top: 1px solid var(--hair); padding-top: 3pt; }
-    body .res .tools-sec .sheet-h { margin: 0 !important; }
+    body .res .tools-sec .sheet-h { margin: 0 !important; border: 0; }
     body .res .tools-sec .ledger, body .res .tools-sec .lrow { border: 0; display: block; padding: 0; }
     body .res .tools-sec .lrow .k { display: none; }
   }
@@ -91,19 +123,24 @@
 </header>
 <main id="main" class="page res">
   <div class="mhead rv"><canvas class="matrix" data-text="Résumé" data-src="assets/resume.svg" aria-label="A paper plane, decoded into the word Résumé" role="img"></canvas><span class="hint">click to replay</span></div>
-  <div class="head rv">
-    <div>
-      <p class="eyebrow">Résumé · 2018–2026</p>
-      <h1 class="display">Collin Stilwell</h1>
-      <p class="statement" style="margin-top:.75rem">Senior Product Security Engineer · WeightWatchers</p>
-      <div class="head-pills"><a class="pill solid" href="assets/Collin-Stilwell-Resume.pdf" download="Collin-Stilwell-Resume.pdf">PDF ↓</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
-    </div>
-    <p class="contact"><span>New Jersey</span><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github.com/stilwellc</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin.com/in/collin-stilwell</a><a class="substack" href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">collinsthoughts.substack.com</a><a class="site" href="https://stilwellc.github.io/me/">stilwellc.github.io/me</a></p>
+  <div class="doc-top rv">
+    <p class="eyebrow">Résumé · 2018–2026</p>
+    <div class="head-pills"><a class="pill solid" href="assets/Collin-Stilwell-Resume.pdf" download="Collin-Stilwell-Resume.pdf">PDF ↓</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a><button class="pill ghost print" type="button" data-print>Print</button></div>
   </div>
-  <section class="rv d1">
+  <article class="doc rv d1" aria-label="Résumé">
+    <header class="head">
+      <div>
+        <h1 class="display">Collin Stilwell</h1>
+        <p class="statement">Senior Product Security Engineer · WeightWatchers</p>
+      </div>
+      <p class="contact"><span>New Jersey</span><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github.com/stilwellc</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin.com/in/collin-stilwell</a><a class="substack" href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">collinsthoughts.substack.com</a><a class="site" href="https://stilwellc.github.io/me/">stilwellc.github.io/me</a></p>
+    </header>
+    <div class="doc-body">
+      <div class="doc-main">
+  <section class="d-sec">
     <h2 class="sheet-h">Experience</h2>
     <div class="ledger">
-      <div class="lrow"><div class="k">2026 – now</div><div><h3 class="t">WeightWatchers — Senior Product Security Engineer</h3><ul class="d"><li>Rebuilding product security from a compliance function into an engineering one as WeightWatchers moves into clinical care.</li><li>Securing the AWS and Kubernetes platform underneath it, and building AI agents for detection, triage, and incident response.</li></ul></div></div>
+      <div class="lrow now"><div class="k">2026 – now</div><div><h3 class="t">WeightWatchers — Senior Product Security Engineer</h3><ul class="d"><li>Rebuilding product security from a compliance function into an engineering one as WeightWatchers moves into clinical care.</li><li>Securing the AWS and Kubernetes platform underneath it, and building AI agents for detection, triage, and incident response.</li></ul></div></div>
       <div class="lrow"><div class="k">2025–2026</div><div><h3 class="t">Remedy Meds — Senior Product Security Engineer II</h3><p class="loc">New York City · GLP-1 care · acquired Thirty Madison</p><ul class="d"><li>Stayed on after the acquisition as the founding security team.</li><li>Built product security, corporate security, and privacy from nothing.</li></ul></div></div>
       <div class="lrow"><div class="k">2023–2026</div><div><h3 class="t">Thirty Madison — Senior Product Security Engineer; II from 2025</h3><p class="loc">New York City · telehealth for over a million people · $650M exit</p><ul class="d"><li>Built security for three years, through the $650M exit.</li><li>Scaled security and privacy across Nurx, Keeps, and Cove.</li></ul></div></div>
       <div class="lrow"><div class="k">2021–2023</div><div><h3 class="t">Podium — Application Security Engineer; Tech Lead, Product Security (2022–2023)</h3><p class="loc">New York City · 100k+ local businesses · $201M Series D</p><ul class="d"><li>Secured payments from proof of concept to billions in payment volume.</li><li>Built the product security team for about 200 engineers.</li><li>Top contributor to Podium’s open Elixir secure-coding curriculum; wrote Semgrep rules for Ash Framework authorization.</li></ul></div></div>
@@ -112,7 +149,7 @@
       <div class="lrow"><div class="k">2018</div><div><h3 class="t">New Jersey State Police — Intern, Network Engineering</h3><p class="loc">Regional Operations &amp; Intelligence Center, the state’s fusion center</p></div></div>
     </div>
   </section>
-  <section class="rv d2">
+  <section class="d-sec">
     <h2 class="sheet-h">Selected work</h2>
     <div class="ledger">
       <div class="lrow"><div class="k">lectr.bid</div><div><h3 class="t"><a href="lectr.html">lectr — auction intelligence</a></h3><ul class="d"><li>Built an auction-intelligence platform over 1.1M lots from 18 houses: a value engine with a public backtest, and a nightly pipeline behind three publish gates.</li><li>Cut the nightly from ~130 to 52 min without changing an output.</li><li>TypeScript, Next.js, Cloudflare R2/Pages, GitHub Actions, Supabase.</li></ul></div></div>
@@ -120,26 +157,30 @@
       <div class="lrow"><div class="k">soiree.today</div><div><h3 class="t"><a href="soiree.html">Soirée — events aggregator</a></h3><ul class="d"><li>Built an events aggregator for NYC, Hoboken/Jersey City, and Philadelphia: scraped at the source, dates normalized, placeholders labeled.</li><li>Node.js, Cloudflare.</li></ul></div></div>
     </div>
   </section>
-  <section class="rv d2">
+      </div>
+      <aside class="doc-side">
+  <section class="d-sec">
     <h2 class="sheet-h">Education</h2>
     <div class="ledger">
       <div class="lrow"><div class="k">2021–2023</div><div><h3 class="t">New York University — M.S. Cyber Security program</h3><ul class="d"><li>Cyber Fellowship recipient.</li><li>Research: stablecoin payments in e-commerce.</li></ul></div></div>
       <div class="lrow"><div class="k">2016–2020</div><div><h3 class="t">Rowan University — B.S. Computer Science, cum laude</h3><ul class="d"><li>Concentration in cyber defense.</li><li>Built Brumby Code Checker, a redundancy scanner for C++, Java, and Ada, with ASRC Federal Mission Solutions for Lockheed Martin systems.</li></ul></div></div>
     </div>
   </section>
-  <section class="rv d3">
+  <section class="d-sec">
     <h2 class="sheet-h">Writing</h2>
     <div class="ledger">
       <div class="lrow"><div class="k">May 2026</div><div><h3 class="t"><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Building an Application Security Program That Actually Works</a></h3><ul class="d"><li>Substack. Four legs, a build order, and the seven failures that sink programs.</li></ul></div></div>
     </div>
   </section>
-  <section class="rv d3 tools-sec">
+  <section class="d-sec tools-sec">
     <h2 class="sheet-h">Tools</h2>
     <div class="ledger">
       <div class="lrow tools"><div class="k"></div><p class="d">AWS&nbsp;· Kubernetes&nbsp;· Semgrep&nbsp;· threat&nbsp;modeling&nbsp;· MCP&nbsp;· Elixir&nbsp;· TypeScript&nbsp;· Python&nbsp;· Next.js&nbsp;· Cloudflare&nbsp;· GitHub&nbsp;Actions</p></div>
     </div>
   </section>
-  <div class="actions print"><button class="pill solid" type="button" data-print>Print</button></div>
+      </aside>
+    </div>
+  </article>
 </main>
 <footer class="foot">
   <div class="foot-in">
@@ -162,7 +203,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790226028"></script>
-<script src="site.js?v=1790226028"></script>
+<script src="assets/engine.js?v=1790226253"></script>
+<script src="site.js?v=1790226253"></script>
 </body>
 </html>
