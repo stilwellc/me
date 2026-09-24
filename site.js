@@ -723,3 +723,36 @@ function leave(href) {
     });
   }
 })();
+
+// ── the ape. Press him and the whole page goes kaiju for six seconds ────────
+(function () {
+  var ape = document.getElementById('ape'); if (!ape) return;
+  var busy = false;
+  ape.addEventListener('click', function () {
+    if (busy) return; busy = true;
+    ape.classList.remove('roar'); void ape.offsetWidth; ape.classList.add('roar');
+    document.body.classList.add('quake'); setTimeout(function () { document.body.classList.remove('quake'); }, 750);
+    document.documentElement.classList.add('egg');
+    // every band on the page lets go of its dots
+    (window.__mx || []).forEach(function (m) { if (m.scatter) m.scatter(function () {}); });
+    // and the page itself becomes the screen: the bust gathers across the whole viewport, then the word
+    var veil = document.createElement('div'); veil.className = 'egg-veil'; veil.setAttribute('aria-hidden', 'true');
+    var c = document.createElement('canvas'); c.dataset.focus = '0.5,0.42'; veil.appendChild(c); document.body.appendChild(veil);
+    setTimeout(function () { veil.classList.add('in'); }, 20);
+    var m = null;
+    try { m = matrix(c, { src: 'assets/physical/prints/ape/front.jpg', text: 'KAIJU', cell: innerWidth < 640 ? 5 : 6, fit: 'cover' }); } catch (e) {}
+    var done = function () {
+      veil.classList.remove('in');
+      setTimeout(function () {
+        veil.remove(); document.documentElement.classList.remove('egg');
+        if (m) { var i = (window.__mx || []).indexOf(m); if (i >= 0) window.__mx.splice(i, 1); }
+        (window.__mx || []).forEach(function (e) { if (e.replay) e.replay(); });
+        busy = false;
+      }, 500);
+    };
+    var end = function () { if (m && m.scatter) { m.scatter(done); setTimeout(done, 900); } else done(); };
+    setTimeout(end, m ? 6200 : 1200);
+    veil.addEventListener('click', end, { once: true });
+    document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { document.removeEventListener('keydown', esc); end(); } });
+  });
+})();
