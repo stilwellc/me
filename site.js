@@ -825,3 +825,9 @@ function leave(href) {
     document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { document.removeEventListener('keydown', esc); finish(); } });
   });
 })();
+
+// ── the footer map marks the page it is on ─────────────────────────────────
+(function () {
+  var here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  [].forEach.call(document.querySelectorAll('footer .foot-map a'), function (a) { if (a.getAttribute('href').toLowerCase() === here) { a.classList.add('on'); a.setAttribute('aria-current', 'page'); } });
+})();

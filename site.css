@@ -103,12 +103,6 @@ h1.display {
 .prose p:last-child { margin-bottom: 0; }
 
 /* ── footer ── */
-footer.foot {
-  position: relative;
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 0.6rem 2rem; text-align: center;
-  padding: var(--pad); border-top: 1px solid var(--hair); margin-top: 3rem;
-  font-family: var(--mono); font-size: 12px; color: var(--ink-3);
-}
 
 /* ── reveal (once, small) ── */
 @media (prefers-reduced-motion: no-preference) {
@@ -152,9 +146,6 @@ kbd { font-family: var(--mono); font-size: 11px; color: var(--ink); border: 1px 
 .mhead .hint { position: absolute; right: 0; bottom: -18px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
 .mhead .hint:hover, .field .hint:hover { color: var(--ink); }
 .field .hint { position: absolute; right: 0; bottom: -2px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
-@media (min-width: 1100px) { footer.foot { display: grid; grid-template-columns: 1fr auto 1fr; } footer.foot .col { text-align: left; } footer.foot .build { text-align: right; } }
-footer.foot a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
-footer.foot a:hover { color: var(--ink); text-decoration-color: var(--ink-3); }
 .eyebrow a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
 .eyebrow a:hover { color: var(--ink); }
 body:has(> .home) footer.foot { margin-top: 0; }
@@ -177,7 +168,7 @@ body .page > *, body .lander-head, body .cs, body .res { max-width: var(--wide);
 body .statement, body .lede, body .cs .lede, body .prose, body .prose p, body .sec p, body .sec ul, body .ledger { max-width: var(--col); margin-left: auto; margin-right: auto; }
 body .lede, body .cs .lede { max-width: 38em; }
 body .facts, body .frame, body .trace, body .stage, body .act, body .repos { max-width: var(--wide); margin-left: auto; margin-right: auto; }
-body .actions, body .cta, body .gh-stats, body footer.foot { justify-content: center; }
+body .actions, body .cta, body .gh-stats { justify-content: center; }
 /* reading text: left-aligned, centred column */
 body .sec p, body .prose p, body .cell p, body .lrow .d { text-align: left; text-wrap: pretty; }
 body .sec > div { width: 100%; }
@@ -523,9 +514,6 @@ body .play-ctl .pill.file input { position: absolute; inset: 0; opacity: 0; curs
 }
 @media (max-width: 480px) { .stage.four { grid-template-columns: 1fr; } .stage.four > div { border-right: 0; } }
 /* the ape, cut from the photograph in two tones, beside the build line */
-footer.foot .ape { display: inline-block; vertical-align: middle; width: 45px; height: 56px; margin: -18px 0 -18px 0.9rem; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .25s var(--ease), filter .25s ease; transform-origin: 50% 85%; filter: drop-shadow(0 2px 3px rgba(22,22,22,0.22)); }
-footer.foot .ape img { display: block; width: 100%; height: 100%; }
-footer.foot .ape:hover { transform: translateY(-4px) scale(1.08) rotate(-4deg); filter: drop-shadow(0 6px 8px rgba(22,22,22,0.28)); }
 footer.foot .ape:focus-visible { outline: 1.5px solid var(--ink); outline-offset: 3px; }
 footer.foot .ape.roar { animation: ape-roar .8s var(--ease); }
 @keyframes ape-roar { 0% { transform: scale(1); } 25% { transform: scale(1.7) rotate(-8deg); } 45% { transform: scale(1.6) rotate(8deg); } 65% { transform: scale(1.7) rotate(-6deg); } 100% { transform: scale(1); } }
@@ -547,7 +535,6 @@ footer.foot .ape.roar { animation: ape-roar .8s var(--ease); }
 .egg-bubble { position: absolute; left: 50%; top: -6px; transform: translate(-50%, -100%) scale(0); background: var(--ink); color: #FFD84D; font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; padding: 5px 9px; border-radius: 999px; white-space: nowrap; animation: egg-bubble 1.6s var(--ease) forwards; pointer-events: none; }
 .egg-bubble::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 8px; height: 8px; background: var(--ink); transform: translateX(-50%) rotate(45deg); }
 @keyframes egg-bubble { 0% { transform: translate(-50%, -100%) scale(0); } 18% { transform: translate(-50%, -110%) scale(1.15); } 30% { transform: translate(-50%, -100%) scale(1); } 85% { transform: translate(-50%, -100%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -120%) scale(0.8); opacity: 0; } }
-footer.foot .ape { position: relative; }
 .egg-tally { position: absolute; left: 50%; top: 100%; transform: translate(-50%, 4px); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--ink-3); white-space: nowrap; pointer-events: none; animation: egg-tally 4.2s ease forwards; }
 @keyframes egg-tally { 0% { opacity: 0; transform: translate(-50%, 0); } 12% { opacity: 1; transform: translate(-50%, 4px); } 80% { opacity: 1; } 100% { opacity: 0; } }
 .egg-head { position: absolute; top: -120px; animation-name: egg-fall; animation-timing-function: cubic-bezier(.3, .1, .7, 1); animation-fill-mode: both; filter: drop-shadow(0 4px 6px rgba(22,22,22,0.25)); }
@@ -568,13 +555,42 @@ body.quake { animation: quake .7s linear infinite; }
 @keyframes quake { 10% { transform: translate(-3px, 2px); } 20% { transform: translate(4px, -2px); } 30% { transform: translate(-4px, 1px); } 40% { transform: translate(3px, 3px); } 50% { transform: translate(-2px, -3px); } 60% { transform: translate(2px, 2px); } 70% { transform: translate(-1px, 1px); } 80% { transform: translate(1px, -1px); } 100% { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .egg-head, .egg-kong, .egg-tick span, .egg-eaten, .egg-spat { animation: none !important; transition: none !important; } }
 @media (prefers-reduced-motion: reduce) { footer.foot .ape.roar, body.quake { animation: none; } }
-/* the footer on a phone: the ape leads, then the build line, the links, the colophon */
-@media (max-width: 600px) {
-  footer.foot { flex-direction: column; align-items: center; gap: 0.85rem; padding: 26px var(--pad) 30px; }
-  footer.foot .build { order: 0; display: flex; flex-direction: column; align-items: center; gap: 0.7rem; }
-  footer.foot .links { order: 1; }
-  footer.foot .col { order: 2; color: var(--ink-3); }
-  footer.foot .ape { order: -1; margin: 0 0 0.2rem; width: 58px; height: 72px; }
-  .egg-tally { top: auto; bottom: 100%; transform: translate(-50%, -4px); }
-  @keyframes egg-tally { 0% { opacity: 0; transform: translate(-50%, 0); } 12% { opacity: 1; transform: translate(-50%, -4px); } 80% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ── the footer. Two designs: a two-row registration block on desktop, the ape beside a page map on phones ── */
+footer.foot { margin-top: 3rem; border-top: 1px solid var(--hair); font-family: var(--mono); font-size: 12px; color: var(--ink-3); letter-spacing: 0.04em; }
+footer.foot .foot-in { max-width: var(--wide); margin: 0 auto; padding: 0 var(--pad); display: grid; }
+footer.foot a { color: var(--ink-2); text-decoration: none; transition: color .2s ease; }
+footer.foot a:hover { color: var(--ink); }
+footer.foot .foot-map { display: flex; flex-wrap: wrap; gap: 0.35rem 1.4rem; }
+footer.foot .foot-map a { position: relative; padding: 2px 0; }
+footer.foot .foot-map a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -2px; height: 1px; background: var(--ink); transition: right .25s var(--ease); }
+footer.foot .foot-map a:hover::after, footer.foot .foot-map a.on::after { right: 0; }
+footer.foot .foot-map a.on { color: var(--ink); }
+footer.foot .foot-out { display: flex; gap: 1.4rem; white-space: nowrap; }
+footer.foot .foot-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem 1.5rem; }
+footer.foot .foot-copy { color: var(--ink-3); }
+footer.foot .foot-build { color: var(--ink-3); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+footer.foot .foot-build:hover { color: var(--ink); text-decoration-color: var(--ink-3); }
+footer.foot .ape { position: relative; display: block; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px; transition: transform .25s var(--ease), filter .25s ease; transform-origin: 50% 85%; filter: drop-shadow(0 2px 3px rgba(22,22,22,0.22)); }
+footer.foot .ape img { display: block; width: 100%; height: 100%; }
+footer.foot .ape:hover { transform: translateY(-4px) scale(1.08) rotate(-4deg); filter: drop-shadow(0 6px 8px rgba(22,22,22,0.28)); }
+/* desktop: row one is the map and the outbound links; row two, under its own hairline, is the colophon line with the ape at the right edge */
+@media (min-width: 761px) {
+  footer.foot .foot-in { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-rows: auto auto; grid-template-areas: "map map map" "meta out ape"; align-items: center; column-gap: 2.5rem; }
+  footer.foot .foot-in::before { content: ""; grid-column: 1 / -1; grid-row: 2; align-self: start; height: 0; border-top: 1px solid var(--hair); }
+  footer.foot .foot-map { grid-area: map; padding: 26px 0 22px; gap: 0.35rem 1.6rem; }
+  footer.foot .foot-meta { grid-area: meta; padding: 20px 0 22px; justify-content: flex-start; gap: 0.4rem 1.6rem; }
+  footer.foot .foot-out { grid-area: out; padding: 20px 0 22px; gap: 1.6rem; }
+  footer.foot .ape { grid-area: ape; justify-self: end; width: 50px; height: 62px; margin: 8px 0 8px 0; }
+}
+}
+/* phones: the ape stands at the left; the page map runs in two columns beside him, then the outbound links; the colophon line closes the block under a hairline */
+@media (max-width: 760px) {
+  footer.foot .foot-in { grid-template-columns: 64px minmax(0, 1fr); grid-template-areas: "ape map" "ape out" "meta meta"; column-gap: 1.1rem; padding-top: 22px; }
+  footer.foot .ape { grid-area: ape; align-self: start; width: 64px; height: 80px; margin-top: 2px; }
+  footer.foot .foot-map { grid-area: map; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem 1rem; align-content: start; }
+  footer.foot .foot-map a::after { display: none; }
+  footer.foot .foot-out { grid-area: out; margin-top: 0.9rem; padding-top: 0.75rem; border-top: 1px solid var(--hair); gap: 1.1rem; flex-wrap: wrap; white-space: normal; }
+  footer.foot .foot-meta { grid-area: meta; margin-top: 1.1rem; padding: 14px 0 22px; border-top: 1px solid var(--hair); font-size: 11px; }
+  .egg-tally { left: 50%; top: 100%; transform: translate(-50%, 4px); }
 }
