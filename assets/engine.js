@@ -11,7 +11,7 @@ var GRAIN = null;
 function grainTile() { if (GRAIN) return GRAIN; GRAIN = document.createElement('canvas'); GRAIN.width = GRAIN.height = 256; var g = GRAIN.getContext('2d'), gd = g.createImageData(256, 256); for (var i = 0; i < gd.data.length; i += 4) { var v = 128 + (Math.random() * 90 - 45) | 0; gd.data[i] = gd.data[i + 1] = gd.data[i + 2] = v; gd.data[i + 3] = 255; } g.putImageData(gd, 0, 0); return GRAIN; }
 // ink + accent, read once; re-read only on an explicit call (themeColors.refresh
 // / window.mxRetheme) or when the root's class list changes (the egg re-accents)
-var THEME = { ink: '#161616', accent: '#FF5A1F', read: false };
+var THEME = { ink: '#161616', accent: '#2F6B34', read: false };
 function readTheme() {
   if (!document.body) return false;
   var cs = getComputedStyle(document.body), ink = cs.color || THEME.ink, ac = cs.getPropertyValue('--accent').trim() || THEME.accent;

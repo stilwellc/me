@@ -354,7 +354,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   }
   function peek() {
     var box = c.parentElement.querySelector('.ape-peek');
-    if (!box) { box = document.createElement('div'); box.className = 'ape-peek'; box.setAttribute('aria-hidden', 'true'); box.innerHTML = '<img src="assets/ape.svg" alt="">'; c.parentElement.appendChild(box); }
+    if (!box) { box = document.createElement('div'); box.className = 'ape-peek'; box.setAttribute('aria-hidden', 'true'); box.innerHTML = '<img src="assets/ape.webp" alt="">'; c.parentElement.appendChild(box); }
     var im = box.firstChild; if (!im.animate) return;
     im.animate(REDUCE ? [{ opacity: 0 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }] : [{ transform: 'translateY(100%)' }, { transform: 'translateY(22%)', offset: 0.25 }, { transform: 'translateY(26%) rotate(-4deg)', offset: 0.6 }, { transform: 'translateY(100%)' }], { duration: 1800, easing: 'cubic-bezier(.65,0,.35,1)' });
   }
@@ -842,19 +842,107 @@ function flagCheck(s) {
 })();
 
 // ── drawn props for the egg (no system emoji) ──────────────────────────────
-var SVG_BANANA = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M50 14c3 2 4 6 3 11-3 16-19 28-38 25-4-1-6-3-5-5 1-2 3-2 6-2 15 0 27-9 31-24 1-3 1-5 3-5z" fill="#E9C46A" stroke="#161616" stroke-width="3" stroke-linejoin="round"/><path d="M47 22c-3 12-13 21-27 24" fill="none" stroke="#9F7C3A" stroke-width="2.4" stroke-linecap="round"/><path d="M49 15l3-7" stroke="#161616" stroke-width="4" stroke-linecap="round"/></svg>';
-var SVG_PLANE = '<svg viewBox="0 0 120 64" aria-hidden="true"><g stroke="#161616" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 22l8 12" fill="none"/><path d="M10 18h10l8 12" fill="#2A555B"/><path d="M22 30h62c8 0 12 3 12 6s-4 6-12 6H26z" fill="#F6F3EC"/><rect x="40" y="12" width="44" height="7" rx="3.5" fill="#D9261C"/><rect x="42" y="42" width="40" height="6" rx="3" fill="#D9261C"/><path d="M50 19v23M74 19v23" fill="none"/><circle cx="62" cy="28" r="4.5" fill="#F6F3EC"/><path d="M58 26c3-3 8-3 10 0" fill="none"/><path d="M60 48l-3 8M72 48l3 8" fill="none"/><circle cx="57" cy="57" r="4" fill="#161616"/><circle cx="76" cy="57" r="4" fill="#161616"/><path d="M100 22v28" fill="none"/><circle cx="97" cy="36" r="3" fill="#161616"/></g><path d="M62 33c10 0 14 3 22 1" fill="none" stroke="#D9261C" stroke-width="2.4" stroke-linecap="round"/></svg>';
-var SVG_HAT = '<svg viewBox="0 0 120 58" aria-hidden="true"><g stroke="#161616" stroke-width="3.2" stroke-linejoin="round"><path d="M18 46C18 18 36 6 60 6s42 12 42 40z" fill="#F2C230"/><path d="M60 6v40M44 9c-4 10-5 24-5 37M76 9c4 10 5 24 5 37" fill="none" stroke-width="2.4"/><rect x="4" y="44" width="112" height="10" rx="5" fill="#E0AE1F"/></g></svg>';
 var SVG_ESB = '<svg viewBox="0 0 20 44" aria-hidden="true"><g fill="#161616"><rect x="9.3" y="0" width="1.4" height="8"/><rect x="8" y="7" width="4" height="5"/><rect x="6.5" y="11" width="7" height="6"/><rect x="5" y="16" width="10" height="8"/><rect x="3" y="23" width="14" height="21"/></g><g fill="#F6F3EC" opacity=".55"><rect x="5" y="26" width="1.4" height="16"/><rect x="8" y="26" width="1.4" height="16"/><rect x="11" y="26" width="1.4" height="16"/><rect x="14" y="26" width="1.4" height="16"/></g></svg>';
 
-// ── the ape. Press him and it all goes wrong for about eight seconds ─────────
+// ── after the giant: tap the cartoon ape as he pops out of the holes ─────────
+// security decoys pop up too; tapping one costs a point
+var DECOYS = [
+  ['phished!', '<svg viewBox="0 0 120 104" aria-hidden="true"><g stroke="#1E4620" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M60 0v14" fill="none"/><path d="M60 14v6a8 8 0 1 1-12 7" fill="none" stroke="#6B6C6A"/><rect x="10" y="32" width="100" height="60" rx="6" fill="#FCFBFA"/><path d="M10 38l50 32 50-32" fill="none"/><circle cx="104" cy="34" r="13" fill="#E0443A"/></g><path d="M104 27v8M104 41v1" stroke="#FCFBFA" stroke-width="5" stroke-linecap="round"/></svg>'],
+  ['access denied', '<svg viewBox="0 0 120 104" aria-hidden="true"><path d="M38 44V32a22 22 0 0 1 44 0v12" fill="none" stroke="#1E4620" stroke-width="16"/><path d="M38 44V32a22 22 0 0 1 44 0v12" fill="none" stroke="#B9BDB5" stroke-width="6"/><g stroke="#1E4620" stroke-width="6" stroke-linejoin="round"><rect x="18" y="40" width="84" height="54" rx="10" fill="#E7B53C"/><circle cx="60" cy="60" r="7" fill="#1E4620"/><path d="M60 62v14" stroke-linecap="round"/></g></svg>'],
+  ['prove you\u2019re human', '<svg viewBox="0 0 120 104" aria-hidden="true"><g stroke="#1E4620" stroke-width="6" stroke-linejoin="round"><rect x="4" y="18" width="112" height="72" rx="8" fill="#FCFBFA"/><rect x="16" y="38" width="30" height="30" rx="5" fill="#FCFBFA"/></g><path d="M58 46h44M58 60h30" stroke="#B9BDB5" stroke-width="7" stroke-linecap="round"/></svg>']
+];
+// intro: the card arrives empty and hands back { hole, land } so the giant can dive into the middle hole first
+function whack(intro) {
+  if (document.querySelector('.whack')) return null;
+  var ROUND = 20, back = document.activeElement, best = parseInt(lsGet('ape:best') || '0', 10) || 0;
+  var box = document.createElement('div'); box.className = 'whack';
+  box.innerHTML = '<div class="whack-box" role="dialog" aria-modal="true" aria-label="Tap the ape">' +
+    '<div class="whack-top mono"><span>score <b class="w-score">0</b></span><span>best <b class="w-best">' + best + '</b></span><span>time <b class="w-time">' + ROUND + '</b></span>' +
+    '<button type="button" class="whack-x" aria-label="Close">×</button></div>' +
+    '<div class="whack-board">' + new Array(10).join('<button type="button" class="hole" tabindex="-1" aria-label="hole"><span class="pit"><img class="spr ape" src="assets/ape-toon.webp" alt="" draggable="false"><span class="spr decoy"></span></span></button>') + '</div>' +
+    '<div class="whack-foot"><p class="w-msg">Tap him. Not the other stuff.</p><button type="button" class="pill solid w-go">Play</button></div></div>';
+  document.body.appendChild(box);
+  var $ = function (q) { return box.querySelector(q); }, holes = [].slice.call(box.querySelectorAll('.hole'));
+  var score = 0, fooled = 0, left = ROUND, playing = false, timers = [], tick = 0, t0 = 0;
+  function clear() { timers.forEach(clearTimeout); timers = []; clearInterval(tick); holes.forEach(function (h) { h.classList.remove('up', 'hit', 'nope', 'd'); }); }
+  function pop() {
+    if (!playing) return;
+    var p = Math.min(1, (Date.now() - t0) / (ROUND * 1000)), stay = 1000 - 480 * p;
+    var free = holes.filter(function (h) { return !h.classList.contains('up'); }); if (!free.length) return;
+    var h = free[Math.floor(Math.random() * free.length)];
+    var d = Date.now() - t0 > 1500 && Math.random() < 0.3 ? DECOYS[Math.floor(Math.random() * DECOYS.length)] : null;
+    h.classList.remove('hit', 'nope'); h.classList.toggle('d', !!d);
+    if (d) { h.querySelector('.decoy').innerHTML = d[1]; h.dataset.say = d[0]; }
+    void h.offsetWidth; h.classList.add('up'); h.tabIndex = 0;
+    timers.push(setTimeout(function () { h.classList.remove('up'); h.tabIndex = -1; }, stay));
+    timers.push(setTimeout(pop, stay * (0.55 + Math.random() * 0.35) - (p > 0.5 && Math.random() < 0.3 ? 200 : 0)));
+  }
+  function start() {
+    clear(); score = 0; fooled = 0; left = ROUND; playing = true; t0 = Date.now();
+    [].forEach.call(box.querySelectorAll('.w-say'), function (x) { x.remove(); }); $('.w-go').classList.remove('nudge');
+    $('.w-score').textContent = 0; $('.w-time').textContent = left; $('.w-msg').textContent = 'Tap him. Not the other stuff.';
+    box.classList.add('playing'); $('.w-go').hidden = true;
+    tick = setInterval(function () { left = ROUND - Math.floor((Date.now() - t0) / 1000); $('.w-time').textContent = Math.max(0, left); if (left <= 0) end(); }, 200);
+    timers.push(setTimeout(pop, 350));
+  }
+  function end() {
+    playing = false; clear(); box.classList.remove('playing');
+    var rec = score > best; if (rec) { best = score; lsSet('ape:best', best); $('.w-best').textContent = best; }
+    $('.w-msg').textContent = score + (score === 1 ? ' tap' : ' taps') + (rec ? ' · new best' : ' · best ' + best) + (fooled ? ' · fell for ' + fooled : '');
+    var go = $('.w-go'); go.textContent = 'Play again'; go.hidden = false; go.focus();
+  }
+  function hit(h) {
+    if (!playing || !h.classList.contains('up') || h.classList.contains('hit')) return;
+    var bad = h.classList.contains('d'); h.tabIndex = -1;
+    if (bad) { score = Math.max(0, score - 1); fooled++; h.classList.add('hit', 'nope'); } else { score++; h.classList.add('hit'); }
+    $('.w-score').textContent = score;
+    var pl = document.createElement('span'); pl.className = 'w-plus mono' + (bad ? ' bad' : ''); pl.textContent = bad ? h.dataset.say + ' −1' : '+1'; h.appendChild(pl); setTimeout(function () { pl.remove(); }, bad ? 900 : 600);
+    setTimeout(function () { h.classList.remove('up', 'hit'); }, bad ? 420 : 180);
+  }
+  holes.forEach(function (h) {
+    h.addEventListener('pointerdown', function (e) { e.preventDefault(); hit(h); });
+    h.addEventListener('click', function (e) { if (e.detail === 0) hit(h); });   // keyboard
+  });
+  function close() { playing = false; clear(); document.removeEventListener('keydown', onKey); box.remove(); if (back && back.focus) back.focus(); }
+  function onKey(e) {
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key !== 'Tab') return;   // keep focus inside the card
+    var f = [].filter.call(box.querySelectorAll('button'), function (b) { return !b.hidden && b.tabIndex >= 0; }); if (!f.length) return;
+    var i = f.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+  }
+  document.addEventListener('keydown', onKey);
+  box.addEventListener('pointerdown', function (e) { if (e.target === box) close(); });
+  $('.whack-x').addEventListener('click', close);
+  $('.w-go').addEventListener('click', start);
+  $('.w-go').focus();
+  function peek() { holes[4].classList.add('up'); }   // he peeks from the middle until you press Play
+  if (!intro) { peek(); return null; }
+  box.classList.add('arrive');
+  return {
+    hole: holes[4],
+    land: function () {
+      if (!box.isConnected || playing) return;
+      var h = holes[4];
+      box.classList.remove('arrive'); $('.whack-box').classList.add('thud');
+      h.classList.add('plop', 'boing'); peek();
+      var say = document.createElement('span'); say.className = 'w-say mono'; say.textContent = 'your turn!'; h.appendChild(say);
+      setTimeout(function () { h.classList.remove('plop', 'boing'); $('.whack-box').classList.remove('thud'); }, 800);
+      setTimeout(function () { say.remove(); }, 2200);
+      $('.w-go').classList.add('nudge');
+    }
+  };
+}
+
+// ── the ape. Press him and he roars, then grows out of the bottom of the page ─
 (function () {
   var ape = document.getElementById('ape'); if (!ape) return;
   var busy = false;
-  var kaiju = function () { return parseInt(lsGet('kaiju') || '0', 10) || 0; };
-  if (kaiju() > 0) ape.title = 'survived \u00d7 ' + kaiju();
   var loud = function () { return ssGet('kaiju:snd') === '1'; };
   function audio(fn, ms) { try { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; var ac = new AC(); fn(ac, ac.currentTime); setTimeout(function () { ac.close(); }, ms); } catch (e) {} }
+  function boing() {
+    audio(function (ac, t) { var o = ac.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(900, t + 0.35); var g = ac.createGain(); g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.5); }, 1000);
+  }
   function roar() {
     audio(function (ac, t) {
       var G = 0.25, g = ac.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(G, t + 0.09); g.gain.setValueAtTime(G, t + 0.7); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
@@ -866,150 +954,52 @@ var SVG_ESB = '<svg viewBox="0 0 20 44" aria-hidden="true"><g fill="#161616"><re
       var n = ac.createBufferSource(); n.buffer = buf; n.connect(ws); n.start(t); n.stop(t + 1.6);
     }, 2500);
   }
-  function chew() {
-    audio(function (ac, t0) {
-      for (var i = 0; i < 4; i++) { var t = t0 + i * 0.3, buf = ac.createBuffer(1, ac.sampleRate * 0.12, ac.sampleRate), d = buf.getChannelData(0); for (var j = 0; j < d.length; j++) d[j] = (Math.random() * 2 - 1) * Math.pow(1 - j / d.length, 2);
-        var n = ac.createBufferSource(); n.buffer = buf; var f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 500; var g = ac.createGain(); g.gain.value = 0.25; n.connect(f); f.connect(g); g.connect(ac.destination); n.start(t); }
-    }, 2000);
-  }
-  function boing() {
-    audio(function (ac, t) { var o = ac.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(900, t + 0.35); var g = ac.createGain(); g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.5); }, 1200);
-  }
-  function planes(n) {
-    var box = document.createElement('div'); box.className = 'egg-planes'; box.setAttribute('aria-hidden', 'true');
-    for (var i = 0; i < n; i++) { var sp = document.createElement('span'); sp.innerHTML = SVG_PLANE; sp.style.cssText = 'top:' + (8 + Math.random() * 40) + 'vh;animation-delay:' + (i * 0.9) + 's;animation-duration:' + (3.2 + Math.random() * 1.6) + 's;width:' + (96 + Math.random() * 56) + 'px;' + (i % 2 ? 'animation-name:egg-fly-back;' : ''); box.appendChild(sp); }
-    document.body.appendChild(box); return box;
-  }
-  function heads(n) {
-    var frag = document.createDocumentFragment();
-    for (var i = 0; i < n; i++) {
-      var banana = Math.random() < 0.45, im;
-      if (banana) { im = document.createElement('span'); im.innerHTML = SVG_BANANA; im.className = 'egg-head egg-banana'; }
-      else { im = document.createElement('img'); im.src = 'assets/ape.svg'; im.alt = ''; im.className = 'egg-head'; }
-      var size = 22 + Math.random() * 64;
-      im.style.cssText = 'left:' + (Math.random() * 100) + 'vw;width:' + size + 'px;animation-delay:' + (Math.random() * 2.4) + 's;animation-duration:' + (2.2 + Math.random() * 2.2) + 's;--spin:' + ((Math.random() > 0.5 ? 1 : -1) * (360 + Math.random() * 720)) + 'deg';
-      frag.appendChild(im);
-    }
-    var box = document.createElement('div'); box.className = 'egg-rain'; box.setAttribute('aria-hidden', 'true'); box.appendChild(frag); document.body.appendChild(box); return box;
-  }
-  function toast(text, cls, ms) { [].forEach.call(document.querySelectorAll('.egg-toast' + (cls ? '.' + cls : ':not(.egg-toast-2)')), function (o) { o.remove(); }); var t = document.createElement('div'); t.className = 'egg-toast mono' + (cls ? ' ' + cls : ''); t.setAttribute('role', 'status'); document.body.appendChild(t); setTimeout(function () { t.textContent = text; }, 30); setTimeout(function () { t.classList.add('out'); setTimeout(function () { t.remove(); }, 500); }, ms || 6000); return t; }
   ape.addEventListener('click', function () {
     if (busy) return; busy = true;
-    var t0 = Date.now(), before = kaiju(), sound = loud(), day = MD === '11-03';
-    var root = document.documentElement, body = document.body, page = [].slice.call(body.children).filter(function (e) { return /^(HEADER|MAIN|FOOTER)$/.test(e.tagName); });
-    var quake = function (on) { page.forEach(function (e) { e.classList.toggle('egg-quake', on); }); };
-    var title = document.title, icon = document.querySelector('link[rel=icon]'), iconHref = icon && icon.getAttribute('href');
+    var sound = loud();
     if (sound) roar();
     var bub = document.createElement('span'); bub.className = 'egg-bubble'; bub.textContent = 'RAWR'; ape.appendChild(bub);
     ape.classList.remove('roar'); void ape.offsetWidth; ape.classList.add('roar');
-    root.classList.add('egg'); document.title = day ? 'KAIJU DAY' : 'KAIJU ALERT'; if (icon) icon.setAttribute('href', 'assets/ape.svg');
-    (window.__mx || []).forEach(function (m) { if (m.setWord) { m.__word = m.word; m.setWord('RAWR'); } });
-    // the ticker is decoration; one sentence is announced
-    var TXT = day ? '⚠ KAIJU DAY · ' : '⚠ KAIJU ALERT · ';
-    var tick = document.createElement('div'); tick.className = 'egg-tick'; tick.setAttribute('aria-hidden', 'true'); tick.innerHTML = '<span>' + new Array(9).join(TXT) + '</span><span>' + new Array(9).join(TXT) + '</span>'; body.appendChild(tick);
-    var sr = document.createElement('div'); sr.className = 'egg-sr'; sr.setAttribute('role', 'status'); body.appendChild(sr); setTimeout(function () { sr.textContent = 'Kaiju alert — press Escape to end.'; }, 60);
-    var kong = document.createElement('div'); kong.className = 'egg-kong'; kong.setAttribute('aria-hidden', 'true'); kong.innerHTML = '<img src="assets/ape.svg" alt="">' + (before + 1 >= 3 ? '<span class="egg-hat">' + SVG_HAT + '</span>' : ''); body.appendChild(kong);
-    // no Escape key on a phone: tap the giant, or the ticker, to end it
-    kong.addEventListener('click', finish); tick.addEventListener('click', finish);
-    var rain = null, fleet = null, timers = [], caught = 0, ended = false;
+    var kong = document.createElement('div'); kong.className = 'egg-kong'; kong.setAttribute('aria-hidden', 'true'); kong.innerHTML = '<img src="assets/ape.webp" alt="">'; document.body.appendChild(kong);
+    // no Escape key on a phone: tap the giant to end it
+    kong.addEventListener('click', dive);
+    var timers = [], ended = false;
     var at = function (ms, fn) { timers.push(setTimeout(fn, ms)); };
-    function onKey(e) { if (e.key === 'Escape') finish(); }
+    function onKey(e) { if (e.key === 'Escape') finish(false); }
     document.addEventListener('keydown', onKey);
-    if (REDUCE) {
-      at(200, function () { tick.classList.add('in'); });
-      at(2600, finish);
-    } else {
-      quake(true); at(900, function () { quake(false); });
-      at(150, function () { tick.classList.add('in'); });
-      at(400, function () { rain = heads(innerWidth < 640 ? 34 : 70); });
-      at(1400, function () { kong.classList.add('up'); fleet = planes(innerWidth < 640 ? 2 : 4); });
-      at(2400, function () { if (!rain) return; var r = kong.querySelector('img').getBoundingClientRect(); [].forEach.call(rain.querySelectorAll('.egg-banana'), function (b) { var x = parseFloat(b.style.left) / 100 * innerWidth; if (x > r.left + r.width * 0.25 && x < r.right - r.width * 0.25) { caught++; b.classList.add('egg-caught'); } }); });
-      at(3600, function () {
-        // eaten: the page shrinks into the mouth
-        var r = kong.querySelector('img').getBoundingClientRect(), ox = r.left + r.width * 0.5, oy = r.top + r.height * 0.76;
-        page.forEach(function (e) { var b = e.getBoundingClientRect(); e.style.transformOrigin = (ox - b.left) + 'px ' + (oy - b.top) + 'px'; e.classList.add('egg-eaten'); });
-        quake(true);
-      });
-      at(4900, function () { quake(false); kong.classList.add('chew'); if (sound) chew(); tick.querySelectorAll('span').forEach(function (sp) { sp.textContent = new Array(7).join('NOM NOM NOM · ' + caught + ' BANANAS CAUGHT · '); }); });
-      at(6100, function () {
-        // spat back out — reprinted, after enough survivals
-        kong.classList.remove('chew'); kong.classList.add('spit'); if (sound) boing();
-        page.forEach(function (e) { e.classList.remove('egg-eaten'); e.classList.add('egg-spat'); if (before + 1 >= 5) e.classList.add('egg-reprinted'); });
-        tick.querySelectorAll('span').forEach(function (sp) { sp.textContent = new Array(9).join('CONTAINED · '); });
-        quake(true); at(700, function () { quake(false); });
-      });
-      at(7300, function () { kong.classList.remove('up'); tick.classList.remove('in'); });
-      at(8300, finish);
+    if (REDUCE) { kong.classList.add('up'); at(2600, function () { finish(true); }); }
+    else {
+      at(300, function () { kong.classList.add('up'); });
+      at(3300, dive);
     }
-    function finish() {
+    // the handoff: the card pops in as the giant drops straight down, and the moment he is gone the cartoon of him boings out of the middle hole
+    function dive() {
+      if (ended || REDUCE) { finish(true); return; }
+      timers.forEach(clearTimeout); timers = [];
+      var g = whack(true); if (!g) { finish(false); return; }
+      kong.style.zIndex = 90; kong.style.transition = 'transform 560ms cubic-bezier(.5, 0, .75, 0)'; kong.classList.remove('up');   // in front of the card while he drops
+      setTimeout(function () { kong.remove(); if (sound) boing(); g.land(); }, 560);
+      ended = true; document.removeEventListener('keydown', onKey); bub.remove(); done();
+    }
+    function finish(play) {
       if (ended) return; ended = true;
       document.removeEventListener('keydown', onKey);
       timers.forEach(clearTimeout);
-      page.forEach(function (e) { e.classList.remove('egg-eaten', 'egg-spat', 'egg-quake'); e.style.transformOrigin = ''; });
-      var reprinted = page.some(function (e) { return e.classList.contains('egg-reprinted'); });
-      setTimeout(function () { page.forEach(function (e) { e.classList.remove('egg-reprinted'); }); }, 2600);
-      kong.remove(); tick.remove(); sr.remove(); if (rain) rain.remove(); if (fleet) fleet.remove(); bub.remove();
-      var n = before + 1; lsSet('kaiju', n);
-      ape.title = 'survived \u00d7 ' + n;
-      var tally = document.createElement('span'); tally.className = 'egg-tally'; tally.textContent = 'survived \u00d7 ' + n; ape.appendChild(tally); setTimeout(function () { tally.remove(); }, 4200);
+      kong.remove(); bub.remove();
+      done();
+      if (play) whack();
+    }
+    function done() {
       if (!sound) { ssSet('kaiju:snd', '1'); var note = document.createElement('span'); note.className = 'egg-note'; note.textContent = 'press again for sound'; ape.appendChild(note); setTimeout(function () { note.remove(); }, 4200); }
-      root.classList.remove('egg'); document.title = title; if (icon && iconHref) icon.setAttribute('href', iconHref);
-      (window.__mx || []).forEach(function (m) { if (m.replay) { var w = m.__word; if (w) m.setWord(w); m.replay(); } });
-      var secs = ((Date.now() - t0) / 1000).toFixed(1);
-      toast('INC-' + ('000' + n).slice(-4) + ' · kaiju on ' + HERE + ' · contained in ' + secs + 's · ' + caught + ' banana' + (caught === 1 ? '' : 's') + ' recovered · postmortem: blameless' + (reprinted ? ' · page reprinted at 0.2 mm layers' : ''), '', 6500);
-      if (n === 13 && HERE !== 'colophon.html') toast('The ape wants to see the playground. It is on the colophon.', 'egg-toast-2', 5000);
       busy = false;
-      feedChip();
     }
   });
-  // thirteen survivals: on the colophon, the ape can be fed to the playground
-  function feedChip() {
-    if (kaiju() < 13 || HERE !== 'colophon.html' || document.querySelector('.feed-ape')) return;
-    var play = document.getElementById('play'); if (!play) return;
-    var b = document.createElement('button'); b.type = 'button'; b.className = 'pill mono feed-ape'; b.textContent = 'feed the ape to the playground';
-    b.addEventListener('click', function () {
-      var w = document.getElementById('play-word'); if (w) { w.value = 'Kong'; w.dispatchEvent(new Event('input', { bubbles: true })); }
-      dispatchEvent(new CustomEvent('playground:feed', { detail: { src: 'assets/ape.svg', word: 'Kong' } }));
-      play.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'center' });
-    });
-    var fig = play.closest('figure') || play.parentNode; fig.parentNode.insertBefore(b, fig.nextSibling);
-  }
-  feedChip();
 })();
 
-// ── the footer ape watches you; on phones he blinks when the footer arrives.
-//    Mar 2 (King Kong, 1933) he stands on a tiny Empire State.
+// ── Mar 2 (King Kong, 1933) the footer ape stands on a tiny Empire State.
 (function () {
-  var ape = document.getElementById('ape'), img = ape && ape.querySelector('img'); if (!img || !window.fetch || !window.DOMParser) return;
-  if (MD === '03-02') { var esb = document.createElement('span'); esb.className = 'ape-esb'; esb.innerHTML = SVG_ESB; ape.appendChild(esb); ape.classList.add('on-esb'); }
-  fetch(img.getAttribute('src')).then(function (r) { return r.ok ? r.text() : ''; }).then(function (txt) {
-    if (!txt) return;
-    var svg = new DOMParser().parseFromString(txt, 'image/svg+xml').documentElement; if (!svg || svg.nodeName !== 'svg') return;
-    svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
-    var eyes = [];
-    [68, 132].forEach(function (cx) {
-      var parts = [].filter.call(svg.querySelectorAll('circle'), function (c) { var x = +c.getAttribute('cx'); return Math.abs(x - cx) < 3 && +c.getAttribute('r') < 6; });
-      var white = [].filter.call(svg.querySelectorAll('ellipse'), function (e) { return +e.getAttribute('cx') === cx && +e.getAttribute('rx') === 12; })[0];
-      if (!parts.length || !white) return;
-      var eye = document.createElementNS('http://www.w3.org/2000/svg', 'g'), pup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      eye.setAttribute('class', 'ape-eye'); pup.setAttribute('class', 'ape-pupil');
-      white.parentNode.insertBefore(eye, white); eye.appendChild(white); parts.forEach(function (p) { pup.appendChild(p); }); eye.appendChild(pup);
-      eyes.push([eye, pup]);
-    });
-    if (eyes.length !== 2) return;
-    img.replaceWith(svg);
-    var raf = 0, mx = 0, my = 0;
-    function look() {
-      raf = 0; var r = ape.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * 0.48, dx = mx - cx, dy = my - cy, d = Math.hypot(dx, dy);
-      var k = d > 200 || d < 1 ? 0 : 1, ux = k ? dx / d : 0, uy = k ? dy / d : 0, f = Math.min(1, d / 60);
-      eyes.forEach(function (e) { e[1].setAttribute('transform', 'translate(' + (ux * 4.5 * f).toFixed(2) + ' ' + (uy * 2.4 * f).toFixed(2) + ')'); });
-    }
-    if (!TOUCH) addEventListener('pointermove', function (e) { mx = e.clientX; my = e.clientY; if (!raf) raf = requestAnimationFrame(look); }, { passive: true });
-    else if ('IntersectionObserver' in window && !REDUCE) {
-      var io = new IntersectionObserver(function (es) { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(function () { eyes.forEach(function (e) { if (e[0].animate) e[0].animate([{ transform: 'scaleY(1)' }, { transform: 'scaleY(0.08)', offset: 0.45 }, { transform: 'scaleY(1)' }], { duration: 260, easing: 'ease-in-out' }); }); }, 500); }, { threshold: 1 });
-      io.observe(ape);
-    }
-  }).catch(function () {});
+  var ape = document.getElementById('ape'); if (!ape || MD !== '03-02') return;
+  var esb = document.createElement('span'); esb.className = 'ape-esb'; esb.innerHTML = SVG_ESB; ape.appendChild(esb); ape.classList.add('on-esb');
 })();
 
 // ── a link to #ape (About's "off hours") points at him instead of jumping past him
@@ -1069,7 +1059,7 @@ var SVG_ESB = '<svg viewBox="0 0 20 44" aria-hidden="true"><g fill="#161616"><re
   var ape = '   .-"-.\n _/.-.-.\\_\n( ( o o ) )\n |/  "  \\|\n  \\ .-. /\n  /`"""`\\';
   try {
     console.log('%c' + ape + '\n%cPoking around? Good. No trackers, no framework, no cookies.\n%cSay hello: ' + LINKEDIN + '\n%cflag 3 of 3: ' + atob('ZmxhZ3t0aGUtY29uc29sZS1pcy10aGUtYmFjay1kb29yfQ==') + '  (paste flags into ⌘K)',
-      'font: 12px/1.2 ui-monospace, Menlo, monospace; color: #161616', 'font: 13px/1.6 ui-monospace, Menlo, monospace; color: #161616', 'font: 12px/1.6 ui-monospace, Menlo, monospace; color: #3E8C93', 'font: 11px/1.6 ui-monospace, Menlo, monospace; color: #FF5A1F');
+      'font: 12px/1.2 ui-monospace, Menlo, monospace; color: #161616', 'font: 13px/1.6 ui-monospace, Menlo, monospace; color: #161616', 'font: 12px/1.6 ui-monospace, Menlo, monospace; color: #3E8C93', 'font: 11px/1.6 ui-monospace, Menlo, monospace; color: #2F6B34');
   } catch (e) {}
 })();
 
