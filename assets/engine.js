@@ -692,7 +692,7 @@ function matrix(c, opts) {
       var b = document.createElement('button'); b.type = 'button'; b.className = hint.className; b.id = hint.id;
       var touch = matchMedia('(hover: none)').matches, verb = touch ? 'tap' : 'click';
       var isPic = !!(opts.src && !/\.svg(\?|$)/i.test(opts.src)) && !c.id;
-      b.textContent = c.id === 'field' ? (touch ? 'tap to replay · type to rewrite' : 'move the cursor · type to rewrite') : verb + ' to replay · ' + (isPic ? 'picture' : 'glyph') + ' → text';
+      b.textContent = verb + ' to replay · ' + (isPic ? 'picture' : 'glyph') + ' → text';
       b.setAttribute('aria-label', 'Replay the header animation'); hint.replaceWith(b); hint = b;
       on(hint, 'click', function () { if (reduce) toggle(); else replay(); });
     }

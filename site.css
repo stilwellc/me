@@ -225,8 +225,6 @@ body .facts .l { text-wrap: balance; }
 body:has(> .home) { display: flex; flex-direction: column; min-height: 100svh; }
 body > .home { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr) auto; }
 body .field { flex-direction: column; justify-content: center; align-items: stretch; }
-/* home: the field row can be taller than its canvas, so the hint flows right under the canvas instead */
-body .field .hint { position: relative; top: auto; align-self: flex-end; margin-top: 6px; }
 body .bottom { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; padding-top: 0.75rem; padding-bottom: calc(var(--pad) * 0.8); align-content: end; }
 h1.display, .cell h2, .sec h2 { text-wrap: balance; }
 
@@ -765,9 +763,6 @@ body figure.plate img.veil-fade { opacity: 0; }
 #pal-list li[data-k] > span:first-child { white-space: pre; overflow: hidden; text-overflow: ellipsis; }
 
 /* f7 · home magic words */
-.field .ape-peek { position: absolute; left: 9%; bottom: 0; width: clamp(44px, 5vw, 64px); height: clamp(40px, 4.4vw, 58px); overflow: hidden; pointer-events: none; }
-.field .ape-peek img { display: block; width: 100%; transform: translateY(100%); }
-.pill.lit { border-color: var(--accent); color: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 28%, transparent); transition: box-shadow var(--t2) var(--out), border-color var(--t2) var(--out); }
 
 .egg-note { position: absolute; left: 50%; top: 100%; transform: translate(-50%, 18px); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-3); white-space: nowrap; pointer-events: none; animation: egg-tally 4.2s var(--out) forwards; }
 

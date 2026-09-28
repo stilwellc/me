@@ -301,12 +301,11 @@ addEventListener('pagereveal', function (e) { if (e.viewTransition) document.doc
 // print buttons (the résumé)
 [].forEach.call(document.querySelectorAll('[data-print]'), function (b) { b.addEventListener('click', function () { window.print(); }); });
 
-// ── the header's hint: plain words, named by what it says. The home page keeps
-//    its hint; elsewhere it shows on the first page of a visit, then steps aside.
-function tuneHint(c, home) {
+// ── the header's hint: plain words, named by what it says. It shows on the
+//    first page of a visit, then steps aside.
+function tuneHint(c) {
   var hint = c.parentElement && c.parentElement.querySelector('.hint'); if (!hint) return;
   hint.removeAttribute('aria-label');
-  if (home) { if (TOUCH) hint.textContent = 'tap to replay'; return; }
   hint.textContent = (TOUCH ? 'tap' : 'click') + ' to replay';
   if (ssGet('mx:hinted')) hint.hidden = true; else ssSet('mx:hinted', '1');
 }
@@ -317,67 +316,26 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   if (FROM_RECT && i === 0) o.fromRect = FROM_RECT;
   if (c.dataset.layers === '1') o.layers = true;
   var m = matrix(c, o); if (i === 0) { HEAD = m; HEAD_CANVAS = c; }
-  tuneHint(c, false);
+  tuneHint(c);
 });
 
-// ── the home field: same engine, plus the word cycle and write-your-own-word
+// ── the home field: same engine, plus the word cycle
 (function () {
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
-  var WORDS = ['Collin', 'Stilwell', 'Security'], wi = 0, typed = '', cycle = null, inside = false;
+  var WORDS = ['Collin', 'Stilwell', 'Security'], wi = 0, cycle = null, inside = false;
   if (MD === '10-04') WORDS.push('Snoopy');   // Snoopy's first strip, 1950
-  var hint = document.getElementById('field-hint');
   var m = matrix(c, { text: WORDS[0], src: 'assets/collin.jpg', prev: PREV_GLYPH, picHold: 2.2 });
   HEAD = m; HEAD_CANVAS = c;
-  tuneHint(c, true); hint = c.parentElement.querySelector('.hint') || hint;
-  var HINT0 = hint ? hint.textContent : '';
   var base = c.getAttribute('aria-label') || '';
   var name = function (w) { if (/the word \S+$/.test(base)) c.setAttribute('aria-label', base.replace(/the word \S+$/, 'the word ' + w)); };
-  var named = function (w) { c.setAttribute('aria-label', w + ', typed into the header'); };
-  function startCycle() { if (REDUCE || cycle || typed || inside) return; cycle = setInterval(function () { wi = (wi + 1) % WORDS.length; m.setWord(WORDS[wi]); name(WORDS[wi]); }, 10000); }
+  function startCycle() { if (REDUCE || cycle || inside) return; cycle = setInterval(function () { wi = (wi + 1) % WORDS.length; m.setWord(WORDS[wi]); name(WORDS[wi]); }, 10000); }
   function stopCycle() { if (cycle) { clearInterval(cycle); cycle = null; } }
   startCycle();
   document.addEventListener('visibilitychange', function () { if (document.hidden) stopCycle(); else startCycle(); });
   // a morph starting under the cursor fights the flow field: hold still while it is in the band
   c.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { inside = true; stopCycle(); } });
   c.addEventListener('pointerleave', function () { inside = false; startCycle(); });
-  function reset() { typed = ''; m.setWord(WORDS[wi]); name(WORDS[wi]); if (hint) hint.textContent = HINT0; startCycle(); }
-  function write(w) {
-    typed = w; if (!w) { reset(); return; }
-    stopCycle(); if (hint) hint.textContent = TOUCH ? 'tap to replay' : 'esc to reset';
-    var lw = w.toLowerCase();
-    if (lw === 'sudo') { m.setWord('denied'); named('denied'); return; }
-    m.setWord(w); named(w);
-    if (lw === 'snoopy' && m.replay) setTimeout(function () { m.replay(); }, 650);
-    else if (lw === 'rawr') peek();
-    else if (lw === 'hire') light();
-  }
-  function peek() {
-    var box = c.parentElement.querySelector('.ape-peek');
-    if (!box) { box = document.createElement('div'); box.className = 'ape-peek'; box.setAttribute('aria-hidden', 'true'); box.innerHTML = '<img src="assets/ape.webp" alt="">'; c.parentElement.appendChild(box); }
-    var im = box.firstChild; if (!im.animate) return;
-    im.animate(REDUCE ? [{ opacity: 0 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.8 }, { opacity: 0 }] : [{ transform: 'translateY(100%)' }, { transform: 'translateY(22%)', offset: 0.25 }, { transform: 'translateY(26%) rotate(-4deg)', offset: 0.6 }, { transform: 'translateY(100%)' }], { duration: 1800, easing: 'cubic-bezier(.65,0,.35,1)' });
-  }
-  function light() {
-    var a = document.querySelector('main a[href*="linkedin.com"]') || document.querySelector('a.pill[href*="linkedin.com"]'); if (!a) return;
-    a.classList.add('lit'); setTimeout(function () { a.classList.remove('lit'); }, 2400);
-  }
-  window.__fieldType = function (e) {
-    if (e.key === 'Escape') { if (!typed) return false; reset(); return true; }
-    if (e.key === 'Backspace') { if (!typed) return false; write(typed.slice(0, -1)); return true; }
-    if (e.key.length === 1 && /[a-zA-Z0-9 .&'-]/.test(e.key) && typed.length < 12) { write(typed + e.key); return true; }
-    return false;
-  };
-  // phones: a tap on the band opens the keyboard, so the promise is real
-  if (TOUCH) {
-    var ti = document.createElement('input');
-    ti.type = 'text'; ti.className = 'field-input'; ti.setAttribute('inputmode', 'text'); ti.setAttribute('autocapitalize', 'off'); ti.setAttribute('autocomplete', 'off'); ti.setAttribute('autocorrect', 'off'); ti.spellcheck = false; ti.maxLength = 12; ti.setAttribute('aria-label', 'Write a word into the header'); ti.setAttribute('enterkeyhint', 'done');
-    ti.style.cssText = 'position:absolute;left:0;bottom:0;width:1px;height:1px;opacity:0;border:0;padding:0;font-size:16px;pointer-events:none;';
-    c.parentElement.appendChild(ti);
-    c.addEventListener('click', function () { ti.value = typed; ti.focus({ preventScroll: true }); });
-    ti.addEventListener('input', function () { var v = ti.value.replace(/[^a-zA-Z0-9 .&'-]/g, '').slice(0, 12); if (v !== ti.value) ti.value = v; write(v); });
-    ti.addEventListener('keydown', function (e) { if (e.key === 'Enter') ti.blur(); });
-  }
 })();
 
 // ── live: lectr's corpus count on the Digital page ─────────────────────────
@@ -394,7 +352,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
 // ── the shortcuts dialog, rendered from one table so help and keymap agree
 (function () {
   var grid = document.querySelector('#keys .keys-grid'); if (!grid) return;
-  var ROWS = [['⌘K', 'command palette'], ['/', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['enter', 'on Replay: replay the header'], ['a–z', 'type a word into the home header'], ['?', 'this']];
+  var ROWS = [['⌘K', 'command palette'], ['/', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['enter', 'on Replay: replay the header'], ['?', 'this']];
   grid.innerHTML = ROWS.map(function (r) { return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + h(k) + '</kbd>'; }).join(' ') + '</span><span>' + h(r[1]) + '</span>'; }).join('');
 })();
 
@@ -518,9 +476,8 @@ function flagCheck(s) {
   list.addEventListener('mousemove', function (e) { var li = e.target.closest('li[data-k]'); if (!li || +li.dataset.k === sel) return; sel = +li.dataset.k; draw(); preview(); });
   pal.addEventListener('click', function (e) { if (e.target === pal) close(); });
   var btn = document.getElementById('palette-btn'); if (btn) btn.addEventListener('click', open);
-  var pending = null, pt = 0, gT = 0, gField = false;
+  var pending = null, pt = 0;
   var CHORD = { h: 'index.html', d: 'digital.html', s: 'security.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' };
-  function flushG() { clearTimeout(gT); var was = pending === 'g' && gField; pending = null; gField = false; if (was && window.__fieldType) window.__fieldType({ key: 'g' }); }
   addEventListener('keydown', function (e) {
     var ae = document.activeElement, inField = /^(INPUT|TEXTAREA|SELECT)$/.test((ae || {}).tagName || '') || (ae && ae.isContentEditable);
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); pal.hidden ? open() : close(); return; }
@@ -535,19 +492,12 @@ function flagCheck(s) {
     if (inField || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === '/') { e.preventDefault(); open(); return; }
     if (e.key === '?') { e.preventDefault(); openKeys(); return; }
-    // the home letterform takes keys only when nothing else has focus
-    var fieldFocus = !!window.__fieldType && (!ae || ae === document.body || ae === document.documentElement || ae.id === 'field');
     var now = Date.now();
     if (pending === 'g') {
-      if (now - pt < 900 && CHORD[e.key]) { clearTimeout(gT); pending = null; gField = false; e.preventDefault(); leave(CHORD[e.key]); return; }
-      flushG();
+      pending = null;
+      if (now - pt < 900 && CHORD[e.key]) { e.preventDefault(); leave(CHORD[e.key]); return; }
     }
-    if (e.key === 'g' && !e.repeat) {
-      pending = 'g'; pt = now; gField = fieldFocus;
-      if (fieldFocus) { e.preventDefault(); gT = setTimeout(flushG, 900); }
-      return;
-    }
-    if (fieldFocus && window.__fieldType(e)) { e.preventDefault(); return; }
+    if (e.key === 'g' && !e.repeat) { pending = 'g'; pt = now; }
   });
 })();
 
