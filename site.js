@@ -67,8 +67,7 @@ var PAGES = [
   { u: 'digital.html', t: 'Digital', h: 'g d', w: 'Digital' },
   { u: 'physical.html', t: 'Physical', h: 'g p', w: 'Physical' },
   { u: 'fourwalls.html', t: 'Four Walls', h: 'residence', w: 'Four Walls', k: 'apartment renovation home' },
-  { u: 'prints.html', t: '3D prints', h: 'text → print', w: 'Prints', k: 'printing' },
-  { u: 'wave.html', t: 'Wave panel', h: '3D prints', w: 'Wave', k: 'printing' },
+  { u: 'wave.html', t: 'Wave panel', h: 'text2print', w: 'Wave', k: 'printing' },
   { u: 'security.html', t: 'Security', h: 'g s', w: 'Security', k: 'day job' },
   { u: 'writing.html', t: 'Writing', h: 'g n', w: 'Writing', k: 'essays substack' },
   { u: 'github.html', t: 'GitHub', h: 'g g', w: 'GitHub', k: 'code repos' },
@@ -77,7 +76,7 @@ var PAGES = [
   { u: 'lectr.html', t: 'lectr, a case study', h: 'g l', w: 'lectr', k: 'auction', cs: 1 },
   { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'digital', w: 'SecMCPHub', k: 'security review', cs: 1 },
   { u: 'soiree.html', t: 'Soirée, a case study', h: 'digital', w: 'Soirée', k: 'events tonight', cs: 1 },
-  { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing cadquery', cs: 1 },
+  { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing studio bambu woven watch case', cs: 1 },
   { u: 'colophon.html', t: 'Colophon', h: 'stack and build', w: 'Colophon', k: 'playground' }
 ];
 function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('/').pop().toLowerCase() || 'index.html'; for (var i = 0; i < PAGES.length; i++) if (PAGES[i].u === f) return PAGES[i]; return null; }
@@ -435,7 +434,7 @@ function flagCheck(s) {
     previewing = false; pal.hidden = true; inp.setAttribute('aria-expanded', 'false'); leave(i.u);
   }
   // commands for the curious: matched exactly, never listed
-  var PORTS = { 'index.html': 80, 'digital.html': 443, 'physical.html': 3000, 'fourwalls.html': 3306, 'prints.html': 5000, 'wave.html': 5432, 'security.html': 8443, 'writing.html': 8080, 'github.html': 9418, 'about.html': 8000, 'resume.html': 8888, 'lectr.html': 4000, 'secmcphub.html': 7000, 'soiree.html': 6000, 'text2print.html': 9100, 'colophon.html': 9000 };
+  var PORTS = { 'index.html': 80, 'digital.html': 443, 'physical.html': 3000, 'fourwalls.html': 3306, 'wave.html': 5432, 'security.html': 8443, 'writing.html': 8080, 'github.html': 9418, 'about.html': 8000, 'resume.html': 8888, 'lectr.html': 4000, 'secmcphub.html': 7000, 'soiree.html': 6000, 'text2print.html': 9100, 'colophon.html': 9000 };
   var APPS = [['lectr', 1001, 'auction intelligence', '/srv/lectr', '/bin/nightly', 'https://lectr.bid'], ['starling', 1002, 'ebay deep value', '/srv/starling', '/bin/sweep', 'https://starling-6s1.pages.dev'], ['soiree', 1003, 'what is on tonight', '/srv/soiree', '/bin/scrape', 'https://soiree.today'], ['text2print', 1004, 'text to printable file', '/srv/text2print', '/bin/cadquery', 'https://github.com/stilwellc/text2print'], ['secmcphub', 1005, 'monthly security review', '/srv/secmcphub', '/bin/report', 'https://github.com/stilwellc/SecMCPHub']];
   function command(raw) {
     var c = norm(raw.trim()).replace(/\s+/g, ' ');

@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>text2print, a case study — Collin Stilwell</title>
-<meta name="description" content="text2print: a Claude Code skill that turns a sentence into a print-ready model, with four gates and a slicer check before anything is delivered.">
+<meta name="description" content="text2print: a local studio that turns a shape, a texture or a sentence into a print-ready Bambu Lab project, checked layer by layer.">
 <meta property="og:title" content="text2print, a case study — Collin Stilwell">
-<meta property="og:description" content="text2print: a Claude Code skill that turns a sentence into a print-ready model, with four gates and a slicer check before anything is delivered.">
+<meta property="og:description" content="text2print: a local studio that turns a shape, a texture or a sentence into a print-ready Bambu Lab project, checked layer by layer.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/text2print.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/text2print.png">
@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=1790560432">
+<link rel="stylesheet" href="site.css?v=1793068054">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -33,97 +33,79 @@
   <nav aria-label="Site"><a class="pill on" aria-current="page" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Résumé</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
-  <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.45" data-text="text2print" data-src="assets/physical/prints/ape/hero.jpg" aria-label="The sofubi ape bust, decoded into the word text2print" role="img"></canvas><span class="hint">click to replay</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-focus="0.5,0.45" data-text="text2print" data-src="assets/physical/text2print/watch/closed.webp" aria-label="The woven watch case, decoded into the word text2print" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">text2print on GitHub ↗</a></p>
-  <h1 class="display rv d1">A Claude Code skill that<br>models parts for 3D printing.</h1>
-  <p class="lede rv d2">text2print turns a sentence into CadQuery code, checks printability, and waits for four approvals before delivery.</p>
+  <h1 class="display rv d1">A studio that turns a shape,<br>a texture and a sentence into a print.</h1>
+  <p class="lede rv d2">text2print builds print-ready Bambu Lab projects from a shape and a texture, or from a description Claude turns into a design, and checks every layer before it hands over a file.</p>
 
   <div class="facts rv d3">
-    <div><div class="n">10</div><div class="l">phases<span class="sub">requirements → delivered</span></div></div>
-    <div><div class="n">4</div><div class="l">gates<span class="sub">each needs an approval</span></div></div>
-    <div><div class="n">6</div><div class="l">material profiles<span class="sub">PLA · PETG · ABS · ASA · TPU · PA-CF</span></div></div>
-    <div><div class="n">0</div><div class="l">islands on the ape’s five shells<span class="sub">printcheck, every layer</span></div></div>
+    <div><div class="n">26</div><div class="l">shapes<span class="sub">trays to lidded boxes to lamp shades</span></div></div>
+    <div><div class="n">46</div><div class="l">textures<span class="sub">19 woven · 7 fabric · 6 spiral · 14 more</span></div></div>
+    <div><div class="n">5</div><div class="l">lid styles<span class="sub">slip · gift box · screw · magnets · none</span></div></div>
+    <div><div class="n">337</div><div class="l">tests<span class="sub">fits, floating rods, slicer output</span></div></div>
   </div>
 
   <section class="sec" id="problem">
     <div class="k">the problem</div>
     <div>
       <h2>Modeling is the slow part.</h2>
-      <p>The skill takes a sentence and returns a verified file. Each phase is checked before the next starts; the last check is the slicer.</p>
+      <p>A textured, two-colour, lidded object takes hours to model and more hours to make printable. text2print generates the geometry, the colour changes and the slicer settings together, so the file that comes out is the file that prints.</p>
     </div>
   </section>
 
-  <section class="sec" id="build">
-    <div class="k">the build</div>
+  <section class="sec" id="studio">
+    <div class="k">the studio</div>
     <div>
-      <h2>One skill, four modes, ten phases.</h2>
-      <p>A new design runs requirements, repository search, dimensions and a design brief before any geometry, then base shape, features, a structural pass against the material’s rules, and a finish. The other three modes take an existing STL to reference, fix overhangs in, or audit.</p>
-      <div class="stage">
-        <div><div class="t">brief</div><div class="d">requirements · repo search · dimensions · design brief</div></div>
-        <div><div class="t">build</div><div class="d">base shape · features · structural pass · finish</div></div>
-        <div><div class="t">verify</div><div class="d">printcheck · overhangs · PrusaSlicer, headless</div></div>
+      <h2>Pick a shape and a texture, or describe it.</h2>
+      <p>The studio runs locally in the browser. Choose a shape, a texture, colours and a lid, or type a sentence into Design with Claude and let it compose the design. The right panel shows size, rod count, colour changes, print time and filament; one button writes a Bambu Studio project for the P2S.</p>
+      <figure class="plate wide"><img src="assets/physical/text2print/studio.webp" width="1600" height="1000" alt="The text2print studio: shapes on the left, a woven lidded box with contour lines on its lid in the centre, and size, lid fit, colour changes and print time on the right" loading="lazy"><figcaption>The studio · the watch case's base and gift-box lid</figcaption></figure>
+      <p class="after-plate">Woven textures print as rods: each layer is a course of lines that cross the course below, so the weave is the object, with no infill and no supports. Colour changes follow the courses, fades dither between two filaments, and lids are short caps of the same weave printed face down.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="example">
+    <div class="k">the example</div>
+    <div>
+      <h2>A woven case for three watches.</h2>
+      <p>A twill base in charcoal and cream holds a printed sleeve with three bays. The lid is a gift-box lid built over an insert: the sleeve stands 21 mm above the base and is the neck the lid slides onto, so the closed box is one block with a single seam.</p>
+      <div class="pairs">
+        <figure class="plate"><img src="assets/physical/text2print/watch/closed.webp" width="1600" height="1000" alt="The closed watch case: a charcoal and cream twill block with contour lines on the lid" loading="lazy"><figcaption>Closed · 225 × 92 × 89.6 mm</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/text2print/watch/open.webp" width="1600" height="1000" alt="The case open: lid lifted, cream sleeve standing above the woven base" loading="lazy"><figcaption>Open · the sleeve is the neck</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/text2print/watch/top.webp" width="1600" height="1000" alt="The lid from above: topographic lines of three hills laid as charcoal rods on cream weave" loading="lazy"><figcaption>Lid · one hill per watch</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/text2print/watch/underside.webp" width="1600" height="1000" alt="The base's underside: solid charcoal with an inlaid cream border line and the letters cns" loading="lazy"><figcaption>Underside · inlaid in the first two layers</figcaption></figure>
       </div>
-      <p>Twelve rule tables cover materials, fits, snap arms, living hinges, print-in-place joints, minimum features, fasteners, board mounts and thin walls.</p>
-    </div>
-  </section>
-
-  <section class="sec" id="run">
-    <div class="k">the run</div>
-    <div>
-      <h2>A studio that watches the folder.</h2>
-      <p>A single-file Flask app on port 7384 streams each new STL, render and state change to the browser within half a second. It shows the model on a 256 mm plate, the phase rail, parameters, slicer report and activity log.</p>
-      <figure class="plate wide"><img src="assets/physical/text2print/studio.webp" width="1600" height="1000" alt="The text2print studio: pipeline rail on the left, a verification banner asking to approve phase two, and a bowl on the print plate" loading="lazy"><figcaption>The studio · phase 2 gate, waiting for a yes</figcaption></figure>
-      <p class="after-plate">At <b>design-brief</b>, <b>phase-1-base</b>, <b>phase-2-features</b> and <b>final-review</b>, the skill writes a question to the state file, the studio shows an approve-or-change banner, and a watcher waits up to 30 minutes. The skill can’t pass a gate on its own; a change request redoes the phase.</p>
+      <p>The lid's weave starts where the base's stops, so its rows match a single box woven to the full height, rod for rod. The contour lines are continuous rods laid on the lid's top course, and the base's underside carries an inlaid border and maker mark in the first two layers.</p>
+      <ul>
+        <li><span>Fit</span><span class="v">lid 0.25–0.30 mm a side over the sleeve · base 0.6 mm</span></li>
+        <li><span>Base</span><span class="v">≈7 h 22 m · 75 colour changes</span></li>
+        <li><span>Lid</span><span class="v">≈5 h 11 m · printed face down on a cream raft</span></li>
+      </ul>
     </div>
   </section>
 
   <section class="sec" id="proof">
     <div class="k">the proof</div>
     <div>
-      <h2>printcheck, overhangs, then PrusaSlicer.</h2>
-      <p><b>printcheck</b> slices the mesh every 0.4 mm and reports islands (unsupported material, fatal) in world coordinates, plus overhang area past 50°, first-layer contact and features under 0.9 mm. <b>overhangs</b> measures only steep exterior faces, probing 1.5 mm along each normal to skip inner skins that falsely flagged hollow parts.</p>
-      <p>PrusaSlicer then runs headless with named profiles (0.4 mm nozzle at 0.16 mm layers for the bust, 0.08 mm for the eye plugs, 0.8 mm nozzle at 0.32 mm for the wave tiles) and its log is checked for warnings. In a control test, a deliberately floating pin triggered “Floating object part, Loose extrusions”.</p>
-      <div class="pairs">
-        <figure class="plate"><img src="assets/physical/prints/ape/front.jpg" width="1200" height="750" alt="The sofubi ape bust, straight on" loading="lazy"><figcaption>The bust · front</figcaption></figure>
-        <figure class="plate"><img src="assets/physical/prints/ape/profile.jpg" width="1200" height="750" alt="The sofubi ape bust in profile" loading="lazy"><figcaption>The bust · profile</figcaption></figure>
-        <figure class="plate"><img src="assets/physical/prints/ape/mouth.jpg" width="1200" height="750" alt="The mouth: curved canines and incisors on gum pads" loading="lazy"><figcaption>Fang plugs and incisors</figcaption></figure>
-        <figure class="plate"><img src="assets/physical/prints/ape/face-part.webp" width="1200" height="750" alt="The face shell in print orientation, on its back, with pin bosses and ribs" loading="lazy"><figcaption>The face shell · print orientation</figcaption></figure>
-      </div>
-      <p>The ape is a six-inch kaiju bust: a signed-distance field on a 0.5 mm grid, hollowed to a 2 mm wall, split into five pinned shells. Horns, fangs and eyes print as separate plugs at finer layers. All five shells are watertight with zero islands.</p>
-      <figure class="plate wide" id="ape-fig"><img src="assets/physical/prints/ape/hero.jpg" width="1200" height="750" alt="The sofubi ape bust, three-quarter view: two horns, round eyes, and fangs over a ring base" loading="lazy" decoding="async"><figcaption>The bust · three-quarter</figcaption></figure>
-      <div class="wave-ctl"><button class="pill mono" type="button" data-v3d="ape-fig" data-build="ape" data-stl="assets/physical/prints/ape/ape.stl" aria-pressed="false">Rotate the bust in 3D</button></div>
+      <h2>Every layer checked, then the slicer.</h2>
+      <p>Before a file is handed over, the mesh is cut into its print layers and every island is checked for something underneath it. The check found a real bug: on a 6 mm wall, the twill's skipped rod was sometimes the only rod in the wall, leaving 440 cross-rods printing in mid-air. The weave now never skips a rod that something rests on, and a test keeps it that way.</p>
+      <p>The project is then sliced headless with the Bambu Studio CLI and its warnings read back. Projects default to a 60 °C bed on the textured PEI plate, write every per-filament setting the GUI expects, and print woven lid tops on a peel-off raft in the lid's lightest colour.</p>
       <ul>
-        <li><span>Bust</span><span class="v">150 × 165 × 161 mm · 2.7 M triangles</span></li>
-        <li><span>Filament</span><span class="v">≈370 g PLA+ across 26 parts · ≈52 h</span></li>
-        <li><span>Wave panel</span><span class="v">12 tiles · 2,000 g · ≈51 h · 0 supports</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="sec" id="call">
-    <div class="k">the call</div>
-    <div>
-      <h2>Sculpt in a field, split with a plane.</h2>
-      <p>Every feature is a distance function blended into the last; the mesh is extracted at the end. Hollowing by distance transform is exact where mesh offsetting is not. Seams are pinned butt joints; tongue-and-groove halved bed contact and went non-manifold.</p>
-      <p>Hashed fur read as scales and left 800 crumbs in the slicer, so it became a continuous raked shingle; rimmed eyes read as goggles, puck ears as headphones, brow furrows as cassette slots. At six inches, each feature gets one clear idea, with fine detail only in small areas a printer can hold.</p>
-      <ul>
-        <li><span>Language</span><span class="v">Python 3.10–3.12 · CadQuery · trimesh · manifold3d</span></li>
-        <li><span>Runtime</span><span class="v">Claude Code skill · PrusaSlicer CLI</span></li>
-        <li><span>Published</span><span class="v">February 2026 · MIT license</span></li>
+        <li><span>Watch case</span><span class="v">0 floating islands · 0 slicer warnings</span></li>
+        <li><span>Language</span><span class="v">Python 3.12 · trimesh · manifold3d · CadQuery</span></li>
+        <li><span>Runtime</span><span class="v">local studio · Claude Code skill · Bambu Studio CLI</span></li>
       </ul>
     </div>
   </section>
 
   <div class="cta">
     <a class="pill solid" href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">Open the repo ↗</a>
-    <a class="pill ghost" href="prints.html">3D prints</a>
+    <a class="pill ghost" href="physical.html">Physical</a>
   </div>
 
   <div class="endstrip">
     <p>Built and run by Collin Stilwell, product security engineer.</p>
     <div class="cta"><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a><a class="pill ghost" href="about.html">About</a><a class="pill solid" href="lectr.html">Next: lectr →</a></div>
   </div>
-<script src="assets/wave3d.js?v=5"></script>
 </main>
 <footer class="foot">
   <div class="foot-in">
@@ -146,7 +128,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=1790560432"></script>
-<script src="site.js?v=1790560432"></script>
+<script src="assets/engine.js?v=1793068054"></script>
+<script src="site.js?v=1793068054"></script>
 </body>
 </html>
