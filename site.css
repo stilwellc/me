@@ -826,8 +826,9 @@ body .sheet.also { max-width: var(--wide); margin-top: 1rem; }
   .cells.three > .cell, .cells.three > .cell:nth-child(2n) { border-right: 0; border-bottom: 1px solid var(--hair); }
   .cells.three > .cell:last-child { border-bottom: 0; }
 }
-.cell img.pic { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px; margin: 0 0 0.35rem; background: #000; }
-.cell img.pic.plan { object-fit: contain; padding: 6px; box-sizing: border-box; }
+/* a drawing on a dark ground (the floor plan) keeps the cards' one frame */
+.cell .thumb-wrap.is-plan { background: #000; }
+.cell .thumb-wrap.is-plan .thumb-img { object-fit: contain; padding: 6px; box-sizing: border-box; }
 
 /* lectr: four terse "what it does" lines under the lede (k10) */
 body .cs ul.does { list-style: none; max-width: var(--col); margin: 1.1rem auto 0; padding: 0; text-align: left; border-top: 1px solid var(--hair); }
