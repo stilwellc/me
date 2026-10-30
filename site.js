@@ -259,7 +259,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
 (function () {
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
-  var WORDS = ['Collin', 'Stilwell', 'Security'], wi = 0, cycle = null, inside = false;
+  var WORDS = ['Collin', 'Stilwell'], wi = 0, cycle = null, inside = false;
   if (MD === '10-04') WORDS.push('Snoopy');   // Snoopy's first strip, 1950
   var m = matrix(c, { text: WORDS[0], src: 'assets/collin.jpg', prev: PREV_GLYPH, picHold: 2.2 });
   HEAD = m; HEAD_CANVAS = c;
