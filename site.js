@@ -179,7 +179,7 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
 // you enter, which shows it first and dissolves it into its own (one hop).
 var PREV_GLYPH = ssGet('mx:prev'); ssDel('mx:prev');
 var _own = document.querySelector('canvas.matrix');
-var OWN_GLYPH = _own ? _own.dataset.src : (document.getElementById('field') ? 'assets/collin.jpg' : null);
+var OWN_GLYPH = _own ? _own.dataset.src : (document.getElementById('field') ? 'assets/collin-band.png' : null);
 // a Digital card's thumbnail becomes the next page's header (one hop, same target only)
 var FROM_RECT = null;
 try { var _fr = JSON.parse(ssGet('mx:from') || 'null'); ssDel('mx:from'); if (_fr && _fr.p === HERE && _fr.r) FROM_RECT = _fr.r; } catch (e) {}
@@ -261,8 +261,8 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
 (function () {
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
-  var src = 'assets/collin.jpg';
-  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, still: true, focus: '0.12,0.5' });
+  var src = 'assets/collin-band.png';
+  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, still: true, flat: true, fit: 'contain', focus: '0,0' });
   HEAD_CANVAS = c;
 })();
 

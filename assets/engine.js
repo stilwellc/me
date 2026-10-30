@@ -69,6 +69,7 @@ function matrix(c, opts) {
   function grow(b, need) { if (b.length >= need) return b; var nb = new Float32Array(Math.max(need, b.length * 2)); nb.set(b); return nb; }
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
   var still = !!opts.still;   // still: the picture is the band's one thing — no word, held
+  var flat = !!(opts.flat || (c.dataset && c.dataset.flat));   // flat: a two-tone drawing — sampled crisp, no tone curve; a dash only where the source is deliberately grey
   var noFill = opts.filler === false;
   var layers = !!(opts.layers || (c.dataset && c.dataset.layers === '1'));
   var fromRect = opts.fromRect && isFinite(opts.fromRect.x) && isFinite(opts.fromRect.y) && opts.fromRect.w > 4 && opts.fromRect.h > 4 ? opts.fromRect : null;
@@ -137,7 +138,7 @@ function matrix(c, opts) {
     // picture draws its darks. Photographs cover the band; drawings (svg) sit
     // inside it over the filler.
     var cols = G.cols, rows = G.rows, N = G.N;
-    var S = innerWidth <= 760 ? 1 : 2, cw = cols * S, rh = rows * S;
+    var S = (flat || innerWidth > 760) ? 2 : 1, cw = cols * S, rh = rows * S;
     var p = document.createElement('canvas'); p.width = Math.max(1, cw); p.height = Math.max(1, rh);
     var pc = p.getContext('2d', { willReadFrequently: true }); pc.imageSmoothingEnabled = true; pc.imageSmoothingQuality = 'high';
     var iw = im.naturalWidth || im.width || 1, ih = im.naturalHeight || im.height || 1, sx0 = 0, sy0 = 0, fullW = iw, fullH = ih;
@@ -145,7 +146,7 @@ function matrix(c, opts) {
     var isSvg = /\.svg(\?|$)/i.test(im.src || '');
     // landscape photographs cover the band; drawings and portraits sit inside it over the filler
     var fit = fitPref || (isSvg ? 'contain' : ((iw / ih) >= 1.3 ? 'cover' : 'contain'));
-    var padX = fit === 'cover' ? 0 : Math.round(cw * 0.03), padY = fit === 'cover' ? 0 : Math.round(rh * 0.05);
+    var padX = (fit === 'cover' || flat) ? 0 : Math.round(cw * 0.03), padY = (fit === 'cover' || flat) ? 0 : Math.round(rh * 0.05);   // an authored (flat) source carries its own margins and may bleed off the band
     var sx = (cw - 2 * padX) / iw, sy = (rh - 2 * padY) / ih, s = fit === 'cover' ? Math.max(sx, sy) : Math.min(sx, sy);
     var dw = Math.round(iw * s), dh = Math.round(ih * s);
     var ox = fit === 'cover' ? Math.round((cw - dw) * focus[0]) : padX + Math.round((cw - 2 * padX - dw) * focus[0]);
@@ -162,10 +163,10 @@ function matrix(c, opts) {
       // boundary blends with the white fill and read as a bright bar
       if (cx >= ox + 1 && cx < ox + dw - 1 && cy >= oy + 1 && cy < oy + dh - 1) { inside[i] = 1; list.push(raw[i]); mean += raw[i]; nIn++; }
     }
-    mean /= Math.max(1, nIn); var flip = mean > 0.5;
+    mean /= Math.max(1, nIn); var flip = !flat && mean > 0.5;   // flat: an authored two-tone source, white is the carve
     list.sort(function (a, b) { return a - b; });
-    var pl = isSvg ? 0.03 : 0.08, lo = list[Math.floor(list.length * pl)] || 0, hi = list[Math.floor(list.length * (1 - pl))] || 1, span = Math.max(0.05, hi - lo);
-    var GAINK = isSvg ? 0 : 5.5, gl = 1 / (1 + Math.exp(GAINK * 0.5)), gh = 1 / (1 + Math.exp(-GAINK * 0.5));
+    var pl = (isSvg || flat) ? 0 : 0.08, lo = list[Math.floor(list.length * pl)] || 0, hi = list[Math.floor(list.length * (1 - pl))] || 1, span = Math.max(0.05, hi - lo);
+    var GAINK = (isSvg || flat) ? 0 : 5.5, gl = 1 / (1 + Math.exp(GAINK * 0.5)), gh = 1 / (1 + Math.exp(-GAINK * 0.5));
     var v0 = new Float32Array(N);
     for (var k = 0; k < N; k++) { if (!inside[k]) continue; var u = flip ? 1 - raw[k] : raw[k]; u = (u - (flip ? 1 - hi : lo)) / span; v0[k] = clamp01(u); }
     // local contrast + edges from a 3x3 box blur
@@ -174,7 +175,7 @@ function matrix(c, opts) {
       var i2 = y2 * cols + x2; if (!inside[i2]) continue;
       var sum = 0, n = 0;
       for (var dy = -1; dy <= 1; dy++) { var yb = y2 + dy; if (yb < 0 || yb >= rows) continue; for (var dx = -1; dx <= 1; dx++) { var xb = x2 + dx; if (xb < 0 || xb >= cols) continue; sum += v0[yb * cols + xb]; n++; } }
-      var bl = sum / n, dv = v0[i2] - bl;
+      var bl = sum / n, dv = flat ? 0 : v0[i2] - bl;   // flat: the source is the tone, no local contrast
       var tv = clamp01(v0[i2] + 0.55 * dv);
       if (GAINK) tv = (1 / (1 + Math.exp(-GAINK * (tv - 0.5))) - gl) / (gh - gl);   // the S-curve: a photograph's mid-tones go to stripe or gap, dashes only on the turn
       out[i2] = Math.pow(clamp01(tv), 1.2);
@@ -251,7 +252,7 @@ function matrix(c, opts) {
     // a picture: its subject (the tones the halftone read as the figure) is carved
     // out of the stripes — a gap where the figure is strong, a short dash where it
     // shades off — and its ground stays stripes, so no box ever shows around it
-    var CUT = 0.3, SOLID = 0.72;
+    var CUT = flat ? 0.5 : 0.3, SOLID = flat ? 0.5 : 0.72;   // flat: a hard edge, stripe or gap, no dashes
     for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
       var i = y * cols + x, val = f[i];
       if (val < CUT) { fill[i] = 1; continue; }
