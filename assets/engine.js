@@ -7,18 +7,35 @@
 // smears the screen; click replays from wherever the bodies are. Once the word
 // has settled the band goes still and stops drawing until something wakes it.
 // Reduced motion: the picture as a still, then a short dissolve to the word.
+//
+// THE RULES (Oct 29 2026, from the owner's notes: "always the same width and
+// height even if we have to add filler", "sometimes green sometimes black —
+// think Apple", "real photos doing the pixel first is tacky"):
+// · ONE SIZE. The band's height is site.css --band, identical on every page
+//   (lander headers, the home #field, 404, colophon). The engine fills whatever
+//   it is given: the word is set at one cap height and letterboxed inside the
+//   band (a word that would overflow shrinks; a short word never stretches the
+//   band) and the filler-dot field covers every other cell.
+// · ONE COLOUR. The screen is INK ONLY: picture dashes, word squares, filler
+//   dots and fades all paint in the body's text colour. Nothing here reads
+//   --accent. A picture is read as LUMINANCE, never hue, so artwork colour can
+//   not leak into the screen. The accent belongs to the chrome around the band
+//   (focus rings, the brand hover), never to the pixel.
+// · NO PIXEL-FIRST ON PHOTOGRAPHS. Card thumbnails and case-study plates are
+//   plain <img>s (site.js). The pixel lives in the header and travels between
+//   pages: the glyph hand-off (PREV_GLYPH / scatter) is the only transition.
 var GRAIN = null;
 function grainTile() { if (GRAIN) return GRAIN; GRAIN = document.createElement('canvas'); GRAIN.width = GRAIN.height = 256; var g = GRAIN.getContext('2d'), gd = g.createImageData(256, 256); for (var i = 0; i < gd.data.length; i += 4) { var v = 128 + (Math.random() * 90 - 45) | 0; gd.data[i] = gd.data[i + 1] = gd.data[i + 2] = v; gd.data[i + 3] = 255; } g.putImageData(gd, 0, 0); return GRAIN; }
-// ink + accent, read once; re-read only on an explicit call (themeColors.refresh
-// / window.mxRetheme) or when the root's class list changes (the egg re-accents)
-var THEME = { ink: '#161616', accent: '#2F6B34', read: false };
+// the one colour: the body's ink, read once; re-read only on an explicit call
+// (themeColors.refresh / window.mxRetheme) or when the root's attributes change
+var THEME = { ink: '#161616', read: false };
 function readTheme() {
   if (!document.body) return false;
-  var cs = getComputedStyle(document.body), ink = cs.color || THEME.ink, ac = cs.getPropertyValue('--accent').trim() || THEME.accent;
-  var changed = ink !== THEME.ink || ac !== THEME.accent; THEME.ink = ink; THEME.accent = ac; THEME.read = true; return changed;
+  var ink = getComputedStyle(document.body).color || THEME.ink;
+  var changed = ink !== THEME.ink; THEME.ink = ink; THEME.read = true; return changed;
 }
 function themeColors() { if (!THEME.read) readTheme(); return THEME; }
-themeColors.refresh = function () { if (readTheme()) (window.__mx || []).concat(window.__plates || []).forEach(function (m) { if (m.wake) m.wake(true); }); };
+themeColors.refresh = function () { if (readTheme()) (window.__mx || []).forEach(function (m) { if (m.wake) m.wake(true); }); };
 window.mxRetheme = themeColors.refresh;
 if (window.MutationObserver && document.documentElement && !window.__mxThemeMO) {
   window.__mxThemeMO = new MutationObserver(function () { if (THEME.read) themeColors.refresh(); });
@@ -37,7 +54,7 @@ function matrix(c, opts) {
   opts = opts || {};
   var ctx = c.getContext('2d');
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var dpr = opts.plate ? 1 : Math.min(2, window.devicePixelRatio || 1);   // a 5 px dot screen does not need a 2x bitmap
+  var dpr = Math.min(2, window.devicePixelRatio || 1);   // a 5 px dot screen does not need a 2x bitmap
   var W = 0, H = 0, cols = 0, rows = 0, cell = 4, N = 0, th, t0 = 0, tStart = 0, raf = 0, word = opts.text || '', img = null, prevImg = null, showPic = true;
   var maskF = null, pic = null, picPrev = null;          // fields: {v: Float32Array, e: Float32Array|null}
   var fc, fr, F = 5, vx, vy, tmpx, tmpy, pmx = -1, pmy = -1, pmt = 0;   // flow grid, F fine cells per flow cell
@@ -45,16 +62,15 @@ function matrix(c, opts) {
   var FILL_IN = 0.35, PIC_HOLD = opts.picHold != null ? +opts.picHold : (c.id === 'field' ? 2.2 : 1.6), MORPH = 0.8, WORD_MORPH = 0.6;
   var GATHER = 0.9, EXPLODE = 0.32, SCATTER = 0.22, PREVIEW = 0.24, LAYER_GATHER = 1.5;
   var RM_HOLD = 1.2, RM_FADE = 0.3, RM_WORD = 0.12;                      // reduced motion: still, hold, dissolve
-  var PLATE_GATHER = 0.75, PLATE_SETTLE = 1.0;                           // plate veils: gather, no hold
   var IDLE_AFTER = 1.0, AMP_FADE = 0.6, EPS = 0.004, LONG_PRESS = 450;
   var grain = null, A = null, B = null, SR = null, CR = null, SC = null, CC = null, curK = 0;
-  // scratch rectangles, reused every frame: [x,y,w,h]* for ink and accent, [x,y,d]* for filler, [x,y,w,h,alpha,ink]* for fades
+  // scratch rectangles, reused every frame: [x,y,w,h]* for word squares (RI) and picture dashes (RA), [x,y,d]* for filler, [x,y,w,h,alpha,word]* for fades
   var RI = null, RA = null, RF = null, RD = null, nI = 0, nA = 0, nF = 0, nD = 0;
   function grow(b, need) { if (b.length >= need) return b; var nb = new Float32Array(Math.max(need, b.length * 2)); nb.set(b); return nb; }
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
-  var plate = !!opts.plate, still = !!opts.still, veil = plate && !still, noFill = opts.filler === false, settled = false;
-  var layers = !plate && !!(opts.layers || (c.dataset && c.dataset.layers === '1'));
-  var fromRect = !plate && opts.fromRect && isFinite(opts.fromRect.x) && isFinite(opts.fromRect.y) && opts.fromRect.w > 4 && opts.fromRect.h > 4 ? opts.fromRect : null;
+  var noFill = opts.filler === false;
+  var layers = !!(opts.layers || (c.dataset && c.dataset.layers === '1'));
+  var fromRect = opts.fromRect && isFinite(opts.fromRect.x) && isFinite(opts.fromRect.y) && opts.fromRect.w > 4 && opts.fromRect.h > 4 ? opts.fromRect : null;
   var focus = [0.5, 0.5];
   if (c.dataset && c.dataset.focus) { var fp = c.dataset.focus.split(',').map(parseFloat); if (fp.length === 2 && !isNaN(fp[0]) && !isNaN(fp[1])) focus = fp; }
   // lifecycle
@@ -74,7 +90,7 @@ function matrix(c, opts) {
     };
   }
   var EASE_IN = bez(0.5, 0, 0.75, 0);
-  (function () { var r = c.getBoundingClientRect(); visible = plate || (r.bottom > 0 && r.top < innerHeight); })();
+  (function () { var r = c.getBoundingClientRect(); visible = r.bottom > 0 && r.top < innerHeight; })();
 
   // ── grid + fields ────────────────────────────────────────────────────────
   function measure() {
@@ -111,10 +127,12 @@ function matrix(c, opts) {
   }
   function maskFor(w) { if (!fontReady) return null; return masks[w] || (masks[w] = buildMask(w)); }
   function halftone(im, G) {
-    // luminance (2x supersampled; 1x on a phone), a percentile stretch, a little
-    // local contrast so flat screenshots keep their structure, and an edge
-    // channel that widens the dash on detail. Polarity flips so a light picture
-    // draws its darks. Photographs cover the band; drawings (svg) sit inside it.
+    // LUMINANCE ONLY (2x supersampled; 1x on a phone) — hue is never read, so a
+    // coloured picture cannot colour the screen — then a percentile stretch, a
+    // little local contrast so flat screenshots keep their structure, and an
+    // edge channel that widens the dash on detail. Polarity flips so a light
+    // picture draws its darks. Photographs cover the band; drawings (svg) sit
+    // inside it over the filler.
     var cols = G.cols, rows = G.rows, N = G.N;
     var S = innerWidth <= 760 ? 1 : 2, cw = cols * S, rh = rows * S;
     var p = document.createElement('canvas'); p.width = Math.max(1, cw); p.height = Math.max(1, rh);
@@ -155,18 +173,7 @@ function matrix(c, opts) {
       out[i2] = Math.pow(clamp01(v0[i2] + 0.55 * dv), 1.2);
       edge[i2] = clamp01(Math.abs(dv) * 3.2);
     }
-    var res = { v: out, e: edge };
-    if (veil) {
-      // the veil's ground: the photograph's own border tone (the studio mat on
-      // a studio render), so the lift is dark → dark, never through a grey slab
-      var br = 0, bg = 0, bb = 0, bn = 0, m = Math.max(1, Math.round(Math.min(cw, rh) * 0.04));
-      for (var yq = 0; yq < rh; yq++) for (var xq = 0; xq < cw; xq++) {
-        if (yq >= m && yq < rh - m && xq >= m && xq < cw - m) { xq = cw - m - 1; continue; }
-        var q = (yq * cw + xq) * 4; br += d[q]; bg += d[q + 1]; bb += d[q + 2]; bn++;
-      }
-      res.bg = bn ? 'rgb(' + Math.round(br / bn) + ',' + Math.round(bg / bn) + ',' + Math.round(bb / bn) + ')' : '#161616';
-    }
-    return res;
+    return { v: out, e: edge };
   }
   function idle(fn) { return window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 300 }) : setTimeout(fn, 1); }
   function ensureFields(G, cb) {
@@ -340,11 +347,6 @@ function matrix(c, opts) {
   }
   function sequence() {
     var s = [], picOn = pic && showPic;
-    if (plate) {   // a veil gathers its photograph and settles; a still just holds
-      if (pic && !reduce && !still) s.push(stepOf(null, null, 'pic', 0, PLATE_GATHER));
-      s.push(stepOf(pic ? 'pic' : 'mask', pic || maskF, pic ? 'pic' : 'word', 1e9, MORPH));
-      setSeq(s); return;
-    }
     if (reduce) {   // designed, not frozen: the picture as a still, then a short dissolve to the word
       if (picOn) s.push(stepOf('pic', pic, 'pic', RM_HOLD, RM_FADE));
       s.push(finalStep()); setSeq(s); return;
@@ -367,7 +369,7 @@ function matrix(c, opts) {
   function eo(x) { return 1 - Math.pow(1 - x, 3); }
   function fireSettled() {
     if (api.onSettled) { try { api.onSettled(); } catch (e) {} }
-    try { c.dispatchEvent(new CustomEvent('mx:settled', { bubbles: true, detail: { word: word, plate: plate } })); } catch (e) {}
+    try { c.dispatchEvent(new CustomEvent('mx:settled', { bubbles: true, detail: { word: word } })); } catch (e) {}
   }
 
   // ── drawing ─────────────────────────────────────────────────────────────
@@ -439,11 +441,13 @@ function matrix(c, opts) {
     else for (var q2 = 0; q2 < n; q2 += 4) ctx.rect(list[q2], list[q2 + 1], list[q2 + 2], list[q2 + 3]);
     ctx.fill();
   }
-  function paintAll(m, inkCol, accent, fillCol) {
-    paint(RF, nF, fillCol, 0.13 * fillIn * m, true);
-    paint(RA, nA, accent, 0.95 * m, false);
-    paint(RI, nI, inkCol, 0.92 * m, false);
-    for (var z = 0; z < nD; z += 6) { ctx.globalAlpha = 0.95 * RD[z + 4] * m; ctx.fillStyle = RD[z + 5] ? inkCol : accent; ctx.fillRect(RD[z], RD[z + 1], RD[z + 2], RD[z + 3]); }
+  function paintAll(m, ink) {
+    // ink only: filler, picture dashes, word squares and fades are one colour
+    paint(RF, nF, ink, 0.13 * fillIn * m, true);
+    paint(RA, nA, ink, 0.92 * m, false);
+    paint(RI, nI, ink, 0.92 * m, false);
+    ctx.fillStyle = ink;
+    for (var z = 0; z < nD; z += 6) { ctx.globalAlpha = 0.92 * RD[z + 4] * m; ctx.fillRect(RD[z], RD[z + 1], RD[z + 2], RD[z + 3]); }
   }
   function frame(now, force) {
     raf = 0;
@@ -462,17 +466,17 @@ function matrix(c, opts) {
     }
     curK = k;
     var last = k === SEQ.length - 1 && !morphing, fin = SEQ[SEQ.length - 1];
-    if (last && settledAt < 0) { settledAt = now; if (!plate && fin.f) fireSettled(); }
-    var idleNow = !plate && (reduce || (last && !previewing && now - Math.max(settledAt, lastAct) > IDLE_AFTER * 1000));
+    if (last && settledAt < 0) { settledAt = now; if (fin.f) fireSettled(); }
+    var idleNow = reduce || (last && !previewing && now - Math.max(settledAt, lastAct) > IDLE_AFTER * 1000);
     var ampT = idleNow || reduce ? 0 : 1;
     if (reduce) amp = 0; else amp += Math.max(-dt / AMP_FADE, Math.min(dt / AMP_FADE, ampT - amp));
     var energy = reduce ? 0 : stepFlow();
     // scroll dissolve: the settled word slides back toward the picture's dashes as the band leaves
     if (scrollFlag) { scrollFlag = false; var br = c.getBoundingClientRect(); scrollP = clamp01((-br.top) / Math.max(1, br.height * 0.85)); }
     var picAny = curPic();
-    var sp = (!reduce && !plate && last && fin.key === 'mask' && fin.f && picAny && !previewing) ? scrollP : 0;
+    var sp = (!reduce && last && fin.key === 'mask' && fin.f && picAny && !previewing) ? scrollP : 0;
     ctx.clearRect(0, 0, W, H);
-    var th_ = themeColors(), inkCol = th_.ink, accent = th_.accent, fillCol = veil ? '#FCFBFA' : inkCol;
+    var inkCol = themeColors().ink;
     fillIn = reduce ? 1 : Math.min(1, (now - tStart) / 1000 / FILL_IN);
     var t = now / 1000, amb = (SEQ[k].kind === 'pic' ? 0.9 : 0.25) * amp;
     for (var yy = 0; yy < rows; yy++) A[yy] = amb * Math.sin(yy * 0.09 + t * 0.7);
@@ -485,8 +489,8 @@ function matrix(c, opts) {
     if (reduce && morphing) {
       // an opacity dissolve between two stills
       var P0 = partsAt(k), P1 = partsAt(k + 1);
-      emitParts(P0); emitFill(P0.fill); paintAll(1 - u, inkCol, accent, fillCol);
-      nI = nA = nF = nD = 0; emitParts(P1); emitFill(P1.fill); paintAll(u, inkCol, accent, fillCol);
+      emitParts(P0); emitFill(P0.fill); paintAll(1 - u, inkCol);
+      nI = nA = nF = nD = 0; emitParts(P1); emitFill(P1.fill); paintAll(u, inkCol);
     } else {
       if (morphing) {
         var Q = pairsAt(k);
@@ -504,7 +508,7 @@ function matrix(c, opts) {
         var P = partsAt(k); emitParts(P); emitFill(P.fill);
       }
       if (SEQ[0].mode === 'layers' && k >= 1 && k <= 2 && PAIRS[0]) { var sp0 = PAIRS[0].span; lay = k === 1 ? { v: sp0, a: morphing ? 1 - u : 1 } : null; }
-      paintAll(1, inkCol, accent, fillCol);
+      paintAll(1, inkCol);
     }
     if (grain) {
       if (!idleNow && !reduce) { gfx = -((Math.random() * 256) | 0); gfy = -((Math.random() * 256) | 0); }   // grain holds still once the band is idle
@@ -512,7 +516,6 @@ function matrix(c, opts) {
       for (var gy = gfy; gy < H; gy += 256) for (var gx = gfx; gx < W; gx += 256) ctx.drawImage(grain, gx, gy);
       ctx.globalCompositeOperation = 'source-over';
     }
-    if (veil && picAny && picAny.bg) { ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'destination-over'; ctx.fillStyle = picAny.bg; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = 'source-over'; }
     if (lay && lay.a > 0.01) {
       var s4 = ('0000' + lay.v).slice(-4);
       ctx.globalAlpha = 0.6 * lay.a; ctx.fillStyle = inkCol; ctx.font = '400 11px "Geist Mono", ui-monospace, Menlo, monospace'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
@@ -521,10 +524,6 @@ function matrix(c, opts) {
     ctx.globalAlpha = 1;
     if (force) return;
     // what next
-    if (plate) {
-      if (!settled && last && (still || reduce || el > PLATE_SETTLE)) { settled = true; fireSettled(); return; }
-      raf = requestAnimationFrame(frame); return;
-    }
     if (reduce) {
       if (morphing) { raf = requestAnimationFrame(frame); return; }
       if (k < SEQ.length - 1 && !(!fontReady && gateAt >= 0 && el >= gateAt - 0.002)) { clearTimeout(rmT); rmT = setTimeout(run, Math.max(16, (SEQ[k].hold - tt) * 1000)); }
@@ -537,12 +536,11 @@ function matrix(c, opts) {
     if (dead) return;
     cancelAnimationFrame(raf); raf = 0; clearTimeout(rmT); sleeping = false; lastNow = 0;
     if (!SEQ.length || !cols) return;
-    if (!visible && !plate) { dirty = true; return; }   // resumes on intersect
+    if (!visible) { dirty = true; return; }   // resumes on intersect
     if (reduce) frame(performance.now()); else raf = requestAnimationFrame(frame);
   }
   function wake(force) {
     if (dead || !SEQ.length || !cols) return;
-    if (plate) { if (force && settled) frame(performance.now(), true); return; }
     lastAct = performance.now();
     if (reduce) { if (force || dirty) run(); return; }
     if (sleeping || !raf) run();
@@ -550,9 +548,8 @@ function matrix(c, opts) {
 
   // ── playing ─────────────────────────────────────────────────────────────
   function play() {
-    // a fresh sequence from nothing: first load, long-press re-gather, plates
+    // a fresh sequence from nothing: first load, long-press re-gather
     if (dead) return;
-    settled = false;   // a replay (resize, __repaintStills) must be allowed to settle again, or a still loops forever
     var G = measure();
     ensureFields(G, function () {
       if (dead) return;
@@ -586,7 +583,7 @@ function matrix(c, opts) {
   }
   function replay() {
     if (dead) return;
-    if (plate || !cols || !SEQ.length) { showPic = true; return play(); }
+    if (!cols || !SEQ.length) { showPic = true; return play(); }
     showPic = true; prevImg = null; picPrev = null; previewing = false;
     if (reduce) return toggle();
     var p0 = curPic();
@@ -607,7 +604,7 @@ function matrix(c, opts) {
   function scatter(cb) {
     // the page is leaving: everything flies off the band (≈220 ms, ease-in), then the caller navigates
     cb = typeof cb === 'function' ? cb : function () {};
-    if (dead || reduce || !cols || !SEQ.length || !visible || plate) { setTimeout(cb, 0); return; }
+    if (dead || reduce || !cols || !SEQ.length || !visible) { setTimeout(cb, 0); return; }
     var sn = snapStep(), cur = SEQ[Math.min(curK, SEQ.length - 1)]; if (!cur.f && !cur.parts) cur = SEQ[SEQ.length - 1];
     var kind = sn ? sn.parts.kind : cur.kind;
     setSeq(resetFrom(sn || cur, [stepOf(null, null, kind, 1e9, SCATTER)], SCATTER, EASE_IN), true);
@@ -624,7 +621,7 @@ function matrix(c, opts) {
     run(); fireSettled();
   }
   function preview(w) {
-    if (dead || !cols || !fontReady || plate || !SEQ.length) return;
+    if (dead || !cols || !fontReady || !SEQ.length) return;
     w = String(w == null ? '' : w); if (!w) return;
     previewing = true; pvWord = w;
     morphTo(stepOf('pv', maskFor(w), 'word', 1e9, PREVIEW), PREVIEW);
@@ -667,52 +664,50 @@ function matrix(c, opts) {
   var L = [];   // [target, type, fn, opts] for destroy()
   function on(tg, ty, fn, o) { tg.addEventListener(ty, fn, o); L.push([tg, ty, fn, o]); }
   function clickReplay() { if (performance.now() - lpFired < 800) return; if (reduce) toggle(); else replay(); }
-  if (!plate) {
-    on(c, 'pointerenter', function () { wake(); });
-    on(c, 'pointermove', function (e) {
-      if (lpT && Math.hypot(e.clientX - lpX, e.clientY - lpY) > 10) { clearTimeout(lpT); lpT = 0; }
-      if (!vx) return;
-      var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / (cell * F), y = (e.clientY - r.top) / (cell * F), now = performance.now();
-      if (pmx >= 0 && !reduce) { var dt = Math.max(8, now - pmt) / 16.7; inject(x, y, (x - pmx) / dt, (y - pmy) / dt); }
-      pmx = x; pmy = y; pmt = now; wake();
-    });
-    on(c, 'pointerleave', function () { pmx = pmy = -1; clearTimeout(lpT); lpT = 0; });
-    on(c, 'click', clickReplay);
-    // long press on touch: scatter, then gather again (never blocks the scroll: nothing is prevented)
-    on(c, 'pointerdown', function (e) {
-      if (e.pointerType === 'mouse' || reduce) return;
-      lpX = e.clientX; lpY = e.clientY; clearTimeout(lpT);
-      lpT = setTimeout(function () { lpT = 0; lpFired = performance.now(); scatter(function () { showPic = true; prevImg = null; picPrev = null; previewing = false; play(); }); }, LONG_PRESS);
-    }, { passive: true });
-    var lpEnd = function () { clearTimeout(lpT); lpT = 0; };
-    on(c, 'pointerup', lpEnd); on(c, 'pointercancel', lpEnd);
-    on(c, 'contextmenu', function (e) { if (lpT || performance.now() - lpFired < 900) e.preventDefault(); });
-    var hint = c.parentElement && c.parentElement.querySelector('.hint');
-    if (hint && hint.tagName !== 'BUTTON') {
-      var b = document.createElement('button'); b.type = 'button'; b.className = hint.className; b.id = hint.id;
-      var touch = matchMedia('(hover: none)').matches, verb = touch ? 'tap' : 'click';
-      var isPic = !!(opts.src && !/\.svg(\?|$)/i.test(opts.src)) && !c.id;
-      b.textContent = verb + ' to replay · ' + (isPic ? 'picture' : 'glyph') + ' → text';
-      b.setAttribute('aria-label', 'Replay the header animation'); hint.replaceWith(b); hint = b;
-      on(hint, 'click', function () { if (reduce) toggle(); else replay(); });
-    }
-    if (window.ResizeObserver) { ro = new ResizeObserver(function () { clearTimeout(rsT); rsT = setTimeout(onResize, 120); }); ro.observe(c); }
-    else on(window, 'resize', function () { clearTimeout(rsT); rsT = setTimeout(onResize, 120); });
-    if (!reduce) on(window, 'scroll', function () { if (lpT) { clearTimeout(lpT); lpT = 0; } if (!visible || dead || !SEQ.length) return; scrollFlag = true; if (!raf) raf = requestAnimationFrame(frame); }, { passive: true });
-    on(window, 'pageshow', function (e) { if (e.persisted) restore(); });
-    if ('IntersectionObserver' in window) {
-      io = new IntersectionObserver(function (es) { es.forEach(function (e) {
-        visible = e.isIntersecting;
-        if (visible) { if (SEQ.length) { scrollFlag = true; if (dirty || !reduce) wake(true); } }
-        else { cancelAnimationFrame(raf); raf = 0; sleeping = true; }
-      }); }, { threshold: 0 });
-      io.observe(c);
-    }
+  on(c, 'pointerenter', function () { wake(); });
+  on(c, 'pointermove', function (e) {
+    if (lpT && Math.hypot(e.clientX - lpX, e.clientY - lpY) > 10) { clearTimeout(lpT); lpT = 0; }
+    if (!vx) return;
+    var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / (cell * F), y = (e.clientY - r.top) / (cell * F), now = performance.now();
+    if (pmx >= 0 && !reduce) { var dt = Math.max(8, now - pmt) / 16.7; inject(x, y, (x - pmx) / dt, (y - pmy) / dt); }
+    pmx = x; pmy = y; pmt = now; wake();
+  });
+  on(c, 'pointerleave', function () { pmx = pmy = -1; clearTimeout(lpT); lpT = 0; });
+  on(c, 'click', clickReplay);
+  // long press on touch: scatter, then gather again (never blocks the scroll: nothing is prevented)
+  on(c, 'pointerdown', function (e) {
+    if (e.pointerType === 'mouse' || reduce) return;
+    lpX = e.clientX; lpY = e.clientY; clearTimeout(lpT);
+    lpT = setTimeout(function () { lpT = 0; lpFired = performance.now(); scatter(function () { showPic = true; prevImg = null; picPrev = null; previewing = false; play(); }); }, LONG_PRESS);
+  }, { passive: true });
+  var lpEnd = function () { clearTimeout(lpT); lpT = 0; };
+  on(c, 'pointerup', lpEnd); on(c, 'pointercancel', lpEnd);
+  on(c, 'contextmenu', function (e) { if (lpT || performance.now() - lpFired < 900) e.preventDefault(); });
+  var hint = c.parentElement && c.parentElement.querySelector('.hint');
+  if (hint && hint.tagName !== 'BUTTON') {
+    var b = document.createElement('button'); b.type = 'button'; b.className = hint.className; b.id = hint.id;
+    var touch = matchMedia('(hover: none)').matches, verb = touch ? 'tap' : 'click';
+    var isPic = !!(opts.src && !/\.svg(\?|$)/i.test(opts.src)) && !c.id;
+    b.textContent = verb + ' to replay · ' + (isPic ? 'picture' : 'glyph') + ' → text';
+    b.setAttribute('aria-label', 'Replay the header animation'); hint.replaceWith(b); hint = b;
+    on(hint, 'click', function () { if (reduce) toggle(); else replay(); });
+  }
+  if (window.ResizeObserver) { ro = new ResizeObserver(function () { clearTimeout(rsT); rsT = setTimeout(onResize, 120); }); ro.observe(c); }
+  else on(window, 'resize', function () { clearTimeout(rsT); rsT = setTimeout(onResize, 120); });
+  if (!reduce) on(window, 'scroll', function () { if (lpT) { clearTimeout(lpT); lpT = 0; } if (!visible || dead || !SEQ.length) return; scrollFlag = true; if (!raf) raf = requestAnimationFrame(frame); }, { passive: true });
+  on(window, 'pageshow', function (e) { if (e.persisted) restore(); });
+  if ('IntersectionObserver' in window) {
+    io = new IntersectionObserver(function (es) { es.forEach(function (e) {
+      visible = e.isIntersecting;
+      if (visible) { if (SEQ.length) { scrollFlag = true; if (dirty || !reduce) wake(true); } }
+      else { cancelAnimationFrame(raf); raf = 0; sleeping = true; }
+    }); }, { threshold: 0 });
+    io.observe(c);
   }
   function start() {
     if (dead) return;
     started = true;
-    var imgDone = !opts.src, prevDone = !(opts.prev && !reduce && !plate), prevT = 0, went = false;
+    var imgDone = !opts.src, prevDone = !(opts.prev && !reduce), prevT = 0, went = false;
     function go() { if (went || dead) return; went = true; play(); }
     function maybe() {
       if (!imgDone) return;
@@ -735,7 +730,7 @@ function matrix(c, opts) {
     cancelAnimationFrame(raf); raf = 0; clearTimeout(rmT); clearTimeout(rsT); clearTimeout(lpT); idleTok++;
     if (io) io.disconnect(); if (ro) ro.disconnect();
     L.forEach(function (l) { l[0].removeEventListener(l[1], l[2], l[3]); }); L = [];
-    [window.__mx, window.__plates].forEach(function (arr) { if (!arr) return; var i = arr.indexOf(api); if (i >= 0) arr.splice(i, 1); });
+    var arr = window.__mx; if (arr) { var ai = arr.indexOf(api); if (ai >= 0) arr.splice(ai, 1); }
     img = prevImg = null; cache = { key: '', pic: null, prev: null }; masks = {}; SEQ = []; PARTS = []; PAIRS = []; picParts = SP = null;
   }
   var api = {
@@ -747,6 +742,6 @@ function matrix(c, opts) {
     // seek(seconds): draw the band as it looks that far into its sequence, once
     seek: function (s) { if (dead || !SEQ.length) return; cancelAnimationFrame(raf); raf = 0; t0 = performance.now() - s * 1000; frame(performance.now(), true); sleeping = true; }
   };
-  if (plate) (window.__plates = window.__plates || []).push(api); else (window.__mx = window.__mx || []).push(api);
+  (window.__mx = window.__mx || []).push(api);
   return api;
 }
