@@ -156,86 +156,23 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var tick = false; addEventListener('scroll', function () { shut(); if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; sweep(); }); } }, { passive: true }); addEventListener('resize', sweep); sweep();
 })();
 
-// ── work cards: the real picture of each product, framed. The line screen is
-// only its entrance: the first time a card scrolls into view the dots gather
-// over it and dissolve into the picture underneath. Reduced motion: just the picture.
+// ── work cards: the real picture of each product, framed. No pixel-first on a
+// photograph: the picture is simply there (lazily loaded) and only the hover
+// scale moves. The pixel lives in the header and travels between pages.
+// (Preferred markup, once the HTML is free to change: a plain
+//  <span class="thumb-wrap"><img class="thumb-img" …></span> in place of each
+//  <canvas class="thumb">; until then this builds exactly that.)
 (function () {
-  var cs = [].slice.call(document.querySelectorAll('canvas.thumb')); if (!cs.length) return;
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, canRun = typeof matrix === 'function' && !reduce;
-  var pending = [];
-  cs.forEach(function (c) {
+  [].forEach.call(document.querySelectorAll('canvas.thumb'), function (c) {
     var src = c.dataset.src || '', svg = /\.svg(\?|$)/i.test(src);
-    var wrap = document.createElement('span'); wrap.className = 'thumb-wrap' + (svg ? ' is-mark' : ''); c.parentNode.insertBefore(wrap, c);
+    var wrap = document.createElement('span'); wrap.className = 'thumb-wrap' + (svg ? ' is-mark' : '');
     var im = document.createElement('img'); im.className = 'thumb-img'; im.alt = ''; im.setAttribute('aria-hidden', 'true'); im.decoding = 'async'; im.loading = 'lazy'; im.src = src;
     var f = (c.dataset.focus || '0.5,0.5').split(','); im.style.objectPosition = (parseFloat(f[0]) * 100) + '% ' + (parseFloat(f[1]) * 100) + '%';
-    wrap.appendChild(im);
-    if (!canRun) { c.remove(); return; }
-    wrap.appendChild(c); wrap.classList.add('veiled'); pending.push(c);
+    wrap.appendChild(im); c.replaceWith(wrap);
   });
-  if (!pending.length) return;
-  function lift(c, m) {
-    if (c.__lifted) return; c.__lifted = true;
-    var wrap = c.parentNode; wrap.classList.remove('veiled'); c.classList.add('done');
-    setTimeout(function () { if (m && m.destroy) m.destroy(); c.remove(); }, 700);
-  }
-  function run(c) {
-    var m = null; setTimeout(function () { lift(c, m); }, 3200);
-    try { m = matrix(c, { src: c.dataset.src, text: '', plate: true, cell: 4, fit: /\.svg(\?|$)/i.test(c.dataset.src) ? 'contain' : 'cover', filler: false }); m.onSettled = function () { lift(c, m); }; }
-    catch (e) { lift(c, m); }
-  }
-  if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); run(e.target); } }); }, { threshold: 0.25 }); pending.forEach(function (c) { io.observe(c); }); }
-  else pending.forEach(function (c) { lift(c, null); });
-  window.__repaintStills = function () {};
 })();
 
-// ── plates arrive, quietly ──────────────────────────────────────────────────
-// A plate already in view at load is simply there. Below the fold, the FIRST
-// plate of each section (or Four Walls room) gathers the way the header does;
-// the rest fade in over 480ms. Never under reduced motion; a backstop always
-// lifts the veil.
-(function () {
-  if (REDUCE || !('IntersectionObserver' in window)) return;
-  var all = [].slice.call(document.querySelectorAll('figure.plate img'));
-  if (!all.length) return;
-  var vh = innerHeight, firstOf = new Map(), imgs = [];
-  all.forEach(function (img) {
-    var g = img.closest('.room, section, .sec') || img.closest('main') || document.body;
-    var first = !firstOf.has(g); if (first) firstOf.set(g, img);
-    var r = img.getBoundingClientRect(); if (r.top < vh && r.bottom > 0) return;   // in view at load: never veiled
-    img.__gather = first && typeof matrix === 'function'; imgs.push(img);
-  });
-  if (!imgs.length) return;
-  var seen = new WeakSet(), left = imgs.length, running = 0, queue = [];
-  function fire(img) { if (seen.has(img) || imgs.indexOf(img) < 0) return; seen.add(img); io.unobserve(img); left--; if (!img.__gather) { img.classList.remove('veil-fade'); return; } if (running >= 2) { queue.push(img); setTimeout(function () { if (queue.indexOf(img) >= 0) { queue.splice(queue.indexOf(img), 1); img.classList.remove('veiled'); } }, 2200); } else reveal(img); }
-  function next() { running = Math.max(0, running - 1); var n = queue.shift(); if (n) reveal(n); }
-  var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) fire(en.target); }); }, { threshold: 0.18 });
-  imgs.forEach(function (img) { if (img.__gather) img.classList.add('veiled'); else img.classList.add('veil-fade', 'fading'); io.observe(img); });
-  // the observer can sit idle in a background tab or a slow engine; a cheap
-  // sweep on scroll makes sure a plate in view always gets its turn
-  var sweepT = 0;
-  function sweep() { if (left <= 0) { removeEventListener('scroll', sweep); return; } var now = Date.now(); if (now - sweepT < 120) return; sweepT = now; var hh = innerHeight; imgs.forEach(function (img) { if (seen.has(img)) return; var r = img.getBoundingClientRect(); if (r.bottom > 0 && r.top < hh * 0.92) fire(img); }); }
-  addEventListener('scroll', sweep, { passive: true }); addEventListener('resize', sweep); setTimeout(sweep, 400); setTimeout(sweep, 1500);
-  window.__revealPlate = fire;   // test hook: reveal a plate without scrolling (the observer sleeps in a hidden tab)
-  addEventListener('beforeprint', function () { imgs.forEach(function (i) { i.classList.remove('veiled', 'veil-fade'); }); });
-  function reveal(img) {
-    var lift = function () { img.classList.remove('veiled'); };
-    var go = function () {
-      var fig = img.closest('figure'); if (!fig || !img.clientWidth) { lift(); return; }
-      running++;
-      var done = false, c = document.createElement('canvas'), finish = function () { if (done) return; done = true; c.classList.add('done'); lift(); next(); setTimeout(function () { c.remove(); }, 700); };
-      setTimeout(finish, 3200);   // the backstop is armed before anything can throw
-      var onResize = function () { removeEventListener('resize', onResize); finish(); }; addEventListener('resize', onResize);
-      c.className = 'plate-veil'; c.setAttribute('aria-hidden', 'true');
-      var cs = getComputedStyle(img), pl = parseFloat(cs.paddingLeft) || 0, pt = parseFloat(cs.paddingTop) || 0, pr = parseFloat(cs.paddingRight) || 0, pb = parseFloat(cs.paddingBottom) || 0, bw = parseFloat(cs.borderLeftWidth) || 0;
-      c.style.left = (img.offsetLeft + bw + pl) + 'px'; c.style.top = (img.offsetTop + bw + pt) + 'px'; c.style.width = (img.clientWidth - pl - pr) + 'px'; c.style.height = (img.clientHeight - pt - pb) + 'px';
-      fig.appendChild(c);
-      var area = img.clientWidth * img.clientHeight, cellPx = Math.max(5, Math.round(Math.sqrt(area / 20000)));   // big plates get a coarser screen
-      try { var m = matrix(c, { src: img.currentSrc || img.src, text: '', plate: true, cell: cellPx, fit: 'cover' }); m.onSettled = finish; } catch (e) { finish(); }
-    };
-    if (img.complete) { if (img.naturalWidth) go(); else lift(); }
-    else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', lift, { once: true }); setTimeout(function () { if (!img.complete) lift(); }, 6000); }
-  }
-})();
+// (case-study plates: a photograph is simply there — no veil, no gather, no fade.)
 
 // ── leaving a page ──────────────────────────────────────────────────────────
 // The glyph travels with you: the page you leave hands its picture to the page
