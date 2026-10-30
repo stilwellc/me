@@ -71,7 +71,8 @@ function matrix(c, opts) {
   var noFill = opts.filler === false;
   var layers = !!(opts.layers || (c.dataset && c.dataset.layers === '1'));
   var fromRect = opts.fromRect && isFinite(opts.fromRect.x) && isFinite(opts.fromRect.y) && opts.fromRect.w > 4 && opts.fromRect.h > 4 ? opts.fromRect : null;
-  var focus = [0.5, 0.5];
+  var focus = [0.5, 0.5], crop = null;   // crop: x,y,w,h fractions of the source — the window the band is cut from
+  if (c.dataset && c.dataset.crop) { var cp = c.dataset.crop.split(',').map(parseFloat); if (cp.length === 4 && cp.every(function (q) { return !isNaN(q); }) && cp[2] > 0.05 && cp[3] > 0.05) crop = cp; }
   if (c.dataset && c.dataset.focus) { var fp = c.dataset.focus.split(',').map(parseFloat); if (fp.length === 2 && !isNaN(fp[0]) && !isNaN(fp[1])) focus = fp; }
   // lifecycle
   var dead = false, sleeping = false, dirty = false, visible = true, fontReady = false, started = false;
@@ -95,7 +96,7 @@ function matrix(c, opts) {
   // ── grid + fields ────────────────────────────────────────────────────────
   function measure() {
     var r = c.getBoundingClientRect(), w = Math.max(1, Math.floor(r.width)), h = Math.max(1, Math.floor(r.height));
-    var ce = opts.cell || (w < 640 ? 5 : 4);   // coarser on a phone, not finer
+    var ce = opts.cell || (w < 640 ? 4 : 6);   // the stripe pitch: 6 px on a desk (the reference's), 4 on a phone
     var cl = Math.floor(w / ce), rw = Math.floor(h / ce);
     return { W: w, H: h, cell: ce, cols: cl, rows: rw, N: cl * rw, key: cl + 'x' + rw + '@' + ce };
   }
@@ -106,7 +107,7 @@ function matrix(c, opts) {
     fc = Math.ceil(cols / F) + 1; fr = Math.ceil(rows / F) + 1;
     vx = new Float32Array(fc * fr); vy = new Float32Array(fc * fr); tmpx = new Float32Array(fc * fr); tmpy = new Float32Array(fc * fr);
     A = new Float32Array(rows); B = new Float32Array(cols); SR = null;
-    RI = new Float32Array(N * 4); RA = new Float32Array(N * 4); RF = new Float32Array(N * 3); RD = new Float32Array(Math.max(6, N * 6)); nI = nA = nF = nD = 0;
+    RI = new Float32Array(N * 4); RA = new Float32Array(N * 4); RF = new Float32Array(N * 5); RD = new Float32Array(Math.max(6, N * 6)); nI = nA = nF = nD = 0;
     masks = {}; picParts = null; SP = null;
     grain = grainTile();
   }
@@ -117,7 +118,7 @@ function matrix(c, opts) {
     var m = document.createElement('canvas'); m.width = Math.max(1, G.cols); m.height = Math.max(1, G.rows);
     var mc = m.getContext('2d');
     mc.fillStyle = '#000'; mc.textBaseline = 'middle'; mc.textAlign = 'center';
-    var fs = G.rows * 0.62, font = function (s) { return '300 ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
+    var fs = G.rows * 0.66, font = function (s) { return '500 ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
     mc.font = font(fs);
     var mw = mc.measureText(w).width; if (mw > G.cols * 0.92) { fs = Math.max(8, Math.floor(fs * (G.cols * 0.92) / mw)); mc.font = font(fs); }
     mc.fillText(w, G.cols / 2, G.rows * 0.53);
@@ -137,7 +138,8 @@ function matrix(c, opts) {
     var S = innerWidth <= 760 ? 1 : 2, cw = cols * S, rh = rows * S;
     var p = document.createElement('canvas'); p.width = Math.max(1, cw); p.height = Math.max(1, rh);
     var pc = p.getContext('2d', { willReadFrequently: true }); pc.imageSmoothingEnabled = true; pc.imageSmoothingQuality = 'high';
-    var iw = im.naturalWidth || im.width || 1, ih = im.naturalHeight || im.height || 1;
+    var iw = im.naturalWidth || im.width || 1, ih = im.naturalHeight || im.height || 1, sx0 = 0, sy0 = 0, fullW = iw, fullH = ih;
+    if (crop) { sx0 = Math.round(fullW * crop[0]); sy0 = Math.round(fullH * crop[1]); iw = Math.max(1, Math.round(fullW * crop[2])); ih = Math.max(1, Math.round(fullH * crop[3])); }
     var isSvg = /\.svg(\?|$)/i.test(im.src || '');
     // landscape photographs cover the band; drawings and portraits sit inside it over the filler
     var fit = fitPref || (isSvg ? 'contain' : ((iw / ih) >= 1.3 ? 'cover' : 'contain'));
@@ -146,7 +148,7 @@ function matrix(c, opts) {
     var dw = Math.round(iw * s), dh = Math.round(ih * s);
     var ox = fit === 'cover' ? Math.round((cw - dw) * focus[0]) : Math.round((cw - dw) / 2);
     var oy = fit === 'cover' ? Math.round((rh - dh) * focus[1]) : Math.round((rh - dh) / 2);
-    pc.fillStyle = '#fff'; pc.fillRect(0, 0, cw, rh); pc.drawImage(im, ox, oy, dw, dh);
+    pc.fillStyle = '#fff'; pc.fillRect(0, 0, cw, rh); pc.drawImage(im, sx0, sy0, iw, ih, ox, oy, dw, dh);
     var d = pc.getImageData(0, 0, p.width, p.height).data;
     var raw = new Float32Array(N), inside = new Uint8Array(N), list = [], mean = 0, nIn = 0, ss = S * S;
     for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
@@ -160,7 +162,8 @@ function matrix(c, opts) {
     }
     mean /= Math.max(1, nIn); var flip = mean > 0.5;
     list.sort(function (a, b) { return a - b; });
-    var lo = list[Math.floor(list.length * 0.03)] || 0, hi = list[Math.floor(list.length * 0.97)] || 1, span = Math.max(0.05, hi - lo);
+    var pl = isSvg ? 0.03 : 0.08, lo = list[Math.floor(list.length * pl)] || 0, hi = list[Math.floor(list.length * (1 - pl))] || 1, span = Math.max(0.05, hi - lo);
+    var GAINK = isSvg ? 0 : 5.5, gl = 1 / (1 + Math.exp(GAINK * 0.5)), gh = 1 / (1 + Math.exp(-GAINK * 0.5));
     var v0 = new Float32Array(N);
     for (var k = 0; k < N; k++) { if (!inside[k]) continue; var u = flip ? 1 - raw[k] : raw[k]; u = (u - (flip ? 1 - hi : lo)) / span; v0[k] = clamp01(u); }
     // local contrast + edges from a 3x3 box blur
@@ -170,10 +173,12 @@ function matrix(c, opts) {
       var sum = 0, n = 0;
       for (var dy = -1; dy <= 1; dy++) { var yb = y2 + dy; if (yb < 0 || yb >= rows) continue; for (var dx = -1; dx <= 1; dx++) { var xb = x2 + dx; if (xb < 0 || xb >= cols) continue; sum += v0[yb * cols + xb]; n++; } }
       var bl = sum / n, dv = v0[i2] - bl;
-      out[i2] = Math.pow(clamp01(v0[i2] + 0.55 * dv), 1.2);
+      var tv = clamp01(v0[i2] + 0.55 * dv);
+      if (GAINK) tv = (1 / (1 + Math.exp(-GAINK * (tv - 0.5))) - gl) / (gh - gl);   // the S-curve: a photograph's mid-tones go to stripe or gap, dashes only on the turn
+      out[i2] = Math.pow(clamp01(tv), 1.2);
       edge[i2] = clamp01(Math.abs(dv) * 3.2);
     }
-    return { v: out, e: edge };
+    return { v: out, e: edge, inside: inside };
   }
   function idle(fn) { return window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 300 }) : setTimeout(fn, 1); }
   function ensureFields(G, cb) {
@@ -234,12 +239,22 @@ function matrix(c, opts) {
     if (st.parts) return st.parts;
     var fill = new Uint8Array(N), P = { n: 0, hx: null, hy: null, v: null, e: null, t: null, kind: st.kind, fill: fill };
     if (!st.f) { fill.fill(1); P.hx = P.hy = P.v = P.e = P.t = new Float32Array(0); return P; }
-    var f = st.f.v, e = st.f.e, thr = st.kind === 'word' ? 0.3 : 0.06, n = 0;
+    var f = st.f.v, e = st.f.e, inside = st.f.inside || null, thr = st.kind === 'word' ? 0.3 : 0.06, n = 0;
     var hx = new Float32Array(N), hy = new Float32Array(N), v = new Float32Array(N), ee = new Float32Array(N), tt = new Float32Array(N);
+    // THE STRIPE SCREEN (Oct 30, after elevenlabs.io/summit): the band is a field of
+    // vertical stripes; a picture is CARVED out of it — inside the picture's box a
+    // cell is a dash where the picture is dark and a gap where it is light — and
+    // the word is carved too: its letters are the gaps, no bodies of their own
+    if (st.kind === 'word') { for (var wi = 0; wi < N; wi++) fill[wi] = f[wi] < thr ? 1 : 0; P.hx = P.hy = P.v = P.e = P.t = new Float32Array(0); return P; }
+    // a picture: its subject (the tones the halftone read as the figure) is carved
+    // out of the stripes — a gap where the figure is strong, a short dash where it
+    // shades off — and its ground stays stripes, so no box ever shows around it
+    var CUT = 0.3, SOLID = 0.72;
     for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
       var i = y * cols + x, val = f[i];
-      if (val < thr) { fill[i] = 1; continue; }
-      hx[n] = x; hy[n] = y; v[n] = val; ee[n] = e ? e[i] : 1; tt[n] = th[i]; n++;
+      if (val < CUT) { fill[i] = 1; continue; }
+      fill[i] = 0; if (val >= SOLID) continue;
+      hx[n] = x; hy[n] = y; v[n] = clamp01((SOLID - val) / (SOLID - CUT)); ee[n] = e ? e[i] : 1; tt[n] = th[i]; n++;
     }
     P.n = n; P.hx = hx; P.hy = hy; P.v = v; P.e = ee; P.t = tt; return P;
   }
@@ -249,7 +264,7 @@ function matrix(c, opts) {
     var n = (nI + nA) >> 2; if (!n || !cols || !th) return null;
     var hx = new Float32Array(n), hy = new Float32Array(n), v = new Float32Array(n), e = new Float32Array(n), t = new Float32Array(n), kd = new Uint8Array(n), fill = new Uint8Array(N);
     fill.fill(1);
-    var dashW = Math.max(1.2, cell * 0.55), sq = cell * 0.7, j = 0;
+    var dashW = Math.max(1.2, cell * 0.47), sq = cell * 0.7, j = 0;
     function put(X, Y, w, h, isW) {
       var cx = (X + w / 2) / cell - 0.5, cy = (Y + h / 2) / cell - 0.5, ix = Math.round(cx), iy = Math.round(cy), id = iy * cols + ix, inb = ix >= 0 && iy >= 0 && ix < cols && iy < rows;
       hx[j] = cx; hy[j] = cy; kd[j] = isW ? 1 : 0; t[j] = inb ? th[id] : Math.random();
@@ -276,7 +291,7 @@ function matrix(c, opts) {
       tx: new Float32Array(n), ty: new Float32Array(n), tv: new Float32Array(n), te: new Float32Array(n),
       bx: new Float32Array(n), by: new Float32Array(n), t: new Float32Array(n), fill: new Uint8Array(N),
       ax: new Float32Array(n), ay: new Float32Array(n) };   // momentum picked up from the flow field while in the air
-    for (var c0 = 0; c0 < N; c0++) Q.fill[c0] = A.fill[c0] & B.fill[c0];
+    for (var c0 = 0; c0 < N; c0++) Q.fill[c0] = scatter ? B.fill[c0] : (A.fill[c0] & B.fill[c0]);
     var ia = A.n ? byAngle(A) : null, ib = B.n ? byAngle(B) : null;
     // gather from a rectangle (the card that was clicked), in band cells
     var rc = null;
@@ -428,12 +443,15 @@ function matrix(c, opts) {
       else { RA = grow(RA, nA + 4); RA[nA++] = X; RA[nA++] = Y; RA[nA++] = w; RA[nA++] = h; }
     }
   }
-  function emitFill(fillMask) {
-    // filler: the band is always a full rectangle
+  function emitFill(fillMask, toMask, u) {
+    // the stripe field: one full-height dash per cell; between two phases a cell
+    // that is a stripe in one and a gap in the other cross-fades
     if (!(fillIn > 0) || !fillMask || noFill) return;
-    for (var fy = 0; fy < rows; fy++) { var ay = A[fy], sr = SR[fy] * amp, cr = CR[fy] * amp; for (var fx = 0; fx < cols; fx++) { var fi = fy * cols + fx; if (!fillMask[fi]) continue;
-      var fd = fillDot * (0.7 + 0.5 * th[fi]) * (0.85 + 0.15 * (sr * CC[fx] + cr * SC[fx])), fo = (flowAt(vx, fx, fy) * F + ay * B[fx]) * cell * 0.3;
-      RF[nF++] = fx * cell + (cell - fd) / 2 + fo; RF[nF++] = fy * cell + (cell - fd) / 2; RF[nF++] = fd; } }
+    for (var fy = 0; fy < rows; fy++) { var ay = A[fy]; for (var fx = 0; fx < cols; fx++) { var fi = fy * cols + fx;
+      var a = fillMask[fi] ? 1 : 0, bb = toMask ? (toMask[fi] ? 1 : 0) : a, al = toMask ? (u > th[fi] * 0.96 + 0.02 ? bb : a) : a;   // a dithered dissolve: each cell flips once, no half-grey stripes
+      if (al <= 0.01) continue;
+      var fw = dashW * (0.92 + 0.08 * th[fi]), fo = (flowAt(vx, fx, fy) * F + ay * B[fx]) * cell * 0.12;
+      RF = grow(RF, nF + 5); RF[nF++] = fx * cell + (cell - fw) / 2 + fo; RF[nF++] = fy * cell - 0.5; RF[nF++] = fw; RF[nF++] = cell + 1; RF[nF++] = al; } }
   }
   function paint(list, n, col, alpha, square) {
     if (!n || alpha <= 0) return; ctx.fillStyle = col; ctx.globalAlpha = alpha; ctx.beginPath();
@@ -443,7 +461,7 @@ function matrix(c, opts) {
   }
   function paintAll(m, ink) {
     // ink only: filler, picture dashes, word squares and fades are one colour
-    paint(RF, nF, ink, 0.13 * fillIn * m, true);
+    ctx.fillStyle = ink; for (var zf = 0; zf < nF; zf += 5) { ctx.globalAlpha = 0.9 * fillIn * m * RF[zf + 4]; ctx.fillRect(RF[zf], RF[zf + 1], RF[zf + 2], RF[zf + 3]); }   // the stripe field
     paint(RA, nA, ink, 0.92 * m, false);
     paint(RI, nI, ink, 0.92 * m, false);
     ctx.fillStyle = ink;
@@ -481,7 +499,7 @@ function matrix(c, opts) {
     var t = now / 1000, amb = (SEQ[k].kind === 'pic' ? 0.9 : 0.25) * amp;
     for (var yy = 0; yy < rows; yy++) A[yy] = amb * Math.sin(yy * 0.09 + t * 0.7);
     for (var xx = 0; xx < cols; xx++) B[xx] = Math.cos(xx * 0.05 - t * 0.45);
-    dashW = Math.max(1.2, cell * 0.55); sq = cell * 0.7; fillDot = cell * 0.22;
+    dashW = Math.max(1.2, cell * 0.47); sq = cell * 0.7; fillDot = cell * 0.22;
     if (!SR) { SR = new Float32Array(rows); CR = new Float32Array(rows); SC = new Float32Array(cols); CC = new Float32Array(cols); for (var c2 = 0; c2 < cols; c2++) { SC[c2] = Math.sin(c2 * 0.05); CC[c2] = Math.cos(c2 * 0.05); } }
     for (var r2 = 0; r2 < rows; r2++) { SR[r2] = Math.sin(t * 0.6 + r2 * 0.09); CR[r2] = Math.cos(t * 0.6 + r2 * 0.09); }
     nI = nA = nF = nD = 0;
@@ -497,7 +515,7 @@ function matrix(c, opts) {
         if (!gusted[k] && !Q.gather) { gusted[k] = true; gust(gustDir); gustDir = -gustDir; }
         var uu = SEQ[k].ease ? SEQ[k].ease(u) : u;
         emitMorph(Q, uu, SEQ[k].mode === 'layers');
-        emitFill(Q.fill);
+        emitFill(partsAt(k).fill, partsAt(k + 1).fill, uu);
         if (SEQ[k].mode === 'layers') lay = { v: Math.floor(clamp01(u / 0.8) * Q.span), a: 1, span: Q.span };
       } else if (sp > 0.001) {
         var Pk = partsAt(k);
