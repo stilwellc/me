@@ -262,7 +262,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
   var src = 'assets/collin.jpg';
-  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, still: true });
+  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, still: true, focus: '0.12,0.5' });
   HEAD_CANVAS = c;
 })();
 

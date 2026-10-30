@@ -74,7 +74,8 @@ function matrix(c, opts) {
   var fromRect = opts.fromRect && isFinite(opts.fromRect.x) && isFinite(opts.fromRect.y) && opts.fromRect.w > 4 && opts.fromRect.h > 4 ? opts.fromRect : null;
   var focus = [0.5, 0.5], crop = null;   // crop: x,y,w,h fractions of the source — the window the band is cut from
   if (c.dataset && c.dataset.crop) { var cp = c.dataset.crop.split(',').map(parseFloat); if (cp.length === 4 && cp.every(function (q) { return !isNaN(q); }) && cp[2] > 0.05 && cp[3] > 0.05) crop = cp; }
-  if (c.dataset && c.dataset.focus) { var fp = c.dataset.focus.split(',').map(parseFloat); if (fp.length === 2 && !isNaN(fp[0]) && !isNaN(fp[1])) focus = fp; }
+  var focusSrc = (c.dataset && c.dataset.focus) || opts.focus || null;   // where the picture sits in the band (0..1 across, 0..1 down); the reference hero sits its subject left
+  if (focusSrc) { var fp = String(focusSrc).split(',').map(parseFloat); if (fp.length === 2 && !isNaN(fp[0]) && !isNaN(fp[1])) focus = fp; }
   // lifecycle
   var dead = false, sleeping = false, dirty = false, visible = true, fontReady = false, started = false;
   var settledAt = -1, lastAct = 0, amp = 1, lastNow = 0, gateAt = -1, gfx = 0, gfy = 0;
@@ -147,8 +148,8 @@ function matrix(c, opts) {
     var padX = fit === 'cover' ? 0 : Math.round(cw * 0.03), padY = fit === 'cover' ? 0 : Math.round(rh * 0.05);
     var sx = (cw - 2 * padX) / iw, sy = (rh - 2 * padY) / ih, s = fit === 'cover' ? Math.max(sx, sy) : Math.min(sx, sy);
     var dw = Math.round(iw * s), dh = Math.round(ih * s);
-    var ox = fit === 'cover' ? Math.round((cw - dw) * focus[0]) : Math.round((cw - dw) / 2);
-    var oy = fit === 'cover' ? Math.round((rh - dh) * focus[1]) : Math.round((rh - dh) / 2);
+    var ox = fit === 'cover' ? Math.round((cw - dw) * focus[0]) : padX + Math.round((cw - 2 * padX - dw) * focus[0]);
+    var oy = fit === 'cover' ? Math.round((rh - dh) * focus[1]) : padY + Math.round((rh - 2 * padY - dh) * focus[1]);
     pc.fillStyle = '#fff'; pc.fillRect(0, 0, cw, rh); pc.drawImage(im, sx0, sy0, iw, ih, ox, oy, dw, dh);
     var d = pc.getImageData(0, 0, p.width, p.height).data;
     var raw = new Float32Array(N), inside = new Uint8Array(N), list = [], mean = 0, nIn = 0, ss = S * S;
