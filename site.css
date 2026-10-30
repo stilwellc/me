@@ -89,6 +89,15 @@ h1.display {
 .cells > .cell:last-child:nth-child(odd) { border-right: 0; }
 @media (max-width: 760px) { .cells .cell { border-right: 0; border-bottom: 1px solid var(--hair); } .cells > .cell:last-child { border-bottom: 0; } }
 @media (hover: hover) { .cell:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); } }
+/* a one-cell frame whose cell leads: the mark at left, the words beside it (Security's program) */
+.cells.one { grid-template-columns: 1fr; }
+.cells.one > .cell { border-right: 0; border-bottom: 0; }
+.cell.lead { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 0.6rem 2.5rem; align-items: center; }
+.cell.lead > .thumb-wrap { grid-column: 1; grid-row: 1 / span 4; margin: 0; }
+.cell.lead > :not(.thumb-wrap) { grid-column: 2; }
+.cell.lead h2 { margin-top: 0; }
+.cell.lead .foot { margin-top: 0.4rem; }
+@media (max-width: 760px) { .cell.lead { display: flex; } }
 .cell .top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .cell h2 { margin: 0.9rem 0 0; font-family: var(--display); font-weight: 300; letter-spacing: -0.025em; font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1; font-variation-settings: "opsz" 48; }
 .cell h2 .arrow { display: inline-block; margin-left: 0.25em; color: var(--ink-3); }
