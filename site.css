@@ -32,9 +32,9 @@
      inside it (a long word shrinks, a short one never stretches the band) and
      the filler-dot field covers the rest. Phone value below. */
   /* THE PIXEL BAND is one static canvas on every page: one width, one height per breakpoint, centred */
-  --band-w: 960px; --band-h: 320px;
+  --band-w: 960px; --band-h: 400px;
 }
-@media (max-width: 600px) { :root { --band-w: 358px; --band-h: 150px; } }
+@media (max-width: 600px) { :root { --band-w: 358px; --band-h: 160px; } }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -288,6 +288,8 @@ body .trow .tb .mono { text-wrap: balance; }
 /* ── the pixels are the hero; titles are small ── */
 body .mhead, body .field { --bw: min(var(--band-w), calc(100vw - 2 * var(--pad))); width: var(--bw); margin-left: calc(50% - var(--bw) / 2); margin-right: 0; }   /* the only size rule: --band-w × --band-h at :root — measured from the viewport, so a page's own padding never narrows it */
 body .mhead canvas.matrix, body .field canvas { width: 100%; height: var(--band-h); }
+/* the window itself is visible: one framed rectangle, the same on every page, whatever is drawn in it */
+body .mhead canvas.matrix, body .field canvas { border: 1px solid var(--hair); border-radius: 14px; background: color-mix(in srgb, var(--ink) 2.5%, var(--ground)); box-sizing: border-box; }
 body h1.display, body .res h1.display, body .cs h1.display { font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1.2; letter-spacing: -0.015em; font-weight: 400; font-variation-settings: "opsz" 24; }
 body .mhead { margin-bottom: clamp(22px, 3.5vw, 40px); }
 body .eyebrow { margin-bottom: 0.6rem; }
