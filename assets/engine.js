@@ -117,10 +117,21 @@ function matrix(c, opts) {
     var m = document.createElement('canvas'); m.width = Math.max(1, G.cols); m.height = Math.max(1, G.rows);
     var mc = m.getContext('2d');
     mc.fillStyle = '#000'; mc.textBaseline = 'middle'; mc.textAlign = 'center';
-    var fs = G.rows * 0.62, font = function (s) { return '300 ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
-    mc.font = font(fs);
-    var mw = mc.measureText(w).width; if (mw > G.cols * 0.92) { fs = Math.max(8, Math.floor(fs * (G.cols * 0.92) / mw)); mc.font = font(fs); }
-    mc.fillText(w, G.cols / 2, G.rows * 0.53);
+    // ONE WIDTH (Oct 30): the ink always spans the same span of the band — a word
+    // is sized to WORD_W of the columns; a short word that would grow past the
+    // cap height keeps the cap and spreads its letters (tracking) to the same
+    // width instead, so "Wave" and "SecMCPHub" read as one window
+    var font = function (s) { return '300 ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
+    var target = G.cols * 0.88, capH = G.rows * 0.72, fs = G.rows * 0.62;
+    mc.font = font(fs); var mw = mc.measureText(w).width || 1;
+    fs = Math.max(8, Math.floor(fs * target / mw)); if (fs > capH) fs = Math.floor(capH);
+    mc.font = font(fs); mw = mc.measureText(w).width;
+    if ('letterSpacing' in mc && w.length > 1 && mw < target) {
+      var gap = Math.min(fs * 0.6, (target - mw) / (w.length - 1)); mc.letterSpacing = gap.toFixed(2) + 'px';
+      mw = mc.measureText(w).width;
+    }
+    // centred by hand: a tracked string's measure carries its trailing gap, so textAlign would sit it left
+    mc.textAlign = 'left'; mc.fillText(w, (G.cols - mw) / 2, G.rows * 0.53);
     var px = mc.getImageData(0, 0, m.width, m.height).data, out = new Float32Array(G.N);
     for (var i = 0; i < G.N; i++) out[i] = px[i * 4 + 3] / 255;
     return { v: out, e: null };
@@ -443,7 +454,7 @@ function matrix(c, opts) {
   }
   function paintAll(m, ink) {
     // ink only: filler, picture dashes, word squares and fades are one colour
-    paint(RF, nF, ink, 0.13 * fillIn * m, true);
+    paint(RF, nF, ink, 0.22 * fillIn * m, true);   // the filler reads as the grid: the window has edges, not just a word
     paint(RA, nA, ink, 0.92 * m, false);
     paint(RI, nI, ink, 0.92 * m, false);
     ctx.fillStyle = ink;
