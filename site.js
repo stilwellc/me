@@ -372,7 +372,7 @@ function flagCheck(s) {
   if (!pal || !inp || !list) return;
   var norm = function (s) { return String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase(); };
   var ITEMS = PAGES.map(function (p) { return { t: p.t, h: p.h, u: p.u, k: p.k || '', w: p.w }; }).concat([
-    { t: 'Starling', h: 'digital', u: 'digital.html#starling', k: 'ebay deals', w: 'Digital' }, { t: 'Elixir secure coding', h: 'digital', u: 'digital.html#elixir', k: 'semgrep ash podium', w: 'Digital' },
+    { t: 'Starling', h: 'digital', u: 'digital.html#starling', k: 'ebay deals', w: 'Digital' }, { t: 'Elixir secure coding', h: 'security', u: 'security.html#elixir', k: 'semgrep ash podium', w: 'Security' },
     { t: 'Open lectr.bid', h: '↗', u: 'https://lectr.bid', x: 1 }, { t: 'How we built the price-movement engine', h: '↗', u: 'https://lectr.bid/blog/how-we-built-the-pricing-engine', x: 1, k: 'blog pricing' }, { t: 'Open Starling', h: '↗', u: 'https://starling-6s1.pages.dev', x: 1 }, { t: 'text2print (GitHub)', h: '↗', u: 'https://github.com/stilwellc/text2print', x: 1 }, { t: 'Open soiree.today', h: '↗', u: 'https://soiree.today', x: 1 },
     { t: 'github.com/stilwellc', h: '↗', u: 'https://github.com/stilwellc', x: 1, k: 'code' }, { t: 'LinkedIn', h: '↗', u: LINKEDIN, x: 1, k: 'contact reply message hire' }, { t: 'Substack', h: '↗', u: 'https://collinsthoughts.substack.com', x: 1, k: 'essays writing' },
     { t: 'Shortcuts', h: '?', k: 'keys keyboard help', fn: function () { openKeys(); } }
