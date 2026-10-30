@@ -72,7 +72,7 @@ var PAGES = [
   { u: 'writing.html', t: 'Writing', h: 'g n', w: 'Writing', k: 'essays substack' },
   { u: 'github.html', t: 'GitHub', h: 'g g', w: 'GitHub', k: 'code repos' },
   { u: 'about.html', t: 'About', h: 'g a', w: 'About' },
-  { u: 'resume.html', t: 'Résumé', h: 'g r', w: 'Résumé', k: 'resume cv pdf' },
+  { u: 'resume.html', t: 'Career', h: 'g r', w: 'Career', k: 'resume résumé cv overview' },
   { u: 'lectr.html', t: 'lectr, a case study', h: 'g l', w: 'lectr', k: 'auction', cs: 1 },
   { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'digital', w: 'SecMCPHub', k: 'security review', cs: 1 },
   { u: 'soiree.html', t: 'Soirée, a case study', h: 'digital', w: 'Soirée', k: 'events tonight', cs: 1 },
@@ -351,7 +351,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
 // ── the shortcuts dialog, rendered from one table so help and keymap agree
 (function () {
   var grid = document.querySelector('#keys .keys-grid'); if (!grid) return;
-  var ROWS = [['⌘K', 'command palette'], ['/', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'résumé'], ['g l', 'lectr'], ['enter', 'on Replay: replay the header'], ['?', 'this']];
+  var ROWS = [['⌘K', 'command palette'], ['/', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'career'], ['g l', 'lectr'], ['enter', 'on Replay: replay the header'], ['?', 'this']];
   grid.innerHTML = ROWS.map(function (r) { return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + h(k) + '</kbd>'; }).join(' ') + '</span><span>' + h(r[1]) + '</span>'; }).join('');
 })();
 
