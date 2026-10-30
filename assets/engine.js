@@ -28,11 +28,14 @@ var GRAIN = null;
 function grainTile() { if (GRAIN) return GRAIN; GRAIN = document.createElement('canvas'); GRAIN.width = GRAIN.height = 256; var g = GRAIN.getContext('2d'), gd = g.createImageData(256, 256); for (var i = 0; i < gd.data.length; i += 4) { var v = 128 + (Math.random() * 90 - 45) | 0; gd.data[i] = gd.data[i + 1] = gd.data[i + 2] = v; gd.data[i + 3] = 255; } g.putImageData(gd, 0, 0); return GRAIN; }
 // the one colour: the body's ink, read once; re-read only on an explicit call
 // (themeColors.refresh / window.mxRetheme) or when the root's attributes change
-var THEME = { ink: '#161616', read: false };
+var THEME = { ink: '#161616', paper: '#FCFBFA', read: false };
 function readTheme() {
   if (!document.body) return false;
-  var ink = getComputedStyle(document.body).color || THEME.ink;
-  var changed = ink !== THEME.ink; THEME.ink = ink; THEME.read = true; return changed;
+  // THE WINDOW IS REVERSED (Oct 30): the canvas ground is the page's ink and
+  // every pixel — filler, picture dashes, word squares, fades — paints in the
+  // page's ground colour. One read of each; the CSS gives the canvas its black.
+  var cs = getComputedStyle(document.body), ink = cs.color || THEME.ink, paper = cs.backgroundColor || THEME.paper;
+  var changed = ink !== THEME.ink || paper !== THEME.paper; THEME.ink = ink; THEME.paper = paper; THEME.read = true; return changed;
 }
 function themeColors() { if (!THEME.read) readTheme(); return THEME; }
 themeColors.refresh = function () { if (readTheme()) (window.__mx || []).forEach(function (m) { if (m.wake) m.wake(true); }); };
@@ -476,7 +479,7 @@ function matrix(c, opts) {
     var picAny = curPic();
     var sp = (!reduce && last && fin.key === 'mask' && fin.f && picAny && !previewing) ? scrollP : 0;
     ctx.clearRect(0, 0, W, H);
-    var inkCol = themeColors().ink;
+    var inkCol = themeColors().paper;   // the pixels are paper-white on the ink ground (reversed window)
     fillIn = reduce ? 1 : Math.min(1, (now - tStart) / 1000 / FILL_IN);
     var t = now / 1000, amb = (SEQ[k].kind === 'pic' ? 0.9 : 0.25) * amp;
     for (var yy = 0; yy < rows; yy++) A[yy] = amb * Math.sin(yy * 0.09 + t * 0.7);

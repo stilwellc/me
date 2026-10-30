@@ -183,7 +183,7 @@ html:not(.js) .hint { display: none; }
 .eyebrow a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
 @media (hover: hover) { .mhead .hint:hover, .field .hint:hover, .eyebrow a:hover { color: var(--ink); } }
 /* with no JS the band never paints: a faint dot screen says "picture here", not "broken" */
-html:not(.js) canvas.matrix, html:not(.js) .field canvas { background: radial-gradient(circle, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1.4px) 0 0 / 7px 7px; }
+html:not(.js) canvas.matrix, html:not(.js) .field canvas { background: var(--ink) radial-gradient(circle, color-mix(in srgb, var(--ground) 18%, transparent) 1px, transparent 1.4px) 0 0 / 7px 7px; }
 body:has(> .home) footer.foot { margin-top: 0; }
 
 /* ── small screens: the page never scrolls sideways (the nav row does, see the phone block at the end) ── */
@@ -298,7 +298,7 @@ body .trow .tb .mono { text-wrap: balance; }
 body .mhead, body .field { --bw: min(var(--band-w), calc(100vw - 2 * var(--pad))); width: var(--bw); margin-left: calc(50% - var(--bw) / 2); margin-right: 0; }   /* the only size rule: --band-w × --band-h at :root — measured from the viewport, so a page's own padding never narrows it */
 body .mhead canvas.matrix, body .field canvas { width: 100%; height: var(--band-h); }
 /* the window itself is visible: one framed rectangle, the same on every page, whatever is drawn in it */
-body .mhead canvas.matrix, body .field canvas { border: 1px solid var(--hair); border-radius: 14px; background: color-mix(in srgb, var(--ink) 2.5%, var(--ground)); box-sizing: border-box; }
+body .mhead canvas.matrix, body .field canvas { border: 1px solid var(--ink); border-radius: 14px; background: var(--ink); box-sizing: border-box; }   /* reversed: ink ground, paper pixels */
 body h1.display, body .res h1.display, body .cs h1.display { font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1.2; letter-spacing: -0.015em; font-weight: 400; font-variation-settings: "opsz" 24; }
 body .mhead { margin-bottom: clamp(22px, 3.5vw, 40px); }
 body .eyebrow { margin-bottom: 0.6rem; }
