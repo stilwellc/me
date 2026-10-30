@@ -804,25 +804,14 @@ body .links-line { margin: 1rem auto 0; font-size: 15px; color: var(--ink-3); }
 body .links-line a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
 body .links-line a:hover { color: var(--ink); text-decoration-color: var(--ink); }
 
-/* about · i2: Short / Full toggle over the bio — two radios + labels, no script.
-   Short (default) = prose + Now; Full also reveals Experience and Education. */
-body .bio-r { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-body .bio-tog { display: flex; justify-content: center; gap: 0.4rem; margin: 0 auto 1.4rem; }
-body .bio-tog label { cursor: pointer; user-select: none; }
-body #bio-short:checked ~ .bio-tog label[for="bio-short"],
-body #bio-full:checked ~ .bio-tog label[for="bio-full"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
-body #bio-short:focus-visible ~ .bio-tog label[for="bio-short"],
-body #bio-full:focus-visible ~ .bio-tog label[for="bio-full"] { outline: 2px solid var(--accent); outline-offset: 2px; }
-body .bio-long { display: none; }
-body #bio-full:checked ~ .bio-long { display: block; animation: bio-in 480ms cubic-bezier(.2,.7,.1,1) both; }
-@keyframes bio-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { body #bio-full:checked ~ .bio-long { animation: bio-fade 240ms linear both; } }
-@keyframes bio-fade { from { opacity: 0; } to { opacity: 1; } }
-body .sheet.now .row .d a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
-body .sheet.now .row .d a:hover { text-decoration-color: var(--ink); }
-body .sheet.now { max-width: var(--col); margin-left: auto; margin-right: auto; }
-body .sheet.now .row { grid-template-columns: 6.5rem minmax(0, 1fr); }
-@media (max-width: 600px) { body .sheet.now .row { grid-template-columns: 1fr; } }
+/* about · i2: the bio is one paragraph on the reading column, plus a short one
+   for the off-hours. Links sit in the prose like the links-line does. */
+body .bio { max-width: var(--col); margin: 0 auto; text-align: left; }
+body .bio p { margin: 0 0 1.1rem; max-width: none; font-size: 18px; line-height: 1.6; font-weight: 300; color: var(--ink); text-wrap: pretty; }
+body .bio p.off { margin: 0; font-size: 16px; color: var(--ink-2); }
+body .bio a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+body .bio a:hover { color: var(--ink); text-decoration-color: var(--ink); }
+@media (max-width: 640px) { body .bio p { font-size: 17px; } body .bio p.off { font-size: 15.5px; } }
 
 /* security · k3: the Semgrep rule and its one-line caption */
 
