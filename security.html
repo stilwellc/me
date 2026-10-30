@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Security — Collin Stilwell</title>
-<meta name="description" content="How Collin Stilwell runs product security: guardrails not gates, a program in four parts, and the open-source work.">
+<meta name="description" content="The security work of Collin Stilwell: a product security program in four parts, SecMCPHub, Semgrep rules for Ash, Podium’s secure-coding course, and the essay.">
 <meta property="og:title" content="Security — Collin Stilwell">
-<meta property="og:description" content="How Collin Stilwell runs product security: guardrails not gates, a program in four parts, and the open-source work.">
+<meta property="og:description" content="The security work of Collin Stilwell: a product security program in four parts, SecMCPHub, Semgrep rules for Ash, Podium’s secure-coding course, and the essay.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/security.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/security.png">
@@ -34,111 +34,60 @@
 <main id="main" class="page cs">
 <div class="lander-head">
   <div class="mhead rv"><canvas class="matrix" data-text="Security" data-src="assets/security.svg" aria-label="A row of space invaders and a cannon, decoded into the word Security" role="img"></canvas><span class="hint">click to replay</span></div>
-  <p class="eyebrow rv d1">Security · the day job</p>
-  <h1 class="display rv d1">Guardrails,<br>not gates.</h1>
+  <p class="eyebrow rv d1">Security · the day job · 6 pieces</p>
+  <h1 class="display rv d1">Guardrails, not gates.</h1>
   <p class="lede one rv d2">How I run product security, and the security work I’ve published. Roles and dates are on the <a href="resume.html">résumé</a>.</p>
 </div>
+  <div class="frame rv d2"><div class="cells">
+<a class="cell" id="program" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">
+  <canvas class="thumb" data-src="assets/program.svg" data-focus="0.5,0.5" aria-hidden="true"></canvas><div class="top"><span class="pill mono">program · how I run it</span><span class="when mono">2022 – now</span></div>
+  <h2>The program<span class="arrow">↗</span></h2>
+  <p>Four parts: guardrails by default, a human pass, safe primitives, and feedback into the rules. Built in five stops, foundation to maturity.</p>
+  <div class="foot">4 parts · 5 stops · &lt;5% false positives before a rule may block</div>
+</a>
+<a class="cell" href="secmcphub.html">
+  <canvas class="thumb" data-src="assets/secmcphub-sample.webp" data-focus="0.5,0.3" aria-hidden="true"></canvas><div class="top"><span class="pill mono">open source · case study</span><span class="when mono">Jun 2026</span></div>
+  <h2>SecMCPHub<span class="arrow">→</span></h2>
+  <p>Claude Code skills that turn vulnerability, GRC, and incident data into one monthly security review.</p>
+  <div class="foot">Claude Code · MCP · HTML · JSON</div>
+</a>
+<a class="cell" id="ash" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener">
+  <canvas class="thumb" data-src="assets/ash-rule.svg" data-focus="0.5,0.5" aria-hidden="true"></canvas><div class="top"><span class="pill mono">open source · Semgrep</span><span class="when mono">2025</span></div>
+  <h2>Ash Semgrep rules<span class="arrow">↗</span></h2>
+  <p>Seven rules for authorization gaps in Ash Framework apps. One flags any changeset or query built without an <code>actor:</code>, so the resource’s policies may never run.</p>
+  <div class="foot">Semgrep · Elixir · Ash Framework · 7 rules</div>
+</a>
+<a class="cell" id="elixir" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener">
+  <canvas class="thumb" data-src="assets/shot-elixir.svg" data-focus="0.5,0.5" aria-hidden="true"></canvas><div class="top"><span class="pill mono">open source · course</span><span class="when mono">2023</span></div>
+  <h2>Elixir secure coding<span class="arrow">↗</span></h2>
+  <p>Podium’s open secure-coding curriculum for Elixir engineers. Top contributor.</p>
+  <div class="foot">Elixir · Phoenix · Livebook</div>
+</a>
+<a class="cell" id="brumby" href="resume.html">
+  <canvas class="thumb" data-src="assets/brumby.svg" data-focus="0.5,0.5" aria-hidden="true"></canvas><div class="top"><span class="pill mono">scanner · Rowan + ASRC</span><span class="when mono">2019 – 2020</span></div>
+  <h2>Brumby Code Checker<span class="arrow">→</span></h2>
+  <p>A redundancy scanner for C++, Java, and Ada, built for Lockheed Martin systems. Three similarity measures combined into one weighted score.</p>
+  <div class="foot">cosine · ordered naive · longest common subsequence</div>
+</a>
+<a class="cell" id="essay" href="writing.html">
+  <canvas class="thumb" data-src="assets/writing.svg" data-focus="0.5,0.5" aria-hidden="true"></canvas><div class="top"><span class="pill mono">writing · Substack</span><span class="when mono">May 2026</span></div>
+  <h2>Building an AppSec program that works<span class="arrow">→</span></h2>
+  <p>The essay behind the program: the four parts, the build order, and seven common failures.</p>
+  <div class="foot">≈3,200 words · collinsthoughts.substack.com</div>
+</a>
+</div></div>
+  <div class="sheet also rv d3"><a class="row" href="digital.html"><span class="k">also</span><span><span class="t">Also digital<span class="arrow">→</span></span><span class="d">lectr, Starling, text2print, and Soirée.</span></span></a></div>
 
-  <div class="facts rv d3">
-    <div><div class="n">4</div><div class="l">parts to the program<span class="sub">guardrails, human pass, primitives, feedback</span></div></div>
-    <div><div class="n">5</div><div class="l">stops in the build order<span class="sub">foundation to maturity</span></div></div>
-    <div><div class="n">7</div><div class="l">open Semgrep rules<span class="sub">Ash Framework authorization</span></div></div>
-    <div><div class="n">&lt;5<span class="u">%</span></div><div class="l">false positives before a rule can block<span class="sub">measured over a quarter</span></div></div>
+  <h2 class="sheet-h rv d3" id="how">How I run it</h2>
+  <div class="sheet how rv d3">
+    <div class="row"><span class="k">blocking</span><span><span class="t">Rules earn the right to block.</span><span class="d">A false-positive rate under 5% over a quarter before a rule moves from Comment to Block. Never straight to Block.</span></span></div>
+    <div class="row"><span class="k">AI</span><span><span class="t">AI runs between rule evaluation and PR action.</span><span class="d">Never in front of SAST.</span></span></div>
+    <div class="row"><span class="k">severity</span><span><span class="t">Pattern presence is not reachability.</span><span class="d">A “Critical” behind a network ACL is not Critical.</span></span></div>
+    <div class="row"><span class="k">bounty</span><span><span class="t">Triage SLA matters more than bounty amount.</span></span></div>
+    <div class="row"><span class="k">primitives</span><span><span class="t">Build the safe primitive first.</span><span class="d">Then write the rule that blocks the unsafe one.</span></span></div>
   </div>
 
-  <section class="sx" id="loop" aria-labelledby="loop-h">
-    <h2 class="sheet-h" id="loop-h">The loop</h2>
-    <figure class="loops">
-      <div class="lane is-old" aria-label="The usual loop: find, triage, ticket">
-        <span class="lane-k">the usual loop</span>
-        <ol class="lane-steps"><li>find</li><li>triage</li><li>ticket</li></ol>
-      </div>
-      <div class="lane is-new" aria-label="How I run it: build, default, enforce">
-        <span class="lane-k">how I run it</span>
-        <ol class="lane-steps"><li>build</li><li>default</li><li>enforce</li></ol>
-      </div>
-    </figure>
-  </section>
-
-  <section class="sx" id="beliefs" aria-labelledby="beliefs-h">
-    <h2 class="sheet-h" id="beliefs-h">What I believe</h2>
-    <a class="belief-lead" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Stop fixing bugs.<br>Start removing bug classes.<span class="arrow" aria-hidden="true">↗</span></a>
-    <ul class="belief-grid">
-      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">blocking</span>Rules earn the right to block: a false-positive rate under 5% over a quarter, never straight to Block.</a></li>
-      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">AI</span>AI runs between rule evaluation and PR action, never in front of SAST.</a></li>
-      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">severity</span>Pattern presence is not reachability. A “Critical” behind a network ACL is not Critical.</a></li>
-      <li><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">bounty</span>Triage SLA matters more than bounty amount.</a></li>
-      <li class="wide"><a href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="bk">primitives</span>Build the safe primitive first, then write the rule blocking the unsafe one.</a></li>
-    </ul>
-  </section>
-
-  <section class="sx" id="program" aria-labelledby="program-h">
-    <h2 class="sheet-h" id="program-h">The program</h2>
-    <div class="legs">
-      <div class="leg"><span class="leg-k">guardrails <b>1/4</b></span><h3>Security by default</h3><p>Tiered SAST with an AI false-positive filter, auto-merged dependency patches, a threat model for every project at planning.</p></div>
-      <div class="leg"><span class="leg-k">human pass <b>2/4</b></span><h3>Reactionary security</h3><p>Design review where the default model flags risk, pentest findings, bug bounty, incidents.</p></div>
-      <div class="leg"><span class="leg-k">primitives <b>3/4</b></span><h3>Security by design</h3><p>Paved-road libraries and secure primitives.</p></div>
-      <div class="leg"><span class="leg-k">feedback <b>4/4</b></span><h3>Feedback and metrics</h3><p>Overrides feed back into rule tuning.</p></div>
-    </div>
-  </section>
-
-  <section class="sx" id="order" aria-labelledby="order-h">
-    <h2 class="sheet-h" id="order-h">Build order</h2>
-    <ol class="track">
-      <li><span class="st">Foundation</span><span class="sd">SAST in advisory mode, auto-merged patches, a default threat modeler</span></li>
-      <li><span class="st">Promotion</span><span class="sd">First rules to the Comment tier, the first paved-road library</span></li>
-      <li><span class="st">Depth + AI</span><span class="sd">AI as PR commenter, a private bug bounty, the metrics dashboard</span></li>
-      <li><span class="st">Design</span><span class="sd">Security champions, a pattern library, Comment → Block promotions</span></li>
-      <li><span class="st">Maturity</span><span class="sd">Three tiers with the AI filter, a public bounty, enforced libraries</span></li>
-    </ol>
-  </section>
-
-  <section class="sx" id="writing" aria-labelledby="writing-h">
-    <h2 class="sheet-h" id="writing-h">Writing</h2>
-    <a class="essay" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">
-      <span class="ok">Substack · May 2026 · ≈3,200 words</span>
-      <h3>Building an Application Security Program That Actually Works <span class="arrow" aria-hidden="true">↗</span></h3>
-      <p>Covers the four parts, the build order, and seven common failures.</p>
-    </a>
-  </section>
-
-  <section class="sx" id="open" aria-labelledby="open-h">
-    <h2 class="sheet-h" id="open-h">Open source</h2>
-    <div class="opens">
-      <a class="open" href="secmcphub.html"><span class="ok">2026 · case study</span><h3>SecMCPHub <span class="arrow" aria-hidden="true">→</span></h3><p>Claude Code skills that turn vulnerability, GRC, and incident data into one monthly report.</p></a>
-      <a class="open" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener"><span class="ok">2025 · GitHub</span><h3>Ash Semgrep rules <span class="arrow" aria-hidden="true">↗</span></h3><p>Seven Semgrep rules for authorization gaps in Ash Framework apps.</p></a>
-      <a class="open" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener"><span class="ok">2023 · GitHub</span><h3>Elixir secure coding <span class="arrow" aria-hidden="true">↗</span></h3><p>Podium’s open secure-coding curriculum. Top contributor.</p></a>
-    </div>
-    <p class="open-foot">Also: <b>Brumby Code Checker</b> (Rowan, 2019–2020), a redundancy scanner for C++, Java, and Ada, built with ASRC Federal for Lockheed Martin systems.</p>
-
-    <div class="rule">
-      <div class="rule-say">
-        <span class="ok">one of seven rules</span>
-        <h3>Missing actor</h3>
-        <p>Flags Ash changesets and queries built without an <code>actor:</code>. Without one, the resource’s policies may not run. Calls that pass a non-nil actor are skipped.</p>
-        <a class="rule-link" href="https://github.com/stilwellc/ash-semgrep-rules/blob/main/ash-changeset-missing-actor.yaml" target="_blank" rel="noopener">ash-changeset-missing-actor.yaml ↗</a>
-      </div>
-      <pre class="code rule-code" tabindex="0" aria-label="Semgrep rule ash-changeset-missing-actor"><span class="yk">rules:</span>
-  - <span class="yk">id:</span> ash-changeset-missing-actor
-    <span class="yk">languages:</span> [elixir]
-    <span class="yk">severity:</span> <span class="yh">HIGH</span>
-    <span class="yk">message:</span> &gt;
-      Ash changeset or query executed without a valid `actor:` context.
-      Nil or placeholder actors may bypass policy enforcement.
-    <span class="yk">patterns:</span>
-      - <span class="yk">pattern-either:</span>
-          - <span class="yk">pattern:</span> <span class="yp">Ash.Changeset.for_$ACTION($RESOURCE, $INPUT)</span>
-          - <span class="yk">pattern:</span> <span class="yp">Ash.Query.for_read($RESOURCE, $ACTION)</span>
-      - <span class="yk">pattern-not:</span> <span class="yn">Ash.Changeset.for_$ACTION($RESOURCE, $INPUT, actor: ($ACTOR &amp; !nil))</span>
-      - <span class="yk">pattern-not:</span> <span class="yn">Ash.Query.for_read($RESOURCE, $ACTION, actor: ($ACTOR &amp; !nil))</span></pre>
-    </div>
-  </section>
-
-  <div class="cta">
-    <a class="pill solid" href="resume.html">Résumé</a>
-    <a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a>
-    <a class="pill ghost" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Read the essay ↗</a>
-  </div>
+  <div class="cta"><a class="pill solid" href="resume.html">Résumé</a><a class="pill ghost" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">Read the essay ↗</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
 </main>
 <footer class="foot">
   <div class="foot-in">
