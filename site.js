@@ -255,23 +255,15 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   tuneHint(c);
 });
 
-// ── the home field: same engine, plus the word cycle
+// ── the home field: same engine, one thing — Snoopy, facing right, held.
+//    The page-to-page hand-off (scatter on leave, gather from the previous
+//    page's glyph on arrival) is the only motion after the picture settles.
 (function () {
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
-  var WORDS = ['Collin', 'Stilwell'], wi = 0, cycle = null, inside = false;
-  if (MD === '10-04') WORDS.push('Snoopy');   // Snoopy's first strip, 1950
-  var m = matrix(c, { text: WORDS[0], src: 'assets/collin.jpg', prev: PREV_GLYPH, picHold: 2.2 });
-  HEAD = m; HEAD_CANVAS = c;
-  var base = c.getAttribute('aria-label') || '';
-  var name = function (w) { if (/the word \S+$/.test(base)) c.setAttribute('aria-label', base.replace(/the word \S+$/, 'the word ' + w)); };
-  function startCycle() { if (REDUCE || cycle || inside) return; cycle = setInterval(function () { wi = (wi + 1) % WORDS.length; m.setWord(WORDS[wi]); name(WORDS[wi]); }, 10000); }
-  function stopCycle() { if (cycle) { clearInterval(cycle); cycle = null; } }
-  startCycle();
-  document.addEventListener('visibilitychange', function () { if (document.hidden) stopCycle(); else startCycle(); });
-  // a morph starting under the cursor fights the flow field: hold still while it is in the band
-  c.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { inside = true; stopCycle(); } });
-  c.addEventListener('pointerleave', function () { inside = false; startCycle(); });
+  var src = 'assets/collin.jpg';
+  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, still: true });
+  HEAD_CANVAS = c;
 })();
 
 // ── live: lectr's corpus count on the Digital page ─────────────────────────

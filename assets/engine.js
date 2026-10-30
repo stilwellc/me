@@ -68,6 +68,7 @@ function matrix(c, opts) {
   var RI = null, RA = null, RF = null, RD = null, nI = 0, nA = 0, nF = 0, nD = 0;
   function grow(b, need) { if (b.length >= need) return b; var nb = new Float32Array(Math.max(need, b.length * 2)); nb.set(b); return nb; }
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
+  var still = !!opts.still;   // still: the picture is the band's one thing — no word, held
   var noFill = opts.filler === false;
   var layers = !!(opts.layers || (c.dataset && c.dataset.layers === '1'));
   var fromRect = opts.fromRect && isFinite(opts.fromRect.x) && isFinite(opts.fromRect.y) && opts.fromRect.w > 4 && opts.fromRect.h > 4 ? opts.fromRect : null;
@@ -347,7 +348,10 @@ function matrix(c, opts) {
     return Q;
   }
   function stepOf(key, f, kind, hold, dur) { return { key: key, f: f, kind: kind, hold: hold, dur: dur }; }
-  function finalStep() { return stepOf('mask', maskF, 'word', 1e9, WORD_MORPH); }
+  function finalStep() {
+    if (still) { var p = (pic && showPic) ? pic : curPic(); if (p) return stepOf('pic', p, 'pic', 1e9, MORPH); }
+    return stepOf('mask', maskF, 'word', 1e9, WORD_MORPH);
+  }
   function setSeq(s, gustedAll) {
     SEQ = s; PARTS = s.map(function () { return null; }); PAIRS = s.map(function () { return null; }); gusted = s.map(function () { return !!gustedAll; });
     settledAt = -1; SP = null; computeGate();
@@ -363,7 +367,7 @@ function matrix(c, opts) {
   function sequence() {
     var s = [], picOn = pic && showPic;
     if (reduce) {   // designed, not frozen: the picture as a still, then a short dissolve to the word
-      if (picOn) s.push(stepOf('pic', pic, 'pic', RM_HOLD, RM_FADE));
+      if (picOn && !still) s.push(stepOf('pic', pic, 'pic', RM_HOLD, RM_FADE));
       s.push(finalStep()); setSeq(s); return;
     }
     if (layers && picOn) s.push({ key: null, f: null, kind: 'pic', hold: 0, dur: LAYER_GATHER, mode: 'layers' });
@@ -374,8 +378,8 @@ function matrix(c, opts) {
     else if (picPrev) s.push(stepOf('prev', picPrev, 'pic', 0, GATHER));   // the previous page's glyph is where the bodies start
     else s.push(stepOf(null, null, picOn ? 'pic' : 'word', 0, GATHER));
     fromRect = null;   // one hop
-    if (picOn) s.push(stepOf('pic', pic, 'pic', PIC_HOLD, MORPH));
-    s.push(finalStep());
+    if (picOn && !still) s.push(stepOf('pic', pic, 'pic', PIC_HOLD, MORPH));
+    s.push(finalStep());   // still: the picture itself, held
     setSeq(s);
   }
   function partsAt(k) { return PARTS[k] || (PARTS[k] = makeParticles(SEQ[k])); }
@@ -593,6 +597,7 @@ function matrix(c, opts) {
     t0 = performance.now(); lastAct = t0; run();
   }
   function setWord(w) {
+    if (still) return;   // one thing per page: the picture stays
     word = String(w == null ? '' : w); showPic = false;
     if (!cols) return;   // not drawn yet: play() will use the new word
     maskF = maskFor(word);
@@ -607,7 +612,7 @@ function matrix(c, opts) {
     var p0 = curPic();
     if (img && !p0) return play();
     pic = p0;
-    var target = pic ? [stepOf('pic', pic, 'pic', PIC_HOLD, MORPH), finalStep()] : [finalStep()];
+    var target = (pic && !still) ? [stepOf('pic', pic, 'pic', PIC_HOLD, MORPH), finalStep()] : [finalStep()];
     var sn = snapStep();
     if (!sn) return play();
     setSeq(resetFrom(sn, target, GATHER));
@@ -615,7 +620,7 @@ function matrix(c, opts) {
   }
   function toggle() {
     // reduced motion: a click dissolves between the picture still and the word
-    var fin = SEQ[SEQ.length - 1], p0 = curPic(); if (!fin || !p0) return;
+    var fin = SEQ[SEQ.length - 1], p0 = curPic(); if (!fin || !p0 || still) return;
     var toPic = fin.key !== 'pic', target = toPic ? stepOf('pic', p0, 'pic', 1e9, RM_FADE) : finalStep();
     setSeq([stepOf(fin.key, fin.f, fin.kind, 0, RM_FADE), target]); t0 = performance.now(); run();
   }
