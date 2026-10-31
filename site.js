@@ -66,8 +66,8 @@ var PAGES = [
   { u: 'index.html', t: 'Home', h: 'g h', w: 'Collin' },
   { u: 'digital.html', t: 'Digital', h: 'g d', w: 'Digital' },
   { u: 'physical.html', t: 'Physical', h: 'g p', w: 'Physical' },
-  { u: 'fourwalls.html', t: 'Four Walls', h: 'residence', w: 'Four Walls', k: 'apartment renovation home' },
-  { u: 'wave.html', t: 'Wave panel', h: 'text2print', w: 'Wave', k: 'printing' },
+  { u: 'fourwalls.html', t: 'Four Walls', h: 'the residence', w: 'Four Walls', k: 'apartment renovation home' },
+  { u: 'wave.html', t: 'Wave panel', h: 'wall panel', w: 'Wave', k: 'printing' },
   { u: 'security.html', t: 'Security', h: 'g s', w: 'Security', k: 'day job' },
   { u: 'writing.html', t: 'Writing', h: 'g n', w: 'Writing', k: 'essays substack' },
   { u: 'github.html', t: 'GitHub', h: 'g g', w: 'GitHub', k: 'code repos' },
@@ -280,7 +280,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
 // ── the shortcuts dialog, rendered from one table so help and keymap agree
 (function () {
   var grid = document.querySelector('#keys .keys-grid'); if (!grid) return;
-  var ROWS = [['⌘K', 'command palette'], ['/', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'career'], ['g l', 'lectr'], ['enter', 'on Replay: replay the header'], ['?', 'this']];
+  var ROWS = [['⌘K /', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'career'], ['g l', 'lectr'], ['enter', 'replay the band (Replay focused)'], ['?', 'this']];
   grid.innerHTML = ROWS.map(function (r) { return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + h(k) + '</kbd>'; }).join(' ') + '</span><span>' + h(r[1]) + '</span>'; }).join('');
 })();
 
@@ -614,7 +614,7 @@ function flagCheck(s) {
       else if (r.k === 'quiet') v = 'appraised ' + usd(r.p) + ' → realized ' + usd(r.r);
       else { var q = r.r / r.p; v = 'called ' + usd(r.p) + ' → realized ' + usd(r.r) + mk(q >= 0.7 && q <= 1.3, 'within 30%', 'off by more than 30%'); }
       var name = r.id ? '<a href="https://lectr.bid/lot/' + encodeURIComponent(r.id) + '" target="_blank" rel="noopener">' + h(t) + '</a>' : h(t);
-      return '<li><span>' + name + ' · ' + h(r.h || houseOf(r.id)) + ' · called ' + h(r.d) + '</span><span class="v">' + v + '</span></li>';
+      return '<li><span>' + name + ' · ' + h(r.h || houseOf(r.id)) + ' · called <span class="nw">' + h(r.d) + '</span></span><span class="v">' + v + '</span></li>';
     }).join(''));
     var g = rc.record && rc.record.vsbid && rc.record.vsbid.graded; if (g) setNum($('bt-graded'), g.toLocaleString('en-US'));
     var src = $('trace-rec-src'); if (src) src.textContent = 'Live from lectr.bid, generated ' + (rc.generatedAt || '') + '.';
@@ -896,7 +896,7 @@ function whack(intro) {
     ghEvents().then(function (ev) {
       var p = ev && ev.filter(function (e) { return e.t === 'PushEvent'; })[0]; if (!p) return;
       var repo = p.r.replace(/^stilwellc\//, ''); if (repo === 'me') repo = 'this site';
-      el.textContent = 'last push ' + ago(new Date(p.d).getTime()) + ' · ' + repo; el.hidden = false;
+      el.textContent = repo + ' pushed ' + ago(new Date(p.d).getTime()); el.hidden = false;
     });
   }
   if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); run(); } }, { rootMargin: '600px 0px' }); io.observe(meta); } else run();

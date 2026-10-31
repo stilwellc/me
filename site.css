@@ -12,6 +12,7 @@
   --ink: #161616;
   --ink-2: #6B6C6A;
   --ink-3: #6E6F6B;
+  --bad: #B3261E;   /* the one negative; the accent is the one positive */
   --hair: #E6E5E2;
   --hair-2: #D6D5D1;
   --pill: #161616;
@@ -51,8 +52,8 @@ a { color: inherit; text-decoration: none; }
   padding: var(--pad); font-size: 17px;
 }
 .mast .brand { display: inline-flex; align-items: center; border-radius: 6px; }
-.mast .brand .n { font-family: var(--display); font-weight: 500; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.03em; line-height: 1; font-variation-settings: "opsz" 96; color: var(--ink); transition: color var(--t2) var(--out), letter-spacing var(--t3) var(--out); }
-@media (hover: hover) { .mast .brand:hover .n { color: var(--accent); letter-spacing: -0.015em; } }
+.mast .brand .n { font-family: var(--display); font-weight: 500; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.03em; line-height: 1; font-variation-settings: "opsz" 96; color: var(--ink); transition: color var(--t2) var(--out); }
+@media (hover: hover) { .mast .brand:hover .n { color: var(--accent); } }   /* colour only: a tracking change reflowed the masthead */
 .mast nav { display: flex; gap: 0.4rem; }
 .pill {
   display: inline-flex; align-items: center; height: 30px; padding: 0 12px;
@@ -180,7 +181,8 @@ kbd { font-family: var(--mono); font-size: 11px; color: var(--ink); border: 1px 
   font-family: var(--mono); font-size: 11px; line-height: 1; letter-spacing: 0.04em; color: var(--ink-3); white-space: nowrap; transition: color var(--t1) linear; }
 .mhead .hint[hidden], .field .hint[hidden] { display: none; }
 html:not(.js) .hint { display: none; }
-.eyebrow a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+.eyebrow a { color: var(--ink-2); text-decoration: none; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+@media (hover: hover) { .eyebrow a:hover { text-decoration: underline; } }   /* an underline through 12 px tracked capitals filled the counters */
 @media (hover: hover) { .mhead .hint:hover, .field .hint:hover, .eyebrow a:hover { color: var(--ink); } }
 /* with no JS the band never paints: a faint dot screen says "picture here", not "broken" */
 html:not(.js) canvas.matrix, html:not(.js) .field canvas { background: radial-gradient(circle, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1.4px) 0 0 / 7px 7px; }
@@ -268,7 +270,7 @@ h1.display, .cell h2, .sec h2 { text-wrap: balance; }
   .pill:not(.on):not(.solid):hover::before { clip-path: inset(0 0 0 0); }
   .pill.solid:hover { transform: translateY(-1px); }
 }
-.cell h2 .arrow { transition: transform var(--t3) var(--out), color var(--t2) var(--out); }
+.cell h2 .arrow { transition: transform var(--t2) var(--out), color var(--t2) var(--out); }   /* a 3 px nudge is 240 ms everywhere */
 /* the headline is one text block: if a script still splits it into .ln/.li
    spans, they flow as plain text with no clip and no rise */
 h1.display .ln, h1.display .li { display: inline; overflow: visible; padding: 0; margin: 0; transform: none; animation: none; }
@@ -441,6 +443,7 @@ body figure.plate.detail { max-width: var(--col); margin-top: 1.2rem; }
    off the element, following the element's own corner radius */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, canvas:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .pal-box input:focus, .pal-box input:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
+.pal-box:focus-visible, .keys-box:focus-visible { outline: 0; }   /* focus moves to the box on open; the ring there read as an error state */
 .skip { position: absolute; left: 1rem; top: -3rem; z-index: 50; padding: 0.5rem 0.9rem; background: var(--pill); color: var(--pill-ink); border-radius: 999px; font-size: 14px; transition: top var(--t1) var(--out); }
 .skip:focus { top: 1rem; }
 
@@ -605,7 +608,7 @@ footer.foot .ape.roar { animation: ape-roar var(--t4) var(--out); }
 /* a decoy: it holds its ground and shakes its head */
 .whack .hole.nope .spr { transform: translateY(14%); animation: w-nope 320ms var(--inout); }
 @keyframes w-nope { 20%, 60% { translate: -6px 0; } 40%, 80% { translate: 6px 0; } }
-.w-plus.bad { color: #D13B2F; white-space: nowrap; }
+.w-plus.bad { color: var(--bad); white-space: nowrap; }
 .whack .hole:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .w-plus { position: absolute; left: 50%; top: 8%; transform: translateX(-50%); font-size: 13px; font-weight: 500; color: var(--accent); pointer-events: none; animation: w-plus 600ms var(--out) forwards; }
 @keyframes w-plus { to { opacity: 0; transform: translate(-50%, -14px); } }
@@ -729,8 +732,8 @@ body .act .grid.weeks i { width: auto; height: 12px; border-radius: 2px; }
 
 /* b6 · lectr record: hit / miss against the lane's own rule */
 #trace-rec .mk { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; white-space: nowrap; margin-left: 0.35em; }
-#trace-rec .mk.ok { color: #2F7A3A; }
-#trace-rec .mk.no { color: #B3261E; }
+#trace-rec .mk.ok { color: var(--accent); }
+#trace-rec .mk.no { color: var(--bad); }
 #trace-rec a { color: inherit; text-decoration: underline; text-decoration-color: var(--hair-2, rgba(22,22,22,.25)); text-underline-offset: 3px; }
 #trace-rec a:hover { text-decoration-color: currentColor; }
 
@@ -941,3 +944,9 @@ body .sheet.how .row { grid-template-columns: 6.5rem minmax(0, 1fr); }
 body .sheet.how .row .t { font-weight: 500; }
 @media (max-width: 600px) { body .sheet.how .row { grid-template-columns: 1fr; } }
 body .lede a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+
+/* ── finish (Oct 30, after the Apple + TE lens reviews) ── */
+.cell h2, .sheet .row .t, .job h3 { text-wrap: pretty; }              /* no one-word last lines on titles */
+.wave-ctl [aria-disabled="true"] { display: none; }                  /* a greyed Download before a tile is picked read as broken */
+@media (max-width: 600px) { .facts .l .sub { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }   /* two lines at most, so the tiles in a row stay one height */
+.nw { white-space: nowrap; }                                         /* an ISO date never breaks at its hyphen */

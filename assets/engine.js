@@ -105,7 +105,7 @@ function matrix(c, opts) {
   }
   function applyGrid(G) {
     gridKey = G.key; W = G.W; H = G.H; cell = G.cell; cols = G.cols; rows = G.rows; N = G.N;
-    c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr * W / (cols * cell), 0, 0, dpr * H / (rows * cell), 0, 0);   // cols × pitch rarely equals the width; stretch the field the last pixel or two so no blank column shows at the right edge
     th = new Float32Array(N); for (var i = 0; i < N; i++) th[i] = Math.random();
     fc = Math.ceil(cols / F) + 1; fr = Math.ceil(rows / F) + 1;
     vx = new Float32Array(fc * fr); vy = new Float32Array(fc * fr); tmpx = new Float32Array(fc * fr); tmpy = new Float32Array(fc * fr);
