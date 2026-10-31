@@ -79,12 +79,12 @@ var PAGES = [
   { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing studio bambu woven watch case', cs: 1 },
   { u: 'colophon.html', t: 'Colophon', h: 'stack and build', w: 'Colophon', k: 'playground' }
 ];
+PAGES.forEach(function (p, i) { p.n = ('0' + (i + 1)).slice(-2); });   // the system is numbered: 01 Home … 15 Colophon
 function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('/').pop().toLowerCase() || 'index.html'; for (var i = 0; i < PAGES.length; i++) if (PAGES[i].u === f) return PAGES[i]; return null; }
 
 // ── touch: the ⌘K pill is the menu (before the topbar clones the nav) ────────
 (function () {
   if (!TOUCH) return;
-  var btn = document.getElementById('palette-btn'); if (btn) { btn.textContent = 'Menu'; btn.setAttribute('aria-label', 'Menu'); btn.title = 'Menu'; }
   var foot = document.querySelector('.pal-foot'); if (foot) { foot.hidden = true; foot.style.display = 'none'; }
   var inp = document.getElementById('pal-in'); if (inp) inp.placeholder = 'Go to…';
 })();
@@ -93,7 +93,7 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
 (function () {
   if (!matchMedia('(max-width: 760px)').matches) return;
   var nav = document.querySelector('header.mast nav'), on = nav && nav.querySelector('.pill.on'); if (!on || nav.scrollWidth <= nav.clientWidth) return;
-  var a = on.getBoundingClientRect(), b = nav.getBoundingClientRect(); nav.scrollLeft += (a.left + a.width / 2) - (b.left + b.width / 2);
+  var a = on.getBoundingClientRect(), b = nav.getBoundingClientRect(), padL = parseFloat(getComputedStyle(nav).paddingLeft) || 0; nav.scrollLeft += a.left - b.left - padL;
 })();
 
 // ── the condensed masthead: a slim bar that arrives once the real masthead
@@ -114,6 +114,19 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   function check() { var y = scrollY, edge = mast.offsetTop + mast.offsetHeight + 24, want = y > edge; if (want !== on) { on = want; document.body.classList.toggle('scrolled', on); } }
   addEventListener('scroll', function () { var now = Date.now(); if (now - t < 60) return; t = now; check(); }, { passive: true });
   addEventListener('resize', check); check();
+})();
+
+// ── numbering: every page, eyebrow, footer entry and section carries its index
+(function () {
+  var here = pageOf(HERE);
+  // the eyebrow: 07 · DIGITAL · LECTR.BID ↗
+  var eb = document.querySelector('.lander-head .eyebrow, .page .eyebrow'); if (eb && here && !eb.querySelector('.no')) eb.insertAdjacentHTML('afterbegin', '<span class="no">' + here.n + '</span> · ');
+  // the footer map: 02 Digital … 15 Colophon
+  [].forEach.call(document.querySelectorAll('footer .foot-map a'), function (a) { var p = pageOf(a.getAttribute('href')); if (p && !a.querySelector('.no')) a.insertAdjacentHTML('afterbegin', '<span class="no">' + p.n + '</span>'); });
+  // sections: "the problem · corpus" → "01 PROBLEM · CORPUS" (the key keeps its words; the article goes)
+  var secs = [].slice.call(document.querySelectorAll('.cs .sec')), i = 0;
+  secs.forEach(function (sec) { var k = sec.querySelector(':scope > .k'); if (!k) return; i++; var no = ('0' + i).slice(-2); sec.dataset.no = no; var raw = k.textContent.trim(); if (/^\d\d\b/.test(raw)) return; var txt = raw.replace(/^the\s+/i, ''); k.innerHTML = '<span class="no">' + no + '</span> ' + h(txt); });   // a page that numbers its own keys (Four Walls) keeps them
+  document.documentElement.dataset.secs = String(i);
 })();
 
 // ── case studies: a section index in the left margin, current section lit.
@@ -137,9 +150,10 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var chip = document.createElement('button'); chip.type = 'button'; chip.className = 'sec-chip'; chip.setAttribute('aria-haspopup', 'true'); chip.setAttribute('aria-expanded', 'false');
   var menu = document.createElement('nav'); menu.className = 'sec-menu'; menu.hidden = true; menu.setAttribute('aria-label', 'Sections');
   links.forEach(function (p) { var a = document.createElement('a'); a.href = p[1].getAttribute('href'); a.textContent = p[1].textContent; menu.appendChild(a); });
+  var topA = document.createElement('a'); topA.href = '#main'; topA.className = 'top'; topA.textContent = '↑ top'; topA.addEventListener('click', function (e) { e.preventDefault(); scrollTo({ top: 0, behavior: REDUCE ? 'auto' : 'smooth' }); }); menu.appendChild(topA);
   document.body.appendChild(chip); document.body.appendChild(menu);
   // the chip exists only where the rail does not fit
-  var narrow = matchMedia('(max-width: 1399px)');
+  var narrow = matchMedia('(max-width: 1199px)');
   function fit() { chip.hidden = !narrow.matches; if (!narrow.matches) { menu.hidden = true; chip.setAttribute('aria-expanded', 'false'); } }
   if (narrow.addEventListener) narrow.addEventListener('change', fit); fit();
   function shut() { if (menu.hidden) return; menu.hidden = true; chip.setAttribute('aria-expanded', 'false'); }
@@ -150,7 +164,7 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var cur = null;
   function light(sec) {
     if (sec === cur) return; cur = sec;
-    links.forEach(function (p, i) { var on = p[0] === sec; p[1].classList.toggle('on', on); if (on) p[1].setAttribute('aria-current', 'true'); else p[1].removeAttribute('aria-current'); var m = menu.children[i]; if (m) m.classList.toggle('on', on); if (on) chip.innerHTML = '<span class="sr">Section: </span>' + h(p[1].textContent) + ' <span aria-hidden="true">▾</span>'; });
+    links.forEach(function (p, i) { var on = p[0] === sec; p[1].classList.toggle('on', on); if (on) p[1].setAttribute('aria-current', 'true'); else p[1].removeAttribute('aria-current'); var m = menu.children[i]; if (m) m.classList.toggle('on', on); if (on) { var no = p[0].dataset.no || ('0' + (i + 1)).slice(-2), lab = p[1].textContent.replace(/^\d\d\s*/, ''); chip.innerHTML = '<span class="sr">Section: </span><span class="pos">§' + no + '/' + ('0' + links.length).slice(-2) + '</span>' + h(lab) + ' <span aria-hidden="true">▾</span>'; var ss = document.querySelector('.foot-status .sl.s-secno b'); if (ss) ss.textContent = '§' + no; } });
   }
   function sweep() { var best = null, y = innerHeight * 0.38; links.forEach(function (p) { var r = p[0].getBoundingClientRect(); if (r.top <= y) best = p[0]; }); light(best || links[0][0]); }
   var tick = false; addEventListener('scroll', function () { shut(); if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; sweep(); }); } }, { passive: true }); addEventListener('resize', sweep); sweep();
@@ -200,7 +214,7 @@ function leave(href) {
   if (leaving || REDUCE || !HEAD || !HEAD.scatter || !headVisible()) { leaving = true; goNow(); return; }
   leaving = true;
   try { HEAD.scatter(goNow); } catch (e) { goNow(); return; }
-  leaveT = setTimeout(goNow, 700);
+  leaveT = setTimeout(goNow, 400);
 }
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target === '_blank' || a.origin !== location.origin) return;
@@ -237,13 +251,25 @@ addEventListener('pagereveal', function (e) { if (e.viewTransition) document.doc
 // print buttons (the résumé)
 [].forEach.call(document.querySelectorAll('[data-print]'), function (b) { b.addEventListener('click', function () { window.print(); }); });
 
-// ── the header's hint: plain words, named by what it says. It shows on the
-//    first page of a visit, then steps aside.
-function tuneHint(c) {
-  var hint = c.parentElement && c.parentElement.querySelector('.hint'); if (!hint) return;
-  hint.removeAttribute('aria-label');
-  hint.textContent = (TOUCH ? 'tap' : 'click') + ' to replay';
-  if (ssGet('mx:hinted')) hint.hidden = true; else ssSet('mx:hinted', '1');
+// ── the band's caption strip: SRC · WORD · cols×rows @ pitch · cells, the phase
+//    squares, and a replay key that stays. The band reads as operated, not
+//    played at you. One strip per band, on the frame's width.
+function caption(c, m, srcName) {
+  var host = c.closest('.mhead, .field') || c.parentElement; if (!host || !m) return;
+  var old = host.querySelector('.hint'); if (old) old.remove();
+  var cap = document.createElement('div'); cap.className = 'cap'; cap.setAttribute('aria-live', 'off');
+  var word = (c.dataset.text || m.word || '').trim();
+  var src = srcName == null ? (c.dataset.src || '') : srcName; src = src ? src.split('/').pop() : '—';
+  cap.innerHTML = '<span class="cap-l"><span class="src">' + h(src) + '</span><span class="sep">·</span><b>' + h(word || '—') + '</b><span class="sep">·</span><span class="grid">—</span></span>' +
+    '<span class="cap-r"><span class="ph" aria-hidden="true"></span><button type="button" class="replay" aria-label="Replay the band" title="Replay (↵ when focused)">↻</button></span>';
+  host.insertAdjacentElement('afterend', cap);
+  var gridEl = cap.querySelector('.grid'), ph = cap.querySelector('.ph'), btn = cap.querySelector('.replay');
+  function grid() { var f = m.fields || {}; if (!f.cols) return; var cell = Math.round(c.getBoundingClientRect().width / f.cols) || 0; gridEl.textContent = f.cols + '×' + f.rows + ' @ ' + cell + 'px' + (innerWidth > 600 ? ' · ' + (f.cols * f.rows).toLocaleString('en-US') + ' cells' : ''); }
+  function phase() { var st = m.state || {}, n = Math.max(1, st.n || 1), k = Math.min(n - 1, st.k || 0); if (ph.children.length !== n) ph.innerHTML = new Array(n + 1).join('<i></i>'); [].forEach.call(ph.children, function (el, j) { el.classList.toggle('on', st.settled ? true : j <= k); }); }
+  var tries = 0, iv = setInterval(function () { grid(); phase(); if (++tries > 80 && (m.state || {}).settled) clearInterval(iv); }, 120);
+  c.addEventListener('mx:settled', function () { grid(); phase(); SND.tick('set'); });
+  addEventListener('resize', function () { setTimeout(grid, 200); });
+  btn.addEventListener('click', function () { try { m.replay(); } catch (e) {} tries = 0; clearInterval(iv); iv = setInterval(function () { grid(); phase(); if (++tries > 80 && (m.state || {}).settled) clearInterval(iv); }, 120); });
 }
 
 // headers on landers + case studies
@@ -252,7 +278,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   if (FROM_RECT && i === 0) o.fromRect = FROM_RECT;
   if (c.dataset.layers === '1') o.layers = true;
   var m = matrix(c, o); if (i === 0) { HEAD = m; HEAD_CANVAS = c; }
-  tuneHint(c);
+  caption(c, m);
 });
 
 // ── the home field: same engine, one thing — Snoopy, facing right, held.
@@ -263,7 +289,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   if (!c || typeof matrix !== 'function') return;
   var src = 'assets/collin-band.png';
   HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, still: true, flat: true, fit: 'contain', focus: '0,0' });
-  HEAD_CANVAS = c;
+  HEAD_CANVAS = c; c.dataset.text = 'Collin'; caption(c, HEAD, src);
 })();
 
 // ── live: lectr's corpus count on the Digital page ─────────────────────────
@@ -277,11 +303,38 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   }).catch(function () {});
 })();
 
+// ── the sound bus. One switch (SND in the footer status strip), default off,
+//    stored per browser. A tick is 2–15 ms of sine: the band setting, a palette
+//    detent, a toggle detent, a flag confirm. Nothing on scroll, hover or arrival.
+var SND = (function () {
+  var on = lsGet('snd') === '1', ac = null;
+  function ctx() { try { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; if (!ac) ac = new AC(); if (ac.state === 'suspended') ac.resume(); return ac; } catch (e) { return null; } }
+  function tone(f0, f1, ms, gain, delay) {
+    var a = ctx(); if (!a) return; var t = a.currentTime + (delay || 0), o = a.createOscillator(), g = a.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(f0, t); if (f1) o.frequency.exponentialRampToValueAtTime(f1, t + ms / 1000);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + ms / 1000);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + ms / 1000 + 0.01);
+  }
+  var KIND = { set: function () { tone(2200, 0, 4, 0.05); }, detent: function () { tone(1500, 0, 8, 0.04); }, click: function () { tone(820, 0, 14, 0.05); }, flag: function () { tone(660, 0, 70, 0.05); tone(880, 0, 90, 0.05, 0.09); } };
+  var setOnce = false;
+  return {
+    get on() { return on; },
+    set: function (v) { on = !!v; lsSet('snd', on ? '1' : '0'); [].forEach.call(document.querySelectorAll('button.snd'), function (b) { b.setAttribute('aria-pressed', String(on)); }); if (on) KIND.click(); },
+    tick: function (k) { if (!on || !KIND[k]) return; if (k === 'set') { if (setOnce) return; setOnce = true; } KIND[k](); }
+  };
+})();
+document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.pill[aria-pressed], .pt-switch label, .tm-cell'); if (b) SND.tick('detent'); });
+// hardware state: every toggle pill carries a 6 px square (the wave page draws its own)
+if (HERE !== 'wave.html') [].forEach.call(document.querySelectorAll('.pill[aria-pressed]'), function (b) { if (!b.querySelector('.sq, .tg')) b.insertAdjacentHTML('afterbegin', '<i class="sq" aria-hidden="true"></i>'); });
+
 // ── the shortcuts dialog, rendered from one table so help and keymap agree
 (function () {
   var grid = document.querySelector('#keys .keys-grid'); if (!grid) return;
-  var ROWS = [['⌘K /', 'command palette'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g n', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'career'], ['g l', 'lectr'], ['enter', 'replay the band (Replay focused)'], ['?', 'this']];
-  grid.innerHTML = ROWS.map(function (r) { return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + h(k) + '</kbd>'; }).join(' ') + '</span><span>' + h(r[1]) + '</span>'; }).join('');
+  var ROWS = [['GO'], ['g h', 'home'], ['g d', 'digital'], ['g p', 'physical'], ['g s', 'security'], ['g w', 'writing'], ['g g', 'github'], ['g a', 'about'], ['g r', 'career'], ['g l', 'lectr'],
+    ['OPEN'], ['⌘K /', 'command palette'], ['?', 'this sheet'],
+    ['BAND'], ['↵', 'replay (on the ↻ key)'], ['long-press', 'scatter and re-gather'], ['s', 'sound on / off']];
+  var n = ROWS.filter(function (r) { return r.length > 1; }).length, head = document.querySelector('#keys .keys-h'); if (head) head.textContent = 'Shortcuts · ' + n;
+  grid.innerHTML = ROWS.map(function (r) { if (r.length === 1) return '<span class="grp">' + h(r[0]) + '</span>'; return '<span>' + r[0].split(' ').map(function (k) { return '<kbd>' + h(k) + '</kbd>'; }).join(' ') + '</span><span>' + h(r[1]) + '</span>'; }).join('');
 })();
 
 // ── CTF: three flags. One in the home page source, one in the vault, one in
@@ -321,7 +374,7 @@ function flagCheck(s) {
         [].forEach.call(doc.querySelectorAll('.cs .sec'), function (sec, i) { var k = sec.querySelector('.k'), h2 = sec.querySelector('h2'); if (!k) return; out.push({ t: p.w + ' · ' + k.textContent.trim(), h: '§', u: p.u + '#' + (sec.id || 'sec-' + (i + 1)), k: (h2 ? h2.textContent : '') + ' ' + (p.k || ''), sd: h2 ? h2.textContent : '', sec: 1, w: p.w }); });
         return out;
       }).catch(function () { return []; });
-    })).then(function (lists) { OTHER_SECS = [].concat.apply([], lists); ssSet('pal:secs2', JSON.stringify(OTHER_SECS)); if (!pal.hidden) render(); });
+    })).then(function (lists) { OTHER_SECS = [].concat.apply([], lists); ssSet('pal:secs2', JSON.stringify(OTHER_SECS)); if (!pal.hidden) { render(); foot(); } });
   }
   var sel = 0, shown = ITEMS, out = null;
   function hay(i) { return i.__n || (i.__n = norm(i.t + ' ' + (i.k || '') + ' ' + (i.h || ''))); }
@@ -343,7 +396,9 @@ function flagCheck(s) {
   function row(i) {
     var hh = String(i.h || ''), chord = /^(g [a-z]|\?)$/.test(hh), t = i.t + (hh === '↗' ? ' ↗' : ''), d = '';
     if (hh === '§') d = String(i.sd || '').replace(/\s+/g, ' ').trim(); else if (!chord && hh !== '↗') d = hh;
-    return '<span class="tt"><span>' + h(t) + '</span>' + (d ? '<span class="d">' + h(d) + '</span>' : '') + '</span><span class="h">' + (chord ? hh.split(' ').map(function (x) { return '<kbd>' + h(x) + '</kbd>'; }).join(' ') : '') + '</span>';
+    var pg = i.u && !i.x ? pageOf(i.u) : null, no = pg && i.u.indexOf('#') < 0 ? pg.n : (hh === '§' ? '§' : '');
+    var right = pg && pg.u === HERE && i.u.indexOf('#') < 0 ? '<span class="here">here</span>' : chord ? hh.split(' ').map(function (x) { return '<kbd>' + h(x) + '</kbd>'; }).join(' ') : (hh === '↗' ? '↗' : '—');
+    return '<span class="no">' + h(no) + '</span><span class="tt"><span>' + h(t) + '</span>' + (d ? '<span class="d">' + h(d) + '</span>' : '') + '</span><span class="h">' + right + '</span>';
   }
   function say(text, items) { out = text; shown = items || []; sel = 0; draw(); }
   // preview: the band morphs toward where the selection points (engine permitting)
@@ -382,16 +437,21 @@ function flagCheck(s) {
         if (k < 0) { say('Not one of mine. The flags look like flag{…}, and there are three.'); return; }
         var got = []; try { got = JSON.parse(ssGet('ctf') || '[]'); } catch (e) {}
         if (got.indexOf(k) < 0) got.push(k); ssSet('ctf', JSON.stringify(got));
-        if (got.length >= 3) say('3/3 found. You\'d do well on my team.', [{ t: 'Say hello on LinkedIn', h: '↗', u: LINKEDIN, x: 1 }]);
-        else say(got.length + '/3 found. ' + (3 - got.length) + ' to go.');
+        SND.tick('flag'); foot();
+        if (got.length >= 3) say('3/3. The job posting is on LinkedIn ↗', [{ t: 'Say hello on LinkedIn', h: '↗', u: LINKEDIN, x: 1 }]);
+        else say(got.length + '/3. ' + (3 - got.length) + ' to go.');
+        var fs = document.querySelector('.foot-status .sl.s-flags b'); if (fs) fs.textContent = got.length + '/3';
       });
       return true;
     }
     return false;
   }
   var opener = null;
-  function open() { closeKeys(); opener = document.activeElement; pal.hidden = false; inp.value = ''; sel = 0; render(); if (!TOUCH) inp.focus(); inp.setAttribute('aria-expanded', 'true'); loadSections(); }
-  function close() { pal.hidden = true; inp.setAttribute('aria-expanded', 'false'); inp.blur(); unpreview(); if (opener && opener.focus) { opener.focus(); opener = null; } }
+  var kbtn = document.getElementById('palette-btn');
+  function foot() { var f = pal.querySelector('.pal-foot'); if (!f) return; var got = []; try { got = JSON.parse(ssGet('ctf') || '[]'); } catch (e) {} var secs = HERE_SECS.length + (OTHER_SECS ? OTHER_SECS.length : 0); f.innerHTML = '<span>' + PAGES.length + ' pages · ' + secs + ' sections · flags ' + got.length + '/3</span><span>? shortcuts</span>'; }
+  inp.placeholder = '> go to a page · type a command';
+  function open() { closeKeys(); opener = document.activeElement; pal.hidden = false; inp.value = ''; sel = 0; render(); foot(); if (!TOUCH) inp.focus(); inp.setAttribute('aria-expanded', 'true'); if (kbtn) kbtn.setAttribute('aria-expanded', 'true'); loadSections(); }
+  function close() { pal.hidden = true; inp.setAttribute('aria-expanded', 'false'); if (kbtn) kbtn.setAttribute('aria-expanded', 'false'); inp.blur(); unpreview(); if (opener && opener.focus) { opener.focus(); opener = null; } }
   function openKeys() { if (!keys) return; close(); opener = opener || document.activeElement; keys.hidden = false; var box = keys.querySelector('.keys-box'); if (box) { box.tabIndex = -1; box.focus(); } }
   function closeKeys() { if (!keys || keys.hidden) return; keys.hidden = true; if (opener && opener.focus) { opener.focus(); opener = null; } }
   window.__palOpen = open;
@@ -405,21 +465,22 @@ function flagCheck(s) {
   pal.addEventListener('click', function (e) { if (e.target === pal) close(); });
   var btn = document.getElementById('palette-btn'); if (btn) btn.addEventListener('click', open);
   var pending = null, pt = 0;
-  var CHORD = { h: 'index.html', d: 'digital.html', s: 'security.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' };
+  var CHORD = { h: 'index.html', d: 'digital.html', s: 'security.html', w: 'writing.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' };
   addEventListener('keydown', function (e) {
     var ae = document.activeElement, inField = /^(INPUT|TEXTAREA|SELECT)$/.test((ae || {}).tagName || '') || (ae && ae.isContentEditable);
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); pal.hidden ? open() : close(); return; }
     if (!pal.hidden) {
       if (e.key === 'Escape') { e.preventDefault(); close(); }
-      else if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(shown.length - 1, sel + 1); draw(); preview(); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(0, sel - 1); draw(); preview(); }
-      else if (e.key === 'Enter') { e.preventDefault(); if (!command(inp.value)) go(shown[sel]); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(shown.length - 1, sel + 1); draw(); preview(); SND.tick('detent'); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(0, sel - 1); draw(); preview(); SND.tick('detent'); }
+      else if (e.key === 'Enter') { e.preventDefault(); SND.tick('click'); if (!command(inp.value)) go(shown[sel]); }
       return;
     }
     if (keys && !keys.hidden) { if (e.key === 'Escape' || e.key === '?') { e.preventDefault(); closeKeys(); } return; }
     if (inField || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === '/') { e.preventDefault(); open(); return; }
     if (e.key === '?') { e.preventDefault(); openKeys(); return; }
+    if (e.key === 's' && !e.repeat && pending !== 'g') { SND.set(!SND.on); return; }
     var now = Date.now();
     if (pending === 'g') {
       pending = null;
@@ -429,6 +490,13 @@ function flagCheck(s) {
   });
 })();
 
+// the weekday ticks beside the grid: row d is the weekday of (today − (6 − d)) days
+function ghDays(grid, now) {
+  if (grid.parentNode.classList.contains('gh-wrap')) { var d0 = grid.parentNode.querySelector('.gh-days'); if (d0) d0.remove(); } else { var wrap = document.createElement('div'); wrap.className = 'gh-wrap'; grid.parentNode.insertBefore(wrap, grid); wrap.appendChild(grid); }
+  var days = document.createElement('div'); days.className = 'gh-days'; days.setAttribute('aria-hidden', 'true'); var L = ['S', 'M', 'T', 'W', 'T', 'F', 'S'], out = '';
+  for (var d = 0; d < 7; d++) { var dt = new Date(now); dt.setDate(now.getDate() - (6 - d)); out += '<span>' + L[dt.getDay()] + '</span>'; }
+  days.innerHTML = out; grid.parentNode.insertBefore(days, grid);
+}
 // ── GitHub, live ───────────────────────────────────────────────────────────
 // A short list of the repositories that matter, described in the site's own
 // words. The page ships a snapshot; a live read hydrates it in place and a
@@ -447,6 +515,10 @@ function flagCheck(s) {
     "ash-semgrep-rules": 'Semgrep rules that catch Ash Framework authorization gaps.'
   };
   var LANG = { 'ash-semgrep-rules': 'Semgrep' };
+  // the state LED at the frame's top-right corner, read from the page's own state line
+  (function () { var st = document.getElementById('gh-state'), act = document.querySelector('.act'); if (!st || !act) return; var led = document.createElement('span'); led.className = 'gh-led'; led.innerHTML = '<i></i><span>' + h(st.textContent.trim()) + '</span>'; act.appendChild(led); st.hidden = true; })();
+  // the snapshot grid gets its weekday ticks at once; the live read redraws them
+  (function () { var g = document.getElementById('gh-grid'); if (g && g.children.length) ghDays(g, new Date()); })();
   ghGet('users/stilwellc', 'gh:user', function (u) { return u && u.created_at ? { public_repos: u.public_repos, created_at: u.created_at } : null; }).then(function (u) {
     if (!u) return;
     if (u.public_repos != null) setNum(document.getElementById('gh-repos'), String(+u.public_repos));
@@ -464,7 +536,7 @@ function flagCheck(s) {
         var r = byName[cell.getAttribute('data-repo')]; if (!r) return;
         var foot = cell.querySelector('.foot'); if (foot && r.pushed_at) foot.textContent = 'pushed ' + String(r.pushed_at).slice(0, 10);
         var stars = +r.stargazers_count || 0, top = cell.querySelector('.top'), sp = cell.querySelector('.stars');
-        if (stars && top) { if (!sp) { sp = document.createElement('span'); sp.className = 'pill mono stars'; top.appendChild(sp); } sp.textContent = '★ ' + stars; }
+        if (stars >= 5 && top) { if (!sp) { sp = document.createElement('span'); sp.className = 'pill mono stars'; top.appendChild(sp); } sp.textContent = '★ ' + stars; }
         cell.__p = String(r.pushed_at || '');
       });
       stat.slice().sort(function (a, b) { return String(b.__p || '').localeCompare(String(a.__p || '')); }).forEach(function (c) { cells.appendChild(c); });
@@ -473,7 +545,7 @@ function flagCheck(s) {
     swap(cells, own.map(function (r) {
       var url = String(r.html_url || ''), ok = url.indexOf('https://github.com/') === 0, stars = +r.stargazers_count || 0;
       var tag = ok ? 'a class="cell" data-repo="' + h(r.name) + '" href="' + h(url) + '" target="_blank" rel="noopener"' : 'div class="cell" data-repo="' + h(r.name) + '"';
-      return '<' + tag + '><div class="top"><span class="pill mono">' + h(LANG[r.name] || r.language || 'repo') + '</span>' + (stars ? '<span class="pill mono stars">★ ' + stars + '</span>' : '') + '</div><h2>' + h(r.name) + (ok ? '<span class="arrow">↗</span>' : '') + '</h2><p>' + h(DESC[r.name] || r.description || '') + '</p><div class="foot">pushed ' + h(String(r.pushed_at || '').slice(0, 10)) + '</div></' + (ok ? 'a' : 'div') + '>';
+      return '<' + tag + '><div class="top"><span class="pill mono">' + h(LANG[r.name] || r.language || 'repo') + '</span>' + (stars >= 5 ? '<span class="pill mono stars">★ ' + stars + '</span>' : '') + '</div><h2>' + h(r.name) + (ok ? '<span class="arrow">↗</span>' : '') + '</h2><p>' + h(DESC[r.name] || r.description || '') + '</p><div class="foot">pushed ' + h(String(r.pushed_at || '').slice(0, 10)) + '</div></' + (ok ? 'a' : 'div') + '>';
     }).join(''));
   }).catch(function () {});
   ghEvents().then(function (ev) {
@@ -488,7 +560,7 @@ function flagCheck(s) {
     }
     if (pushes.length) {
       var last = document.getElementById('gh-last'), when = ago(new Date(pushes[0].d).getTime());
-      if (last) last.textContent = when;
+      if (last) last.textContent = last.classList.contains('n') ? when.replace(' ago', '').replace(/ days?/, 'd').replace(/ weeks?/, 'w').replace(' min', 'm').replace('just now', 'now') : when;
       else { var st = document.getElementById('gh-stats'); if (st) { var s = document.createElement('span'); s.innerHTML = 'last push <b id="gh-last">' + h(when) + '</b>'; st.appendChild(s); } }
     }
     // twelve weeks, a column a week, newest on the right
@@ -504,14 +576,16 @@ function flagCheck(s) {
       else swap(grid, cls.map(function (c, i) { return '<i class="' + c + '" title="' + h(tips[i]) + '"></i>'; }).join(''));
       grid.setAttribute('aria-label', 'Push activity: ' + pushes.length + ' pushes among the last ' + ev.length + ' public events, twelve weeks shown');
       grid.classList.add('weeks');
-      var ax = grid.parentNode.querySelector('.gh-axis');
-      if (!ax) { ax = document.createElement('div'); ax.className = 'gh-axis'; ax.setAttribute('aria-hidden', 'true'); grid.insertAdjacentElement('afterend', ax); }
+      ghDays(grid, now);
+      var ax = grid.closest('.act').querySelector('.gh-axis');
+      if (!ax) { ax = document.createElement('div'); ax.className = 'gh-axis'; ax.setAttribute('aria-hidden', 'true'); (grid.parentNode.classList.contains('gh-wrap') ? grid.parentNode : grid).insertAdjacentElement('afterend', ax); }
       var from = new Date(now); from.setDate(now.getDate() - (W * 7 - 1));
       ax.innerHTML = '<span>' + h(from.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })) + '</span><span>today</span>';
     }
     var first = ev.reduce(function (m, e) { var d = e.d.slice(0, 10); return !m || d < m ? d : m; }, ''), note = document.querySelector('.gh-note');
     if (note && first) { var fs = document.getElementById('gh-first'); if (!fs) { fs = document.createElement('span'); fs.id = 'gh-first'; note.insertBefore(fs, note.firstChild); } fs.textContent = 'Since ' + first + '. '; }
     var state = document.getElementById('gh-state'); if (state) state.textContent = 'live';
+    var led = document.querySelector('.gh-led'); if (led) { led.classList.add('live'); led.lastChild.textContent = 'live'; }
   });
 })();
 
@@ -605,7 +679,7 @@ function flagCheck(s) {
   // the record: each call written the way its lane made it, graded by that lane's rule
   getJSON('https://lectr.bid/data/ray/receipts.json').then(function (rc) {
     var seenT = {}; var rows = (rc.rows || []).filter(function (r) { if (!(r.p && r.r) || seenT[r.t || r.id]) return false; seenT[r.t || r.id] = 1; return true; }).slice(0, 5); if (!rows.length) return;
-    var mk = function (ok, yes, no) { return ' <span class="mk ' + (ok ? 'ok' : 'no') + '">' + (ok ? '✓ ' + yes : '✗ ' + no) + '</span>'; };
+    var mk = function (ok, yes, no) { return ' <span class="mk ' + (ok ? 'ok' : 'no') + '">' + (ok ? yes : no) + '</span>'; };   // the square is the mark: filled hit, hollow miss
     swap($('trace-rec'), rows.map(function (r) {
       var t = String(r.t || r.id).split(' | ')[0]; t = t.length > 64 ? t.slice(0, 62) + '…' : t;
       var v, f = +r.f || 0;
@@ -816,7 +890,7 @@ function whack(intro) {
 (function () {
   var ape = document.getElementById('ape'); if (!ape) return;
   var busy = false;
-  var loud = function () { return ssGet('kaiju:snd') === '1'; };
+  var loud = function () { return SND.on; };
   function audio(fn, ms) { try { var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; var ac = new AC(); fn(ac, ac.currentTime); setTimeout(function () { ac.close(); }, ms); } catch (e) {} }
   function boing() {
     audio(function (ac, t) { var o = ac.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(900, t + 0.35); var g = ac.createGain(); g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.5); }, 1000);
@@ -868,7 +942,7 @@ function whack(intro) {
       if (play) whack();
     }
     function done() {
-      if (!sound) { ssSet('kaiju:snd', '1'); var note = document.createElement('span'); note.className = 'egg-note'; note.textContent = 'press again for sound'; ape.appendChild(note); setTimeout(function () { note.remove(); }, 4200); }
+      if (!sound && !ssGet('snd:told')) { ssSet('snd:told', '1'); var note = document.createElement('span'); note.className = 'egg-note'; note.textContent = 'sound is off · SND below'; ape.appendChild(note); setTimeout(function () { note.remove(); }, 4200); }
       busy = false;
     }
   });
@@ -888,18 +962,35 @@ function whack(intro) {
   if (location.hash === '#ape') setTimeout(show, 300);
 })();
 
-// ── the footer heartbeat: last public push, from GitHub, cached per tab ─────
+// ── the footer status strip: fixed slots, every one a readout. The heartbeat
+//    (last public push, from GitHub, cached per tab) is one of them.
 (function () {
-  var meta = document.querySelector('footer .foot-meta'); if (!meta) return;
-  var el = document.createElement('span'); el.className = 'foot-beat mono'; el.hidden = true; meta.appendChild(el);
+  var fin = document.querySelector('footer .foot-in'); if (!fin) return;
+  var here = pageOf(HERE), got = []; try { got = JSON.parse(ssGet('ctf') || '[]'); } catch (e) {}
+  var strip = document.createElement('div'); strip.className = 'foot-status'; strip.setAttribute('aria-label', 'Status');
+  var slots = [(here ? '<span class="sl s-page">page <b>' + here.n + '/' + ('0' + PAGES.length).slice(-2) + '</b></span>' : '<span class="sl s-page">page <b>—</b></span>')];
+  if (document.documentElement.dataset.secs && +document.documentElement.dataset.secs > 1) slots.push('<span class="sl s-secno"><b>§01</b></span>');
+  slots.push('<span class="sl s-weight"><b>—</b></span>', '<span class="sl s-flags">flags <b>' + got.length + '/3</b></span>', '<span class="sl"><button type="button" class="snd" aria-pressed="' + String(SND.on) + '" title="Sound: the band setting, palette and toggle detents, a flag confirm"><i></i>snd</button></span>');
+  strip.innerHTML = slots.join('<span class="dot">·</span>');
+  fin.appendChild(strip);
+  strip.querySelector('button.snd').addEventListener('click', function () { SND.set(!SND.on); });
+  // this page's weight, once the load has settled
+  function weight() {
+    if (!window.performance || !performance.getEntriesByType) return;
+    var nav = performance.getEntriesByType('navigation')[0], res = performance.getEntriesByType('resource'), bytes = nav ? (nav.transferSize || nav.encodedBodySize || 0) : 0;
+    res.forEach(function (r) { bytes += r.transferSize || r.encodedBodySize || 0; });
+    var w = strip.querySelector('.sl.s-weight b'); if (w) w.textContent = Math.max(1, Math.round(bytes / 1024)) + ' KB / ' + (res.length + 1) + ' req';
+  }
+  if (document.readyState === 'complete') setTimeout(weight, 600); else addEventListener('load', function () { setTimeout(weight, 600); });
   function run() {
     ghEvents().then(function (ev) {
       var p = ev && ev.filter(function (e) { return e.t === 'PushEvent'; })[0]; if (!p) return;
       var repo = p.r.replace(/^stilwellc\//, ''); if (repo === 'me') repo = 'this site';
-      el.textContent = repo + ' pushed ' + ago(new Date(p.d).getTime()); el.hidden = false;
+      var w = strip.querySelector('.sl.s-weight'); if (!w) return;
+      w.insertAdjacentHTML('beforebegin', '<span class="sl s-beat"><b>' + h(repo + ' pushed ' + ago(new Date(p.d).getTime())) + '</b></span><span class="dot">·</span>');
     });
   }
-  if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); run(); } }, { rootMargin: '600px 0px' }); io.observe(meta); } else run();
+  if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); run(); } }, { rootMargin: '600px 0px' }); io.observe(fin); } else run();
 })();
 
 // ── "hand-built · no framework": hover for this page's real weight ─────────
@@ -927,7 +1018,7 @@ function whack(intro) {
     var lede = document.querySelector('main .lander-head .lede') || document.querySelector('main .lede'), head = document.querySelector('main .lander-head');
     if (lede) lede.insertAdjacentElement('afterend', box); else if (head) head.appendChild(box); else { var mn = document.querySelector('main'); if (mn) mn.appendChild(box); }
   }
-  box.innerHTML = '<p>GET ' + h(shown) + ' → 404 · logged, not alerted · severity: informational</p><p>If you were fuzzing, the real endpoints are in <button type="button" class="req-k">' + (TOUCH ? 'Menu' : '⌘K') + '</button>.</p>';
+  box.innerHTML = '<p>GET ' + h(shown) + ' → 404 · logged, not alerted · severity: informational · <button type="button" class="req-k">⌘K</button></p>';
   var k = box.querySelector('.req-k'); if (k) k.addEventListener('click', function () { if (window.__palOpen) window.__palOpen(); });
 })();
 

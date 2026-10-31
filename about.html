@@ -21,8 +21,22 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=fbd82e6">
+<link rel="stylesheet" href="site.css?v=c6b0b2f">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+<style>
+/* about: the record is a sheet; the essay is a disclosure under it (page-local, like wave.html) */
+body .sheet.record .row .t { font-weight: 400; }
+body .sheet.record .row .t a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+body .sheet.record .row .t a:hover { text-decoration-color: var(--ink); }
+body .bio details.note { margin-top: 0.9rem; }
+body .bio details.note summary { cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3); list-style: none; width: max-content; }
+body .bio details.note summary::-webkit-details-marker { display: none; }
+body .bio details.note summary::before { content: "+ "; }
+body .bio details.note[open] summary::before { content: "− "; }
+body .bio details.note summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+body .bio details.note[open] summary { margin-bottom: 1rem; }
+body .bio details.note p:last-child { margin-bottom: 0; }
+</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
@@ -39,9 +53,20 @@
   <p class="links-line rv d2"><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a><span aria-hidden="true"> · </span><a href="https://github.com/stilwellc" target="_blank" rel="noopener">GitHub ↗</a><span aria-hidden="true"> · </span><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">Substack ↗</a></p>
 </div>
   <div class="sp-md"></div>
+  <div class="sheet record rv d2">
+    <div class="row"><span class="k">now</span><span class="t">Senior Product Security Engineer at <a href="security.html">WeightWatchers</a>, moving product security from a compliance function to an engineering one.</span><span class="v">the day job</span></div>
+    <div class="row"><span class="k">before</span><span class="t">Security at startups from nothing: Remedy Meds, Thirty Madison through the $650M exit, Podium’s payments platform, and enterprise security at TD.</span><span class="v">4 companies</span></div>
+    <div class="row"><span class="k">built</span><span class="t"><a href="lectr.html">lectr</a>, an auction-intelligence app; <a href="text2print.html">text2print</a>, a local 3D-print studio; <a href="fourwalls.html">Four Walls</a>, a renovation down to the studs.</span><span class="v">3 projects</span></div>
+    <div class="row"><span class="k">writes</span><span class="t">About security, on <a href="writing.html">Substack</a>.</span><span class="v">collinsthoughts</span></div>
+    <div class="row"><span class="k">school</span><span class="t">NYU’s M.S. Cyber Security program as a Cyber Fellow, after a B.S. in Computer Science, cum laude, from Rowan.</span><span class="v">NYU · Rowan</span></div>
+    <div class="row"><span class="k">lives</span><span class="t">New Jersey.</span><span class="v">NJ</span></div>
+  </div>
   <div class="bio prose rv d2">
-    <p>I’m a Senior Product Security Engineer at <a href="security.html">WeightWatchers</a>, where I’m moving product security from a compliance function to an engineering one: securing the AWS and Kubernetes platform and building AI agents for detection, triage, and incident response. Most of my career has been building security at startups from nothing. At Remedy Meds I founded the security team after it acquired Thirty Madison, where I had run security and privacy for Nurx, Keeps, and Cove through the $650M exit. Before that I secured Podium’s payments platform from proof of concept to billions of dollars in volume, built its product security team for about 200 engineers, was the top contributor to its open Elixir secure-coding curriculum, and wrote Semgrep rules for Ash. I started in enterprise security at TD. I studied in NYU’s M.S. Cyber Security program as a Cyber Fellow, after a B.S. in Computer Science, cum laude, from Rowan with a concentration in cyber defense. I live in New Jersey.</p>
-    <p class="off">Off the clock I build things: <a href="lectr.html">lectr</a>, an auction-intelligence app; <a href="text2print.html">text2print</a>, a local 3D-print studio; and <a href="fourwalls.html">Four Walls</a>, a renovation down to the studs. I <a href="writing.html">write</a> about security on Substack.</p>
+    <details class="note">
+      <summary>long version</summary>
+      <p>I’m a Senior Product Security Engineer at <a href="security.html">WeightWatchers</a>, where I’m moving product security from a compliance function to an engineering one: securing the AWS and Kubernetes platform and building AI agents for detection, triage, and incident response. Most of my career has been building security at startups from nothing. At Remedy Meds I founded the security team after it acquired Thirty Madison, where I had run security and privacy for Nurx, Keeps, and Cove through the $650M exit. Before that I secured Podium’s payments platform from proof of concept to billions of dollars in volume, built its product security team for about 200 engineers, was the top contributor to its open Elixir secure-coding curriculum, and wrote Semgrep rules for Ash. I started in enterprise security at TD. I studied in NYU’s M.S. Cyber Security program as a Cyber Fellow, after a B.S. in Computer Science, cum laude, from Rowan with a concentration in cyber defense. I live in New Jersey.</p>
+      <p class="off">Off the clock I build things: <a href="lectr.html">lectr</a>, an auction-intelligence app; <a href="text2print.html">text2print</a>, a local 3D-print studio; and <a href="fourwalls.html">Four Walls</a>, a renovation down to the studs. I <a href="writing.html">write</a> about security on Substack.</p>
+    </details>
   </div>
 
   <div class="cta rv d3"><a class="pill solid" href="resume.html">Career</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
@@ -67,7 +92,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=fbd82e6"></script>
-<script src="site.js?v=fbd82e6"></script>
+<script src="assets/engine.js?v=c6b0b2f"></script>
+<script src="site.js?v=c6b0b2f"></script>
 </body>
 </html>

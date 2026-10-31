@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=fbd82e6">
+<link rel="stylesheet" href="site.css?v=c6b0b2f">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -37,7 +37,7 @@
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://lectr.bid" target="_blank" rel="noopener">lectr.bid ↗</a></p>
   <h1 class="display rv d1">Auction valuations<br>traced to realized sales.</h1>
   <p class="lede rv d2">lectr values upcoming auction lots from past sales and rebuilds itself every night.</p>
-  <ul class="does rv d2">
+  <ul class="does num rv d2">
     <li>Crawls eighteen auction houses nightly, one isolated job each.</li>
     <li>Reconciles hammer and buyer’s premium so prices compare across houses.</li>
     <li>Values upcoming lots from realized comparables, with a band and a confidence.</li>
@@ -118,7 +118,7 @@
         </div>
         <div class="trow comps">
           <div class="tl">the comps <span id="trace-comps-src">· snapshot 2026-09-20</span></div>
-          <ul class="tb" id="trace-comps"><li><span>Bonhams · 2025-11-18</span><span class="v">$12,800</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,240</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,880</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$9,600</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$19,200</span></li><li><span>Bonhams · 2024-12-09</span><span class="v">$15,360</span></li><li><span>Bonhams · 2024-09-17</span><span class="v">$10,240</span></li><li><span>Bonhams · 2023-05-23</span><span class="v">$16,640</span></li><li><span>Phillips · 2020-12-03</span><span class="v">$5,292</span></li><li><span>Bonhams · 2005-10-05</span><span class="v">$8,736</span></li></ul>
+          <ul class="tb num" id="trace-comps"><li><span>Bonhams · 2025-11-18</span><span class="v">$12,800</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,240</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,880</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$9,600</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$19,200</span></li><li><span>Bonhams · 2024-12-09</span><span class="v">$15,360</span></li><li><span>Bonhams · 2024-09-17</span><span class="v">$10,240</span></li><li><span>Bonhams · 2023-05-23</span><span class="v">$16,640</span></li><li><span>Phillips · 2020-12-03</span><span class="v">$5,292</span></li><li><span>Bonhams · 2005-10-05</span><span class="v">$8,736</span></li></ul>
         </div>
         <p class="basis">All-in realized vs hammer-basis estimate: the gap carries the buyer’s premium by design.</p>
       </div>
@@ -131,7 +131,7 @@
     <div>
       <h2>Graded calls.</h2>
       <p>The five latest graded calls, then the backtest across the whole book. <span class="mono" id="trace-rec-src">Snapshot 2026-09-20.</span></p>
-      <ul id="trace-rec"><li><span>97 Topps Chrome Refractor #138 Kobe Bryant rookie, BGS 9 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $50,020 → realized $73,200</span></li><li><span>2017 National Treasures rookie patch autograph, BGS 9 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $231,800 → realized $292,800</span></li><li><span>87 Fleer #57 Michael Jordan signed rookie, PSA EX 5 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $10,347 → realized $123,220</span></li><li><span>85 Star #101 Michael Jordan rookie, BGS NM-MT 8 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $32,803 → realized $119,560</span></li><li><span>95 Playboy Chromium refractor #85, PSA 10 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $38,026 → realized $23,790</span></li></ul>
+      <ul id="trace-rec" class="num"><li><span>97 Topps Chrome Refractor #138 Kobe Bryant rookie, BGS 9 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $50,020 → realized $73,200</span></li><li><span>2017 National Treasures rookie patch autograph, BGS 9 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $231,800 → realized $292,800</span></li><li><span>87 Fleer #57 Michael Jordan signed rookie, PSA EX 5 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $10,347 → realized $123,220</span></li><li><span>85 Star #101 Michael Jordan rookie, BGS NM-MT 8 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $32,803 → realized $119,560</span></li><li><span>95 Playboy Chromium refractor #85, PSA 10 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $38,026 → realized $23,790</span></li></ul>
       <div class="facts" id="trace-bt">
         <div><div class="n" id="bt-flag-n">38,855</div><div class="l">lots the engine flagged, graded</div></div>
         <div><div class="n" id="bt-flag-perf">+41%</div><div class="l">their median result vs estimate<span class="sub">unflagged <span id="bt-unflag-perf">+16%</span></span></div></div>
@@ -179,7 +179,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=fbd82e6"></script>
-<script src="site.js?v=fbd82e6"></script>
+<script src="assets/engine.js?v=c6b0b2f"></script>
+<script src="site.js?v=c6b0b2f"></script>
 </body>
 </html>

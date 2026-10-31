@@ -60,7 +60,7 @@ function matrix(c, opts) {
   var fc, fr, F = 5, vx, vy, tmpx, tmpy, pmx = -1, pmy = -1, pmt = 0;   // flow grid, F fine cells per flow cell
   var GAIN = 1.4, DECAY = 0.94, DIFF = 0.11, MAXV = 2.4;                 // in flow cells
   var FILL_IN = 0.35, PIC_HOLD = opts.picHold != null ? +opts.picHold : (c.id === 'field' ? 2.2 : 1.6), MORPH = 0.8, WORD_MORPH = 0.6;
-  var GATHER = 0.9, EXPLODE = 0.32, SCATTER = 0.22, PREVIEW = 0.24, LAYER_GATHER = 1.5;
+  var GATHER = 0.9, EXPLODE = 0.32, SCATTER = 0.12, PREVIEW = 0.24, LAYER_GATHER = 1.5;
   var RM_HOLD = 1.2, RM_FADE = 0.3, RM_WORD = 0.12;                      // reduced motion: still, hold, dissolve
   var IDLE_AFTER = 1.0, AMP_FADE = 0.6, EPS = 0.004, LONG_PRESS = 450;
   var grain = null, A = null, B = null, SR = null, CR = null, SC = null, CC = null, curK = 0;
@@ -764,7 +764,7 @@ function matrix(c, opts) {
     setWord: setWord, replay: replay, scatter: scatter, restore: restore, destroy: destroy, wake: wake, preview: preview, unpreview: unpreview,
     visible: function () { return visible; },
     get word() { return word; },
-    get fields() { return { pic: pic, prev: picPrev, mask: maskF, cols: cols, rows: rows }; },
+    get fields() { return { pic: pic, prev: picPrev, mask: maskF, cols: cols, rows: rows, cell: cell, N: N }; },
     get state() { return { sleeping: sleeping, visible: visible, raf: !!raf, k: curK, n: SEQ.length, settled: settledAt >= 0, amp: amp, previewing: previewing, dead: dead, fontReady: fontReady }; },
     // seek(seconds): draw the band as it looks that far into its sequence, once
     seek: function (s) { if (dead || !SEQ.length) return; cancelAnimationFrame(raf); raf = 0; t0 = performance.now() - s * 1000; frame(performance.now(), true); sleeping = true; }
