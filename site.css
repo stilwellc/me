@@ -2,6 +2,7 @@
    ONE variable file (wght axis 100–900 for Geist and Geist Mono, 200–800 plus opsz
    for Bricolage), so each gets one @font-face with the real axis range. ─────── */
 @font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 200 800; font-display: swap; src: url(assets/fonts/bricolage-grotesque-200-500.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Michroma'; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/michroma-400.woff2) format('woff2'); }   /* the wordmark only: wide, geometric, lowercase */
 @font-face { font-family: 'Geist'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/geist-400.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/geist-mono-400.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
@@ -310,7 +311,7 @@ body .mhead canvas.matrix, body .field canvas { width: 100%; height: var(--band-
 /* the window itself is visible: one framed rectangle, the same on every page, whatever is drawn in it */
 body .mhead canvas.matrix, body .field canvas { border: 0; border-radius: 0; background: transparent; }   /* the stripe field draws its own edges */
 body h1.display, body .res h1.display, body .cs h1.display { font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1.2; letter-spacing: -0.015em; font-weight: 400; font-variation-settings: "opsz" 24; }
-body .mhead { margin-bottom: 0; }   /* the caption strip carries the gap to the eyebrow */
+body .mhead { margin-bottom: clamp(24px, 3.5vw, 36px); }
 body .eyebrow { margin-bottom: 0.6rem; }
 body .lede, body .cs .lede { font-size: clamp(16px, 1.25vw, 18px) !important; margin-top: 0.75rem; }
 body .statement { font-size: clamp(17px, 1.35vw, 19px); }
@@ -856,7 +857,7 @@ body .sheet.also { max-width: var(--col); margin-top: 1rem; }   /* one sheet wid
 /* lectr: four terse "what it does" lines under the lede (k10) */
 body .cs ul.does { list-style: none; max-width: var(--col); margin: 1.1rem auto 0; padding: 0; text-align: left; border-top: 1px solid var(--hair); }
 body .cs ul.does li { padding: 12px 0 12px 2.4rem; border-bottom: 1px solid var(--hair); color: var(--ink-2); font-size: 15px; line-height: 1.45; position: relative; text-wrap: pretty; }
-body .cs ul.does li::before { content: "→"; position: absolute; left: 0; color: var(--ink-3); font-family: var(--mono); font-size: 12px; top: 0.72rem; }
+body .cs ul.does li::before { content: ""; position: absolute; left: 0; color: var(--ink-3); font-family: var(--mono); font-size: 12px; top: 0.72rem; }
 
 /* case studies: the end strip, so the page doesn't end in a dead end (c4) */
 body .endstrip { max-width: var(--col); margin: clamp(36px, 5vw, 72px) auto 0; padding-top: clamp(18px, 2.5vw, 30px); border-top: 1px solid var(--hair); text-align: center; }
@@ -872,7 +873,7 @@ body figure.plate.sample + .cta { margin-top: 1rem; }
 body .datefix { display: grid; grid-template-columns: 1fr 1fr; max-width: var(--col); margin: 1.4rem auto 0; border: 1px solid var(--hair); border-radius: var(--r); overflow: hidden; text-align: left; }
 body .datefix .df-cell { padding: 16px 18px; display: flex; flex-direction: column; gap: 0.3rem; }
 body .datefix .df-cell + .df-cell { border-left: 1px solid var(--hair); position: relative; padding-left: 28px; }
-body .datefix .df-cell + .df-cell::before { content: "→"; position: absolute; left: -0.75rem; top: 50%; transform: translateY(-50%); width: 1.5rem; height: 1.5rem; line-height: 1.5rem; text-align: center; border-radius: 999px; background: var(--ground); border: 1px solid var(--hair); font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+body .datefix .df-cell + .df-cell::before { content: ""; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8h10M9 4l4 4-4 4' fill='none' stroke='%236E6F6B' stroke-width='1.5'/%3E%3C/svg%3E"); background-size: 10px; background-repeat: no-repeat; background-position: center; position: absolute; left: -0.75rem; top: 50%; transform: translateY(-50%); width: 1.5rem; height: 1.5rem; line-height: 1.5rem; text-align: center; border-radius: 999px; background: var(--ground); border: 1px solid var(--hair); font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
 body .datefix .df-k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
 body .datefix .df-v { font-family: var(--display); font-weight: 300; font-size: clamp(1.4rem, 2.2vw, 1.8rem); letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
 body .datefix .df-cell:first-child .df-v { color: var(--ink-3); text-decoration: line-through; text-decoration-thickness: 1px; }
@@ -1070,3 +1071,40 @@ body .act .gh-led.live { color: var(--accent); } body .act .gh-led.live i { back
   body .bottom { padding-top: 18px; }
 }
 .gh-axis { padding-left: calc(10px + 1.2em); }   /* the axis starts where the grid starts, past the weekday ticks */
+
+/* ══ Oct 31 · round two ══════════════════════════════════════════════════════ */
+/* icons: drawn, in currentColor, sized to the text they sit in */
+svg.ic { display: inline-block; width: 0.92em; height: 0.92em; vertical-align: -0.12em; flex: none; overflow: visible; }
+kbd svg.ic, .pill.mono svg.ic, #palette-btn svg.ic { width: 1em; height: 1em; vertical-align: -0.16em; }
+.sr-ch { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+body .cs ul.does:not(.num) li::before { content: ""; width: 10px; height: 10px; top: 1.05rem; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8h10M9 4l4 4-4 4' fill='none' stroke='%236E6F6B' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat; }
+
+/* the selected pill is British racing green */
+:root { --sel: #004225; }
+.pill.on, body .wave-ctl .pill.on, body .play-presets .pill[aria-pressed="true"] { background: var(--sel); border-color: var(--sel); color: #FCFBFA; }
+
+/* the wordmark: its own face, on the right, at the very top */
+body .mast { align-items: stretch; }
+body .mast .brand { align-self: flex-end; }
+.mast .brand .n, .topbar .brand .n { font-family: "Michroma", var(--display); font-weight: 400; text-transform: lowercase; letter-spacing: 0.01em; font-variation-settings: normal; }
+.mast .brand .n { font-size: clamp(15px, 1.5vw, 19px); }
+.topbar .brand .n { font-size: 13px; }
+body .mast nav { align-self: center; }
+@media (max-width: 760px) { body .mast { gap: 10px; } body .mast .brand { margin-right: 0; } }
+
+/* the page never scrolls sideways */
+html, body { overflow-x: clip; max-width: 100%; }
+
+/* the footer: the © line is always the last line of the page; phones keep only the status and the meta line */
+@media (min-width: 761px) {
+  footer.foot .foot-in { grid-template-areas: "map map map" "status status status" "meta out ape"; }
+  footer.foot .foot-status { padding: 0 0 18px; }
+  footer.foot .foot-meta, footer.foot .foot-out { padding-bottom: 30px; }
+}
+@media (max-width: 760px) {
+  footer.foot .foot-map, footer.foot .foot-out { display: none; }
+  footer.foot .foot-in { grid-template-areas: "status status" "meta ape"; padding-bottom: 18px; }
+  footer.foot .foot-status { padding-top: 0; }
+}
+
+@media (min-width: 761px) { footer.foot .foot-in::before { grid-row: 3; } }   /* the hairline sits over the last row, the © line */

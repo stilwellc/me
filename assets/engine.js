@@ -68,6 +68,7 @@ function matrix(c, opts) {
   var RI = null, RA = null, RF = null, RD = null, nI = 0, nA = 0, nF = 0, nD = 0;
   function grow(b, need) { if (b.length >= need) return b; var nb = new Float32Array(Math.max(need, b.length * 2)); nb.set(b); return nb; }
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
+  var prevWord = opts.prevWord || null;   // the word the previous page settled on
   var still = !!opts.still;   // still: the picture is the band's one thing — no word, held
   var flat = !!(opts.flat || (c.dataset && c.dataset.flat));   // flat: a two-tone drawing — sampled crisp, no tone curve; a dash only where the source is deliberately grey
   var noFill = opts.filler === false;
@@ -371,7 +372,6 @@ function matrix(c, opts) {
   function sequence() {
     var s = [], picOn = pic && showPic;
     if (reduce) {   // designed, not frozen: the picture as a still, then a short dissolve to the word
-      if (picOn && !still) s.push(stepOf('pic', pic, 'pic', RM_HOLD, RM_FADE));
       s.push(finalStep()); setSeq(s); return;
     }
     if (layers && picOn) s.push({ key: null, f: null, kind: 'pic', hold: 0, dur: LAYER_GATHER, mode: 'layers' });
@@ -379,11 +379,12 @@ function matrix(c, opts) {
       var r = c.getBoundingClientRect();
       s.push({ key: null, f: null, kind: picOn ? 'pic' : 'word', hold: 0, dur: GATHER * 1.15, mode: 'rect', rect: { x: (fromRect.x - r.left) / cell, y: (fromRect.y - r.top) / cell, w: fromRect.w / cell, h: fromRect.h / cell } });
     }
-    else if (picPrev) s.push(stepOf('prev', picPrev, 'pic', 0, GATHER));   // the previous page's glyph is where the bodies start
-    else s.push(stepOf(null, null, picOn ? 'pic' : 'word', 0, GATHER));
+    else if (picPrev) s.push(stepOf('prev', picPrev, 'pic', 0, GATHER));   // the previous page's picture (home) is where the bodies start
+    else if (prevWord && maskFor(prevWord)) s.push(stepOf('pw', maskFor(prevWord), 'word', 0, GATHER));   // the previous page's word morphs into this one
+    else s.push(stepOf(null, null, still && picOn ? 'pic' : 'word', 0, GATHER));
     fromRect = null;   // one hop
-    if (picOn && !still) s.push(stepOf('pic', pic, 'pic', PIC_HOLD, MORPH));
-    s.push(finalStep());   // still: the picture itself, held
+    // ONE STATE PER BAND (Oct 31): a page shows its word (home: Snoopy, held); the only motion is the hand-off from the page before
+    s.push(finalStep());
     setSeq(s);
   }
   function partsAt(k) { return PARTS[k] || (PARTS[k] = makeParticles(SEQ[k])); }
@@ -616,7 +617,7 @@ function matrix(c, opts) {
     var p0 = curPic();
     if (img && !p0) return play();
     pic = p0;
-    var target = (pic && !still) ? [stepOf('pic', pic, 'pic', PIC_HOLD, MORPH), finalStep()] : [finalStep()];
+    var target = [finalStep()];   // one state: replay gathers straight back to it
     var sn = snapStep();
     if (!sn) return play();
     setSeq(resetFrom(sn, target, GATHER));
@@ -677,7 +678,7 @@ function matrix(c, opts) {
       applyGrid(G);
       var pc = img ? cache.pic : null; pic = pic ? pc : null; picPrev = picPrev ? cache.prev : null; maskF = maskFor(word);
       var remap = function (s) {
-        var f = s.key === 'pic' ? pc : s.key === 'prev' ? picPrev : s.key === 'mask' ? maskF : s.key === 'pv' ? maskFor(pvWord || word) : null;
+        var f = s.key === 'pic' ? pc : s.key === 'prev' ? picPrev : s.key === 'mask' ? maskF : s.key === 'pv' ? maskFor(pvWord || word) : s.key === 'pw' ? maskFor(prevWord) : null;
         return { key: s.key, f: f, kind: s.kind, hold: s.hold, dur: s.dur, mode: s.mode, rect: s.rect, ease: s.ease };
       };
       var hasSnap = SEQ.some(function (s) { return s.parts || (s.key === 'pic' && !pc) || (s.key === 'prev' && !picPrev); });

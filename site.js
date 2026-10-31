@@ -11,6 +11,38 @@ var LINKEDIN = 'https://www.linkedin.com/in/collin-stilwell/';
 document.documentElement.classList.add('js');
 // escape for HTML text and attributes, single quote included
 function h(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+// ── ICONS: every arrow and symbol is drawn, never a font or emoji glyph. A
+//    text node carrying one of these characters is split and the glyph swapped
+//    for an inline SVG in currentColor; a MutationObserver covers what scripts
+//    render later (palette rows, live data). Attributes keep the character.
+var ICON = (function () {
+  var P = {
+    '↗': 'M5 11 11 5M6 5h5v5', '→': 'M3 8h10M9 4l4 4-4 4', '←': 'M13 8H3M7 4 3 8l4 4', '↑': 'M8 13V3M4 7l4-4 4 4', '↓': 'M8 3v10M4 9l4 4 4-4',
+    '↵': 'M12 4v5H4M7 6 4 9l3 3', '↻': 'M12.5 8a4.5 4.5 0 1 1-1.4-3.3M12.5 3v3h-3', '↔': 'M3 8h10M6 5 3 8l3 3M10 5l3 3-3 3',
+    '▾': 'M4 6l4 4 4-4z', '◂': 'M10 4 6 8l4 4z', '▸': 'M6 4l4 4-4 4z', '✓': 'M3.5 8.5l3 3 6-7', '✗': 'M4 4l8 8M12 4l-8 8',
+    '★': 'M8 2.5l1.7 3.6 3.8.4-2.9 2.6.8 3.8L8 11l-3.4 1.9.8-3.8-2.9-2.6 3.8-.4z',
+    '⌘': 'M6 6H4.6A1.4 1.4 0 1 1 6 4.6V6zM10 6V4.6A1.4 1.4 0 1 1 11.4 6H10zM10 10h1.4A1.4 1.4 0 1 1 10 11.4V10zM6 10v1.4A1.4 1.4 0 1 1 4.6 10H6zM6 6h4v4H6z'
+  };
+  var FILL = { '▾': 1, '◂': 1, '▸': 1, '★': 1 };
+  var RE = /[↗→←↑↓↵↻↔▾◂▸✓✗★⌘]/;
+  var RE_G = new RegExp(RE.source, 'g');
+  var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, INPUT: 1, TITLE: 1, NOSCRIPT: 1, OPTION: 1, SELECT: 1 };
+  function svg(ch) { var f = FILL[ch]; return '<svg class="ic" viewBox="0 0 16 16" role="img" aria-label="&#' + ch.charCodeAt(0) + ';" focusable="false"><path d="' + P[ch] + '" fill="' + (f ? 'currentColor' : 'none') + '" stroke="' + (f ? 'none' : 'currentColor') + '" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>'; }
+  function swap(t) {
+    var p = t.parentNode; if (!p || SKIP[p.nodeName] || (p.closest && p.closest('svg'))) return;
+    var s = t.nodeValue; if (!RE.test(s)) return;
+    var span = document.createElement('span'); span.className = 'ics';
+    span.innerHTML = h(s).replace(RE_G, svg);
+    var frag = document.createDocumentFragment(); while (span.firstChild) frag.appendChild(span.firstChild); p.replaceChild(frag, t);
+  }
+  function walk(root) {
+    if (!root) return; if (root.nodeType === 3) { swap(root); return; } if (root.nodeType !== 1 || SKIP[root.nodeName]) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (n) { return RE.test(n.nodeValue) ? 1 : 3; } }), list = [], n; while ((n = w.nextNode())) list.push(n); list.forEach(swap);
+  }
+  function start() { walk(document.body); if (window.MutationObserver) new MutationObserver(function (ms) { ms.forEach(function (m) { if (m.type === 'characterData') swap(m.target); else [].forEach.call(m.addedNodes, walk); }); }).observe(document.body, { childList: true, subtree: true, characterData: true }); }
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+  return { svg: svg };
+})();
 function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
 function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
 function ssDel(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
@@ -192,6 +224,9 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
 // The glyph travels with you: the page you leave hands its picture to the page
 // you enter, which shows it first and dissolves it into its own (one hop).
 var PREV_GLYPH = ssGet('mx:prev'); ssDel('mx:prev');
+var PREV_WORD = ssGet('mx:prevw'); ssDel('mx:prevw');
+// what this page hands the next one: home hands its picture, every other page its word
+function stash() { var hm = document.getElementById('field'); if (hm) { ssSet('mx:prev', 'assets/collin-band.png'); ssDel('mx:prevw'); } else if (HEAD && HEAD.word) { ssSet('mx:prevw', HEAD.word); ssDel('mx:prev'); } }
 var _own = document.querySelector('canvas.matrix');
 var OWN_GLYPH = _own ? _own.dataset.src : (document.getElementById('field') ? 'assets/collin-band.png' : null);
 // a Digital card's thumbnail becomes the next page's header (one hop, same target only)
@@ -209,7 +244,7 @@ function goNow() { var u = pendingHref; if (!u) return; pendingHref = null; clea
 // the one way to leave a page: the latest click wins; a second click while the
 // band is scattering goes at once; an off-screen band does not hold anyone up
 function leave(href) {
-  if (OWN_GLYPH) ssSet('mx:prev', OWN_GLYPH);
+  stash();
   pendingHref = href;
   if (leaving || REDUCE || !HEAD || !HEAD.scatter || !headVisible()) { leaving = true; goNow(); return; }
   leaving = true;
@@ -218,7 +253,7 @@ function leave(href) {
 }
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target === '_blank' || a.origin !== location.origin) return;
-  if (OWN_GLYPH) ssSet('mx:prev', OWN_GLYPH);
+  stash();
   if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button || a.hasAttribute('download')) return;
   if (a.pathname === location.pathname && a.hash) return;
   var th = a.querySelector('.thumb-wrap, canvas.thumb');
@@ -251,34 +286,14 @@ addEventListener('pagereveal', function (e) { if (e.viewTransition) document.doc
 // print buttons (the résumé)
 [].forEach.call(document.querySelectorAll('[data-print]'), function (b) { b.addEventListener('click', function () { window.print(); }); });
 
-// ── the band's caption strip: SRC · WORD · cols×rows @ pitch · cells, the phase
-//    squares, and a replay key that stays. The band reads as operated, not
-//    played at you. One strip per band, on the frame's width.
-function caption(c, m, srcName) {
-  var host = c.closest('.mhead, .field') || c.parentElement; if (!host || !m) return;
-  var old = host.querySelector('.hint'); if (old) old.remove();
-  var cap = document.createElement('div'); cap.className = 'cap'; cap.setAttribute('aria-live', 'off');
-  var word = (c.dataset.text || m.word || '').trim();
-  var src = srcName == null ? (c.dataset.src || '') : srcName; src = src ? src.split('/').pop() : '—';
-  cap.innerHTML = '<span class="cap-l"><span class="src">' + h(src) + '</span><span class="sep">·</span><b>' + h(word || '—') + '</b><span class="sep">·</span><span class="grid">—</span></span>' +
-    '<span class="cap-r"><span class="ph" aria-hidden="true"></span><button type="button" class="replay" aria-label="Replay the band" title="Replay (↵ when focused)">↻</button></span>';
-  host.insertAdjacentElement('afterend', cap);
-  var gridEl = cap.querySelector('.grid'), ph = cap.querySelector('.ph'), btn = cap.querySelector('.replay');
-  function grid() { var f = m.fields || {}; if (!f.cols) return; var cell = Math.round(c.getBoundingClientRect().width / f.cols) || 0; gridEl.textContent = f.cols + '×' + f.rows + ' @ ' + cell + 'px' + (innerWidth > 600 ? ' · ' + (f.cols * f.rows).toLocaleString('en-US') + ' cells' : ''); }
-  function phase() { var st = m.state || {}, n = Math.max(1, st.n || 1), k = Math.min(n - 1, st.k || 0); if (ph.children.length !== n) ph.innerHTML = new Array(n + 1).join('<i></i>'); [].forEach.call(ph.children, function (el, j) { el.classList.toggle('on', st.settled ? true : j <= k); }); }
-  var tries = 0, iv = setInterval(function () { grid(); phase(); if (++tries > 80 && (m.state || {}).settled) clearInterval(iv); }, 120);
-  c.addEventListener('mx:settled', function () { grid(); phase(); SND.tick('set'); });
-  addEventListener('resize', function () { setTimeout(grid, 200); });
-  btn.addEventListener('click', function () { try { m.replay(); } catch (e) {} tries = 0; clearInterval(iv); iv = setInterval(function () { grid(); phase(); if (++tries > 80 && (m.state || {}).settled) clearInterval(iv); }, 120); });
-}
 
 // headers on landers + case studies
 if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('canvas.matrix'), function (c, i) {
-  var src = c.dataset.src || null, o = { text: c.dataset.text || '', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null };
+  var src = c.dataset.src || null, o = { text: c.dataset.text || '', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, prevWord: PREV_WORD && PREV_WORD !== c.dataset.text ? PREV_WORD : null };
   if (FROM_RECT && i === 0) o.fromRect = FROM_RECT;
   if (c.dataset.layers === '1') o.layers = true;
   var m = matrix(c, o); if (i === 0) { HEAD = m; HEAD_CANVAS = c; }
-  caption(c, m);
+  c.addEventListener('mx:settled', function () { SND.tick('set'); });
 });
 
 // ── the home field: same engine, one thing — Snoopy, facing right, held.
@@ -288,8 +303,8 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
   var src = 'assets/collin-band.png';
-  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, still: true, flat: true, fit: 'contain', focus: '0,0' });
-  HEAD_CANVAS = c; c.dataset.text = 'Collin'; caption(c, HEAD, src);
+  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, prevWord: PREV_WORD || null, picHold: 2.2, still: true, flat: true, fit: 'contain', focus: '0,0' });
+  HEAD_CANVAS = c; c.addEventListener('mx:settled', function () { SND.tick('set'); });
 })();
 
 // ── live: lectr's corpus count on the Digital page ─────────────────────────
@@ -302,6 +317,8 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
     var w = document.getElementById('cs-when'); if (w) w.textContent = 'crawled ' + when;
   }).catch(function () {});
 })();
+
+[].forEach.call(document.querySelectorAll('.mhead .hint, .field .hint'), function (e) { e.remove(); });
 
 // ── the sound bus. One switch (SND in the footer status strip), default off,
 //    stored per browser. A tick is 2–15 ms of sine: the band setting, a palette
