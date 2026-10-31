@@ -21,7 +21,7 @@
 <link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=c82dc4f">
+<link rel="stylesheet" href="site.css?v=72e3e16">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -63,8 +63,8 @@
     <div class="k">the line screen</div>
     <div>
       <h2>One engine draws every header.</h2>
-      <p>Each header is a grid of 4 px cells. A word is sampled into the grid as a mask; a picture is sampled at twice the resolution with local contrast and an edge channel, so photos become dashes and line drawings become squares. Empty cells get a filler dot, so every band is a full rectangle.</p>
-      <p>Each dot moves from a spot in the current image to one in the next, paired by angle around the center so paths don’t cross. Dots gather on load, explode and re-form on change, scatter on exit, and drift in a flow-field wind. One file, no dependencies.</p>
+      <p>Each header is a field of vertical stripes, 6 px apart on a desk and 4 on a phone. A word is set at one cap height and carved out of the field: its letters are the gaps. A picture is read as luminance only, then carved the same way, a gap where the figure is dark and a short dash where it shades off, so its ground stays stripes and no box shows around it.</p>
+      <p>Between two states every cell flips once, along a dithered sweep, so nothing goes half-grey. The field gathers on load, re-forms on change, scatters on exit, and leans in a flow-field wind. One file, no dependencies.</p>
       <figure class="plate wide play-plate">
         <canvas id="play" role="img" aria-label="The playground line screen"></canvas>
         <figcaption>Playground · your word and picture</figcaption>
@@ -159,8 +159,8 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=c82dc4f"></script>
-<script src="site.js?v=c82dc4f"></script>
+<script src="assets/engine.js?v=72e3e16"></script>
+<script src="site.js?v=72e3e16"></script>
 <script src="assets/colophon-page.js"></script>
 </body>
 </html>

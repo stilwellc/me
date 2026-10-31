@@ -116,12 +116,14 @@ function matrix(c, opts) {
   }
   function buildMask(w, G) {
     // one cap height for every word, so "Wave" and "SecMCPHub" sit in the same
-    // band at the same size; only a word that would overflow shrinks
+    // band at the same size; only a word that would overflow shrinks. The weight
+    // follows the pitch: at 4 px a 500 letter is two stripes thick and its curves
+    // break up (the S and y of Security went), so a phone carves at 700
     G = G || { cols: cols, rows: rows, N: N };
     var m = document.createElement('canvas'); m.width = Math.max(1, G.cols); m.height = Math.max(1, G.rows);
     var mc = m.getContext('2d');
     mc.fillStyle = '#000'; mc.textBaseline = 'middle'; mc.textAlign = 'center';
-    var fs = G.rows * 0.66, font = function (s) { return '500 ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
+    var fs = G.rows * 0.66, wt = cell <= 4 ? 700 : 500, font = function (s) { return wt + ' ' + s + 'px "Bricolage Grotesque", Geist, Helvetica, Arial, sans-serif'; };
     mc.font = font(fs);
     var mw = mc.measureText(w).width; if (mw > G.cols * 0.92) { fs = Math.max(8, Math.floor(fs * (G.cols * 0.92) / mw)); mc.font = font(fs); }
     mc.fillText(w, G.cols / 2, G.rows * 0.53);

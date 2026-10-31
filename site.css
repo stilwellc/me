@@ -144,7 +144,7 @@ html .mhead.rv, html .field.rv, html.arrived .rv { animation: none; opacity: 1; 
   .mast .brand .n { white-space: nowrap; }
   .mast .brand .r, .mast .brand .pill { display: none; }
   .mast nav { gap: 0.3rem; }
-  .pill { height: 28px; padding: 0 10px; font-size: 12.5px; }
+  .pill { height: 28px; padding: 0 8px; font-size: 12.5px; }
   .pill.solid, .pill.ghost { height: 42px; font-size: 14px; }
 }
 button.pill { cursor: pointer; font-family: inherit; }
@@ -677,7 +677,7 @@ footer.foot .ape img { display: block; width: 100%; height: 100%; }
    at the left edge. (Scrolling the current pill into view is site.js.) ── */
 @media (max-width: 760px) {
   body .mast { gap: 0.15rem; padding-bottom: 2px; }
-  body .mast nav { align-self: stretch; flex-wrap: nowrap; justify-content: flex-start; gap: 0.3rem;
+  body .mast nav { align-self: stretch; flex-wrap: nowrap; justify-content: flex-start; gap: 0.2rem;
     margin-inline: calc(-1 * var(--pad)); padding: 8px var(--pad); scroll-padding-inline: var(--pad);
     overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none;
     -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--pad), #000 calc(100% - var(--pad)), transparent);
@@ -927,7 +927,7 @@ body .wave-ctl + .sheet, body figure.plate + .wave-ctl { margin-top: 0.9rem; }
 body .lander-head + .frame { margin-top: clamp(28px, 4vw, 48px); }
 
 /* ── Digital cards: the real picture, framed; the line screen only arrives over it ── */
-.cell .thumb-wrap { position: relative; display: block; aspect-ratio: 16 / 10; margin: 0 0 0.35rem; border-radius: 8px; overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); box-shadow: inset 0 0 0 1px var(--line); }
+.cell .thumb-wrap { position: relative; display: block; aspect-ratio: 16 / 10; margin: 0 0 0.35rem; border-radius: 8px; overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); box-shadow: inset 0 0 0 1px var(--hair); }
 .cell .thumb-img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform var(--t3) var(--out); }   /* the photograph simply appears; only the hover scale moves */
 .cell .thumb-wrap.is-mark .thumb-img { object-fit: contain; padding: 18%; }
 @media (hover: hover) { .cell:hover .thumb-img, .cell:focus-visible .thumb-img { transform: scale(1.025); } }
