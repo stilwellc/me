@@ -1085,7 +1085,7 @@ body .cs ul.does:not(.num) li::before { content: ""; width: 10px; height: 10px; 
 
 /* the wordmark: its own face, on the right, at the very top */
 body .mast { align-items: stretch; }
-body .mast .brand { align-self: flex-end; }
+body .mast .brand { align-self: flex-start; }   /* the wordmark sits at the left edge, over the band's left edge */
 .mast .brand .n, .topbar .brand .n { font-family: "Michroma", var(--display); font-weight: 400; text-transform: lowercase; letter-spacing: 0.01em; font-variation-settings: normal; }
 .mast .brand .n { font-size: clamp(15px, 1.5vw, 19px); }
 .topbar .brand .n { font-size: 13px; }
