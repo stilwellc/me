@@ -224,11 +224,11 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
 // The glyph travels with you: the page you leave hands its picture to the page
 // you enter, which shows it first and dissolves it into its own (one hop).
 var PREV_GLYPH = ssGet('mx:prev'); ssDel('mx:prev');
-var PREV_WORD = ssGet('mx:prevw'); ssDel('mx:prevw');
-// what this page hands the next one: home hands its picture, every other page its word
-function stash() { var hm = document.getElementById('field'); if (hm) { ssSet('mx:prev', 'assets/collin-band.png'); ssDel('mx:prevw'); } else if (HEAD && HEAD.word) { ssSet('mx:prevw', HEAD.word); ssDel('mx:prev'); } }
+ssDel('mx:prevw');
 var _own = document.querySelector('canvas.matrix');
 var OWN_GLYPH = _own ? _own.dataset.src : (document.getElementById('field') ? 'assets/collin-band.png' : null);
+// what this page hands the next one: its picture (the band is the picture, never a word)
+function stash() { if (OWN_GLYPH) ssSet('mx:prev', OWN_GLYPH); }
 // a Digital card's thumbnail becomes the next page's header (one hop, same target only)
 var FROM_RECT = null;
 try { var _fr = JSON.parse(ssGet('mx:from') || 'null'); ssDel('mx:from'); if (_fr && _fr.p === HERE && _fr.r) FROM_RECT = _fr.r; } catch (e) {}
@@ -289,7 +289,7 @@ addEventListener('pagereveal', function (e) { if (e.viewTransition) document.doc
 
 // headers on landers + case studies
 if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('canvas.matrix'), function (c, i) {
-  var src = c.dataset.src || null, o = { text: c.dataset.text || '', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, prevWord: PREV_WORD && PREV_WORD !== c.dataset.text ? PREV_WORD : null };
+  var src = c.dataset.src || null, o = { text: c.dataset.text || '', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null };
   if (FROM_RECT && i === 0) o.fromRect = FROM_RECT;
   if (c.dataset.layers === '1') o.layers = true;
   var m = matrix(c, o); if (i === 0) { HEAD = m; HEAD_CANVAS = c; }
@@ -303,7 +303,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
   var src = 'assets/collin-band.png';
-  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, prevWord: PREV_WORD || null, picHold: 2.2, still: true, flat: true, fit: 'contain', focus: '0,0' });
+  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, flat: true, fit: 'contain', focus: '0,0' });
   HEAD_CANVAS = c; c.addEventListener('mx:settled', function () { SND.tick('set'); });
 })();
 

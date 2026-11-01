@@ -68,8 +68,10 @@ function matrix(c, opts) {
   var RI = null, RA = null, RF = null, RD = null, nI = 0, nA = 0, nF = 0, nD = 0;
   function grow(b, need) { if (b.length >= need) return b; var nb = new Float32Array(Math.max(need, b.length * 2)); nb.set(b); return nb; }
   var fitPref = (c.dataset && c.dataset.fit) || opts.fit || null;
-  var prevWord = opts.prevWord || null;   // the word the previous page settled on
-  var still = !!opts.still;   // still: the picture is the band's one thing — no word, held
+  // THE BAND IS THE PICTURE (Nov 1): a page's band shows its picture, held. No word is ever
+  // drawn in the band; the only motion is the hand-off, the previous page's picture dissolving
+  // into this one. A band with no picture is the bare stripe field.
+  var still = true;
   var flat = !!(opts.flat || (c.dataset && c.dataset.flat));   // flat: a two-tone drawing — sampled crisp, no tone curve; a dash only where the source is deliberately grey
   var noFill = opts.filler === false;
   var layers = !!(opts.layers || (c.dataset && c.dataset.layers === '1'));
@@ -354,8 +356,8 @@ function matrix(c, opts) {
   }
   function stepOf(key, f, kind, hold, dur) { return { key: key, f: f, kind: kind, hold: hold, dur: dur }; }
   function finalStep() {
-    if (still) { var p = (pic && showPic) ? pic : curPic(); if (p) return stepOf('pic', p, 'pic', 1e9, MORPH); }
-    return stepOf('mask', maskF, 'word', 1e9, WORD_MORPH);
+    var p = (pic && showPic) ? pic : curPic();
+    return p ? stepOf('pic', p, 'pic', 1e9, MORPH) : stepOf(null, null, 'pic', 1e9, MORPH);   // no picture: the bare stripes, never a word
   }
   function setSeq(s, gustedAll) {
     SEQ = s; PARTS = s.map(function () { return null; }); PAIRS = s.map(function () { return null; }); gusted = s.map(function () { return !!gustedAll; });
@@ -379,12 +381,10 @@ function matrix(c, opts) {
       var r = c.getBoundingClientRect();
       s.push({ key: null, f: null, kind: picOn ? 'pic' : 'word', hold: 0, dur: GATHER * 1.15, mode: 'rect', rect: { x: (fromRect.x - r.left) / cell, y: (fromRect.y - r.top) / cell, w: fromRect.w / cell, h: fromRect.h / cell } });
     }
-    else if (picPrev) s.push(stepOf('prev', picPrev, 'pic', 0, GATHER));   // the previous page's picture (home) is where the bodies start
-    else if (prevWord && maskFor(prevWord)) s.push(stepOf('pw', maskFor(prevWord), 'word', 0, GATHER));   // the previous page's word morphs into this one
-    else s.push(stepOf(null, null, still && picOn ? 'pic' : 'word', 0, GATHER));
+    else if (picPrev) s.push(stepOf('prev', picPrev, 'pic', 0, GATHER));   // the previous page's picture is where the bodies start
+    else s.push(stepOf(null, null, 'pic', 0, GATHER));
     fromRect = null;   // one hop
-    // ONE STATE PER BAND (Oct 31): a page shows its word (home: Snoopy, held); the only motion is the hand-off from the page before
-    s.push(finalStep());
+    s.push(finalStep());   // one state: the picture, held
     setSeq(s);
   }
   function partsAt(k) { return PARTS[k] || (PARTS[k] = makeParticles(SEQ[k])); }
@@ -648,17 +648,8 @@ function matrix(c, opts) {
     setSeq([finalStep()], true); t0 = performance.now(); settledAt = t0 - IDLE_AFTER * 1000 - 1; lastAct = 0; amp = 0; scrollFlag = true;
     run(); fireSettled();
   }
-  function preview(w) {
-    if (dead || !cols || !fontReady || !SEQ.length) return;
-    w = String(w == null ? '' : w); if (!w) return;
-    previewing = true; pvWord = w;
-    morphTo(stepOf('pv', maskFor(w), 'word', 1e9, PREVIEW), PREVIEW);
-  }
-  function unpreview() {
-    if (!previewing || dead) return;
-    previewing = false; pvWord = null; maskF = maskFor(word);
-    morphTo(finalStep(), PREVIEW);
-  }
+  function preview() {}     // the band never previews a word
+  function unpreview() {}
   function onFont() {
     if (dead || fontReady) return;
     fontReady = true; masks = {};
@@ -678,7 +669,7 @@ function matrix(c, opts) {
       applyGrid(G);
       var pc = img ? cache.pic : null; pic = pic ? pc : null; picPrev = picPrev ? cache.prev : null; maskF = maskFor(word);
       var remap = function (s) {
-        var f = s.key === 'pic' ? pc : s.key === 'prev' ? picPrev : s.key === 'mask' ? maskF : s.key === 'pv' ? maskFor(pvWord || word) : s.key === 'pw' ? maskFor(prevWord) : null;
+        var f = s.key === 'pic' ? pc : s.key === 'prev' ? picPrev : s.key === 'mask' ? maskF : s.key === 'pv' ? maskFor(pvWord || word) : null;
         return { key: s.key, f: f, kind: s.kind, hold: s.hold, dur: s.dur, mode: s.mode, rect: s.rect, ease: s.ease };
       };
       var hasSnap = SEQ.some(function (s) { return s.parts || (s.key === 'pic' && !pc) || (s.key === 'prev' && !picPrev); });
