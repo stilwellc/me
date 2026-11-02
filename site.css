@@ -1108,3 +1108,11 @@ html, body { overflow-x: clip; max-width: 100%; }
 }
 
 @media (min-width: 761px) { footer.foot .foot-in::before { grid-row: 3; } }   /* the hairline sits over the last row, the © line */
+
+/* ══ Nov 1 · the receipts ════════════════════════════════════════════════════ */
+/* home: a proof strip between the statement and the doors */
+body .bottom .facts.proof { width: min(100%, var(--wide)); margin: 0.25rem auto 0; }
+/* security: the operated roles, a key-value sheet like the also-rows */
+body .sheet.ops .row { grid-template-columns: 6.5rem minmax(0, 1fr); }
+body .sheet.ops { max-width: var(--col); margin: 1.25rem auto 0; }
+body .sheet.ops .row .k { text-transform: none; letter-spacing: 0.04em; font-size: 12px; }   /* a date, not a label */
