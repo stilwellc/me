@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Writing — Collin Stilwell</title>
-<meta name="description" content="Three essays by Collin Stilwell: running an application security program, where AI earns trust in security, and how lectr measures price movement.">
+<meta name="description" content="Writing by Collin Stilwell: two Substack essays, on building an application security program and on AI in security, and eleven market and engineering notes for lectr.">
 <meta property="og:title" content="Writing — Collin Stilwell">
-<meta property="og:description" content="Three essays by Collin Stilwell: running an application security program, where AI earns trust in security, and how lectr measures price movement.">
+<meta property="og:description" content="Writing by Collin Stilwell: two Substack essays, on building an application security program and on AI in security, and eleven market and engineering notes for lectr.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/writing.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/writing.png">
@@ -32,20 +32,50 @@
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
   <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs">
+<main id="main" class="page cs p-writing">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="Writing" data-src="assets/writing.svg" aria-label="A keyboard, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
-  <p class="eyebrow rv d1">Writing · Substack and lectr.bid</p>
-  <h1 class="display rv d1">Three essays.</h1>
-  <p class="lede one rv d2">Two on security — running an AppSec program, and where AI earns trust — and one on how lectr measures price movement.</p>
+  <div class="mhead rv"><canvas class="matrix" data-text="Writing" data-src="assets/writing.svg" aria-label="A keyboard, drawn in the line screen" role="img"></canvas></div>
+  <p class="eyebrow rv d1">Writing · 2 essays · 11 notes</p>
+  <h1 class="display rv d1">Two essays, eleven notes.</h1>
+  <p class="lede one rv d2">Two essays on security, published on Substack, and the market and engineering notes I write for lectr.</p>
 </div>
 
-  <h2 class="sheet-h rv d3">Essays</h2>
-  <div class="sheet num rv d3">
-    <a class="row" href="https://collinsthoughts.substack.com/p/ai-in-security-volume-from-the-model" target="_blank" rel="noopener"><span class="k">ai</span><span><span class="t">AI in Security: Volume From the Model, Trust From the Structure<span class="arrow">↗</span></span><span class="d">Using AI to triage findings, run security work through deterministic scripts, and guard the agents developers use — the model gives volume; the structure around it gives trust.</span></span><span class="v">Oct 2026 · ≈2,100 words</span></a>
-    <a class="row" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener"><span class="k">appsec</span><span><span class="t">Building an Application Security Program That Actually Works<span class="arrow">↗</span></span><span class="d">Four parts, a five-stage build order, and seven common failure modes.</span></span><span class="v">May 2026 · ≈3,200 words</span></a>
-    <a class="row" href="https://lectr.bid/blog/how-we-built-the-pricing-engine" target="_blank" rel="noopener"><span class="k">lectr</span><span><span class="t">How we built the price-movement engine<span class="arrow">↗</span></span><span class="d">A per-maker, Huber-robust hedonic index that publishes a return only when its sign is clear.</span></span><span class="v">Jul 2026 · ≈2,200 words</span></a>
+  <h2 class="sheet-h rv d2" id="essays">Essays</h2>
+  <div class="frame rv d2"><div class="cells one essays">
+<a class="cell essay" id="essay-ai" href="https://collinsthoughts.substack.com/p/ai-in-security-volume-from-the-model" target="_blank" rel="noopener">
+  <div class="e-side"><span class="thumb-wrap"><img class="thumb-img" src="assets/essay-ai.webp" width="1200" height="801" alt="The essay’s first figure: three clusters of dots for the three directions a security team meets AI" loading="lazy" decoding="async" style="object-position:50% 0"></span>
+  <p class="pull">The model gives you volume. Trust comes from the structure you build around it.</p></div>
+  <div class="e-main"><div class="top"><span class="pill mono">essay · Substack</span><span class="when mono">5 Oct 2026</span></div>
+  <h2>AI in Security: Volume From the Model, Trust From the Structure<span class="arrow">↗</span></h2>
+  <p class="sub">What we learned using AI to triage security findings, run our own work, and guard the agents developers use.</p>
+  <div class="outline"><span class="ol-k">Outline</span><ol><li>Direction 1: AI that reads the findings</li><li>Direction 2: AI that does the team’s legwork</li><li>Direction 3: AI that developers use</li><li>Bringing It Together</li></ol></div>
+  <div class="foot">≈2,000 words · collinsthoughts.substack.com</div></div>
+</a>
+<a class="cell essay" id="essay-appsec" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">
+  <div class="e-side"><span class="thumb-wrap"><img class="thumb-img" src="assets/essay-appsec.webp" width="1200" height="736" alt="The essay’s first figure: the four legs, Security by Default, Reactionary Security, Security by Design, and Continuous Feedback &amp; Metrics" loading="lazy" decoding="async" style="object-position:50% 0"></span>
+  <p class="pull">Find → triage → ticket is the wrong loop. Build → default → enforce is the right one.</p></div>
+  <div class="e-main"><div class="top"><span class="pill mono">essay · Substack</span><span class="when mono">19 May 2026</span></div>
+  <h2>Building an Application Security Program That Actually Works<span class="arrow">↗</span></h2>
+  <div class="outline"><span class="ol-k">Outline</span><ol><li>Leg 1: Security by Default</li><li>Leg 2: Reactionary Security</li><li>Leg 3: Security by Design</li><li>Leg 4: Continuous Feedback &amp; Metrics</li><li>Build Order</li><li>Anti-Patterns: Seven Failures That Sink AppSec Programs</li><li>What This Guide Doesn’t Solve</li><li>Bringing It Together</li><li>Further Reading</li></ol></div>
+  <div class="foot">≈3,200 words · collinsthoughts.substack.com</div></div>
+</a>
+</div></div>
+
+  <h2 class="sheet-h rv d3" id="notes">Notes from the desk</h2>
+  <div class="sheet notes rv d3">
+    <a class="row" href="https://lectr.bid/blog/q3-2026-art" target="_blank" rel="noopener"><span class="k">22 Oct 2026</span><span class="t">Art in Q3: a thin summer that cleared almost everything<span class="arrow">↗</span></span><span class="v">market · Q3</span></a>
+    <a class="row" href="https://lectr.bid/blog/q3-2026-watches" target="_blank" rel="noopener"><span class="k">22 Oct 2026</span><span class="t">Watches in Q3: one Hong Kong weekend made the quarter<span class="arrow">↗</span></span><span class="v">market · Q3</span></a>
+    <a class="row" href="https://lectr.bid/blog/q3-2026-design" target="_blank" rel="noopener"><span class="k">22 Oct 2026</span><span class="t">Design in Q3: the Nakashima quarter<span class="arrow">↗</span></span><span class="v">market · Q3</span></a>
+    <a class="row" href="https://lectr.bid/blog/q3-2026-sports" target="_blank" rel="noopener"><span class="k">22 Oct 2026</span><span class="t">Sports in Q3: Pelé’s World Cup shirt tops a $195M quarter<span class="arrow">↗</span></span><span class="v">market · Q3</span></a>
+    <a class="row" href="https://lectr.bid/blog/q3-2026-science" target="_blank" rel="noopener"><span class="k">22 Oct 2026</span><span class="t">Science in Q3: one skeleton was the quarter<span class="arrow">↗</span></span><span class="v">market · Q3</span></a>
+    <a class="row" href="https://lectr.bid/blog/how-we-built-the-pricing-engine" target="_blank" rel="noopener"><span class="k">24 Jul 2026</span><span class="t">How we built the price-movement engine<span class="arrow">↗</span></span><span class="v">engineering</span></a>
+    <a class="row" href="https://lectr.bid/blog/q2-2026-art" target="_blank" rel="noopener"><span class="k">16 Jul 2026</span><span class="t">Art in Q2: trophies cleared, the middle got picky<span class="arrow">↗</span></span><span class="v">market · Q2</span></a>
+    <a class="row" href="https://lectr.bid/blog/q2-2026-watches" target="_blank" rel="noopener"><span class="k">16 Jul 2026</span><span class="t">Watches in Q2: the deepest tape we track<span class="arrow">↗</span></span><span class="v">market · Q2</span></a>
+    <a class="row" href="https://lectr.bid/blog/q2-2026-design" target="_blank" rel="noopener"><span class="k">16 Jul 2026</span><span class="t">Design in Q2: small money, real heat<span class="arrow">↗</span></span><span class="v">market · Q2</span></a>
+    <a class="row" href="https://lectr.bid/blog/q2-2026-sports" target="_blank" rel="noopener"><span class="k">16 Jul 2026</span><span class="t">Sports in Q2: the cards led a $126M quarter<span class="arrow">↗</span></span><span class="v">market · Q2</span></a>
+    <a class="row" href="https://lectr.bid/blog/q2-2026-science" target="_blank" rel="noopener"><span class="k">16 Jul 2026</span><span class="t">Science in Q2: between the seasons<span class="arrow">↗</span></span><span class="v">market · Q2</span></a>
   </div>
+  <p class="links-line rv d3"><a href="https://lectr.bid/blog" target="_blank" rel="noopener">lectr.bid/blog<span class="arrow">↗</span></a><a href="https://lectr.bid/blog/corrections" target="_blank" rel="noopener">Corrections register<span class="arrow">↗</span></a></p>
 
   <div class="cta"><a class="pill solid" href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">Subscribe on Substack ↗</a><a class="pill ghost" href="security.html">Security</a></div>
 </main>

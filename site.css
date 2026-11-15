@@ -1170,3 +1170,89 @@ body.solo > main { flex: 1 0 auto; width: 100%; }
 body.solo footer.foot .foot-status .s-page, body.solo footer.foot .foot-status .s-page + .dot { display: none; }
 body.solo .req-log code.flag { font: inherit; color: var(--ink); border: 1px solid var(--hair-2); border-radius: var(--r); padding: 1px 6px; white-space: nowrap; }
 /* ==== /v3:bands ==== */
+
+/* ==== v3:words ==== */
+/* security · writing · career · about */
+
+/* outbound link rows: the arrow sits outside the underline, one gap between links */
+body .links-line { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.35rem 1.25rem; }
+body .links-line a .arrow, body .lede a .arrow, .res .lrow h3.t a .arrow { display: inline-block; margin-left: 0.3em; color: var(--ink-3); }
+body .p-security .cell h2, body .p-writing .cell h2 { text-wrap: balance; }
+body .p-security .cell .top, body .p-writing .cell .top { align-items: baseline; }
+
+/* security: the Operated label sits on its facts; one hairline between facts and roles */
+body .p-security .sheet-h + .facts { margin-top: 0; }
+body .p-security .facts + .sheet.ops { margin-top: 0; border-top: 0; }
+body .p-security .sheet.also { margin-top: 36px; }
+/* a lead card above a 2-up grid in one frame */
+.cells.led > .cell.lead { grid-column: 1 / -1; border-right: 0; }
+@media (min-width: 761px) {
+  .cells.led > .cell:nth-child(2n) { border-right: 1px solid var(--hair); }
+  .cells.led > .cell:nth-child(2n+1) { border-right: 0; }
+}
+/* the divider hairline is taken from the left card: give the right card the same 1px so both figures are one height */
+@media (min-width: 761px) { body .p-security .cells:not(.one):not(.led) > .cell:nth-child(2n), body .p-security .cells.led > .cell:nth-child(2n+3) { padding-right: calc(clamp(18px, 2.4vw, 30px) + 1px); } }
+@media (max-width: 760px) {
+  body .p-security .cell.lead { display: flex; align-items: stretch; gap: 1rem; }
+  body .p-security .cell.lead > .thumb-wrap { margin: 0 0 0.35rem; }
+  body .p-security .cell.lead h2 { margin-top: 0.9rem; }
+}
+
+/* writing: an essay is one wide card: figure and pull quote left, title, outline and count right */
+.cells.essays > .cell.essay { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 0 2.5rem; align-items: stretch; }
+.cells.essays > .cell.essay + .cell.essay { border-top: 1px solid var(--hair); }
+.cell.essay .e-side, .cell.essay .e-main { display: flex; flex-direction: column; min-width: 0; }
+.cell.essay .e-side { gap: 1.2rem; }
+.cell.essay .e-main { gap: 0.8rem; }
+.cell.essay .thumb-wrap { margin: 0; }
+.cell.essay h2 { margin: 0.1rem 0 0; }
+.cell.essay p.sub { max-width: none; }
+.cell.essay p.pull { max-width: none; font-family: var(--display); font-weight: 300; font-size: clamp(1.2rem, 1.7vw, 1.45rem); line-height: 1.24; letter-spacing: -0.015em; color: var(--ink); text-wrap: balance; font-variation-settings: "opsz" 36; }
+.cell.essay p.pull::before { content: "\201C"; }
+.cell.essay p.pull::after { content: "\201D"; }
+.cell.essay .outline { margin-top: 0.3rem; padding-top: 0.8rem; border-top: 1px solid var(--hair); }
+.cell.essay .outline .ol-k { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.cell.essay .outline ol { list-style: none; margin: 0.45rem 0 0; padding: 0; font-size: 14px; line-height: 1.7; color: var(--ink-2); }
+@media (max-width: 760px) {
+  .cells.essays > .cell.essay { display: flex; flex-direction: column; gap: 1rem; }
+  .cell.essay .e-side, .cell.essay .e-main { display: contents; }
+  .cell.essay .thumb-wrap { order: 1; margin: 0 0 0.35rem; }
+  .cell.essay .top { order: 2; } .cell.essay h2 { order: 3; margin: 0; } .cell.essay p.sub { order: 4; }
+  .cell.essay p.pull { order: 5; } .cell.essay .outline { order: 6; margin-top: 0; } .cell.essay .foot { order: 7; }
+}
+/* writing: the lectr notes, a dated sheet */
+body .sheet.notes .row .k { text-transform: none; letter-spacing: 0.04em; font-size: 12px; }
+body .sheet.notes .row .t { font-weight: 400; }
+body .sheet.notes + .links-line { margin-top: 1.1rem; }
+@media (max-width: 600px) {
+  body .sheet.notes .row { grid-template-columns: minmax(0, 1fr) auto; gap: 0.2rem 1rem; }
+  body .sheet.notes .row .t { grid-column: 1 / -1; order: 2; }
+}
+
+/* career: company, context line, titles with their dates, then what the profile says */
+.res .lrow h3.t { margin: 0; font-size: 17px; font-weight: 500; line-height: 1.35; letter-spacing: -0.005em; font-family: inherit; color: var(--ink); text-wrap: balance; }
+.res .lrow h3.t a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+.res .lrow h3.t a:hover { text-decoration-color: var(--ink); }
+.res .lrow h3.t a { position: relative; }
+.res .lrow h3.t a::after { content: ""; position: absolute; inset: -11px 0; }   /* a 44 px target on a 22 px line */
+.res .lrow .loc { margin: 0.2rem 0 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; line-height: 1.5; color: var(--ink-3); text-wrap: balance; }
+.res .lrow > div:last-child { justify-self: stretch; min-width: 0; }
+.res .lrow ul.roles { list-style: none; margin: 0.45rem 0 0; padding: 0; }
+.res .lrow ul.roles li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 1rem; font-size: 15px; line-height: 1.6; color: var(--ink); }
+.res .lrow ul.roles .w { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--ink-3); }
+.res .lrow ul.d { list-style: none; margin: 0.5rem 0 0; padding: 0; max-width: 46em; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.res .lrow ul.d li { position: relative; padding-left: 1.1rem; text-wrap: pretty; }
+.res .lrow ul.d li + li { margin-top: 0.28rem; }
+.res .lrow ul.d li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 0.5rem; height: 1px; background: var(--ink-3); }
+@media (max-width: 640px) { .res .lrow ul.roles li { display: block; } .res .lrow ul.roles .w { display: block; margin: -0.1rem 0 0.3rem; } .res .lrow ul.roles li:last-child .w { margin-bottom: 0; } }
+body main.res .lrow .k { text-transform: none; font-size: 12px; letter-spacing: 0.04em; }   /* a date, not a label */
+body main.res .lrow.now .k { color: var(--accent); }
+body main.res .lrow.now .k::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 0.45rem; border-radius: 50%; background: var(--accent); vertical-align: 1px; }
+.res .ledger.links .lrow h3.t { font-size: 16.5px; font-weight: 400; }
+
+/* about: one paragraph, then the short sheet */
+body .sheet.record .row .t { font-weight: 400; }
+body .sheet.record .row .t a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hair-2); }
+body .sheet.record .row .t a:hover { text-decoration-color: var(--ink); }
+body .p-about .bio + .sheet.record { margin-top: clamp(24px, 3vw, 36px); }
+/* ==== /v3:words ==== */
