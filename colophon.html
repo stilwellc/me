@@ -22,7 +22,7 @@
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/michroma-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=eac5685">
+<link rel="stylesheet" href="site.css?v=1794724788">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -34,7 +34,7 @@
   <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs">
-  <div class="mhead rv"><canvas class="matrix" data-text="Colophon" data-src="assets/colophon.svg" aria-label="A page with three rules and a mark, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="Colophon" data-src="assets/colophon.svg" aria-label="A page with three rules and a mark, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv">Colophon · how this site is built</p>
   <h1 class="display rv d1">Static HTML.<br>No framework, no build step.</h1>
   <p class="lede rv d2">Eighteen pages, one stylesheet, two shared scripts, four font files and a line-screen engine drawn on a canvas, served as static files from GitHub Pages with no cookies and no analytics.</p>
@@ -112,7 +112,8 @@
         <li><span>JSON from api.github.com on the GitHub page</span><span class="v" aria-hidden="true"></span></li>
         <li><span>JSON from lectr.bid on the lectr study, where auction titles are untrusted text</span><span class="v" aria-hidden="true"></span></li>
         <li><span>three.js, served from this origin, on the wave page</span><span class="v" aria-hidden="true"></span></li>
-        <li><span>Content-Security-Policy with script-src 'self' and two hashed inline snippets: no other inline script and no third-party script runs</span><span class="v">control</span></li>
+        <li><span>binjgb (MIT), a Game Boy emulator compiled to WebAssembly, served from this origin, on the Stilwell Farms page</span><span class="v" aria-hidden="true"></span></li>
+        <li><span>Content-Security-Policy with script-src 'self' and two hashed inline snippets: no other inline script and no third-party script runs. Only the Stilwell Farms page adds 'wasm-unsafe-eval', which lets the emulator’s WebAssembly compile</span><span class="v">control</span></li>
         <li><span>Every external string is escaped before it reaches the page</span><span class="v" aria-hidden="true"></span></li>
         <li><span>No cookies, no analytics, no third-party scripts</span><span class="v" aria-hidden="true"></span></li>
         <li><span>GitHub Pages sends no custom response headers, so no frame-ancestors and no Permissions-Policy</span><span class="v">gap</span></li>
@@ -163,8 +164,8 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=eac5685"></script>
-<script src="site.js?v=eac5685"></script>
-<script src="assets/colophon-page.js?v=eac5685"></script>
+<script src="assets/engine.js?v=1794724788"></script>
+<script src="site.js?v=1794724788"></script>
+<script src="assets/colophon-page.js?v=1794724788"></script>
 </body>
 </html>

@@ -106,7 +106,7 @@ var PAGES = [
   { u: 'about.html', t: 'About', h: 'g a', w: 'About' },
   { u: 'resume.html', t: 'Career', h: 'g r', w: 'Career', k: 'resume résumé cv overview' },
   { u: 'lectr.html', t: 'lectr, a case study', h: 'g l', w: 'lectr', k: 'auction', cs: 1 },
-  { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'digital', w: 'SecMCPHub', k: 'security review', cs: 1 },
+  { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'security', w: 'SecMCPHub', k: 'security review', cs: 1 },
   { u: 'soiree.html', t: 'Soirée, a case study', h: 'digital', w: 'Soirée', k: 'events tonight', cs: 1 },
   { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing studio bambu woven watch case', cs: 1 },
   { u: 'colophon.html', t: 'Colophon', h: 'stack and build', w: 'Colophon', k: 'playground' },
@@ -123,6 +123,7 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var inp = document.getElementById('pal-in'); if (inp) inp.placeholder = 'Go to…';
   // there is no Command key on a touch device: the keycap reads "Menu"
   var kb = document.getElementById('palette-btn'); if (kb) { kb.textContent = 'Menu'; kb.classList.add('menu'); kb.setAttribute('aria-label', 'Menu'); kb.removeAttribute('title'); }
+  [].forEach.call(document.querySelectorAll('.k-key'), function (e) { e.textContent = 'the menu'; });   // copy that names the key names the menu instead
 })();
 
 // ── phones: the masthead nav scrolls sideways; start with this page's pill in view
@@ -157,7 +158,8 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var here = pageOf(HERE);
   // the eyebrow: 07 · DIGITAL · LECTR.BID ↗
   var eb = document.querySelector('.lander-head .eyebrow, .page .eyebrow'); if (eb && here && !eb.querySelector('.no')) eb.insertAdjacentHTML('afterbegin', '<span class="no">' + here.n + '</span> · ');
-  // (the footer map prints names only: it lists eight of the pages, and 02 03 06 07 … read as pages missing. The number lives in the eyebrow, the status strip and the palette.)
+  // the footer map: 02 Digital … 15 Colophon
+  [].forEach.call(document.querySelectorAll('footer .foot-map a'), function (a) { var p = pageOf(a.getAttribute('href')); if (p && !a.querySelector('.no')) a.insertAdjacentHTML('afterbegin', '<span class="no">' + p.n + '</span>'); });
   // sections: "the problem · corpus" → "01 PROBLEM · CORPUS" (the key keeps its words; the article goes)
   var secs = [].slice.call(document.querySelectorAll('.cs .sec')), i = 0;
   secs.forEach(function (sec) { var k = sec.querySelector(':scope > .k'); if (!k) return; i++; var no = ('0' + i).slice(-2); sec.dataset.no = no; var raw = k.textContent.trim(); if (/^\d\d\b/.test(raw)) return; var txt = raw.replace(/^the\s+/i, ''); k.innerHTML = '<span class="no">' + no + '</span> ' + h(txt); });   // a page that numbers its own keys (Four Walls) keeps them
@@ -438,8 +440,8 @@ function flagCheck(s) {
     previewing = false; pal.hidden = true; inp.setAttribute('aria-expanded', 'false'); leave(i.u);
   }
   // commands for the curious: matched exactly, never listed
-  var PORTS = { 'index.html': 80, 'digital.html': 443, 'physical.html': 3000, 'fourwalls.html': 3306, 'wave.html': 5432, 'security.html': 8443, 'writing.html': 8080, 'github.html': 9418, 'about.html': 8000, 'resume.html': 8888, 'lectr.html': 4000, 'secmcphub.html': 7000, 'soiree.html': 6000, 'text2print.html': 9100, 'colophon.html': 9000 };
-  var APPS = [['lectr', 1001, 'auction intelligence', '/srv/lectr', '/bin/nightly', 'https://lectr.bid'], ['starling', 1002, 'ebay deep value', '/srv/starling', '/bin/sweep', 'https://github.com/stilwellc/starling'], ['soiree', 1003, 'what is on tonight', '/srv/soiree', '/bin/scrape', 'https://soiree.today'], ['text2print', 1004, 'text to printable file', '/srv/text2print', '/bin/cadquery', 'https://github.com/stilwellc/text2print'], ['secmcphub', 1005, 'monthly security review', '/srv/secmcphub', '/bin/report', 'https://github.com/stilwellc/SecMCPHub']];
+  var PORTS = { 'index.html': 80, 'digital.html': 443, 'physical.html': 3000, 'fourwalls.html': 3306, 'wave.html': 5432, 'security.html': 8443, 'writing.html': 8080, 'github.html': 9418, 'about.html': 8000, 'resume.html': 8888, 'lectr.html': 4000, 'secmcphub.html': 7000, 'soiree.html': 6000, 'text2print.html': 9100, 'colophon.html': 9000, 'farms.html': 1989, 'starling.html': 5000 };
+  var APPS = [['lectr', 1001, 'auction intelligence', '/srv/lectr', '/bin/nightly', 'https://lectr.bid'], ['starling', 1002, 'ebay deep value', '/srv/starling', '/bin/sweep', 'https://github.com/stilwellc/starling'], ['soiree', 1003, 'what is on tonight', '/srv/soiree', '/bin/scrape', 'https://soiree.today'], ['text2print', 1004, 'shape + texture → bambu studio project', '/srv/text2print', '/bin/studio', 'https://github.com/stilwellc/text2print'], ['secmcphub', 1005, 'monthly security review', '/srv/secmcphub', '/bin/report', 'https://github.com/stilwellc/SecMCPHub']];
   function command(raw) {
     var c = norm(raw.trim()).replace(/\s+/g, ' ');
     if (c === 'sudo' || c === 'sudo su' || c === 'sudo -i') { say('collin is not in the sudoers file. This incident will be reported.'); return true; }
@@ -612,99 +614,19 @@ function ghDays(grid, now) {
   });
 })();
 
-// ── lectr case study: one lot traced, read live from lectr.bid (CORS * on the data)
+// ── lectr case study: the graded record and the backtest, read live from lectr.bid (CORS * on the data)
 (function () {
   if (!document.getElementById('trace')) return;
-  // The pinned lot is the fallback. While it is live and more than a few days
-  // out it is shown; otherwise a live flagged lot is picked: the soonest sale at
-  // least three days out, medium or high confidence, the most comps.
-  var PIN = 'bonhams-31916-177', SALE = '2026-09-24';
-  var day = function (d) { return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); };
-  var today = day(new Date()), min = day(new Date(Date.now() + 3 * 864e5));
   var $ = function (id) { return document.getElementById(id); };
-  var when = $('trace-when'); if (when && today > SALE) when.textContent = 'closed ' + SALE;
-  if (today > SALE) { var cs0 = $('trace-comps-src'); if (cs0) cs0.textContent = '· as read on ' + SALE; }
   var HOUSE = { bonhams: 'Bonhams', christies: 'Christie’s', sothebys: 'Sotheby’s', phillips: 'Phillips', wright: 'Wright', hakes: 'Hake’s', rrauction: 'RR Auction', goldin: 'Goldin', rea: 'REA', lama: 'LAMA', rago: 'Rago' };
   var houseOf = function (id) { return HOUSE[String(id).split('-')[0]] || ''; };
-  var tc = function (s) { return String(s || '').toLowerCase().replace(/(^|[\s(‘'"-])([a-z])/g, function (m, a, b) { return a + b.toUpperCase(); }); };
-  var cap = function (s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); };
-  function comps(rows, label) {
-    rows = rows.slice().sort(function (a, b) { return a.d < b.d ? 1 : a.d > b.d ? -1 : 0; });
-    swap($('trace-comps'), rows.map(function (c) { return '<li><span>' + h(c.h) + ' · ' + h(c.d) + '</span><span class="v">' + usd(c.p) + '</span></li>'; }).join(''));
-    var src = $('trace-comps-src'); if (src) src.textContent = label;
-  }
-  // a lot page on lectr carries the lot as JSON in the framework's payload
-  function lotFrom(html) {
-    var re = /self\.__next_f\.push\(\[1,"((?:[^"\\]|\\.)*)"\]\)/g, m, s = '';
-    while ((m = re.exec(html))) { try { s += JSON.parse('"' + m[1] + '"'); } catch (e) {} }
-    var i = s.indexOf('"initialLot":{'); if (i < 0) return null; i = s.indexOf('{', i);
-    var depth = 0, str = false, esc2 = false;
-    for (var j = i; j < s.length; j++) { var ch = s[j]; if (str) { if (esc2) esc2 = false; else if (ch === '\\') esc2 = true; else if (ch === '"') str = false; continue; } if (ch === '"') str = true; else if (ch === '{') depth++; else if (ch === '}') { if (--depth === 0) break; } }
-    var lot; try { lot = JSON.parse(s.slice(i, j + 1)); } catch (e) { return null; }
-    var tt = /<meta name="twitter:title" content="([^"]*)"/.exec(html);
-    if (tt) { var t = new DOMParser().parseFromString('<p>' + tt[1] + '</p>', 'text/html').body.textContent.split(' — '); lot._name = t[0]; lot._maker = t[1] || ''; }
-    return lot;
-  }
-  function conf(l) { return (l.value && l.value.confidence) || (l.signal && l.signal.confidence) || ''; }
-  function eligible(l) { return l && l.status === 'upcoming' && l.saleDate >= min && /^(medium|high)$/.test(conf(l)) && l.value && l.value.compValueUsd > 0; }
-  function renderLot(l, rows) {
-    var v = l.value, lotRow = document.querySelector('#trace .trow.lot .tb'), callRow = document.querySelector('#trace .trow.call .tb'); if (!lotRow || !callRow) return;
-    var house = l.auctionHouse || houseOf(l.id), est = l.estimateLow && l.estimateHigh ? 'estimate ' + usd(l.estimateLow) + ' – ' + usd(l.estimateHigh) : '';
-    var url = String(l.url || ''), links = (url.indexOf('https://') === 0 ? '<a href="' + h(url) + '" target="_blank" rel="noopener">the lot at ' + h(house) + ' &#8599;</a> · ' : '') + '<a href="https://lectr.bid/lot/' + encodeURIComponent(l.id) + '" target="_blank" rel="noopener">on lectr &#8599;</a>';
-    swap(lotRow, '<b>' + h((l._maker ? l._maker + ' · ' : '') + cap(l._name || tc(l.title))) + '</b><span class="mono">' + [h(house), l.saleName ? h(tc(l.saleName)) : '', l.lotNumber ? 'lot ' + h(l.lotNumber) : '', '<span id="trace-when">closes ' + h(l.saleDate) + '</span>', est].filter(Boolean).join(' · ') + '</span><span class="mono">' + links + '</span>');
-    var line1 = ['comp value, all-in', v.low && v.high ? 'band ' + usd(v.low) + ' – ' + usd(v.high) : '', v.signal && v.signal.label ? h(v.signal.label) + (v.compRatio ? ', ' + v.compRatio.toFixed(1) + '× the estimate midpoint' : '') : ''].filter(Boolean).join(' · ');
-    var ex = v.exact && v.exact.cls === 'modelMatch' && v.exact.realizedUsd ? 'same model realized before: ' + usd(v.exact.realizedUsd) + (houseOf(v.exact.id) ? ', ' + houseOf(v.exact.id) : '') + ', ' + h(v.exact.saleDate) : '';
-    var line2 = ['confidence ' + h(conf(l)), v.n ? v.n + ' comps in the pool' : '', v.poolSellThroughPct != null ? v.poolSellThroughPct + '% of them sold' : '', ex].filter(Boolean).join(' · ');
-    swap(callRow, '<b class="big">' + usd(v.compValueUsd) + '</b><span class="mono">' + line1 + '</span><span class="mono">' + line2 + '</span>');
-    comps(rows, '· live · picked ' + today);
-  }
-  function pick(ce) {
-    try { var c = JSON.parse(lsGet('lectr:pick') || 'null'); if (c && c.day === today && eligible(c.lot) && ce.byLot[c.lot.id]) return Promise.resolve(c.lot); } catch (e) {}
-    var PREF = ['bonhams', 'christies', 'sothebys', 'phillips', 'wright', 'hakes', 'rrauction'];
-    var hash = function (s) { var x = 0; for (var i = 0; i < s.length; i++) x = (x * 31 + s.charCodeAt(i)) | 0; return x; };
-    // only flagged lots have a pre-rendered page to read; lectr's sitemap lists them
-    return fetch('https://lectr.bid/sitemap.xml').then(function (r) { return r.ok ? r.text() : ''; }).catch(function () { return ''; }).then(function (xml) {
-    var flagged = {}; (xml.match(/\/lot\/[^<\s]+/g) || []).forEach(function (m) { flagged[decodeURIComponent(m.slice(5))] = 1; });
-    var any = Object.keys(flagged).length > 0;
-    var ids = Object.keys(ce.byLot).filter(function (id) { return id !== PIN && (!any || flagged[id]); }).sort(function (a, b) {
-      var n = ce.byLot[b].length - ce.byLot[a].length; if (n) return n;
-      var pa = PREF.indexOf(a.split('-')[0]), pb = PREF.indexOf(b.split('-')[0]); pa = pa < 0 ? 99 : pa; pb = pb < 0 ? 99 : pb; if (pa !== pb) return pa - pb;
-      return hash(a + today) - hash(b + today);
-    });
-    function round(k) {
-      var batch = ids.slice(k * 8, k * 8 + 8); if (!batch.length || k > 1) return Promise.resolve(null);
-      return Promise.all(batch.map(function (id) { return fetch('https://lectr.bid/lot/' + encodeURIComponent(id)).then(function (r) { return r.ok ? r.text() : ''; }).then(lotFrom).catch(function () { return null; }); })).then(function (lots) {
-        var ok = lots.filter(eligible).sort(function (a, b) { return a.saleDate < b.saleDate ? -1 : a.saleDate > b.saleDate ? 1 : (b.value.n || 0) - (a.value.n || 0); });
-        return ok[0] || round(k + 1);
-      });
-    }
-    return round(0).then(function (l) { if (l) lsSet('lectr:pick', JSON.stringify({ day: today, lot: l })); return l; });
-    });
-  }
-  var started = false;
-  function start() {
-    if (started) return; started = true;
-    getJSON('https://lectr.bid/data/ray/comp-evidence.json').then(function (ce) {
-      if (!ce || !ce.byLot) return;
-      var pinRows = ce.byLot[PIN];
-      if (pinRows && pinRows.length && SALE >= min) { comps(pinRows, '· live · generated ' + String(ce.generatedAt || '').slice(0, 10)); return; }
-      return pick(ce).then(function (l) {
-        if (l) renderLot(l, ce.byLot[l.id]);
-        else if (pinRows && pinRows.length && today <= SALE) comps(pinRows, '· live · generated ' + String(ce.generatedAt || '').slice(0, 10));
-      });
-    }).catch(function () {});
-  }
-  // the lot pages are read only when the trace is on its way into view
-  var tr = $('trace');
-  if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); start(); } }, { rootMargin: '900px 0px' }); io.observe(tr); } else start();
-  setTimeout(start, 6000);
 
   // the record: each call written the way its lane made it, graded by that lane's rule
   getJSON('https://lectr.bid/data/ray/receipts.json').then(function (rc) {
     var seenT = {}; var rows = (rc.rows || []).filter(function (r) { if (!(r.p && r.r) || seenT[r.t || r.id]) return false; seenT[r.t || r.id] = 1; return true; }).slice(0, 5); if (!rows.length) return;
     var mk = function (ok, yes, no) { return ' <span class="mk ' + (ok ? 'ok' : 'no') + '">' + (ok ? yes : no) + '</span>'; };   // the square is the mark: filled hit, hollow miss
     swap($('trace-rec'), rows.map(function (r) {
-      var t = String(r.t || r.id).split(' | ')[0]; t = t.length > 64 ? t.slice(0, 62) + '…' : t;
+      var t = String(r.t || r.id).split(' | ')[0]; t = t.length > 64 ? t.slice(0, 62).replace(/\s+\S*$/, '').replace(/[\s,;:·|–—-]+$/, '') + '…' : t;
       var v, f = +r.f || 0;
       if (r.k === 'vsbid') v = 'bid ' + usd(r.p) + (f ? ' · floor ' + usd(f) : '') + ' → realized ' + usd(r.r) + (f ? mk(r.r >= f, 'over floor', 'under floor') : '');
       else if (r.k === 'gap') v = 'projected ' + usd(r.p) + (f ? ' · floor ' + usd(f) : '') + ' → realized ' + usd(r.r) + (f ? mk(r.r >= f, 'over floor', 'under floor') : '');
@@ -730,7 +652,7 @@ function ghDays(grid, now) {
   var el = document.getElementById('houses'); if (!el) return;
   getJSON('https://lectr.bid/data/ray/meta.json').then(function (m) {
     var s = m && Array.isArray(m.sources) ? m.sources.filter(function (x) { return typeof x === 'string' && x; }) : null; if (!s || s.length < 5) return;
-    swap(el, s.map(h).join(' · '));
+    swap(el, s.map(function (x) { return '<span class="nw">' + h(x.replace(/'/g, '’')) + '</span>'; }).join(' · '));
     [].forEach.call(document.querySelectorAll('[data-live="houses-n"]'), function (n) { setNum(n, String(s.length)); });
   }).catch(function () {});
 })();
@@ -769,7 +691,7 @@ function ghDays(grid, now) {
       var seen = {};
       rows = rows.filter(function (x) { var k = x.e.name + x.e.location; if (seen[k]) return false; seen[k] = 1; return true; });
       swap(list, rows.map(function (x) {
-        var e = x.e, url = String(e.url || ''), name = h(e.name.length > 70 ? e.name.slice(0, 68) + '…' : e.name);
+        var e = x.e, url = String(e.url || ''), name = h(e.name.length > 70 ? e.name.slice(0, 68).replace(/\s+\S*$/, '').replace(/[\s,;:·|–—-]+$/, '') + '…' : e.name);
         var whenTxt = (x.day === today ? (x.t ? clock(x.t) : 'today') : 'tomorrow' + (x.t ? ' ' + clock(x.t) : ''));
         return '<li><span>' + (url.indexOf('https://') === 0 ? '<a href="' + h(url) + '" target="_blank" rel="noopener">' + name + '</a>' : name) + '</span><span class="v">' + [h(e.location), h(area(e.address)), h(whenTxt)].filter(Boolean).join(' · ') + '</span></li>';
       }).join(''));

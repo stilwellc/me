@@ -1163,7 +1163,7 @@ body .p-security .sheet.also { margin-top: 36px; }
   .cells.led > .cell:nth-child(2n+1) { border-right: 0; }
 }
 /* the divider hairline is taken from the left card: give the right card the same 1px so both figures are one height */
-@media (min-width: 761px) { body .p-security .cells:not(.one):not(.led) > .cell:nth-child(2n), body .p-security .cells.led > .cell:nth-child(2n+3) { padding-right: calc(clamp(18px, 2.4vw, 30px) + 1px); } }
+@media (min-width: 761px) { body .p-security .cells.led > .cell:nth-child(2n+3) { padding-right: calc(clamp(18px, 2.4vw, 30px) + 1px); } }
 @media (max-width: 760px) {
   body .p-security .cell.lead { display: flex; align-items: stretch; gap: 1rem; }
   body .p-security .cell.lead > .thumb-wrap { margin: 0 0 0.35rem; }
@@ -1231,9 +1231,7 @@ body .p-about .bio + .sheet.record { margin-top: clamp(24px, 3vw, 36px); }
 
 /* ==== v3:cases ==== */
 /* the four case studies (lectr, SecMCPHub, Soirée, text2print) */
-/* plates sit on the two-width system: no 12px mat, a hairline so a near-white screenshot has an edge, captions on the plate edge */
-body .case figure.plate img, body .case figure.plate.wide img { padding: 0; background: var(--ground); outline: 1px solid var(--hair-2); outline-offset: -1px; }
-body .case figure.plate.wide figcaption, body .case .pairs figcaption { margin-left: 0; }
+/* plates (the mat, the edge hairline and the caption line are the shared plate rule) */
 body .case figure.plate picture { display: block; }
 body .case > figure.plate.wide { margin-top: clamp(24px, 4vw, 60px); }
 body .case .sec figure.plate.wide { margin-top: 1.5rem; }
@@ -1262,8 +1260,6 @@ body .case #trace-rec li { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; p
 body .case #trace-rec li .v { justify-self: start; text-align: left; white-space: normal; padding-left: 2.05rem; color: var(--ink-2); }
 body .case #trace-rec li > span:first-child { padding-left: 2.05rem; text-indent: -2.05rem; }
 body .case #trace-rec li > span:first-child::before { display: inline-block; width: 2.05rem; text-indent: 0; }
-/* Soirée: the before → after joint keeps its arrow (the shorthand reset it) */
-body .datefix .df-cell + .df-cell::before { background: var(--ground) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8h10M9 4l4 4-4 4' fill='none' stroke='%236E6F6B' stroke-width='1.5'/%3E%3C/svg%3E") center / 10px no-repeat; }
 /* Soirée: the read list is one closed block */
 body .case ol#tonight { margin: 0 auto; border-top: 1px solid var(--hair); }
 body .case ol#tonight li { padding: 12px 0; align-items: baseline; }
@@ -1278,7 +1274,6 @@ body .case ol#tonight li .v { letter-spacing: 0.04em; }
   body .case #trace-rec li > span:first-child::before { width: auto; }
 }
 @media (max-width: 480px) {
-  .stage.four > div:nth-last-child(2) { border-bottom: 1px solid var(--hair); }
   body .datefix .df-n { display: inline-block; width: 100%; margin-left: 0; }
 }
 /* ==== /v3:cases ==== */
@@ -1287,7 +1282,7 @@ body .case ol#tonight li .v { letter-spacing: 0.04em; }
    words; the other six pair up, so the frame closes on a full row. */
 .cells.lead7 > .cell.lead { grid-column: 1 / -1; border-right: 0; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 0.6rem clamp(24px, 3.5vw, 48px); }
 .cells.lead7 > .cell:nth-child(2n) { border-right: 1px solid var(--hair); }
-.cells.lead7 > .cell:nth-child(2n+1) { border-right: 0; }
+.cells.lead7 > .cell:nth-child(2n+1) { border-right-color: transparent; }   /* transparent, not gone: both columns keep one content width */
 .cells.lead7 > .cell.lead .thumb-wrap { margin-bottom: 0; }
 @media (min-width: 761px) {
   body .cells.lead7 > .cell.lead h2 { font-size: clamp(1.6rem, 2.6vw, 2.25rem); letter-spacing: -0.02em; }
@@ -1295,12 +1290,10 @@ body .case ol#tonight li .v { letter-spacing: 0.04em; }
   .cells.lead7 > .cell.lead .foot { align-self: start; margin-top: 0.4rem; padding-top: 0; }
 }
 @media (max-width: 760px) {
-  .cells.lead7 > .cell, .cells.lead7 > .cell:nth-child(2n) { border-right: 0; }
+  .cells.lead7 > .cell, .cells.lead7 > .cell:nth-child(2n), .cells.lead7 > .cell:nth-child(2n+1) { border-right: 0; }
   .cells.lead7 > .cell.lead .thumb-wrap { margin-bottom: 0.35rem; }
   .cells.lead7 > .cell.lead { align-items: stretch; }
 }
-/* a light screenshot keeps its edge on the eggshell: the hairline sits above the image */
-.cell .thumb-wrap::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--hair-2); pointer-events: none; }
 .cell .thumb-wrap.is-pixel .thumb-img { image-rendering: pixelated; }
 
 /* GitHub: the grid, its weekday ticks and its axis share one frame; a week is a
@@ -1317,7 +1310,6 @@ body .act .gh-wrap .gh-axis { grid-column: 2; max-width: none; margin: 8px 0 0; 
 body .gh-note { max-width: var(--wide); margin-top: 12px; text-align: center; font-size: 15px; }
 body .gh-note .lg { display: flex; justify-content: center; align-items: center; margin: 0 0 6px; }
 body .gh-note .lg span:last-child { margin-right: 0; }
-.gh-note #gh-state[hidden] { display: none; }
 /* on the phone the LED sits under the heading, above the grid: one state, printed once */
 @media (max-width: 600px) { body .act .gh-led { position: static; display: flex; justify-content: center; margin: 0 0 12px; } }
 body .cs .facts.gh { max-width: var(--wide); }   /* four counters on the framed width, so each label holds one line */
@@ -1426,3 +1418,18 @@ body.solo > main { flex: 1 0 auto; width: 100%; }
 body.solo footer.foot .foot-status .s-page, body.solo footer.foot .foot-status .s-page + .dot { display: none; }
 body.solo .req-log code.flag { font: inherit; color: var(--ink); border: 1px solid var(--hair-2); border-radius: var(--r); padding: 1px 6px; white-space: nowrap; }
 /* ==== /v3:bands ==== */
+
+/* ==== v3:integration ==== */
+/* phone: a frame has no side walls, so its closing rule and the top rule of the also-sheet under it read as one rule printed twice: the sheet starts on the frame's rule */
+@media (max-width: 600px) { body .page .frame + .sheet.also { border-top: 0; margin-top: 0; } }
+/* a card title that runs to two lines (the essays) keeps its descenders off the next line */
+body .p-security .cell h2, body .p-writing .cell h2 { line-height: 1.14; }
+/* lectr's lot count: the decimal point needs air at display size, or 1.25M reads 125M */
+body .facts .n#cs-lots { letter-spacing: 0.02em; }
+/* an arrow at the end of a pill sits off the word on every page, as on the case studies */
+body .cta .pill svg.ic, body .bottom .pill svg.ic { margin-left: 0.3em; }
+/* GitHub: the live LED sits on the grid it describes, under the label, at every width (it was pinned to the far edge of the frame) */
+body .act .gh-led { position: static; display: flex; justify-content: center; margin: 0 0 12px; }
+/* wave: the paragraph under the hero's control row keeps the plate's 2rem */
+body main.cs .wave-ctl + p.cap-note { margin-top: 2rem; }
+/* ==== /v3:integration ==== */

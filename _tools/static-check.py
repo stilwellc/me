@@ -37,10 +37,14 @@ for f in html:
         if re.match(r'(https?:|data:|blob:|javascript:|/)', ref) or ref in ('', './'): continue
         if not Path(ref).exists(): fail.append(f'{f}: missing {ref}')
 
-# 5. one cache-busting version across pages
+# 5. one cache-busting version across pages, on the stylesheet and every first-party script tag
 vs = set()
 for f in html:
-    vs |= set(re.findall(r'(?:site\.(?:css|js)|engine\.js)\?v=(\w+)', Path(f).read_text()))
+    s = Path(f).read_text(encoding='utf-8')
+    vs |= set(re.findall(r'(?:site\.(?:css|js)|assets/[\w-]+\.js)\?v=(\w+)', s))
+    for ref in re.findall(r'<(?:script[^>]*\ssrc|link[^>]*rel="stylesheet"[^>]*\shref)="([^"]+)"', s):
+        if re.match(r'https?:', ref) or '/vendor/' in ref: continue
+        if '?v=' not in ref: fail.append(f'{f}: {ref} has no ?v=')
 if len(vs) > 1: fail.append(f'?v= differs across pages: {sorted(vs)}')
 
 # 6. JS syntax

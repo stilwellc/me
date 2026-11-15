@@ -19,8 +19,8 @@
   var q = new URLSearchParams(location.search);
   var word = q.get('text') || 'Collin', src = q.get('src'), sub = q.get('sub') || 'Senior Product Security Engineer';
   var c = document.getElementById('c'), ctx = c.getContext('2d');
-  var W = 1200, H = 630, cell = 14, cols = Math.floor(W / cell), rows = Math.floor((H - 120) / cell);
-  var INK = '#161616', GROUND = '#FCFBFA';
+  var W = 1200, H = 630, cell = Math.max(6, Math.min(14, +q.get('cell') || 14)), cols = Math.floor(W / cell), rows = Math.floor((H - 120) / cell);
+  var INK = '#161616', GROUND = '#FCFBFA', GAMMA = +q.get('gamma') || 1.7;   // ?cell=8&gamma=0.6 for the drawn marks: a finer screen, and thin strokes keep their weight
   function halftone(img, x0, y0, w, h) {
     var p = document.createElement('canvas'); p.width = cols; p.height = rows; var pc = p.getContext('2d');
     pc.fillStyle = '#fff'; pc.fillRect(0, 0, cols, rows);
@@ -33,7 +33,7 @@
     for (var j = 0; j < cols * rows; j++) { raw[j] = (d[j*4]*299 + d[j*4+1]*587 + d[j*4+2]*114) / 255000; if (inside(j)) { inList.push(raw[j]); mean += raw[j]; } }
     mean /= Math.max(1, inList.length); var flip = mean > 0.5; inList.sort(function (a, b) { return a - b; });
     var lo = inList[Math.floor(inList.length * 0.05)], hi = inList[Math.floor(inList.length * 0.95)], span = Math.max(0.05, hi - lo);
-    for (var k = 0; k < cols * rows; k++) { if (!inside(k)) { lum[k] = 0; continue; } var v = flip ? 1 - raw[k] : raw[k]; v = (v - (flip ? 1 - hi : lo)) / span; lum[k] = Math.pow(Math.min(1, Math.max(0, v)), 1.7); }
+    for (var k = 0; k < cols * rows; k++) { if (!inside(k)) { lum[k] = 0; continue; } var v = flip ? 1 - raw[k] : raw[k]; v = (v - (flip ? 1 - hi : lo)) / span; lum[k] = Math.pow(Math.min(1, Math.max(0, v)), GAMMA); }
     return lum;
   }
   function wordMask(text, x0, w) {
