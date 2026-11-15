@@ -1433,3 +1433,37 @@ body .act .gh-led { position: static; display: flex; justify-content: center; ma
 /* wave: the paragraph under the hero's control row keeps the plate's 2rem */
 body main.cs .wave-ctl + p.cap-note { margin-top: 2rem; }
 /* ==== /v3:integration ==== */
+
+/* ==== v3b:fin-core ==== */
+/* the section chip docks when the footer arrives (it sat on the © line at the foot of a phone page) */
+body.at-foot .sec-chip, body.scrolled.at-foot .sec-chip { transform: translate(-50%, 160%); pointer-events: none; }
+body.at-foot .sec-menu { display: none; }
+
+/* 404 + vault: one screen. The band gives up height before the footer leaves the viewport (440 again from 1080 tall) */
+@media (min-width: 601px) { body.solo { --band-h: clamp(180px, calc(100vh - 666px), 440px); } }
+body.solo .cta { margin-top: 36px; }
+body.solo footer.foot { margin-top: 36px; }
+
+/* home: the system's 24 between the sub, the facts strip and the pills; the sub stays close to its statement */
+body .bottom { row-gap: 24px; }
+body .bottom .sub { margin-top: -16px; }
+body .bottom .facts.proof { margin-top: 0; }
+
+/* GitHub: the push grid's frame is the reading column, and so is its caption; the weeks share the width */
+body .act .gh-wrap { width: 100%; max-width: var(--col); }
+body .act .gh-wrap .grid, body .act .gh-wrap .grid.weeks { grid-auto-columns: minmax(0, 1fr); }
+body .gh-note { max-width: var(--col); text-wrap: balance; }
+
+/* colophon: the file pill is a control, in ink like the Replay key beside it */
+body .wave-ctl label.pill.file { color: var(--ink); letter-spacing: 0.01em; gap: 0; }
+body .wave-ctl label.pill.file:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+body .sec h2 + ul { margin-top: 0.4rem; }
+
+/* typography: titles balance, running text never ends on one word, data columns set in tabular figures */
+body .sheet .row .t, .cell h2, .lrow .t, body .job h3, .outline li { text-wrap: balance; }
+body .sec ul li > span:first-child, body .sheet .row .d, body .cell p { text-wrap: pretty; }
+body .bottom .statement { text-wrap: balance; }
+.sheet .row .k, .sheet .row .v, .sec ul li .v, .facts .n, .cell .foot, .cell .top .when, .lrow .k, .gh-axis, footer.foot .foot-status, .pal-foot { font-variant-numeric: tabular-nums; }
+/* an arrow at the end of any action pill sits off its word by the same 0.3em */
+.pill.solid svg.ic, .pill.ghost svg.ic { margin-left: 0.3em; }
+/* ==== /v3b:fin-core ==== */

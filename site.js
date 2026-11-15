@@ -101,7 +101,7 @@ var PAGES = [
   { u: 'fourwalls.html', t: 'Four Walls', h: 'the residence', w: 'Four Walls', k: 'apartment renovation home' },
   { u: 'wave.html', t: 'Wave panel', h: 'wall panel', w: 'Wave', k: 'printing' },
   { u: 'security.html', t: 'Security', h: 'g s', w: 'Security', k: 'day job' },
-  { u: 'writing.html', t: 'Writing', h: 'g n', w: 'Writing', k: 'essays substack' },
+  { u: 'writing.html', t: 'Writing', h: 'g w', w: 'Writing', k: 'essays substack' },
   { u: 'github.html', t: 'GitHub', h: 'g g', w: 'GitHub', k: 'code repos' },
   { u: 'about.html', t: 'About', h: 'g a', w: 'About' },
   { u: 'resume.html', t: 'Career', h: 'g r', w: 'Career', k: 'resume résumé cv overview' },
@@ -113,7 +113,7 @@ var PAGES = [
   { u: 'farms.html', t: 'Stilwell Farms, a case study', h: 'digital', w: 'Stilwell Farms', k: 'game boy color gbc chromatic modretro farm game', cs: 1 },
   { u: 'starling.html', t: 'Starling, a case study', h: 'digital', w: 'Starling', k: 'ebay deals board', cs: 1 }
 ];
-PAGES.forEach(function (p, i) { p.n = ('0' + (i + 1)).slice(-2); });   // the system is numbered: 01 Home … 15 Colophon
+PAGES.forEach(function (p, i) { p.n = ('0' + (i + 1)).slice(-2); });   // the system is numbered: 01 Home … 17 Starling
 function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('/').pop().toLowerCase() || 'index.html'; for (var i = 0; i < PAGES.length; i++) if (PAGES[i].u === f) return PAGES[i]; return null; }
 
 // ── touch: the ⌘K pill is the menu (before the topbar clones the nav) ────────
@@ -158,7 +158,7 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var here = pageOf(HERE);
   // the eyebrow: 07 · DIGITAL · LECTR.BID ↗
   var eb = document.querySelector('.lander-head .eyebrow, .page .eyebrow'); if (eb && here && !eb.querySelector('.no')) eb.insertAdjacentHTML('afterbegin', '<span class="no">' + here.n + '</span> · ');
-  // the footer map: 02 Digital … 15 Colophon
+  // the footer map: 02 Digital … 15 Colophon (the map lists the eight section pages)
   [].forEach.call(document.querySelectorAll('footer .foot-map a'), function (a) { var p = pageOf(a.getAttribute('href')); if (p && !a.querySelector('.no')) a.insertAdjacentHTML('afterbegin', '<span class="no">' + p.n + '</span>'); });
   // sections: "the problem · corpus" → "01 PROBLEM · CORPUS" (the key keeps its words; the article goes)
   var secs = [].slice.call(document.querySelectorAll('.cs .sec')), i = 0;
@@ -204,6 +204,9 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
     links.forEach(function (p, i) { var on = p[0] === sec; p[1].classList.toggle('on', on); if (on) p[1].setAttribute('aria-current', 'true'); else p[1].removeAttribute('aria-current'); var m = menu.children[i]; if (m) m.classList.toggle('on', on); if (on) { var no = p[0].dataset.no || ('0' + (i + 1)).slice(-2), lab = p[1].textContent.replace(/^\d\d\s*/, ''); chip.innerHTML = '<span class="sr">Section: </span><span class="pos">§' + no + '/' + ('0' + links.length).slice(-2) + '</span>' + h(lab) + ' <span aria-hidden="true">▾</span>'; var ss = document.querySelector('.foot-status .sl.s-secno b'); if (ss) ss.textContent = '§' + no; } });
   }
   function sweep() { var best = null, y = innerHeight * 0.38; links.forEach(function (p) { var r = p[0].getBoundingClientRect(); if (r.top <= y) best = p[0]; }); light(best || links[0][0]); }
+  // the chip docks when the footer arrives: at the foot of the page it sat on the © line
+  var footEl = document.querySelector('footer.foot');
+  if (footEl && 'IntersectionObserver' in window) new IntersectionObserver(function (es) { var at = es[es.length - 1].isIntersecting; document.body.classList.toggle('at-foot', at); if (at) shut(); }, { rootMargin: '0px 0px -24px 0px' }).observe(footEl);
   var tick = false; addEventListener('scroll', function () { shut(); if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; sweep(); }); } }, { passive: true }); addEventListener('resize', sweep); sweep();
 })();
 

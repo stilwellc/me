@@ -37,10 +37,10 @@
   <div class="mhead rv"><canvas class="matrix" data-text="Colophon" data-src="assets/colophon.svg" aria-label="A page with three rules and a mark, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv">Colophon · how this site is built</p>
   <h1 class="display rv d1">Static HTML.<br>No framework, no build step.</h1>
-  <p class="lede rv d2">Eighteen pages, one stylesheet, two shared scripts, four font files and a line-screen engine drawn on a canvas, served as static files from GitHub Pages with no cookies and no analytics.</p>
+  <p class="lede rv d2">Nineteen pages, one stylesheet, two shared scripts, four font files and a line-screen engine drawn on a canvas, served as static files from GitHub Pages with no cookies and no analytics.</p>
 
   <div class="facts colo-facts rv d3">
-    <div><div class="n">18</div><div class="l">pages<span class="sub">17 numbered, plus a 404</span></div></div>
+    <div><div class="n">19</div><div class="l">pages<span class="sub">17 numbered, a 404 and a vault</span></div></div>
     <div><div class="n">0</div><div class="l">frameworks<span class="sub">three.js on the wave page only</span></div></div>
     <div><div class="n">4</div><div class="l">font files<span class="sub">self-hosted, 141 KB</span></div></div>
     <div><div class="n">0</div><div class="l">cookies<span class="sub">no analytics</span></div></div>
@@ -49,13 +49,14 @@
   <section class="sec">
     <div class="k">the ground</div>
     <div>
-      <h2>Eggshell, ink, one accent.</h2>
-      <p>Off-white ground, near-black ink, grays for hierarchy, hairlines for registration, and one dark green accent for what moves.</p>
+      <h2>Eggshell, ink, two greens.</h2>
+      <p>Off-white ground, near-black ink, grays for hierarchy, hairlines for registration, a dark green accent for what moves, and British racing green for the pill that is selected.</p>
       <ul>
         <li><span>Ground</span><span class="v">#FCFBFA</span></li>
         <li><span>Ink</span><span class="v">#161616 · #555652 · #6E6F6B</span></li>
         <li><span>Hairlines</span><span class="v">#E6E5E2 · #D6D5D1</span></li>
         <li><span>Accent</span><span class="v">#2F6B34</span></li>
+        <li><span>Selected</span><span class="v">#004225</span></li>
       </ul>
     </div>
   </section>
@@ -81,7 +82,7 @@
         <button class="pill mono" type="button" aria-pressed="false" data-src="assets/resume.svg" data-label="A paper plane">Plane</button>
       </div>
       <div class="wave-ctl play-ctl">
-        <label class="pill mono file">Use a picture <input id="play-pic" type="file" accept="image/*"></label>
+        <label class="pill mono file">Choose a picture <input id="play-pic" type="file" accept="image/*"></label>
         <button class="pill mono" type="button" id="play-again">Replay</button>
       </div>
       <p class="cap-note">Your picture never leaves this tab.</p>
@@ -91,7 +92,8 @@
   <section class="sec">
     <div class="k">the build</div>
     <div>
-      <p>There is no bundler, no template layer, and no client router. Each page carries its own markup, the shared stylesheet, and the two shared scripts; a cache-busting version on those files is the whole deployment story. Photographs ship with width and height and a small variant for phones. Social cards are rendered by a small page in the repository with the same line-screen code, once, and committed.</p>
+      <h2>No bundler, no template layer, no client router.</h2>
+      <p>Each page carries its own markup, the shared stylesheet, and the two shared scripts; a cache-busting version on those files is the whole deployment story. Photographs ship with width and height and a small variant for phones. Social cards are rendered by a small page in the repository with the same line-screen code, once, and committed.</p>
       <ul>
         <li><span>Hosting</span><span class="v">GitHub Pages, from the main branch</span></li>
         <li><span>Fonts</span><span class="v">four woff2 files, preloaded, swap</span></li>
@@ -105,7 +107,7 @@
   <section class="sec">
     <div class="k">the threat model</div>
     <div>
-      <p>The site runs code in your browser and reads data from other servers.</p>
+      <h2>Code runs in your browser; data comes from other servers.</h2>
       <ul class="tm">
         <li><span>Visitors, the integrity of the pages, and the owner’s exact location</span><span class="v">protects</span></li>
         <li><span>GitHub Pages serves every file; the repository is the source of truth</span><span class="v">boundary</span></li>
@@ -113,7 +115,7 @@
         <li><span>JSON from lectr.bid on the lectr study, where auction titles are untrusted text</span><span class="v" aria-hidden="true"></span></li>
         <li><span>three.js, served from this origin, on the wave page</span><span class="v" aria-hidden="true"></span></li>
         <li><span>binjgb (MIT), a Game Boy emulator compiled to WebAssembly, served from this origin, on the Stilwell Farms page</span><span class="v" aria-hidden="true"></span></li>
-        <li><span>Content-Security-Policy with script-src 'self' and two hashed inline snippets: no other inline script and no third-party script runs. Only the Stilwell Farms page adds 'wasm-unsafe-eval', which lets the emulator’s WebAssembly compile</span><span class="v">control</span></li>
+        <li><span>Content-Security-Policy with script-src 'self' and two hashed inline snippets: no other inline script and no third-party script runs. Only the Stilwell Farms page adds 'wasm-unsafe-eval', so the emulator’s WebAssembly can compile</span><span class="v">control</span></li>
         <li><span>Every external string is escaped before it reaches the page</span><span class="v" aria-hidden="true"></span></li>
         <li><span>No cookies, no analytics, no third-party scripts</span><span class="v" aria-hidden="true"></span></li>
         <li><span>GitHub Pages sends no custom response headers, so no frame-ancestors and no Permissions-Policy</span><span class="v">gap</span></li>
@@ -125,6 +127,7 @@
   <section class="sec">
     <div class="k">the rules</div>
     <div>
+      <h2>Eight rules every page follows.</h2>
       <ul class="rules num">
         <li><span>Labels</span><span class="v">two levels: KEYS mono 11 px uppercase wide · data mono 12 px sentence case</span></li>
         <li><span>Unit</span><span class="v">6 px, the stripe pitch · 12 / 18 / 24 / 30 / 36 / 48 / 60 / 72 / 96</span></li>
@@ -132,7 +135,7 @@
         <li><span>Arrows</span><span class="v">→ inside the site · ↗ out of it</span></li>
         <li><span>Widths</span><span class="v">44 rem for reading · 60 rem for objects</span></li>
         <li><span>Band</span><span class="v">one still picture · ink only · never a word</span></li>
-        <li><span>Color</span><span class="v">light only · accent for what moves</span></li>
+        <li><span>Color</span><span class="v">light only · accent for what moves · racing green for what is selected</span></li>
         <li><span>Keyboard</span><span class="v">⌘K palette · g then a letter · ? for shortcuts</span></li>
       </ul>
     </div>
