@@ -41,12 +41,12 @@
 
   <div class="facts rv d3">
     <div><div class="n">199</div><div class="l">on the board<span class="sub">deals, as of Nov 14, 2026</span></div></div>
-    <div><div class="n">5,691</div><div class="l">listings<span class="sub">evaluated in that run</span></div></div>
-    <div><div class="n">3,148</div><div class="l">on the tape<span class="sub">calls, each frozen when surfaced</span></div></div>
-    <div><div class="n">5,000</div><div class="l">calls a day<span class="sub">the eBay Browse API budget</span></div></div>
+    <div><div class="n c">5,691</div><div class="l">listings<span class="sub">evaluated in that run</span></div></div>
+    <div><div class="n c">3,148</div><div class="l">on the tape<span class="sub">calls, each frozen when surfaced</span></div></div>
+    <div><div class="n c">5,000</div><div class="l">calls a day<span class="sub">the eBay Browse API budget</span></div></div>
   </div>
 
-  <figure class="plate wide rv d3"><picture><source media="(max-width: 600px)" srcset="assets/starling/board-phone.webp" width="860" height="1076"><img src="assets/starling/board.webp" width="1920" height="1200" alt="The Starling board: the top deal is a Rolex Daytona asking $46,957 against a $77,131 book median from 20 sales, shown $30,174 under the book with a moderate risk grade" loading="lazy" decoding="async"></picture><figcaption>The board · run locally from the public repo · data of Nov 14, 2026</figcaption></figure>
+  <figure class="plate wide rv d3"><picture><source media="(max-width: 600px)" srcset="assets/starling/board-phone.webp" width="860" height="1243"><img src="assets/starling/board.webp" width="1920" height="1200" alt="The Starling board: the top deal is a Rolex Daytona asking $46,957 against a $77,131 book median from 20 sales, shown $30,174 under the book with a moderate risk grade" loading="lazy" decoding="async"></picture><figcaption><span class="nw">The board</span><i class="sp"> · </i><span class="nw">run locally from the public repo</span><i class="sp"> · </i><span class="nw">data of Nov&nbsp;14,&nbsp;2026</span></figcaption></figure>
 
   <section class="sec" id="problem">
     <div class="k">the problem</div>
@@ -70,7 +70,7 @@
         <li><span>The board is written as one JSON file and committed to the repo.</span><span class="v">publish</span></li>
         <li><span>Every surfaced deal is appended to a ledger and later resolved to its outcome.</span><span class="v">receipts</span></li>
       </ul>
-      <figure class="plate wide"><picture><source media="(max-width: 600px)" srcset="assets/starling/deal-phone.webp" width="860" height="1076"><img src="assets/starling/deal.webp" width="1920" height="1333" alt="A Starling deal page: the asking price marked on the book’s price range, the book median from 20 sales, the gap, confidence, last sale and one-year trend, and the reasons behind a moderate risk grade" loading="lazy" decoding="async"></picture><figcaption>One deal · the evidence and the reasons behind its risk grade</figcaption></figure>
+      <figure class="plate wide"><picture><source media="(max-width: 600px)" srcset="assets/starling/deal-phone.webp" width="860" height="1207"><img src="assets/starling/deal.webp" width="1920" height="1460" alt="A Starling deal page: the asking price marked on the book’s price range, the book median from 20 sales, the gap, confidence, last sale and one-year trend, and the reasons behind a moderate risk grade" loading="lazy" decoding="async"></picture><figcaption><span class="nw">One deal</span><i class="sp"> · </i><span class="nw">the evidence and the reasons</span> <span class="nw">behind its risk grade</span></figcaption></figure>
     </div>
   </section>
 
@@ -93,7 +93,7 @@
     <div>
       <h2>Every call is kept.</h2>
       <p>Book value, depth and risk are frozen the moment a deal is surfaced and never rewritten. When a listing leaves Buy It Now, the outcome is recorded against the call.</p>
-      <figure class="plate wide"><picture><source media="(max-width: 600px)" srcset="assets/starling/tape-phone.webp" width="860" height="1076"><img src="assets/starling/tape.webp" width="1920" height="1200" alt="The Starling tape: 3,148 calls logged, 1,375 still live on Buy It Now, and a table of calls with date, vertical, identity, depth at surface, book value, risk grade and outcome" loading="lazy" decoding="async"></picture><figcaption>The tape · 3,148 calls logged · Nov 14, 2026</figcaption></figure>
+      <figure class="plate wide"><picture><source media="(max-width: 600px)" srcset="assets/starling/tape-phone.webp" width="860" height="1312"><img src="assets/starling/tape.webp" width="1920" height="1171" alt="The Starling tape: 3,148 calls logged, 1,375 still live on Buy It Now, and a table of calls with date, vertical, identity, depth at surface, book value, risk grade and outcome" loading="lazy" decoding="async"></picture><figcaption><span class="nw">The tape</span><i class="sp"> · </i><span class="nw">3,148 calls logged</span><i class="sp"> · </i><span class="nw">Nov&nbsp;14,&nbsp;2026</span></figcaption></figure>
     </div>
   </section>
 
@@ -102,6 +102,11 @@
     <div>
       <h2>No exact identity, no deal.</h2>
       <p>A deal exists only when its listing pins to an exact key in the value book. The value book stays in private storage and the board publishes book numbers only for the deals it shows. The deployed board sits behind a PIN; the source is public.</p>
+      <ul>
+        <li><span>Stack</span><span class="v">TypeScript · Next.js static export</span></li>
+        <li><span>Runs on</span><span class="v">GitHub Actions · Cloudflare Pages + R2</span></li>
+        <li><span>Source</span><span class="v">public on GitHub</span></li>
+      </ul>
     </div>
   </section>
 

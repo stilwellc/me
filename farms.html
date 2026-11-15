@@ -36,8 +36,8 @@
 <main id="main" class="page cs case farms">
   <div class="mhead rv"><canvas class="matrix" data-text="Stilwell Farms" data-src="assets/farms.svg" aria-label="A cartridge, a handheld and three sprouts, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/stilwell-farms" target="_blank" rel="noopener">Stilwell Farms on GitHub ↗</a></p>
-  <h1 class="display rv d1">A farm that’s yours to design,<br> on a Game Boy Color cartridge.</h1>
-  <p class="lede rv d2">Stilwell Farms is an original world-building farm game for the Game Boy Color, written in C with GBDK-2020 and made for the ModRetro Chromatic.</p>
+  <h1 class="display rv d1">A farm that’s yours to design,<br> on a Game&nbsp;Boy&nbsp;Color cartridge.</h1>
+  <p class="lede rv d2">Stilwell Farms is an original world-building farm game for the Game&nbsp;Boy&nbsp;Color, written in C with GBDK-2020 and made for the ModRetro Chromatic.</p>
 
   <div class="facts rv d3">
     <div><div class="n">64</div><div class="l">plots to buy<span class="sub">one 64 × <span class="nw">64-tile</span> valley</span></div></div>
@@ -46,13 +46,15 @@
     <div><div class="n">69</div><div class="l">scripted tests<span class="sub">the ROM, played headless</span></div></div>
   </div>
 
+  <figure class="plate wide px rv d3"><div class="pxb one"><picture><source media="(min-width: 1056px)" srcset="assets/farms/hero.webp" width="928" height="568"><img src="assets/farms/hero-phone.webp" width="320" height="400" alt="The same farm from above at four points: an overgrown shack on day 1, the first radishes and strawberries on spring 5, a big house, a windmill and fenced fields on summer 9, and rows of pumpkins on fall 11" decoding="async"></picture></div><figcaption><span class="nw">One farm ·</span> <span class="nw">day 1, spring 5,</span> <span class="nw">summer 9, fall 11</span></figcaption></figure>
+
   <section class="sec" id="game">
     <div class="k">the game</div>
     <div>
       <h2>Clear it, plant it, build it, then build up the town.</h2>
-      <p>Grandpa left you an overgrown farm in the middle of a valley. You clear it, plant fourteen crops across four seasons, raise cows, hens and sheep, put every building, fence and path where you want it, and buy the valley one plot at a time.</p>
-      <figure class="gbc" id="gbc" data-rom="assets/farms/stilwell_farms.gbc" data-core="assets/vendor/binjgb/binjgb.js">
-        <div class="gbc-screen" id="gbc-screen">
+      <p>Grandpa left you an overgrown farm in the middle of a valley. You clear it, plant fourteen crops across four seasons, raise cows, hens and sheep, put every building, fence and path where you want it, and buy the valley one plot at a&nbsp;time.</p>
+      <figure class="plate px gbc" id="gbc" data-rom="assets/farms/stilwell_farms.gbc" data-core="assets/vendor/binjgb/binjgb.js">
+        <div class="pxb one gbc-screen" id="gbc-screen">
           <img class="gbc-poster" src="assets/farms/poster.png" width="160" height="144" alt="The Stilwell Farms title screen: a farmhouse, a red barn and a row of crops under a wooden sign">
           <canvas id="gbc-canvas" width="160" height="144" aria-label="Stilwell Farms, running" role="img" hidden></canvas>
           <button class="pill solid gbc-play" id="gbc-play" type="button">Play it here</button>
@@ -62,10 +64,8 @@
           <div class="gbc-ab"><button type="button" data-joy="B" aria-label="B">B</button><button type="button" data-joy="A" aria-label="A">A</button></div>
           <div class="gbc-ss"><button type="button" data-joy="select">Select</button><button type="button" data-joy="start">Start</button></div>
         </div>
-        <div class="gbc-bar">
-          <ul class="gbc-keys" aria-label="Keyboard controls"><li><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd><span>D-pad</span></li><li><kbd>X</kbd><span>A</span></li><li><kbd>Z</kbd><span>B</span></li><li><kbd>Enter</kbd><span>Start</span></li><li><kbd>Shift</kbd><span>Select</span></li></ul>
-        </div>
-        <figcaption><span class="t"><span id="gbc-state" aria-live="polite">The released ROM, in the page</span> · saves stay in this browser</span><span class="gbc-ctl" id="gbc-ctl" hidden><button class="pill" id="gbc-pause" type="button" aria-pressed="false">Pause</button><button class="pill" id="gbc-mute" type="button" aria-pressed="true">Sound</button></span></figcaption>
+        <figcaption><span class="t"><span class="nw"><span id="gbc-state" aria-live="polite">The released ROM, in the page</span> ·</span> <span class="nw">saves stay in this browser</span></span><span class="gbc-ctl" id="gbc-ctl" hidden><button class="pill" id="gbc-pause" type="button" aria-pressed="false">Pause</button><button class="pill" id="gbc-mute" type="button" aria-pressed="true">Sound</button></span></figcaption>
+        <ul class="gbc-keys" aria-label="Keyboard controls"><li><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd><span>D-pad</span></li><li><kbd>X</kbd><span>A</span></li><li><kbd>Z</kbd><span>B</span></li><li><kbd>Enter</kbd><span>Start</span></li><li><kbd>Shift</kbd><span>Select</span></li></ul>
       </figure>
     </div>
   </section>
@@ -75,13 +75,16 @@
     <div>
       <h2>64 plots of woods, lakes, marsh, quarries and a river.</h2>
       <p>The farm is the middle of the valley. Every plot is for sale, from a rope line and a sign or from the valley map, which shows each plot by what grows on it.</p>
-      <figure class="px one"><img class="soft" src="assets/farms/maturity.webp" width="576" height="576" alt="The whole valley from above: an overgrown shack on day 1, the first fields in spring, a built-up farm in summer, pumpkins in fall, then the same farm after dark" loading="lazy"><figcaption>One farm · day 1 to fall 11, then after dark</figcaption></figure>
       <p>The design tools work like drawing. Hold A and walk to lay a path or a fence line in one stroke; SELECT swaps to the eraser and the build menu has undo. A swatch page recolours every roof, plank and stone on the farm, and a blueprint copies a corner and stamps it down anywhere, previewed as a ghost first.</p>
-      <div class="pxgrid">
-        <figure class="px"><img src="assets/farms/farming.webp" width="160" height="144" alt="Tilling, watering and sowing radishes, sleeping, then harvesting" loading="lazy"><figcaption>Till · water · sow · harvest</figcaption></figure>
-        <figure class="px"><img src="assets/farms/design.webp" width="160" height="144" alt="Recolouring roofs, painting a brick path, erasing a fence, undoing it and stamping a blueprint" loading="lazy"><figcaption>Colours · eraser · undo · blueprints</figcaption></figure>
-        <figure class="px"><img src="assets/farms/valley.webp" width="160" height="144" alt="The valley map page, with a plot across the river being bought" loading="lazy"><figcaption>The valley map</figcaption></figure>
-      </div>
+      <figure class="plate px">
+        <div class="pxb">
+          <img src="assets/farms/farming.webp" width="160" height="144" alt="Tilling, watering and sowing radishes, sleeping, then harvesting" loading="lazy">
+          <img src="assets/farms/building.webp" width="160" height="144" alt="Placing a windmill from its ghost, painting a picket fence and flowers, digging a pond" loading="lazy">
+          <img src="assets/farms/design.webp" width="160" height="144" alt="Recolouring roofs, painting a brick path, erasing a fence, undoing it and stamping a blueprint" loading="lazy">
+          <img src="assets/farms/valley.webp" width="160" height="144" alt="The valley map page, with a plot across the river being bought" loading="lazy">
+        </div>
+        <figcaption><span class="nw">Farming ·</span> <span class="nw">building ·</span> <span class="nw">the design tools ·</span> <span class="nw">the valley map</span></figcaption>
+      </figure>
       <ul>
         <li><span>Farming</span><span class="v">14 crops · 4 fruit trees · sprinklers</span></li>
         <li><span>Animals</span><span class="v">cows · hens · sheep · breeds and breeding</span></li>
@@ -94,19 +97,26 @@
     <div class="k">the town</div>
     <div>
       <h2>Eight businesses, six townsfolk, four festivals.</h2>
-      <p>The road south leads to a town. A boarded-up storefront becomes a Bakery, a Juice Bar, a Creamery or a Florist, stocked with what the farm grows; Market Street adds lots for a Brewery, a Winery, a Restaurant and an Inn. Six townsfolk keep daily routines and 24 heart scenes, every season has a festival minigame, and six restoration projects change the town for good.</p>
-      <div class="pxgrid">
-        <figure class="px"><img src="assets/farms/invest.webp" width="160" height="144" alt="Restyling a storefront, funding Square Paving, opening Market Street and building a brewery" loading="lazy"><figcaption>Storefronts · Market Street</figcaption></figure>
-        <figure class="px"><img src="assets/farms/festivals.webp" width="160" height="144" alt="An egg hunt, a koi derby, giant produce judging and a snowball fight" loading="lazy"><figcaption>A festival every season</figcaption></figure>
-        <figure class="px"><img src="assets/farms/mine.webp" width="160" height="144" alt="Breaking rocks in the mine, a ladder down, the lift to floor 20 and a ruby" loading="lazy"><figcaption>The mine · 20 floors</figcaption></figure>
-      </div>
+      <p>The road south leads to a town. A boarded-up storefront becomes a Bakery, a Juice Bar, a Creamery or a Florist, stocked with what the farm grows; Market Street adds lots for a Brewery, a Winery, a Restaurant and an Inn. Six townsfolk keep daily routines and 24 heart scenes, every season has a festival minigame, and six restoration projects change the town for&nbsp;good.</p>
+      <figure class="plate px">
+        <div class="pxb">
+          <img src="assets/farms/invest.webp" width="160" height="144" alt="Restyling a storefront, funding Square Paving, opening Market Street and building a brewery" loading="lazy">
+          <img src="assets/farms/townlife.webp" width="160" height="144" alt="Townsfolk walking to lunch, greetings, and Rosa’s first heart event" loading="lazy">
+          <img src="assets/farms/festivals.webp" width="160" height="144" alt="An egg hunt, a koi derby, giant produce judging and a snowball fight" loading="lazy">
+          <img src="assets/farms/mine.webp" width="160" height="144" alt="Breaking rocks in the mine, a ladder down, the lift to floor 20 and a ruby" loading="lazy">
+        </div>
+        <figcaption><span class="nw">Storefronts ·</span> <span class="nw">townsfolk ·</span> <span class="nw">festivals ·</span> <span class="nw">the mine</span></figcaption>
+      </figure>
       <p>The house, every farm building and every storefront can be rebuilt in one of four styles.</p>
-      <div class="pxgrid styles">
-        <figure class="px"><img src="assets/farms/style-classic.png" width="160" height="74" alt="A classic farmhouse with a red tile roof beside a red barn" loading="lazy"><figcaption>Classic</figcaption></figure>
-        <figure class="px"><img src="assets/farms/style-modern.png" width="160" height="74" alt="A modern house in dark steel and glass beside a dark barn with a white roofline" loading="lazy"><figcaption>Modern</figcaption></figure>
-        <figure class="px"><img src="assets/farms/style-cabin.png" width="160" height="74" alt="A log cabin with lit windows and a green roof beside a log barn" loading="lazy"><figcaption>Log Cabin</figcaption></figure>
-        <figure class="px"><img src="assets/farms/style-cottage.png" width="160" height="74" alt="A thatched cottage with a flower garden beside a thatched stone barn" loading="lazy"><figcaption>Storybook Cottage</figcaption></figure>
-      </div>
+      <figure class="plate px">
+        <div class="pxb styles">
+          <img src="assets/farms/style-classic.png" width="160" height="74" alt="A classic farmhouse with a red tile roof beside a red barn" loading="lazy">
+          <img src="assets/farms/style-modern.png" width="160" height="74" alt="A modern house in dark steel and glass beside a dark barn with a white roofline" loading="lazy">
+          <img src="assets/farms/style-cabin.png" width="160" height="74" alt="A log cabin with lit windows and a green roof beside a log barn" loading="lazy">
+          <img src="assets/farms/style-cottage.png" width="160" height="74" alt="A thatched cottage with a flower garden beside a thatched stone barn" loading="lazy">
+        </div>
+        <figcaption><span class="nw">Classic ·</span> <span class="nw">Modern ·</span> <span class="nw">Log Cabin ·</span> <span class="nw">Storybook Cottage</span></figcaption>
+      </figure>
       <ul>
         <li><span>Farmhands</span><span class="v">Waterer · Harvester · Rancher · Groundskeeper</span></li>
         <li><span>Cooking</span><span class="v">16 dishes</span></li>
@@ -120,12 +130,7 @@
     <div>
       <h2>512 background tiles at a time.</h2>
       <p>The Game Boy Color can show 512 background tiles at once. The game keeps all of its art on the cartridge and streams only the tiles on screen into video memory as the view scrolls, counting references to each one. That is how one cartridge holds hundreds of buildings, crops and decorations.</p>
-      <p>The 64 × 64 world, every cell’s ground, crop and decoration, lives in the cartridge’s battery-backed RAM, so the valley is saved exactly as it was left.</p>
-      <ul>
-        <li><span>Language</span><span class="v">C · GBDK-2020</span></li>
-        <li><span>Cartridge</span><span class="v">MBC5 · 512 KB ROM · 128 KB save RAM</span></li>
-        <li><span>Sound</span><span class="v">custom 4-channel driver · VBlank-driven</span></li>
-      </ul>
+      <p>The 64 × 64 world, every cell’s ground, crop and decoration, lives in the cartridge’s battery-backed RAM, so the valley is saved exactly as it was&nbsp;left.</p>
     </div>
   </section>
 
@@ -142,39 +147,39 @@
     <div>
       <h2>The ROM is played by script.</h2>
       <p>The test suite drives the ROM headless in PyBoy with pathfinding, memory inspection and screenshots, across 69 scripted scenarios. An economy model reads every price, yield and wage from the C sources and simulates three in-game years, and the suite checks the ROM against it.</p>
-      <div class="pxgrid">
-        <figure class="px"><img src="assets/farms/s-title.png" width="160" height="144" alt="The title screen" loading="lazy"><figcaption>Title screen</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-fall.png" width="160" height="144" alt="The farm in fall: rows of pumpkins beside a farm stand" loading="lazy"><figcaption>The farm in fall</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-map.png" width="160" height="144" alt="The valley map, 16 of 64 plots owned" loading="lazy"><figcaption>Valley map</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-market.png" width="160" height="144" alt="Market Street: a restaurant and the library on a paved street" loading="lazy"><figcaption>Market Street</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-heart.png" width="160" height="144" alt="Rosa speaking in a dialog box with her portrait" loading="lazy"><figcaption>A heart event</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-barn.png" width="160" height="144" alt="Inside the barn: the panel for Daisy, a Holstein cow" loading="lazy"><figcaption>Inside the barn</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-mine.png" width="160" height="144" alt="The mine on floor 20, with a ruby just dug up" loading="lazy"><figcaption>The mine, floor 20</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-beach.png" width="160" height="144" alt="Fishing off the pier at the beach" loading="lazy"><figcaption>The beach</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-recipes.png" width="160" height="144" alt="The recipe book, open at the omelet" loading="lazy"><figcaption>Recipe book</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-snowball.png" width="160" height="144" alt="The winter snowball fight minigame" loading="lazy"><figcaption>Snowball fight</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-colours.png" width="160" height="144" alt="The farm colours page: roofs, wood and stone swatches" loading="lazy"><figcaption>Farm colours</figcaption></figure>
-        <figure class="px"><img src="assets/farms/s-night.png" width="160" height="144" alt="The farm at night" loading="lazy"><figcaption>Night</figcaption></figure>
-      </div>
+      <figure class="plate px">
+        <div class="pxb stills">
+          <img src="assets/farms/s-fall.png" width="160" height="144" alt="The farm in fall: rows of pumpkins beside a farm stand" loading="lazy">
+          <img src="assets/farms/s-barn.png" width="160" height="144" alt="Inside the barn: the panel for Daisy, a Holstein cow" loading="lazy">
+          <img src="assets/farms/s-beach.png" width="160" height="144" alt="Fishing off the pier at the beach" loading="lazy">
+          <img src="assets/farms/s-night.png" width="160" height="144" alt="The farm at night" loading="lazy">
+        </div>
+        <figcaption><span class="nw">The farm in fall ·</span> <span class="nw">the barn ·</span> <span class="nw">the beach ·</span> <span class="nw">night</span></figcaption>
+      </figure>
       <ul>
         <li><span>Tests</span><span class="v">69 scripted scenarios · PyBoy</span></li>
         <li><span>Economy</span><span class="v">3 in-game years simulated</span></li>
-        <li><span>Releases</span><span class="v">v0.1 to v0.3 · Nov 14–15, 2026</span></li>
       </ul>
     </div>
   </section>
 
-  <section class="sec" id="cartridge">
-    <div class="k">the cartridge</div>
+  <section class="sec" id="call">
+    <div class="k">the call</div>
     <div>
       <h2>It runs on the hardware.</h2>
       <div class="cart">
         <img src="assets/farms/cartridge.webp" width="647" height="727" alt="The Stilwell Farms cartridge: a clear purple shell with the title screen on its label" loading="lazy">
         <div>
-          <p>The ROM installs on a ModRetro Chromatic, writes to any MBC5 flash cartridge with RAM and a battery for a Game Boy Color, and opens in any Game Boy Color emulator, such as SameBoy or mGBA.</p>
-          <p class="fine">Stilwell Farms is an independent, original fan project made for the ModRetro Chromatic. It is not affiliated with or endorsed by ModRetro, OpenAI or Nintendo. Game Boy and Game Boy Color are trademarks of Nintendo.</p>
+          <p>The ROM installs on a ModRetro Chromatic, writes to any MBC5 flash cartridge with RAM and a battery for a Game Boy Color, and opens in any Game Boy Color emulator, such as SameBoy or&nbsp;mGBA.</p>
+          <p class="fine">Stilwell Farms is an independent, original fan project made for the ModRetro Chromatic. It is not affiliated with or endorsed by ModRetro, OpenAI or Nintendo. Game Boy and Game Boy Color are trademarks of&nbsp;Nintendo.</p>
         </div>
       </div>
+      <ul>
+        <li><span>Language</span><span class="v">C · GBDK-2020</span></li>
+        <li><span>Cartridge</span><span class="v">MBC5 · 512 KB ROM · 128 KB save RAM</span></li>
+        <li><span>Sound</span><span class="v">custom 4-channel driver · VBlank-driven</span></li>
+        <li><span>Releases</span><span class="v">v0.1 to v0.3 · Nov 14–15, 2026</span></li>
+      </ul>
     </div>
   </section>
 
