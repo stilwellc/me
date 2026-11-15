@@ -1555,3 +1555,18 @@ body .p-about .ledger .lrow { padding: 12px 0; }
 body .p-about .lrow ul.roles { margin-top: 0.2rem; }
 body .p-about .sheet-h { margin-top: 3rem; }
 /* ==== /v5:about-career ==== */
+
+/* ==== v6:phone-mast ==== below the desktop row: the wordmark shares the nav line (left), the nav sits right; on a phone the pills fold into Menu (the current section stays), and the band runs edge to edge */
+@media (max-width: 899px) {
+  body .mast { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; padding-bottom: 12px; }
+  body .mast .brand { align-self: center; flex: none; }
+  body .mast nav { align-self: center; flex: 0 1 auto; flex-wrap: nowrap; justify-content: flex-end; overflow: visible; }
+  body .mast nav > :first-child { margin-left: 0; }
+  body .mast nav > :last-child { margin-right: 0; }
+}
+@media (max-width: 700px) { body .mast nav .pill:not(.mono):not(.on) { display: none; } body .mast nav .pill { padding: 0 12px; } }
+@media (max-width: 600px) {
+  :root { --band-w: 100vw; --band-h: 230px; }   /* taller, so the drawn marks reach both edges */
+  body .mhead, body .field { --bw: 100vw; }
+}
+/* ==== /v6:phone-mast ==== */
