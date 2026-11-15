@@ -9,7 +9,7 @@
   var cells = Array.prototype.slice.call(document.querySelectorAll('.tm-cell'));
   var img = document.getElementById('tile-img'), cap = document.getElementById('tile-cap'), dl = document.getElementById('tile-dl');
   if (cells.length && img && window.Wave3D) {
-    var fig = img.closest('figure'), v = new Wave3D.Viewer(fig, 'tasteful'), b1 = document.getElementById('tile-3d'), b2 = document.getElementById('run-3d'), mode = '', cur = 0;
+    var fig = img.closest('figure'), v = new Wave3D.Viewer(fig, 'tasteful'), b1 = document.getElementById('tile-3d'), b2 = document.getElementById('run-3d'), hero = document.getElementById('hero-3d'), mode = '', cur = 0;
     var pick = function (i) {
       var t = TILES.tasteful[i]; cur = i;
       img.src = t.img; img.alt = 'Tile ' + label(t.id) + ', studio render';
@@ -19,7 +19,7 @@
       if (mode === 'tile') v.show([t]);
     };
     var set = function (m) {
-      mode = m; b1.setAttribute('aria-pressed', m === 'tile'); b2.setAttribute('aria-pressed', m === 'run'); b1.classList.toggle('on', m === 'tile'); b2.classList.toggle('on', m === 'run');
+      mode = m; b1.setAttribute('aria-pressed', m === 'tile'); b2.setAttribute('aria-pressed', m === 'run'); b1.classList.toggle('on', m === 'tile'); b2.classList.toggle('on', m === 'run'); if (hero) hero.classList.toggle('on', m === 'run');
       if (!m) { v.hide(); pick(cur); return; }
       if (m === 'tile') v.show([TILES.tasteful[cur]]); else { v.show(TILES.tasteful); cap.textContent = 'Full run \u00b7 twelve tiles \u00b7 3.5 MB'; }
       fig.scrollIntoView({ block: 'nearest', behavior: smooth });
@@ -34,7 +34,6 @@
     b2.addEventListener('click', function () { set(mode === 'run' ? '' : 'run'); });
     pick(0);
     // the hero's "View in 3D" pill jumps here and opens the full run
-    var hero = document.getElementById('hero-3d');
     if (hero) hero.addEventListener('click', function (e) { e.preventDefault(); if (mode !== 'run') set('run'); else fig.scrollIntoView({ block: 'center', behavior: smooth }); });
   }
 
@@ -88,7 +87,7 @@
     var P = Wave3D.Viewer.prototype, show3 = P.show, say = P.say, coarse = matchMedia('(pointer: coarse)');
     var fmt = function (b) { return Math.round(b / 1024).toLocaleString('en-US') + ' KB'; };   // KB everywhere, as the captions and the tile map
     var how = function (v) { return coarse.matches ? (v.armed ? 'drag · pinch zoom' : 'tap · pinch zoom') : 'drag · ⌘/ctrl scroll zoom'; };
-    var tell = function (v) { if (!v.read || v.box.hidden) return; v.state.textContent = v.read + ' · ' + how(v); v.box.classList.add('has-read'); };   // the readout carries the hint, so the separate hint steps back
+    var tell = function (v) { if (!v.read || v.box.hidden) return; v.state.textContent = v.read + '\u00a0· ' + how(v); v.box.classList.add('has-read'); };   // the readout carries the hint, so the separate hint steps back
     P.say = function () { say.apply(this, arguments); tell(this); };
     P.show = function (tiles) {
       var self = this, seq = (self.seq = (self.seq || 0) + 1); self.read = ''; self.box.classList.remove('has-read');
@@ -97,7 +96,7 @@
         var tris = 0;
         self.group.children.forEach(function (m) { var a = m.geometry && m.geometry.attributes && m.geometry.attributes.position; if (a) tris += Math.floor(a.count / 3); });
         var name = self.build === 'ape' ? 'the bust' : tiles.length === 1 ? tiles[0].id.replace('_', ' ') : 'Full run · ' + tiles.length + ' tiles';
-        self.read = name + ' · ' + fmt(tiles.length * 84 + tris * 50) + (tris ? ' · ' + tris.toLocaleString('en-US') + ' tris' : '');
+        self.read = name + '\u00a0· ' + fmt(tiles.length * 84 + tris * 50) + (tris ? '\u00a0· ' + tris.toLocaleString('en-US') + ' tris' : '');
         tell(self);
       });
     };

@@ -35,18 +35,18 @@
 </header>
 <main id="main" class="page cs case">
   <div class="mhead rv"><canvas class="matrix" data-text="SecMCPHub" data-src="assets/secmcphub.svg" aria-label="A report with rising bars, drawn in the line screen" role="img"></canvas></div>
-  <p class="eyebrow rv"><a href="security.html">Security</a> · <a href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">GitHub ↗</a></p>
+  <p class="eyebrow rv"><a href="security.html">Security</a> · <a href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">GitHub ↗</a></p>
   <h1 class="display rv d1">A weekly or monthly security review<br> from one command.</h1>
   <p class="lede rv d2">Claude Code skills that pull vulnerability, GRC and incident data over MCP into one HTML report.</p>
 
   <div class="facts rv d3">
     <div><div class="n">1</div><div class="l">command<span class="sub">/security-report</span></div></div>
-    <div><div class="n">3 → 1</div><div class="l">sources<span class="sub">one view</span></div></div>
+    <div><div class="n">3 → 1</div><div class="l">sources<span class="sub">one view</span></div></div>
     <div><div class="n">2</div><div class="l">mapping tables<span class="sub">CWE and incident to risk</span></div></div>
     <div><div class="n">0</div><div class="l">servers<span class="sub">one HTML file</span></div></div>
   </div>
 
-  <figure class="plate wide sample rv d3"><a href="assets/secmcphub-sample.html" target="_blank" rel="noopener"><img src="assets/secmcphub-sample.webp" width="1440" height="900" alt="A sample SecMCPHub report for a made-up company: a B grade at 78 of 100, eight weighted score factors, three this-week callouts, and eight KPI tiles with sparklines" loading="lazy" decoding="async"></a><figcaption>Sample report · synthetic data</figcaption></figure>
+  <figure class="plate wide sample rv d3"><a href="assets/secmcphub-sample.html" target="_blank" rel="noopener"><img src="assets/secmcphub-report.webp" width="2160" height="1125" alt="A sample SecMCPHub report for a made-up company: a B grade at 78 of 100, eight weighted score factors, three this-week callouts, and eight KPI tiles with sparklines" loading="lazy" decoding="async"></a><figcaption>Sample report · synthetic data</figcaption></figure>
 
   <section class="sec" id="problem">
     <div class="k">the problem</div>
@@ -78,9 +78,9 @@
       <h2>Pull, compute, cross-reference, render.</h2>
       <p>Trend deltas are computed against the KPI history file, and the report is validated before it is saved.</p>
       <div class="stage four">
-        <div><div class="t">pull</div><div class="d">findings · GRC<br>incidents</div></div>
-        <div><div class="t">compute</div><div class="d">deltas · MTTR<br>SLA · grade</div></div>
-        <div><div class="t">cross-reference</div><div class="d">CWE → risk<br>attack paths</div></div>
+        <div><div class="t">pull</div><div class="d">findings · GRC<br>incidents</div></div>
+        <div><div class="t">compute</div><div class="d">deltas · MTTR<br>SLA · grade</div></div>
+        <div><div class="t">cross-reference</div><div class="d">CWE → risk<br>attack paths</div></div>
         <div><div class="t">render</div><div class="d">one self-contained<br>HTML file</div></div>
       </div>
     </div>
@@ -91,7 +91,7 @@
     <div>
       <h2>Three reports become one view.</h2>
       <p>Findings map to risk categories through CWE, and incidents are evidence against the same risks. The two chain into <b>attack paths</b> linking a control gap, the vulnerabilities that exploit it, and the incidents that already did.</p>
-      <figure class="plate wide sample"><a href="assets/secmcphub-sample.html" target="_blank" rel="noopener"><img src="assets/secmcphub-attack-path.webp" width="1536" height="592" alt="Attack path AP-1 in the sample report, public API to customer data exfiltration: five linked steps from a missing authorization check through SQL injection and a reused hard-coded token to bulk record staging and data exfiltration, with finding counts on each step and two incidents listed beneath" loading="lazy" decoding="async"></a><figcaption>Attack path AP-1 · synthetic sample</figcaption></figure>
+      <figure class="plate wide sample"><a href="assets/secmcphub-sample.html" target="_blank" rel="noopener"><picture><source media="(max-width: 600px)" srcset="assets/secmcphub-attack-path-phone.webp" width="930" height="924"><img src="assets/secmcphub-attack-path.webp" width="1536" height="592" alt="Attack path AP-1 in the sample report, public API to customer data exfiltration: five linked steps from a missing authorization check through SQL injection and a reused hard-coded token to bulk record staging and data exfiltration, with finding counts on each step and two incidents listed beneath" loading="lazy" decoding="async"></picture></a><figcaption>Attack path AP-1 · synthetic sample</figcaption></figure>
     </div>
   </section>
 
@@ -101,9 +101,9 @@
       <h2>No vendor assumptions, no server.</h2>
       <p>The skills target three <b>categories</b> of source; vendor-specific MCP tool names and field shapes are set in one place. The report is one file with no server or build step.</p>
       <ul>
-        <li><span>Language</span><span class="v">HTML · JSON · Markdown skills</span></li>
+        <li><span>Language</span><span class="v">HTML · JSON · Markdown skills</span></li>
         <li><span>Runtime</span><span class="v">Claude Code + MCP</span></li>
-        <li><span>Published</span><span class="v">June 2026 · public on GitHub</span></li>
+        <li><span>Published</span><span class="v">June 2026 · public on GitHub</span></li>
       </ul>
     </div>
   </section>
@@ -114,7 +114,7 @@
   </div>
 
   <div class="endstrip">
-    <div class="cta"><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a><a class="pill ghost" href="about.html">About</a><a class="pill solid" href="lectr.html">Next: lectr →</a></div>
+    <div class="cta"><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a><a class="pill ghost" href="about.html">About</a><a class="pill solid" href="lectr.html">Next: lectr →</a></div>
   </div>
 </main>
 <footer class="foot">

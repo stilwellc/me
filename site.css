@@ -1467,3 +1467,11 @@ body .bottom .statement { text-wrap: balance; }
 /* an arrow at the end of any action pill sits off its word by the same 0.3em */
 .pill.solid svg.ic, .pill.ghost svg.ic { margin-left: 0.3em; }
 /* ==== /v3b:fin-core ==== */
+/* ==== v3b:fin-cases ==== */
+/* case-study fact strips: at display tracking a comma or a decimal point closes up (1.25M read 125M, 24.4% read 244%); numerals sit at open tracking */
+body .case .facts .n, body .case .trow .tb b.big { letter-spacing: 0.015em; }
+/* captions and data lines break into even lines, so a caption never leaves one word alone on its last line (the separators are bound to the word before them in the markup) */
+body .cs figure.plate figcaption, body .cs figure.plate figcaption .t, body .cs .strip-foot .strip-cap, body .cs .sec li .v, body .cs .sec li > span:first-child, body .cs .sheet .row .t, body .cs .sheet .row .v, body .cs .cell .foot, body .cs p.lbl, body .cs .tm-h { text-wrap: balance; }
+/* a fact's sub line may use the cell's side padding, so "house midpoint 30.9%" holds one line like its neighbours */
+body .case .facts .l .sub { margin-inline: -8px; }
+/* ==== /v3b:fin-cases ==== */

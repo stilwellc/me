@@ -43,7 +43,8 @@
   body .plan-toggle .pt-cap label::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 44px; transform: translateY(-50%); }   /* a 44 px hit area on a 24 px label */
   body .plan-toggle.plan-still { margin-top: 24px; }
   body .plan-toggle figcaption { margin-top: 12px; }
-  /* the plans are drawn on pure black, so the stage is #000 too (ink would box the drawing) */
+  /* the plans sit on the warm near-black of the other dark plates; the stage is the same ground, so the drawing has no box */
+  body .plan-toggle .pt-stage { background: #1c1815; }
   /* one figure rhythm: 12 px picture → caption, 24 px caption → next picture, 36 px into the room's text */
   body .sec.room figure.plate, body .sec.room .more, body .sec.room .more .pairs { margin-top: 0; }
   body .sec.room .more, body .sec.room .more .pairs + figure.plate { margin-top: 24px; }
@@ -73,12 +74,19 @@
     .strip-foot .strip-n { flex: none; font-size: 11px; letter-spacing: 0.14em; font-variant-numeric: tabular-nums; }
     .strip-foot .strip-cap { font-size: 12px; letter-spacing: 0.02em; line-height: 1.5; min-width: 0; }
   }
-  /* phone: the plan keeps a readable height and scrolls sideways, like the room strips */
+  /* phone: the plan keeps a readable height and pans sideways. Its height follows the screen so the first view ends in the clear gap
+     after "Dining Room", never through a word; under it a track with a thumb shows how much plan there is and where the view sits. */
+  .pt-track { display: none; }
   @media (max-width: 760px) {
     body .plan-toggle .pt-stage { display: grid; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; padding: 12px; margin-inline: calc(-1 * var(--pad)); border-radius: 0; }
     body .plan-toggle .pt-stage::-webkit-scrollbar { display: none; }
-    body .plan-toggle .pt-stage img { width: auto; max-width: none; height: 240px; }
+    body .plan-toggle .pt-stage img { width: auto; max-width: none; height: clamp(180px, calc((100vw - 12px) * 0.554), 252px); }
     body .plan-toggle .pt-stage:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    html.js .pt-track { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+    .pt-track .pt-rail { position: relative; flex: 1; height: 2px; border-radius: 999px; background: var(--hair-2); }
+    .pt-track .pt-pos { position: absolute; top: 0; bottom: 0; left: 0; width: 40%; border-radius: 999px; background: var(--ink); }
+    .pt-track .pt-hint { flex: none; display: inline-flex; align-items: center; gap: 6px; }
+    .pt-track .pt-hint svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
   }
   @media (prefers-reduced-motion: reduce) { body .plan-toggle .pt-thumb, body .plan-toggle .pt-cap, body .plan-toggle .pt-switch .pt-cap label { transition: none; } body .sec.room .more { scroll-behavior: auto; } }
 </style>
@@ -93,7 +101,7 @@
 <main id="main" class="page cs">
 <div class="lander-head">
   <div class="mhead rv"><canvas class="matrix" data-text="Four Walls" data-src="assets/plan.svg" aria-label="The floor plan, drawn in the line screen" role="img"></canvas></div>
-  <p class="eyebrow rv d1"><a href="physical.html">Physical</a> · residence</p>
+  <p class="eyebrow rv d1"><a href="physical.html">Physical</a> · residence</p>
   <h1 class="display rv d1">Four Walls</h1>
   <p class="lede one rv d2">A residence taken back to the studs, documented as found and as intended.</p>
 </div>
@@ -114,86 +122,86 @@
       <img class="pt-a" src="assets/physical/plan-before.png" width="1160" height="497" fetchpriority="high" alt="Floor plan as found: railroad layout with master bedroom, living room, dining room, bathroom and bedroom-office">
       <img class="pt-b" src="assets/physical/plan-intent.png" width="1263" height="496" alt="Floor plan as intended: consolidated master closet, widened living room opening, extended kitchen counter and new built-in at the bedroom-office" loading="lazy" decoding="async">
     </div>
-    <figcaption><span class="pt-ca">Plan · as found</span><span class="pt-cb">Plan · as intended</span></figcaption>
+    <figcaption><span class="pt-ca">Plan · as found</span><span class="pt-cb">Plan · as intended</span></figcaption>
   </figure>
 
   <div class="chapter-wrap" id="as-found">
-  <h2 class="sheet-h">Chapter I · as found</h2>
+  <h2 class="sheet-h">Chapter I · as found</h2>
   <p class="chapter">One long line of rooms with gray paint on every wall, maple strip floors, steam heat, and through-wall AC units. Photographed at handover.</p>
   <div class="rooms">
     <section class="sec room" id="kitchen">
-      <div class="k">01 · kitchen</div>
+      <div class="k">kitchen</div>
       <div>
         <h3>Galley kitchen, mid-plan.</h3>
         <p>Flat-panel cabinets, granite counters, gas range, and a pass-through to the dining room.</p>
-        <figure class="plate"><img src="assets/physical/before/kitchen1.webp" srcset="assets/physical/before/kitchen1-768.webp 768w, assets/physical/before/kitchen1-1152.webp 1152w, assets/physical/before/kitchen1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Kitchen as found, straight on: white flat-panel cabinets, dark granite counters, a gas range under a microwave, and the pass-through on the left" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Kitchen · pass-through at left, the only opening to the dining room</span></figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/kitchen1.webp" srcset="assets/physical/before/kitchen1-768.webp 768w, assets/physical/before/kitchen1-1152.webp 1152w, assets/physical/before/kitchen1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Kitchen as found, straight on: white flat-panel cabinets, dark granite counters, a gas range under a microwave, and the pass-through on the left" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Kitchen · pass-through at left, the only opening to the dining room</span></figcaption></figure>
         <div class="more" data-count="3">
-        <div class="pairs"><figure class="plate"><img src="assets/physical/before/kitchen2.webp" srcset="assets/physical/before/kitchen2-768.webp 768w, assets/physical/before/kitchen2-1152.webp 1152w, assets/physical/before/kitchen2.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Kitchen from the living-room side: the counter run ending at the partition, with the pass-through above it" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Kitchen · where the counter dead-ends at the partition</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/kitchen3.webp" srcset="assets/physical/before/kitchen3-768.webp 768w, assets/physical/before/kitchen3-1152.webp 1152w, assets/physical/before/kitchen3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Kitchen close up: dishwasher, sink, and range in one run under a single row of upper cabinets" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Kitchen · range, sink, and dishwasher in one short run</span></figcaption></figure></div>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/kitchen2.webp" srcset="assets/physical/before/kitchen2-768.webp 768w, assets/physical/before/kitchen2-1152.webp 1152w, assets/physical/before/kitchen2.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Kitchen from the living-room side: the counter run ending at the partition, with the pass-through above it" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Kitchen · where the counter dead-ends at the partition</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/kitchen3.webp" srcset="assets/physical/before/kitchen3-768.webp 768w, assets/physical/before/kitchen3-1152.webp 1152w, assets/physical/before/kitchen3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Kitchen close up: dishwasher, sink, and range in one run under a single row of upper cabinets" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Kitchen · range, sink, and dishwasher in one short run</span></figcaption></figure></div>
         </div>
       </div>
     </section>
     <section class="sec room" id="living-room">
-      <div class="k">02 · living room</div>
+      <div class="k">living room</div>
       <div>
         <h3>The long room on the entry side.</h3>
         <p>Crown molding, a cast-iron radiator on the party wall, and a through-wall AC unit.</p>
-        <figure class="plate"><img src="assets/physical/before/livingroom1.webp" srcset="assets/physical/before/livingroom1-768.webp 768w, assets/physical/before/livingroom1-1152.webp 1152w, assets/physical/before/livingroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Living room looking down the length of the plan: the entry door on the left and the kitchen pass-through at the far end" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Living room · entry wall, kitchen at the far end</span></figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/livingroom1.webp" srcset="assets/physical/before/livingroom1-768.webp 768w, assets/physical/before/livingroom1-1152.webp 1152w, assets/physical/before/livingroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Living room looking down the length of the plan: the entry door on the left and the kitchen pass-through at the far end" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Living room · entry wall, kitchen at the far end</span></figcaption></figure>
         <div class="more" data-count="3">
-        <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" srcset="assets/physical/before/livingroom3-768.webp 768w, assets/physical/before/livingroom3-1152.webp 1152w, assets/physical/before/livingroom3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room from the opposite corner: an empty TV bracket on the wall and two doors along the far side" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Living room · crown molding the full length</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" srcset="assets/physical/before/livingroom4-768.webp 768w, assets/physical/before/livingroom4-1152.webp 1152w, assets/physical/before/livingroom4.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room along the long wall: a white cast-iron radiator and an exposed riser in the corner" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Living room · radiator and riser on the long wall</span></figcaption></figure></div>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" srcset="assets/physical/before/livingroom3-768.webp 768w, assets/physical/before/livingroom3-1152.webp 1152w, assets/physical/before/livingroom3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room from the opposite corner: an empty TV bracket on the wall and two doors along the far side" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Living room · crown molding the full length</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" srcset="assets/physical/before/livingroom4-768.webp 768w, assets/physical/before/livingroom4-1152.webp 1152w, assets/physical/before/livingroom4.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room along the long wall: a white cast-iron radiator and an exposed riser in the corner" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Living room · radiator and riser on the long wall</span></figcaption></figure></div>
         </div>
       </div>
     </section>
     <section class="sec room" id="dining-room">
-      <div class="k">03 · dining room</div>
+      <div class="k">dining room</div>
       <div>
         <h3>Between kitchen and living space.</h3>
         <p>One three-arm ceiling fixture over maple strip floors, and two doors along one wall.</p>
-        <figure class="plate"><img src="assets/physical/before/diningroom1.webp" srcset="assets/physical/before/diningroom1-768.webp 768w, assets/physical/before/diningroom1-1152.webp 1152w, assets/physical/before/diningroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room looking toward the end of the plan: a three-arm ceiling fixture over maple strip floors" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Dining room · three-arm fixture, the only light in the room</span></figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/diningroom1.webp" srcset="assets/physical/before/diningroom1-768.webp 768w, assets/physical/before/diningroom1-1152.webp 1152w, assets/physical/before/diningroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room looking toward the end of the plan: a three-arm ceiling fixture over maple strip floors" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Dining room · three-arm fixture, the only light in the room</span></figcaption></figure>
         <div class="more" data-count="2">
-        <figure class="plate"><img src="assets/physical/before/diningroom3.webp" srcset="assets/physical/before/diningroom3-768.webp 768w, assets/physical/before/diningroom3-1152.webp 1152w, assets/physical/before/diningroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room from the other end: the same fixture, with two doors along the right-hand wall" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Dining room · looking back down the plan</span></figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/diningroom3.webp" srcset="assets/physical/before/diningroom3-768.webp 768w, assets/physical/before/diningroom3-1152.webp 1152w, assets/physical/before/diningroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room from the other end: the same fixture, with two doors along the right-hand wall" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Dining room · looking back down the plan</span></figcaption></figure>
         </div>
       </div>
     </section>
     <section class="sec room" id="master-bedroom">
-      <div class="k">04 · master bedroom</div>
+      <div class="k">master bedroom</div>
       <div>
         <h3>The main bedroom.</h3>
         <p>Tall paneled window casings, two sliding-door closets, a ceiling fan, a radiator, and through-wall AC.</p>
-        <figure class="plate"><img src="assets/physical/before/bedroom1.webp" srcset="assets/physical/before/bedroom1-768.webp 768w, assets/physical/before/bedroom1-1152.webp 1152w, assets/physical/before/bedroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Master bedroom: tall window casings with paneled bases, a radiator and riser in the far corner" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Master bedroom · paneled casings, radiator and riser in the corner</span></figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/bedroom1.webp" srcset="assets/physical/before/bedroom1-768.webp 768w, assets/physical/before/bedroom1-1152.webp 1152w, assets/physical/before/bedroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Master bedroom: tall window casings with paneled bases, a radiator and riser in the far corner" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Master bedroom · paneled casings, radiator and riser in the corner</span></figcaption></figure>
         <div class="more" data-count="4">
-        <div class="pairs"><figure class="plate"><img src="assets/physical/before/bedroom2.webp" srcset="assets/physical/before/bedroom2-768.webp 768w, assets/physical/before/bedroom2-1152.webp 1152w, assets/physical/before/bedroom2.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Master bedroom: two sets of white sliding-door closets side by side on one wall" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Master bedroom · the double closet the plan consolidates</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/bedroom3.webp" srcset="assets/physical/before/bedroom3-768.webp 768w, assets/physical/before/bedroom3-1152.webp 1152w, assets/physical/before/bedroom3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Master bedroom toward the second window, with a through-wall AC unit beneath it" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Master bedroom · through-wall AC under the second window</span></figcaption></figure></div>
-        <figure class="plate"><img src="assets/physical/before/bedroom4.webp" srcset="assets/physical/before/bedroom4-768.webp 768w, assets/physical/before/bedroom4-1152.webp 1152w, assets/physical/before/bedroom4.webp 1536w" sizes="(max-width: 760px) 70vw, 960px" width="1536" height="1024" alt="Master bedroom looking past the closets into the hall that runs back through the unit" loading="lazy" decoding="async"><figcaption><span class="n">04</span><span class="t">Master bedroom · the closet wall and the hall beyond it</span></figcaption></figure>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/bedroom2.webp" srcset="assets/physical/before/bedroom2-768.webp 768w, assets/physical/before/bedroom2-1152.webp 1152w, assets/physical/before/bedroom2.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Master bedroom: two sets of white sliding-door closets side by side on one wall" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Master bedroom · the double closet the plan consolidates</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/bedroom3.webp" srcset="assets/physical/before/bedroom3-768.webp 768w, assets/physical/before/bedroom3-1152.webp 1152w, assets/physical/before/bedroom3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Master bedroom toward the second window, with a through-wall AC unit beneath it" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Master bedroom · through-wall AC under the second window</span></figcaption></figure></div>
+        <figure class="plate"><img src="assets/physical/before/bedroom4.webp" srcset="assets/physical/before/bedroom4-768.webp 768w, assets/physical/before/bedroom4-1152.webp 1152w, assets/physical/before/bedroom4.webp 1536w" sizes="(max-width: 760px) 70vw, 960px" width="1536" height="1024" alt="Master bedroom looking past the closets into the hall that runs back through the unit" loading="lazy" decoding="async"><figcaption><span class="n">04</span><span class="t">Master bedroom · the closet wall and the hall beyond it</span></figcaption></figure>
         </div>
       </div>
     </section>
     <section class="sec room" id="bedroom-office">
-      <div class="k">05 · bedroom / office</div>
+      <div class="k">bedroom / office</div>
       <div>
         <h3>Second bedroom, used as the office.</h3>
         <p>At the rear of the plan. Pressed-tin ceiling, exposed steam riser, one tall window with a security grille.</p>
-        <figure class="plate"><img src="assets/physical/before/office1.webp" srcset="assets/physical/before/office1-768.webp 768w, assets/physical/before/office1-1152.webp 1152w, assets/physical/before/office1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bedroom-office: a pressed-tin ceiling, an exposed steam riser, and a radiator under the tall window" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Bedroom / office · pressed-tin ceiling and exposed steam riser</span></figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/office1.webp" srcset="assets/physical/before/office1-768.webp 768w, assets/physical/before/office1-1152.webp 1152w, assets/physical/before/office1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bedroom-office: a pressed-tin ceiling, an exposed steam riser, and a radiator under the tall window" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Bedroom / office · pressed-tin ceiling and exposed steam riser</span></figcaption></figure>
         <div class="more" data-count="3">
-        <div class="pairs"><figure class="plate"><img src="assets/physical/before/office2.webp" srcset="assets/physical/before/office2-768.webp 768w, assets/physical/before/office2-1152.webp 1152w, assets/physical/before/office2.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Bedroom-office from the window side: a sliding-door closet and the door out to the hall" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Bedroom / office · the closet and the door to the hall</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/office3.webp" srcset="assets/physical/before/office3-768.webp 768w, assets/physical/before/office3-1152.webp 1152w, assets/physical/before/office3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Bedroom-office corner: the pressed-tin ceiling meeting the crown, with the radiator below" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Bedroom / office · where the tin ceiling meets the crown</span></figcaption></figure></div>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/office2.webp" srcset="assets/physical/before/office2-768.webp 768w, assets/physical/before/office2-1152.webp 1152w, assets/physical/before/office2.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Bedroom-office from the window side: a sliding-door closet and the door out to the hall" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Bedroom / office · the closet and the door to the hall</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/office3.webp" srcset="assets/physical/before/office3-768.webp 768w, assets/physical/before/office3-1152.webp 1152w, assets/physical/before/office3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Bedroom-office corner: the pressed-tin ceiling meeting the crown, with the radiator below" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Bedroom / office · where the tin ceiling meets the crown</span></figcaption></figure></div>
         </div>
       </div>
     </section>
     <section class="sec room" id="bath">
-      <div class="k">06 · bath</div>
+      <div class="k">bath</div>
       <div>
         <h3>The single bath.</h3>
         <p>Narrow vanity, glass-door shower, frosted double-hung window over the toilet.</p>
-        <figure class="plate"><img src="assets/physical/before/bathroom1.webp" srcset="assets/physical/before/bathroom1-768.webp 768w, assets/physical/before/bathroom1-1152.webp 1152w, assets/physical/before/bathroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bath: a narrow white vanity with a mirrored cabinet, the toilet, and the edge of the glass-door shower" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Bath · narrow vanity, toilet, and the shower door at right</span></figcaption></figure>
+        <figure class="plate"><img src="assets/physical/before/bathroom1.webp" srcset="assets/physical/before/bathroom1-768.webp 768w, assets/physical/before/bathroom1-1152.webp 1152w, assets/physical/before/bathroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Bath: a narrow white vanity with a mirrored cabinet, the toilet, and the edge of the glass-door shower" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Bath · narrow vanity, toilet, and the shower door at right</span></figcaption></figure>
       </div>
     </section>
   </div>
   </div>
 
   <div class="chapter-wrap" id="as-intended">
-  <h2 class="sheet-h">Chapter II · as intended</h2>
+  <h2 class="sheet-h">Chapter II · as intended</h2>
   <p class="chapter">The master bedroom’s double closet becomes one, widening the opening to the living room. The kitchen counter extends and squares off toward the dining room, and a built-in replaces the freestanding closet in the bedroom-office. All three keep the line of rooms continuous so light reaches its full length.</p>
   <figure class="plan-toggle plan-still">
     <div class="pt-stage"><img src="assets/physical/plan-intent.png" width="1263" height="496" alt="Floor plan as intended: consolidated master closet, widened living room opening, extended kitchen counter and new built-in at the bedroom-office" loading="lazy" decoding="async"></div>
-    <figcaption>Plan · as intended</figcaption>
+    <figcaption>Plan · as intended</figcaption>
   </figure>
   </div>
 
