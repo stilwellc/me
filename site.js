@@ -1054,5 +1054,8 @@ function whack(intro) {
 
 // ── the footer map marks the page it is on ─────────────────────────────────
 (function () {
-  [].forEach.call(document.querySelectorAll('footer .foot-map a'), function (a) { if ((a.getAttribute('href') || '').toLowerCase() === HERE) { a.classList.add('on'); a.setAttribute('aria-current', 'page'); } });
+  var links = [].slice.call(document.querySelectorAll('footer .foot-map a')), hit = false;
+  links.forEach(function (a) { if ((a.getAttribute('href') || '').toLowerCase() === HERE) { a.classList.add('on'); a.setAttribute('aria-current', 'page'); hit = true; } });
+  // a page the map does not list (a case study, Four Walls, the wave panel) marks the section it is filed under: the same one its masthead pill selects
+  if (!hit) { var pill = document.querySelector('header.mast nav a.pill.on'), sec = pill && (pill.getAttribute('href') || '').toLowerCase(); links.forEach(function (a) { if (sec && (a.getAttribute('href') || '').toLowerCase() === sec) { a.classList.add('on'); a.setAttribute('aria-current', 'true'); } }); }
 })();
