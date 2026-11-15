@@ -109,7 +109,9 @@ var PAGES = [
   { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'digital', w: 'SecMCPHub', k: 'security review', cs: 1 },
   { u: 'soiree.html', t: 'Soirée, a case study', h: 'digital', w: 'Soirée', k: 'events tonight', cs: 1 },
   { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing studio bambu woven watch case', cs: 1 },
-  { u: 'colophon.html', t: 'Colophon', h: 'stack and build', w: 'Colophon', k: 'playground' }
+  { u: 'colophon.html', t: 'Colophon', h: 'stack and build', w: 'Colophon', k: 'playground' },
+  { u: 'farms.html', t: 'Stilwell Farms, a case study', h: 'digital', w: 'Stilwell Farms', k: 'game boy color gbc chromatic modretro farm game', cs: 1 },
+  { u: 'starling.html', t: 'Starling, a case study', h: 'digital', w: 'Starling', k: 'ebay deals board', cs: 1 }
 ];
 PAGES.forEach(function (p, i) { p.n = ('0' + (i + 1)).slice(-2); });   // the system is numbered: 01 Home … 15 Colophon
 function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('/').pop().toLowerCase() || 'index.html'; for (var i = 0; i < PAGES.length; i++) if (PAGES[i].u === f) return PAGES[i]; return null; }
