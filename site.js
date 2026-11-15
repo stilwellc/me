@@ -311,7 +311,7 @@ if (typeof matrix === 'function') [].forEach.call(document.querySelectorAll('can
   var c = document.getElementById('field');
   if (!c || typeof matrix !== 'function') return;
   var src = 'assets/collin-band.png';
-  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, flat: true, fit: 'contain', focus: '0,0' });
+  HEAD = matrix(c, { text: 'Collin', src: src, prev: PREV_GLYPH && PREV_GLYPH !== src ? PREV_GLYPH : null, picHold: 2.2, flat: true, fit: 'contain', focus: '0,0', cell: innerWidth < 640 ? 3 : 4 });
   HEAD_CANVAS = c; c.addEventListener('mx:settled', function () { SND.tick('set'); });
 })();
 
