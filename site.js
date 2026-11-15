@@ -987,3 +987,40 @@ function whack(intro) {
   // a page the map does not list (a case study, Four Walls, the wave panel) marks the section it is filed under: the same one its masthead pill selects
   if (!hit) { var pill = document.querySelector('header.mast nav a.pill.on'), sec = pill && (pill.getAttribute('href') || '').toLowerCase(); links.forEach(function (a) { if (sec && (a.getAttribute('href') || '').toLowerCase() === sec) { a.classList.add('on'); a.setAttribute('aria-current', 'true'); } }); }
 })();
+
+// ── v4 polish: pictures fade in once decoded; proof numbers count up once, on first sight ──
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+  [].forEach.call(document.querySelectorAll('main img'), function (im) {
+    if (im.complete) return;
+    im.classList.add('fade');
+    var done = function () { im.classList.add('ld'); };
+    im.addEventListener('load', done); im.addEventListener('error', done);
+    setTimeout(done, 4000);
+  });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      var el = e.target, m = el.__cu, t0 = 0, dur = 900;
+      function step(t) {
+        if (!t0) t0 = t;
+        var k = Math.min(1, (t - t0) / dur), ease = 1 - Math.pow(1 - k, 4);
+        el.textContent = m.pre + Math.round(m.val * ease).toLocaleString('en-US') + m.post;
+        if (k < 1) requestAnimationFrame(step); else el.textContent = m.full;
+      }
+      requestAnimationFrame(step);
+    });
+  }, { threshold: 0.6 });
+  [].forEach.call(document.querySelectorAll('.facts .n'), function (el) {
+    if (el.children.length) return;
+    var full = el.textContent, m = /^([^0-9]*)(\d[\d,]*)(\D*)$/.exec(full.trim());
+    if (!m) return;
+    var val = parseInt(m[2].replace(/,/g, ''), 10);
+    if (!(val > 1) || (val >= 1900 && val <= 2100 && !m[1] && !m[3])) return;
+    el.__cu = { pre: m[1], val: val, post: m[3], full: full };
+    io.observe(el);
+  });
+})();

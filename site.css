@@ -1484,3 +1484,52 @@ body .case .sec ul + figure.plate.wide { margin-top: 38px; }
 /* Stilwell Farms: while the ROM runs, the floating section chip is put away so it never sits on the touch controls */
 body:has(.farms .gbc.on:not(.paused)) .sec-chip, body:has(.farms .gbc.on:not(.paused)) .sec-menu { display: none !important; }
 /* ==== /v3b:fin-new ==== */
+
+/* ==== v4:polish ==== */
+/* one-row masthead: the wordmark at the band's left edge, the pills centred on the same line */
+@media (min-width: 900px) {
+  body .mast { flex-direction: row; align-items: center; justify-content: flex-start; position: relative; padding-top: 24px; padding-bottom: 18px; min-height: 78px; box-sizing: border-box; }
+  body .mast .brand { align-self: center; }
+  body .mast nav { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin-top: 3px; flex-wrap: nowrap; }
+}
+/* the selected pill travels from tab to tab across a page change */
+@media (prefers-reduced-motion: no-preference) {
+  .mast nav .pill.on { view-transition-name: navsel; }
+  ::view-transition-group(navsel) { animation-duration: 320ms; animation-timing-function: cubic-bezier(.3, .7, .1, 1); }
+}
+/* titles: one step up, tighter */
+body h1.display, body .res h1.display, body .cs h1.display, body .bottom .statement { font-size: clamp(1.7rem, 2.8vw, 2.5rem); line-height: 1.12; letter-spacing: -0.024em; }
+body .sec h2 { font-size: clamp(1.3rem, 1.95vw, 1.75rem); letter-spacing: -0.02em; line-height: 1.16; }
+body .lede, body .cs .lede { font-size: clamp(16.5px, 1.3vw, 19px) !important; color: var(--ink-2); line-height: 1.45; }
+body .bottom .sub { color: var(--ink-2); }
+body .facts .n, body .trow .tb b.big { font-size: clamp(1.7rem, 2.6vw, 2.4rem); letter-spacing: -0.035em; }
+@media (max-width: 760px) { body .page h1.display, body .cs h1.display, body h1.display, body .bottom .statement { font-size: 1.85rem; } }
+/* frames: every screenshot sits on the page as a sheet, with a hairline and a soft cast */
+:root { --cast: 0 0 0 1px rgba(22,22,22,0.06), 0 1px 2px rgba(22,22,22,0.04), 0 14px 30px -18px rgba(22,22,22,0.22); --cast-up: 0 0 0 1px rgba(22,22,22,0.10), 0 2px 4px rgba(22,22,22,0.05), 0 26px 44px -20px rgba(22,22,22,0.30); }
+.cell .thumb-wrap { box-shadow: var(--cast); transition: box-shadow var(--t3) var(--out), transform var(--t3) var(--out); }
+body figure.plate.wide img, body figure.plate.detail img, body figure.plate.print img, body figure.plate.object img { box-shadow: var(--cast); }
+@media (hover: hover) {
+  a.cell:hover .thumb-wrap, .cell:has(h2 a:hover) .thumb-wrap, .cell:focus-visible .thumb-wrap { box-shadow: var(--cast-up); transform: translateY(-3px); }
+  a.cell:hover h2, .cell h2 a:hover { color: var(--sel); }
+  body a.plate.print img { transition: box-shadow var(--t3) var(--out), transform var(--t3) var(--out); }
+  body a.plate.print:hover img { box-shadow: var(--cast-up); transform: translateY(-3px); }
+}
+.cell h2 { transition: color var(--t2) var(--out); }
+/* pictures arrive: a short fade once decoded (site.js adds .ld) */
+html.js img.fade { opacity: 0; transition: opacity 420ms var(--out); }
+html.js img.fade.ld { opacity: 1; }
+/* small things */
+::selection { background: var(--sel); color: #fff; }
+html { scroll-padding-top: 72px; -webkit-tap-highlight-color: transparent; }
+.pill:active { transform: scale(0.97); }
+body .topbar { -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); background: color-mix(in srgb, var(--ground) 82%, transparent); }
+body.scrolled .topbar { box-shadow: 0 10px 30px -22px rgba(22,22,22,0.35); }
+@media (prefers-reduced-motion: reduce) { .cell .thumb-wrap, body a.plate.print img, html.js img.fade { transition: none; transform: none !important; opacity: 1; } }
+/* reading progress: a racing-green hairline along the condensed masthead */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .topbar::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--sel); transform-origin: 0 50%; transform: scaleX(0); animation: v4prog linear both; animation-timeline: scroll(root block); }
+    @keyframes v4prog { to { transform: scaleX(1); } }
+  }
+}
+/* ==== /v4:polish ==== */
