@@ -1149,3 +1149,24 @@ body .bottom .facts.proof { width: min(100%, var(--wide)); margin: 0.25rem auto 
 body .sheet.ops .row { grid-template-columns: 6.5rem minmax(0, 1fr); }
 body .sheet.ops { max-width: var(--col); margin: 1.25rem auto 0; }
 body .sheet.ops .row .k { text-transform: none; letter-spacing: 0.04em; font-size: 12px; }   /* a date, not a label */
+/* ==== v3:bands ==== */
+/* colophon: the facts strip keeps its subs whole on a phone (they are short), the playground is the band's own size and its marks scroll in one row */
+@media (max-width: 600px) { body .facts.colo-facts .l .sub { display: block; -webkit-line-clamp: none; overflow: visible; } }
+body figure.plate.play-plate canvas { height: auto; aspect-ratio: 960 / 320; border: 0; border-radius: 0; background: none; cursor: pointer; }
+@media (max-width: 600px) { body figure.plate.play-plate canvas { aspect-ratio: 358 / 180; } }
+body figure.plate.play-plate.over canvas { outline: 2px solid var(--sel); outline-offset: 4px; }
+body .play-presets { margin-top: 18px; }
+body .play-ctl { margin-top: 12px; gap: 0.4rem; }
+body .play-ctl + .cap-note { margin-top: 12px; text-align: center; }
+@media (max-width: 600px) {
+  body .play-presets { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; margin-left: calc(var(--pad) * -1); margin-right: calc(var(--pad) * -1); padding: 0 var(--pad); }
+  body .play-presets::-webkit-scrollbar { display: none; }
+  body .play-presets .pill { flex: none; }
+}
+@media (max-width: 600px) { body .sec ul.tm li .v:empty { display: none; } }
+/* 404 + vault: one screen, the footer on the floor, no page number where there is none */
+body.solo { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+body.solo > main { flex: 1 0 auto; width: 100%; }
+body.solo footer.foot .foot-status .s-page, body.solo footer.foot .foot-status .s-page + .dot { display: none; }
+body.solo .req-log code.flag { font: inherit; color: var(--ink); border: 1px solid var(--hair-2); border-radius: var(--r); padding: 1px 6px; white-space: nowrap; }
+/* ==== /v3:bands ==== */
