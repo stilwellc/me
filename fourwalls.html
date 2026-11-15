@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g=' 'sha256-nmYsQHLYhlx1pA+ncO+OHNw1wdN2QbYQvpCH9IopRN4='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Four Walls — Collin Stilwell</title>
@@ -31,7 +31,7 @@
   body .plan-toggle .pt-switch { align-items: center; gap: 12px; margin-bottom: 18px; }
   body .plan-toggle .pt-k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
   body .plan-toggle .pt-cap { position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; height: 30px; padding: 2px; border: 1px solid var(--hair-2); border-radius: 999px; background: transparent; transition: border-color var(--t1) linear; }
-  body .plan-toggle .pt-thumb { position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc(50% - 2px); border-radius: 999px; background: var(--ink); transition: transform var(--t2) var(--out); }
+  body .plan-toggle .pt-thumb { position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc(50% - 2px); border-radius: 999px; background: var(--sel); transition: transform var(--t2) var(--out); }
   body .plan-toggle #plan-intent:checked ~ .pt-switch .pt-thumb { transform: translateX(100%); }
   body .plan-toggle .pt-switch .pt-cap label { position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); cursor: pointer; transition: color var(--t1) linear; -webkit-tap-highlight-color: transparent; }
   body .plan-toggle #plan-found:checked ~ .pt-switch .pt-cap label[for="plan-found"],
@@ -40,9 +40,18 @@
   body .plan-toggle #plan-found:focus-visible ~ .pt-switch .pt-cap, body .plan-toggle #plan-intent:focus-visible ~ .pt-switch .pt-cap { outline: 2px solid var(--accent); outline-offset: 3px; }
   @media (hover: hover) { body .plan-toggle .pt-cap:hover { border-color: var(--ink); } }
   body .plan-toggle .pt-cap:active { border-color: var(--ink); }
-  body .plan-toggle .pt-stage { border-radius: 6px; }
-  body .pt-back { margin: 18px auto 0; text-align: center; }
-  body .pt-back .pill { height: 30px; }
+  body .plan-toggle .pt-cap label::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 44px; transform: translateY(-50%); }   /* a 44 px hit area on a 24 px label */
+  body .plan-toggle.plan-still { margin-top: 24px; }
+  body .plan-toggle figcaption { margin-top: 12px; }
+  /* the plans are drawn on pure black, so the stage is #000 too (ink would box the drawing) */
+  /* one figure rhythm: 12 px picture → caption, 24 px caption → next picture, 36 px into the room's text */
+  body .sec.room figure.plate, body .sec.room .more, body .sec.room .more .pairs { margin-top: 0; }
+  body .sec.room .more, body .sec.room .more .pairs + figure.plate { margin-top: 24px; }
+  body .sec.room .more .pairs { gap: 12px; }
+  /* a room's one line is its lede: on the centre line with the key and the heading, so a room has one axis and one picture edge */
+  body .sec.room p { margin-bottom: 18px; text-align: center; text-wrap: balance; }
+  /* the plan PNGs carry wide black margins: the stage crops to the drawing and its labels */
+  body .plan-toggle .pt-stage img { aspect-ratio: 1263 / 360; object-fit: cover; }
   /* 3 · numbered photographs: KEY index (mono caps 11) then the caption (sentence-case mono 12) */
   body .sec.room figure.plate img, body .plan-toggle .pt-stage { border-radius: 6px; }
   body .sec.room figure.plate figcaption { display: flex; align-items: baseline; gap: 12px; margin-top: 12px; }
@@ -51,10 +60,9 @@
   .strip-foot { display: none; }
   /* 2 · phone: one hero per room, the rest in a snapping strip with a live counter and the current caption beneath */
   @media (max-width: 760px) {
+    body .sec.room .more .pairs + figure.plate { margin-top: 0; }
     body .sec.room .more { position: relative; display: flex; gap: 12px; margin: 12px calc(-1 * var(--pad)) 0; padding: 0 var(--pad) 6px; scroll-padding-inline: var(--pad);
-      overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch;
-      -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--pad), #000 calc(100% - var(--pad)), transparent);
-      mask-image: linear-gradient(to right, transparent, #000 var(--pad), #000 calc(100% - var(--pad)), transparent); }
+      overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }   /* no edge fade: nothing veils a photograph */
     body .sec.room .more::-webkit-scrollbar { display: none; }
     body .sec.room .more:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px; }
     body .sec.room .more .pairs { display: contents; }
@@ -64,6 +72,13 @@
     html.js .strip-foot { display: flex; align-items: baseline; gap: 12px; margin-top: 12px; min-height: 36px; text-align: left; font-family: var(--mono); color: var(--ink-3); }
     .strip-foot .strip-n { flex: none; font-size: 11px; letter-spacing: 0.14em; font-variant-numeric: tabular-nums; }
     .strip-foot .strip-cap { font-size: 12px; letter-spacing: 0.02em; line-height: 1.5; min-width: 0; }
+  }
+  /* phone: the plan keeps a readable height and scrolls sideways, like the room strips */
+  @media (max-width: 760px) {
+    body .plan-toggle .pt-stage { display: grid; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; padding: 12px; margin-inline: calc(-1 * var(--pad)); border-radius: 0; }
+    body .plan-toggle .pt-stage::-webkit-scrollbar { display: none; }
+    body .plan-toggle .pt-stage img { width: auto; max-width: none; height: 240px; }
+    body .plan-toggle .pt-stage:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
   }
   @media (prefers-reduced-motion: reduce) { body .plan-toggle .pt-thumb, body .plan-toggle .pt-cap, body .plan-toggle .pt-switch .pt-cap label { transition: none; } body .sec.room .more { scroll-behavior: auto; } }
 </style>
@@ -77,7 +92,7 @@
 </header>
 <main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="Four Walls" data-src="assets/physical/plan-before.png" aria-label="The floor plan as found, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="Four Walls" data-src="assets/physical/plan-band-found.png" aria-label="The floor plan as found, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv d1"><a href="physical.html">Physical</a> · residence</p>
   <h1 class="display rv d1">Four Walls</h1>
   <p class="lede one rv d2">A residence taken back to the studs, documented as found and as intended.</p>
@@ -86,8 +101,9 @@
   <div class="sheet rv d3 mt-2">
     <div class="row"><span class="k">status</span><span class="t">In progress</span><span class="v">2024 – now</span></div>
     <div class="row"><span class="k">scope</span><span class="t">Full residence</span><span class="v">pre-war railroad plan</span></div>
-    <div class="row"><span class="k">rooms</span><span class="t">Kitchen, living, dining, master bedroom, bedroom/office, bath</span><span class="v">6</span></div>
-    <div class="row"><span class="k">updated</span><span class="t">Photos and plans current as of</span><span class="v">Sep 2026</span></div>
+    <div class="row"><span class="k">rooms</span><span class="t">Kitchen, living, dining, master bedroom, bedroom/office, bath</span></div>
+    <div class="row"><span class="k">updated</span><span class="t">Sep 2026</span><span class="v">photos and plans</span></div>
+    <div class="row"><span class="k">next</span><span class="t">After photos when the work is done</span></div>
   </div>
 
   <figure class="plan-toggle rv d3" id="plan">
@@ -103,7 +119,7 @@
 
   <div class="chapter-wrap" id="as-found">
   <h2 class="sheet-h">Chapter I · as found</h2>
-  <p class="chapter">One long line of rooms with gray paint on every wall, maple strip floors, steam heat, and window AC units. Photographed at handover.</p>
+  <p class="chapter">One long line of rooms with gray paint on every wall, maple strip floors, steam heat, and through-wall AC units. Photographed at handover.</p>
   <div class="rooms">
     <section class="sec room" id="kitchen">
       <div class="k">01 · kitchen</div>
@@ -123,7 +139,7 @@
         <p>Crown molding, a cast-iron radiator on the party wall, and a through-wall AC unit.</p>
         <figure class="plate"><img src="assets/physical/before/livingroom1.webp" srcset="assets/physical/before/livingroom1-768.webp 768w, assets/physical/before/livingroom1-1152.webp 1152w, assets/physical/before/livingroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Living room looking down the length of the plan: the entry door on the left and the kitchen pass-through at the far end" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Living room · entry wall, kitchen at the far end</span></figcaption></figure>
         <div class="more" data-count="3">
-        <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" srcset="assets/physical/before/livingroom3-768.webp 768w, assets/physical/before/livingroom3-1152.webp 1152w, assets/physical/before/livingroom3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room from the opposite corner: an empty TV bracket on the wall and two doors along the far side" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Living room · crown molding runs the full length of the room</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" srcset="assets/physical/before/livingroom4-768.webp 768w, assets/physical/before/livingroom4-1152.webp 1152w, assets/physical/before/livingroom4.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room along the long wall: a white cast-iron radiator and an exposed riser in the corner" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Living room · the radiator and riser on the long wall</span></figcaption></figure></div>
+        <div class="pairs"><figure class="plate"><img src="assets/physical/before/livingroom3.webp" srcset="assets/physical/before/livingroom3-768.webp 768w, assets/physical/before/livingroom3-1152.webp 1152w, assets/physical/before/livingroom3.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room from the opposite corner: an empty TV bracket on the wall and two doors along the far side" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Living room · crown molding the full length</span></figcaption></figure><figure class="plate"><img src="assets/physical/before/livingroom4.webp" srcset="assets/physical/before/livingroom4-768.webp 768w, assets/physical/before/livingroom4-1152.webp 1152w, assets/physical/before/livingroom4.webp 1536w" sizes="(max-width: 760px) 70vw, 470px" width="1536" height="1024" alt="Living room along the long wall: a white cast-iron radiator and an exposed riser in the corner" loading="lazy" decoding="async"><figcaption><span class="n">03</span><span class="t">Living room · radiator and riser on the long wall</span></figcaption></figure></div>
         </div>
       </div>
     </section>
@@ -131,6 +147,7 @@
       <div class="k">03 · dining room</div>
       <div>
         <h3>Between kitchen and living space.</h3>
+        <p>One three-arm ceiling fixture over maple strip floors, and two doors along one wall.</p>
         <figure class="plate"><img src="assets/physical/before/diningroom1.webp" srcset="assets/physical/before/diningroom1-768.webp 768w, assets/physical/before/diningroom1-1152.webp 1152w, assets/physical/before/diningroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room looking toward the end of the plan: a three-arm ceiling fixture over maple strip floors" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Dining room · three-arm fixture, the only light in the room</span></figcaption></figure>
         <div class="more" data-count="2">
         <figure class="plate"><img src="assets/physical/before/diningroom3.webp" srcset="assets/physical/before/diningroom3-768.webp 768w, assets/physical/before/diningroom3-1152.webp 1152w, assets/physical/before/diningroom3.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Dining room from the other end: the same fixture, with two doors along the right-hand wall" loading="lazy" decoding="async"><figcaption><span class="n">02</span><span class="t">Dining room · looking back down the plan</span></figcaption></figure>
@@ -140,7 +157,7 @@
     <section class="sec room" id="master-bedroom">
       <div class="k">04 · master bedroom</div>
       <div>
-        <h3>Closets, casings, and a ceiling fan.</h3>
+        <h3>The main bedroom.</h3>
         <p>Tall paneled window casings, two sliding-door closets, a ceiling fan, a radiator, and through-wall AC.</p>
         <figure class="plate"><img src="assets/physical/before/bedroom1.webp" srcset="assets/physical/before/bedroom1-768.webp 768w, assets/physical/before/bedroom1-1152.webp 1152w, assets/physical/before/bedroom1.webp 1536w" sizes="(max-width: 760px) 92vw, 960px" width="1536" height="1024" alt="Master bedroom: tall window casings with paneled bases, a radiator and riser in the far corner" loading="lazy" decoding="async"><figcaption><span class="n">01</span><span class="t">Master bedroom · paneled casings, radiator and riser in the corner</span></figcaption></figure>
         <div class="more" data-count="4">
@@ -174,11 +191,13 @@
   <div class="chapter-wrap" id="as-intended">
   <h2 class="sheet-h">Chapter II · as intended</h2>
   <p class="chapter">The master bedroom’s double closet becomes one, widening the opening to the living room. The kitchen counter extends and squares off toward the dining room, and a built-in replaces the freestanding closet in the bedroom-office. All three keep the line of rooms continuous so light reaches its full length.</p>
-  <p class="pt-back"><a class="pill mono" href="#plan">See the plan ↑</a></p>
+  <figure class="plan-toggle plan-still">
+    <div class="pt-stage"><img src="assets/physical/plan-intent.png" width="1263" height="496" alt="Floor plan as intended: consolidated master closet, widened living room opening, extended kitchen counter and new built-in at the bedroom-office" loading="lazy" decoding="async"></div>
+    <figcaption>Plan · as intended</figcaption>
+  </figure>
   </div>
 
-  <p class="chapter mt-25">After photos when the work is done.</p>
-  <div class="cta"><a class="pill solid" href="physical.html">Physical</a><a class="pill ghost" href="text2print.html">text2print</a></div>
+  <div class="cta"><a class="pill solid" href="wave.html">Wave panel</a><a class="pill ghost" href="physical.html">Physical</a></div>
 
 </main>
 <footer class="foot">
@@ -202,43 +221,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script>(function () {
-  var mq = window.matchMedia('(max-width: 760px)');
-  function two(n) { return (n < 10 ? '0' : '') + n; }
-  [].forEach.call(document.querySelectorAll('.sec.room .more'), function (strip) {
-    var slides = [].slice.call(strip.querySelectorAll('figure.plate'));
-    if (!slides.length) return;
-    var total = parseInt(strip.getAttribute('data-count'), 10) || slides.length + 1;
-    var offset = total - slides.length;
-    var room = strip.closest('.sec.room'), key = room && room.querySelector('.k');
-    var foot = document.createElement('div'); foot.className = 'strip-foot'; foot.setAttribute('aria-hidden', 'true');
-    var num = document.createElement('span'); num.className = 'strip-n';
-    var cap = document.createElement('span'); cap.className = 'strip-cap';
-    foot.appendChild(num); foot.appendChild(cap);
-    strip.parentNode.insertBefore(foot, strip.nextSibling);
-    var cur = -1;
-    function show(i) {
-      if (i === cur) return; cur = i;
-      num.textContent = two(offset + i + 1) + ' / ' + two(total);
-      var t = slides[i].querySelector('figcaption .t') || slides[i].querySelector('figcaption');
-      cap.textContent = t ? t.textContent : '';
-    }
-    function update() {
-      var x = strip.scrollLeft, base = slides[0].offsetLeft, best = 0, bd = Infinity;
-      for (var i = 0; i < slides.length; i++) { var d = Math.abs((slides[i].offsetLeft - base) - x); if (d < bd) { bd = d; best = i; } }
-      show(best);
-    }
-    var raf = 0;
-    strip.addEventListener('scroll', function () { if (raf) return; raf = requestAnimationFrame(function () { raf = 0; update(); }); }, { passive: true });
-    function mode() {
-      if (mq.matches) { strip.setAttribute('tabindex', '0'); strip.setAttribute('role', 'group'); strip.setAttribute('aria-label', (key ? key.textContent.trim() + ' · ' : '') + 'more photographs, scroll sideways'); }
-      else { strip.removeAttribute('tabindex'); strip.removeAttribute('role'); strip.removeAttribute('aria-label'); }
-      update();
-    }
-    if (mq.addEventListener) mq.addEventListener('change', mode); else mq.addListener(mode);
-    mode();
-  });
-})();</script>
+<script src="assets/fourwalls-page.js?v=1"></script>
 <script src="assets/engine.js?v=eac5685"></script>
 <script src="site.js?v=eac5685"></script>
 </body>

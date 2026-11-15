@@ -56,3 +56,50 @@
     });
   });
 })();
+
+// second block (was inline in wave.html): plan regions ↔ tile map, the earlier builds' stepper, and the 3D readout.
+(function () {
+  var cells = [].slice.call(document.querySelectorAll('.tm-cell')), regs = [].slice.call(document.querySelectorAll('.tm-reg')), grid = document.querySelector('.tm-grid');
+  // the plan lights the selected tile; a region on the plan selects it (the map's own click does the rest)
+  var light = function () {
+    var on = cells.filter(function (c) { return c.classList.contains('on'); })[0], i = on ? on.dataset.tile : null;
+    regs.forEach(function (r) { var is = r.dataset.tile === i; r.classList.toggle('on', is); r.setAttribute('aria-pressed', is); });
+  };
+  regs.forEach(function (r) { r.addEventListener('click', function () { var c = cells.filter(function (c) { return c.dataset.tile === r.dataset.tile; })[0]; if (c) c.click(); }); });
+  if (grid) { new MutationObserver(light).observe(grid, { attributes: true, attributeFilter: ['class'], subtree: true }); light(); }
+
+  // stepper: cycles Full run → r0 c0 → … → r1 c4 → Full run; sets the clipped select and fires change for the page script
+  [].forEach.call(document.querySelectorAll('.stp'), function (s) {
+    var sel = s.querySelector('select'), r = s.querySelector('.stp-r'), n = sel.options.length;
+    var show = function () { r.textContent = sel.options[sel.selectedIndex].textContent; };
+    var go = function (d) { sel.selectedIndex = (sel.selectedIndex + d + n) % n; show(); sel.dispatchEvent(new Event('change', { bubbles: true })); };
+    [].forEach.call(s.querySelectorAll('.stp-b'), function (b) { b.addEventListener('click', function () { go(+b.dataset.step); }); });
+    r.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') go(-1); else if (e.key === 'ArrowRight') go(1);
+      else if (e.key === 'Home') go(-sel.selectedIndex); else if (e.key === 'End') go(n - 1 - sel.selectedIndex); else return;
+      e.preventDefault();
+    });
+    sel.addEventListener('change', show); show();
+  });
+
+  // 3D readout: after a load the state line stays on as data. Facets come from the parsed geometry;
+  // the byte count is the binary STL's (84-byte header + 50 bytes a facet), which is the file behind Download.
+  if (window.Wave3D) {
+    var P = Wave3D.Viewer.prototype, show3 = P.show, say = P.say, coarse = matchMedia('(pointer: coarse)');
+    var fmt = function (b) { return Math.round(b / 1024).toLocaleString('en-US') + ' KB'; };   // KB everywhere, as the captions and the tile map
+    var how = function (v) { return coarse.matches ? (v.armed ? 'drag · pinch zoom' : 'tap · pinch zoom') : 'drag · ⌘/ctrl scroll zoom'; };
+    var tell = function (v) { if (!v.read || v.box.hidden) return; v.state.textContent = v.read + ' · ' + how(v); v.box.classList.add('has-read'); };   // the readout carries the hint, so the separate hint steps back
+    P.say = function () { say.apply(this, arguments); tell(this); };
+    P.show = function (tiles) {
+      var self = this, seq = (self.seq = (self.seq || 0) + 1); self.read = ''; self.box.classList.remove('has-read');
+      return show3.apply(this, arguments).then(function () {
+        if (self.seq !== seq || !self.group || self.state.textContent) return;   // superseded, or the loader printed an error
+        var tris = 0;
+        self.group.children.forEach(function (m) { var a = m.geometry && m.geometry.attributes && m.geometry.attributes.position; if (a) tris += Math.floor(a.count / 3); });
+        var name = self.build === 'ape' ? 'the bust' : tiles.length === 1 ? tiles[0].id.replace('_', ' ') : 'Full run · ' + tiles.length + ' tiles';
+        self.read = name + ' · ' + fmt(tiles.length * 84 + tris * 50) + (tris ? ' · ' + tris.toLocaleString('en-US') + ' tris' : '');
+        tell(self);
+      });
+    };
+  }
+})();

@@ -121,6 +121,8 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   if (!TOUCH) return;
   var foot = document.querySelector('.pal-foot'); if (foot) { foot.hidden = true; foot.style.display = 'none'; }
   var inp = document.getElementById('pal-in'); if (inp) inp.placeholder = 'Go to…';
+  // there is no Command key on a touch device: the keycap reads "Menu"
+  var kb = document.getElementById('palette-btn'); if (kb) { kb.textContent = 'Menu'; kb.classList.add('menu'); kb.setAttribute('aria-label', 'Menu'); kb.removeAttribute('title'); }
 })();
 
 // ── phones: the masthead nav scrolls sideways; start with this page's pill in view
@@ -155,8 +157,7 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var here = pageOf(HERE);
   // the eyebrow: 07 · DIGITAL · LECTR.BID ↗
   var eb = document.querySelector('.lander-head .eyebrow, .page .eyebrow'); if (eb && here && !eb.querySelector('.no')) eb.insertAdjacentHTML('afterbegin', '<span class="no">' + here.n + '</span> · ');
-  // the footer map: 02 Digital … 15 Colophon
-  [].forEach.call(document.querySelectorAll('footer .foot-map a'), function (a) { var p = pageOf(a.getAttribute('href')); if (p && !a.querySelector('.no')) a.insertAdjacentHTML('afterbegin', '<span class="no">' + p.n + '</span>'); });
+  // (the footer map prints names only: it lists eight of the pages, and 02 03 06 07 … read as pages missing. The number lives in the eyebrow, the status strip and the palette.)
   // sections: "the problem · corpus" → "01 PROBLEM · CORPUS" (the key keeps its words; the article goes)
   var secs = [].slice.call(document.querySelectorAll('.cs .sec')), i = 0;
   secs.forEach(function (sec) { var k = sec.querySelector(':scope > .k'); if (!k) return; i++; var no = ('0' + i).slice(-2); sec.dataset.no = no; var raw = k.textContent.trim(); if (/^\d\d\b/.test(raw)) return; var txt = raw.replace(/^the\s+/i, ''); k.innerHTML = '<span class="no">' + no + '</span> ' + h(txt); });   // a page that numbers its own keys (Four Walls) keeps them
@@ -416,7 +417,7 @@ function flagCheck(s) {
     var hh = String(i.h || ''), chord = /^(g [a-z]|\?)$/.test(hh), t = i.t + (hh === '↗' ? ' ↗' : ''), d = '';
     if (hh === '§') d = String(i.sd || '').replace(/\s+/g, ' ').trim(); else if (!chord && hh !== '↗') d = hh;
     var pg = i.u && !i.x ? pageOf(i.u) : null, no = pg && i.u.indexOf('#') < 0 ? pg.n : (hh === '§' ? '§' : '');
-    var right = pg && pg.u === HERE && i.u.indexOf('#') < 0 ? '<span class="here">here</span>' : chord ? hh.split(' ').map(function (x) { return '<kbd>' + h(x) + '</kbd>'; }).join(' ') : (hh === '↗' ? '↗' : '—');
+    var right = pg && pg.u === HERE && i.u.indexOf('#') < 0 ? '<span class="here">here</span>' : chord && !TOUCH ? hh.split(' ').map(function (x) { return '<kbd>' + h(x) + '</kbd>'; }).join(' ') : (hh === '↗' ? '↗' : '');
     return '<span class="no">' + h(no) + '</span><span class="tt"><span>' + h(t) + '</span>' + (d ? '<span class="d">' + h(d) + '</span>' : '') + '</span><span class="h">' + right + '</span>';
   }
   function say(text, items) { out = text; shown = items || []; sel = 0; draw(); }
@@ -987,10 +988,10 @@ function whack(intro) {
   var fin = document.querySelector('footer .foot-in'); if (!fin) return;
   var here = pageOf(HERE), got = []; try { got = JSON.parse(ssGet('ctf') || '[]'); } catch (e) {}
   var strip = document.createElement('div'); strip.className = 'foot-status'; strip.setAttribute('aria-label', 'Status');
-  var slots = [(here ? '<span class="sl s-page">page <b>' + here.n + '/' + ('0' + PAGES.length).slice(-2) + '</b></span>' : '<span class="sl s-page">page <b>—</b></span>')];
+  var slots = here ? ['<span class="sl s-page">page <b>' + here.n + '/' + ('0' + PAGES.length).slice(-2) + '</b></span>'] : [];   // a page outside the numbered system (404, the vault) prints no page slot
   if (document.documentElement.dataset.secs && +document.documentElement.dataset.secs > 1) slots.push('<span class="sl s-secno"><b>§01</b></span>');
   slots.push('<span class="sl s-weight"><b>—</b></span>', '<span class="sl s-flags">flags <b>' + got.length + '/3</b></span>', '<span class="sl"><button type="button" class="snd" aria-pressed="' + String(SND.on) + '" title="Sound: the band setting, palette and toggle detents, a flag confirm"><i></i>snd</button></span>');
-  strip.innerHTML = slots.join('<span class="dot">·</span>');
+  strip.innerHTML = '<div class="fs">' + slots.join('') + '</div>';   // the separators are drawn by CSS, before each slot
   fin.appendChild(strip);
   strip.querySelector('button.snd').addEventListener('click', function () { SND.set(!SND.on); });
   // this page's weight, once the load has settled
@@ -1006,7 +1007,7 @@ function whack(intro) {
       var p = ev && ev.filter(function (e) { return e.t === 'PushEvent'; })[0]; if (!p) return;
       var repo = p.r.replace(/^stilwellc\//, ''); if (repo === 'me') repo = 'this site';
       var w = strip.querySelector('.sl.s-weight'); if (!w) return;
-      w.insertAdjacentHTML('beforebegin', '<span class="sl s-beat"><b>' + h(repo + ' pushed ' + ago(new Date(p.d).getTime())) + '</b></span><span class="dot">·</span>');
+      w.insertAdjacentHTML('beforebegin', '<span class="sl s-beat"><b>' + h(repo + ' pushed ' + ago(new Date(p.d).getTime())) + '</b></span>');
     });
   }
   if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); run(); } }, { rootMargin: '600px 0px' }); io.observe(fin); } else run();
@@ -1037,7 +1038,7 @@ function whack(intro) {
     var lede = document.querySelector('main .lander-head .lede') || document.querySelector('main .lede'), head = document.querySelector('main .lander-head');
     if (lede) lede.insertAdjacentElement('afterend', box); else if (head) head.appendChild(box); else { var mn = document.querySelector('main'); if (mn) mn.appendChild(box); }
   }
-  box.innerHTML = '<p>GET ' + h(shown) + ' → 404 · logged, not alerted · severity: informational · <button type="button" class="req-k">⌘K</button></p>';
+  box.innerHTML = '<p>GET ' + h(shown) + ' → 404 · logged, not alerted · severity: informational · <button type="button" class="req-k">' + (TOUCH ? 'Menu' : '⌘K') + '</button></p>';
   var k = box.querySelector('.req-k'); if (k) k.addEventListener('click', function () { if (window.__palOpen) window.__palOpen(); });
 })();
 
