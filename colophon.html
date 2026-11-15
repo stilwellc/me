@@ -37,13 +37,13 @@
   <div class="mhead rv"><canvas class="matrix" data-text="Colophon" data-src="assets/colophon.svg" aria-label="A page with three rules and a mark, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
   <p class="eyebrow rv">Colophon · how this site is built</p>
   <h1 class="display rv d1">Static HTML.<br>No framework, no build step.</h1>
-  <p class="lede rv d2">Sixteen pages and a 404, one stylesheet, two shared scripts, four font files, and a line-screen engine drawn on a canvas. It is served as static files from GitHub Pages, sets no cookies, and runs no analytics.</p>
+  <p class="lede rv d2">Eighteen pages, one stylesheet, two shared scripts, four font files and a line-screen engine drawn on a canvas, served as static files from GitHub Pages with no cookies and no analytics.</p>
 
-  <div class="facts rv d3">
-    <div><div class="n">16</div><div class="l">pages<span class="sub">plain HTML, plus a 404</span></div></div>
-    <div><div class="n">0</div><div class="l">frameworks<span class="sub">three.js on the wave page, when asked</span></div></div>
-    <div><div class="n">4</div><div class="l">font files<span class="sub">self-hosted, 141 KB, no third-party origin</span></div></div>
-    <div><div class="n">0</div><div class="l">cookies<span class="sub">no analytics, no third-party scripts</span></div></div>
+  <div class="facts colo-facts rv d3">
+    <div><div class="n">18</div><div class="l">pages<span class="sub">17 numbered, plus a 404</span></div></div>
+    <div><div class="n">0</div><div class="l">frameworks<span class="sub">three.js on the wave page only</span></div></div>
+    <div><div class="n">4</div><div class="l">font files<span class="sub">self-hosted, 141 KB</span></div></div>
+    <div><div class="n">0</div><div class="l">cookies<span class="sub">no analytics</span></div></div>
   </div>
 
   <section class="sec">
@@ -53,7 +53,7 @@
       <p>Off-white ground, near-black ink, grays for hierarchy, hairlines for registration, and one dark green accent for what moves.</p>
       <ul>
         <li><span>Ground</span><span class="v">#FCFBFA</span></li>
-        <li><span>Ink</span><span class="v">#161616 · #6B6C6A · #6E6F6B</span></li>
+        <li><span>Ink</span><span class="v">#161616 · #555652 · #6E6F6B</span></li>
         <li><span>Hairlines</span><span class="v">#E6E5E2 · #D6D5D1</span></li>
         <li><span>Accent</span><span class="v">#2F6B34</span></li>
       </ul>
@@ -64,35 +64,37 @@
     <div class="k">the line screen</div>
     <div>
       <h2>One engine draws every header.</h2>
-      <p>Each header is a field of vertical stripes, 6 px apart on a desk and 4 on a phone. A word is set at one cap height and carved out of the field: its letters are the gaps. A picture is read as luminance only, then carved the same way, a gap where the figure is dark and a short dash where it shades off, so its ground stays stripes and no box shows around it.</p>
-      <p>Between two states every cell flips once, along a dithered sweep, so nothing goes half-grey. The field gathers on load, re-forms on change, scatters on exit, and leans in a flow-field wind. One file, no dependencies.</p>
-      <figure class="plate wide play-plate">
-        <canvas id="play" role="img" aria-label="The playground line screen"></canvas>
-        <figcaption>Playground · your word and picture</figcaption>
+      <p>Each header is a field of vertical stripes, 6 px apart on a desk and 4 on a phone. The band is one still picture carved out of that field: where the picture has ink the stripes stop, and its ground stays stripes, so no box shows around it. A drawn mark is read as black and white. A photograph is read as luminance only and shades off through short dashes. No word is set in the band.</p>
+      <p>On load the stripes gather into the picture. Leaving a page scatters it, and the next page starts from the picture you left. Once it has settled the band stops drawing, and with reduced motion it is a still. One file, no dependencies.</p>
+      <figure class="plate wide play-plate" id="play-drop">
+        <canvas id="play" role="img" aria-label="Snoopy at a laptop, drawn in the line screen"></canvas>
+        <figcaption>Playground · pick a mark or drop a picture</figcaption>
       </figure>
+      <div class="play-presets" role="group" aria-label="Pick a mark">
+        <button class="pill mono" type="button" aria-pressed="true" data-src="assets/collin-band.png" data-flat="1" data-label="Snoopy at a laptop">Snoopy</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/plan.svg" data-label="A floor plan">Plan</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/security.svg" data-label="A space invader">Invader</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/lectr.svg" data-label="A gavel over its block">Gavel</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/soiree.svg" data-label="A martini glass with an olive">Martini</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/writing.svg" data-label="A keyboard">Keyboard</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/wave.svg" data-label="Four wave lines">Wave</button>
+        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/resume.svg" data-label="A paper plane">Plane</button>
+      </div>
       <div class="wave-ctl play-ctl">
-        <label>Word <input id="play-word" type="text" maxlength="14" value="Hello" autocomplete="off" spellcheck="false"></label>
         <label class="pill mono file">Use a picture <input id="play-pic" type="file" accept="image/*"></label>
         <button class="pill mono" type="button" id="play-again">Replay</button>
       </div>
-      <div class="play-presets" role="group" aria-label="Try a picture">
-        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/collin-band.png" data-label="Snoopy at a laptop">Snoopy</button>
-        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/ape.webp" data-label="The ape">The ape</button>
-        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/physical/wave/header.jpg" data-label="The wave panel">The wave</button>
-        <button class="pill mono" type="button" aria-pressed="false" data-src="assets/physical/plan-intent.png" data-label="The Four Walls plan">Four Walls</button>
-      </div>
-      <p class="cap-note">Your picture stays in this tab. It leaves with it.</p>
+      <p class="cap-note">Your picture never leaves this tab.</p>
     </div>
   </section>
 
   <section class="sec">
     <div class="k">the build</div>
     <div>
-      <h2>Hosting and build.</h2>
       <p>There is no bundler, no template layer, and no client router. Each page carries its own markup, the shared stylesheet, and the two shared scripts; a cache-busting version on those files is the whole deployment story. Photographs ship with width and height and a small variant for phones. Social cards are rendered by a small page in the repository with the same line-screen code, once, and committed.</p>
       <ul>
         <li><span>Hosting</span><span class="v">GitHub Pages, from the main branch</span></li>
-        <li><span>Fonts</span><span class="v">three woff2 files, preloaded, swap</span></li>
+        <li><span>Fonts</span><span class="v">four woff2 files, preloaded, swap</span></li>
         <li><span>Live data</span><span class="v">GitHub API on the GitHub page · lectr.bid on the lectr study</span></li>
         <li><span>Tracking</span><span class="v">none</span></li>
         <li><span>Source</span><span class="v"><a href="https://github.com/stilwellc/me" target="_blank" rel="noopener">github.com/stilwellc/me ↗</a></span></li>
@@ -103,17 +105,16 @@
   <section class="sec">
     <div class="k">the threat model</div>
     <div>
-      <h2>Threat model of this page.</h2>
       <p>The site runs code in your browser and reads data from other servers.</p>
       <ul class="tm">
         <li><span>Visitors, the integrity of the pages, and the owner’s exact location</span><span class="v">protects</span></li>
         <li><span>GitHub Pages serves every file; the repository is the source of truth</span><span class="v">boundary</span></li>
-        <li><span>JSON from api.github.com on the GitHub page</span><span class="v">boundary</span></li>
-        <li><span>JSON from lectr.bid on the lectr study, where auction titles are untrusted text</span><span class="v">boundary</span></li>
-        <li><span>three.js, served from this origin, on the wave page</span><span class="v">boundary</span></li>
-        <li><span>Content-Security-Policy with script-src 'self': no inline or third-party script runs</span><span class="v">control</span></li>
-        <li><span>Every external string is escaped before it reaches the page</span><span class="v">control</span></li>
-        <li><span>No cookies, no analytics, no third-party scripts</span><span class="v">control</span></li>
+        <li><span>JSON from api.github.com on the GitHub page</span><span class="v" aria-hidden="true"></span></li>
+        <li><span>JSON from lectr.bid on the lectr study, where auction titles are untrusted text</span><span class="v" aria-hidden="true"></span></li>
+        <li><span>three.js, served from this origin, on the wave page</span><span class="v" aria-hidden="true"></span></li>
+        <li><span>Content-Security-Policy with script-src 'self' and two hashed inline snippets: no other inline script and no third-party script runs</span><span class="v">control</span></li>
+        <li><span>Every external string is escaped before it reaches the page</span><span class="v" aria-hidden="true"></span></li>
+        <li><span>No cookies, no analytics, no third-party scripts</span><span class="v" aria-hidden="true"></span></li>
         <li><span>GitHub Pages sends no custom response headers, so no frame-ancestors and no Permissions-Policy</span><span class="v">gap</span></li>
         <li><span>Found something? <a href="https://stilwellc.github.io/.well-known/security.txt">/.well-known/security.txt</a>, or <a href="https://github.com/stilwellc/me/security" target="_blank" rel="noopener">GitHub private vulnerability reporting ↗</a></span><span class="v">report</span></li>
       </ul>
@@ -123,13 +124,13 @@
   <section class="sec">
     <div class="k">the rules</div>
     <div>
-      <h2>Design rules.</h2>
       <ul class="rules num">
         <li><span>Labels</span><span class="v">two levels: KEYS mono 11 px uppercase wide · data mono 12 px sentence case</span></li>
         <li><span>Unit</span><span class="v">6 px, the stripe pitch · 12 / 18 / 24 / 30 / 36 / 48 / 60 / 72 / 96</span></li>
         <li><span>Radii</span><span class="v">6 px for rectangles · 999 for pills</span></li>
         <li><span>Arrows</span><span class="v">→ inside the site · ↗ out of it</span></li>
         <li><span>Widths</span><span class="v">44 rem for reading · 60 rem for objects</span></li>
+        <li><span>Band</span><span class="v">one still picture · ink only · never a word</span></li>
         <li><span>Color</span><span class="v">light only · accent for what moves</span></li>
         <li><span>Keyboard</span><span class="v">⌘K palette · g then a letter · ? for shortcuts</span></li>
       </ul>
@@ -164,6 +165,6 @@
 </div>
 <script src="assets/engine.js?v=eac5685"></script>
 <script src="site.js?v=eac5685"></script>
-<script src="assets/colophon-page.js"></script>
+<script src="assets/colophon-page.js?v=eac5685"></script>
 </body>
 </html>

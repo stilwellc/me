@@ -1,12 +1,17 @@
 
-// ── the matrix: picture → text, in cells ────────────────────────────────────
-// One engine for every header. A cell grid over the canvas. Phase 1 (if a
-// picture is given): the picture as a line screen, vertical dashes sized by
-// luminance. Phase 2: the dashes fly into the word's letterform as squares;
-// the rest of the band is a faint filler-dot field. A cursor-driven flow field
-// smears the screen; click replays from wherever the bodies are. Once the word
-// has settled the band goes still and stops drawing until something wakes it.
-// Reduced motion: the picture as a still, then a short dissolve to the word.
+// ── the matrix: the line screen ─────────────────────────────────────────────
+// One engine for every header. A grid of cells over the canvas, one vertical
+// stripe per cell. THE BAND IS THE PICTURE (Nov 1 2026): a page's band is one
+// still picture carved out of the stripes — a gap where the picture has ink, a
+// short dash where a photograph shades off — and never a word. On load the
+// stripes gather into the picture (from the previous page's picture when there
+// is one); leaving scatters it. A cursor-driven flow field leans the screen;
+// click re-gathers. Once settled the band stops drawing until something wakes
+// it, and it never draws off-screen. Reduced motion: the picture, still.
+// Sources: a drawn mark (svg, black on clear: black is always the carve), an
+// authored two-tone carve (`flat`, white is the carve; named *-band.png), or a
+// photograph (luminance, stretched and S-curved). The word/mask paths below
+// are kept for the API (setWord is a no-op) and are never reached by a band.
 //
 // THE RULES (Oct 29 2026, from the owner's notes: "always the same width and
 // height even if we have to add filler", "sometimes green sometimes black —
@@ -135,7 +140,7 @@ function matrix(c, opts) {
     return { v: out, e: null };
   }
   function maskFor(w) { if (!fontReady) return null; return masks[w] || (masks[w] = buildMask(w)); }
-  function halftone(im, G) {
+  function halftone(im, G, flat) {   // flat is per picture: this band's own source, or a previous page's authored carve
     // LUMINANCE ONLY (2x supersampled; 1x on a phone) — hue is never read, so a
     // coloured picture cannot colour the screen — then a percentile stretch, a
     // little local contrast so flat screenshots keep their structure, and an
@@ -159,6 +164,8 @@ function matrix(c, opts) {
     pc.fillStyle = '#fff'; pc.fillRect(0, 0, cw, rh); pc.drawImage(im, sx0, sy0, iw, ih, ox, oy, dw, dh);
     var d = pc.getImageData(0, 0, p.width, p.height).data;
     var raw = new Float32Array(N), inside = new Uint8Array(N), list = [], mean = 0, nIn = 0, ss = S * S;
+    // a picture edge at or beyond the band's own edge (cover) has nothing to blend with: no inset there
+    var bl = ox <= 0 ? 0 : ox + 1, br = ox + dw >= cw ? cw : ox + dw - 1, bt = oy <= 0 ? 0 : oy + 1, bb = oy + dh >= rh ? rh : oy + dh - 1;
     for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
       var acc = 0;
       for (var yy = 0; yy < S; yy++) for (var xx = 0; xx < S; xx++) { var j = ((y * S + yy) * cw + (x * S + xx)) * 4; acc += (d[j] * 299 + d[j + 1] * 587 + d[j + 2] * 114) / 255000; }
@@ -166,9 +173,9 @@ function matrix(c, opts) {
       var cx = x * S + S / 2, cy = y * S + S / 2;
       // one supersampled pixel in from the picture's edge: the antialiased
       // boundary blends with the white fill and read as a bright bar
-      if (cx >= ox + 1 && cx < ox + dw - 1 && cy >= oy + 1 && cy < oy + dh - 1) { inside[i] = 1; list.push(raw[i]); mean += raw[i]; nIn++; }
+      if (cx >= bl && cx < br && cy >= bt && cy < bb) { inside[i] = 1; list.push(raw[i]); mean += raw[i]; nIn++; }
     }
-    mean /= Math.max(1, nIn); var flip = !flat && mean > 0.5;   // flat: an authored two-tone source, white is the carve
+    mean /= Math.max(1, nIn); var flip = !flat && (isSvg || mean > 0.5);   // a drawn mark (svg): black is the carve, whatever share of the band it covers; flat: an authored two-tone source, white is the carve
     list.sort(function (a, b) { return a - b; });
     var pl = (isSvg || flat) ? 0 : 0.08, lo = list[Math.floor(list.length * pl)] || 0, hi = list[Math.floor(list.length * (1 - pl))] || 1, span = Math.max(0.05, hi - lo);
     var GAINK = (isSvg || flat) ? 0 : 5.5, gl = 1 / (1 + Math.exp(GAINK * 0.5)), gh = 1 / (1 + Math.exp(-GAINK * 0.5));
@@ -199,8 +206,8 @@ function matrix(c, opts) {
     idle(function () {
       if (dead || tok !== idleTok) return;
       if (cache.key !== key) cache = { key: key, pic: null, prev: null };
-      try { if (img && !cache.pic) cache.pic = halftone(img, G); } catch (e) { img = null; }
-      try { if (prevImg && !cache.prev) cache.prev = halftone(prevImg, G); } catch (e) { prevImg = null; }
+      try { if (img && !cache.pic) cache.pic = halftone(img, G, flat); } catch (e) { img = null; }
+      try { if (prevImg && !cache.prev) cache.prev = halftone(prevImg, G, /-band\.png(\?|#|$)/i.test(prevImg.src || '')); } catch (e) { prevImg = null; }   // an authored two-tone carve is named *-band.png; a drawn mark handed to a flat band is still read as a mark
       cb();
     });
   }

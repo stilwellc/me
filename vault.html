@@ -19,13 +19,22 @@
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
-<body>
+<body class="solo">
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
   <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs"><div class="lander-head"><p class="eyebrow">Vault</p><h1 class="display">You read robots.txt.</h1><p class="lede one">Good instinct: a Disallow line is a map. Here is the second flag.</p><pre class="mono">flag{disallow-is-an-invitation}</pre><p class="mono">Paste it into ⌘K. There are three.</p></div></main>
+<main id="main" class="page cs">
+<div class="lander-head">
+  <div class="mhead rv"><canvas class="matrix" data-text="Vault" data-src="assets/vault.svg" aria-label="A vault door, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+  <p class="eyebrow rv d1">Vault</p>
+  <h1 class="display rv d1">You read robots.txt.</h1>
+  <p class="lede one rv d2">A Disallow line is a map, and this is the second flag.</p>
+  <div class="req-log mono rv d2"><p><code class="flag">flag{disallow-is-an-invitation}</code><br>paste it into ⌘K · there are three</p></div>
+</div>
+  <div class="cta"><a class="pill solid" href="./">Home</a><a class="pill ghost" href="security.html">Security</a></div>
+</main>
 <footer class="foot">
   <div class="foot-in">
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape-sm.webp" width="52" height="45" alt=""></button>
