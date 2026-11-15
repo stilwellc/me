@@ -42,6 +42,7 @@
 }
 @media (max-width: 600px) { :root { --band-w: 358px; --band-h: 180px; } }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }   /* the attribute always wins: a later display rule once printed a hidden state line twice */
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--ground); color: var(--ink);
@@ -90,21 +91,21 @@ h1.display {
   padding: clamp(18px, 2.4vw, 30px); border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
   transition: background-color var(--t2) var(--out);
 }
-.cells .cell:nth-child(2n) { border-right: 0; }
+.cells .cell:nth-child(2n) { border-right-color: transparent; }   /* transparent, not gone: both columns keep the same content width, so neighbouring thumbs are the same height to the pixel */
 .cells > .cell:nth-last-child(-n+2) { border-bottom: 0; }
-.cells > .cell:last-child:nth-child(odd) { border-right: 0; }
-@media (max-width: 760px) { .cells .cell { border-right: 0; border-bottom: 1px solid var(--hair); } .cells > .cell:last-child { border-bottom: 0; } }
+.cells > .cell:last-child:nth-child(odd) { border-right-color: transparent; }
+@media (max-width: 760px) { .cells .cell, .cells .cell:nth-child(2n), .cells > .cell:last-child:nth-child(odd) { border-right: 0; } .cells .cell, .cells > .cell:nth-last-child(2) { border-bottom: 1px solid var(--hair); } .cells > .cell:last-child { border-bottom: 0; } }
 @media (hover: hover) { .cell:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); } }
 /* a one-cell frame whose cell leads: the mark at left, the words beside it (Security's program) */
 .cells.one { grid-template-columns: 1fr; }
-.cells.one > .cell { border-right: 0; border-bottom: 0; }
+.cells.one > .cell, .cells.one > .cell:last-child:nth-child(odd) { border-right: 0; border-bottom: 0; }
 .cell.lead { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 0.6rem 2.5rem; align-items: center; }
 .cell.lead > .thumb-wrap { grid-column: 1; grid-row: 1 / span 4; margin: 0; }
 .cell.lead > :not(.thumb-wrap) { grid-column: 2; }
 .cell.lead h2 { margin-top: 0; }
 .cell.lead .foot { margin-top: 0.4rem; }
-@media (max-width: 760px) { .cell.lead { display: flex; } }
-.cell .top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+@media (max-width: 760px) { .cell.lead { display: flex; align-items: stretch; gap: 1rem; } .cell.lead > .thumb-wrap { margin: 0 0 0.35rem; } .cell.lead h2 { margin-top: 0.9rem; } .cell.lead .foot { margin-top: auto; } }   /* stacked, it is an ordinary card */
+.cell .top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
 .cell h2 { margin: 0.9rem 0 0; font-family: var(--display); font-weight: 300; letter-spacing: -0.025em; font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1; font-variation-settings: "opsz" 48; }
 .cell h2 .arrow { display: inline-block; margin-left: 0.25em; color: var(--ink-3); }
 .cell .top .pill { pointer-events: none; color: var(--ink-3); height: auto; padding: 0; border: 0; background: none; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }   /* a tag is a label; only the nav and the actions are buttons */
@@ -216,7 +217,6 @@ body .lede, body .cs .lede, body .lede.one { max-width: var(--col); text-wrap: b
 body main.page.cs, body main.page.res { max-width: calc(var(--wide) + 2 * var(--pad)); }
 body .facts, body .frame, body .trace, body .stage, body .act, body .repos { max-width: var(--wide); margin-left: auto; margin-right: auto; }
 body .cs .facts, body .cs .stage { max-width: var(--col); }   /* no 704 / 960 zigzag: only plates and card frames earn the wide line */
-body figure.plate.wide figcaption, body .pairs figcaption { margin-left: max(0px, calc((100% - var(--col)) / 2)); }   /* a caption under a wide plate starts where the prose starts */
 body .actions, body .cta, body .gh-stats { justify-content: center; }
 /* reading text: left-aligned, centred column */
 body .sec p, body .prose p, body .cell p, body .lrow .d { text-align: left; text-wrap: pretty; }
@@ -348,10 +348,8 @@ body .room { margin: 0 auto 2.5rem; max-width: var(--wide); }
 body .room h3 { margin: 0 0 0.3rem; font-family: var(--display); font-weight: 400; font-size: 1.15rem; letter-spacing: -0.01em; }
 body .room p { margin: 0 0 1rem; color: var(--ink-2); font-size: 15px; line-height: 1.55; max-width: var(--col); }
 body figure.plate { margin: 0; }
-/* two plate types only. PHOTO (the default): bare, 12px radius. OBJECT (.print,
-   .wide, .detail, the wave's earlier builds): a dark render in an eggshell mat,
-   see below. Captions hang on the plate's left edge; the text after a plate
-   always starts 2rem below it. */
+/* one plate: the picture at the column line, 6 px corners. Captions hang on
+   the plate's left edge; the text after a plate always starts 2rem below it. */
 body figure.plate img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border: 0; border-radius: var(--r); background: color-mix(in srgb, var(--ink) 3%, transparent); }
 body figure.plate.wide { max-width: var(--wide); margin: 2rem auto 0; }
 body figure.plate.wide img { aspect-ratio: auto; }
@@ -481,10 +479,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 body figure.plate { position: relative; }
 
 
-/* ── OBJECT plates: a dark render sits in an eggshell mat, like a print in a
-   frame. The room photographs on four walls are PHOTO plates and stay bare. ── */
+/* ── OBJECT plates (renders, screenshots): no mat. The picture runs to the
+   column line like every photograph, so a page has two widths and no third;
+   a hairline drawn over its own edge keeps a near-white screenshot from
+   dissolving into the ground. ── */
 body figure.plate.object img, body figure.plate.print img, body figure.plate.wide img, body figure.plate.detail img, body .eb figure.plate img {
-  padding: 12px; background: var(--ground); border-color: var(--hair-2); border-radius: var(--r); }
+  padding: 0; background: var(--ground); border-radius: var(--r); outline: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); outline-offset: -1px; }   /* ink at low alpha: an edge on a white screenshot, nothing on a dark render */
 
 /* ── the condensed masthead ───────────────────────────────────────────────── */
 .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; justify-content: center; gap: 0.5rem 0.9rem; flex-wrap: nowrap;
@@ -576,10 +576,10 @@ body .play-ctl .pill.file input { position: absolute; inset: 0; opacity: 0; curs
   body .sec > div { min-width: 0; max-width: 100%; }
   body pre.code.tree { max-width: 100%; }
   body .gh-stats { flex-direction: column; gap: 0.25rem; align-items: center; }
-  .gh-note #gh-state { display: block; margin-top: 0.4rem; }
+  .gh-note #gh-state:not([hidden]) { display: block; margin-top: 0.4rem; }
   body .trow .tl { text-wrap: balance; }
 }
-@media (max-width: 480px) { .stage.four { grid-template-columns: 1fr; } .stage.four > div { border-right: 0; } }
+@media (max-width: 480px) { .stage.four { grid-template-columns: 1fr; } .stage.four > div { border-right: 0; } .stage.four > div:nth-last-child(2) { border-bottom: 1px solid var(--hair); } }
 /* the ape, cut from the photograph in two tones, beside the build line */
 footer.foot .ape.roar { animation: ape-roar var(--t4) var(--out); }
 @keyframes ape-roar { 0% { transform: scale(1); } 25% { transform: scale(1.7) rotate(-8deg); } 45% { transform: scale(1.6) rotate(8deg); } 65% { transform: scale(1.7) rotate(-6deg); } 100% { transform: scale(1); } }
@@ -697,10 +697,10 @@ footer.foot .ape img { display: block; width: 100%; height: 100%; }
   body .mast nav > * { flex: none; scroll-snap-align: start; }
   body .mast nav > :first-child { margin-left: auto; }
   body .mast nav > :last-child { margin-right: auto; }
-  /* the wave tile map: cards wrap to fill the width, two lines each, never colliding */
+  /* the wave tile map keeps its true 6 × 2 grid and scrolls sideways: wrapped, the dowel ticks landed on outer edges */
   body .tilemap .tm-grid { overflow-x: auto; padding: 3px; margin-inline: -3px; }  /* room for the dowel ticks that sit 2px outside each card */
-  body .tilemap .tm-row { min-width: 0; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
-  body .tilemap .tm-f { white-space: normal; font-size: 11px; line-height: 1.35; text-wrap: balance; }
+  body .tilemap .tm-row { min-width: 40rem; grid-template-columns: repeat(6, minmax(104px, 1fr)); }
+  body .tilemap .tm-f { font-size: 11px; line-height: 1.35; }
   /* case-study code trees scroll inside their frame instead of widening the page */
   body pre.code.tree { white-space: pre; overflow-x: auto; overflow-wrap: normal; max-width: 100%; }
 }
@@ -838,7 +838,7 @@ body .play-presets + .cap-note { margin-top: 1rem; }
 .cell .top .when { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3); white-space: nowrap; }
 
 /* digital: the one "Also physical →" row under the grid (i3) */
-body .sheet.also { max-width: var(--col); margin-top: 1rem; }   /* one sheet width everywhere */
+body .sheet.also { max-width: var(--col); margin-top: 36px; }   /* one sheet width everywhere */
 
 /* physical: a three-cell frame, each cell carrying a real image (k15) */
 .cells.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -873,7 +873,7 @@ body figure.plate.sample + .cta { margin-top: 1rem; }
 body .datefix { display: grid; grid-template-columns: 1fr 1fr; max-width: var(--col); margin: 1.4rem auto 0; border: 1px solid var(--hair); border-radius: var(--r); overflow: hidden; text-align: left; }
 body .datefix .df-cell { padding: 16px 18px; display: flex; flex-direction: column; gap: 0.3rem; }
 body .datefix .df-cell + .df-cell { border-left: 1px solid var(--hair); position: relative; padding-left: 28px; }
-body .datefix .df-cell + .df-cell::before { content: ""; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8h10M9 4l4 4-4 4' fill='none' stroke='%236E6F6B' stroke-width='1.5'/%3E%3C/svg%3E"); background-size: 10px; background-repeat: no-repeat; background-position: center; position: absolute; left: -0.75rem; top: 50%; transform: translateY(-50%); width: 1.5rem; height: 1.5rem; line-height: 1.5rem; text-align: center; border-radius: 999px; background: var(--ground); border: 1px solid var(--hair); font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+body .datefix .df-cell + .df-cell::before { content: ""; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8h10M9 4l4 4-4 4' fill='none' stroke='%236E6F6B' stroke-width='1.5'/%3E%3C/svg%3E"); background-size: 10px; background-repeat: no-repeat; background-position: center; position: absolute; left: -0.75rem; top: 50%; transform: translateY(-50%); width: 1.5rem; height: 1.5rem; line-height: 1.5rem; text-align: center; border-radius: 999px; background-color: var(--ground); border: 1px solid var(--hair); }
 body .datefix .df-k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
 body .datefix .df-v { font-family: var(--display); font-weight: 300; font-size: clamp(1.4rem, 2.2vw, 1.8rem); letter-spacing: -0.02em; color: var(--ink); line-height: 1.1; }
 body .datefix .df-cell:first-child .df-v { color: var(--ink-3); text-decoration: line-through; text-decoration-thickness: 1px; }
@@ -938,7 +938,8 @@ body .wave-ctl + .sheet, body figure.plate + .wave-ctl { margin-top: 0.9rem; }
 body .lander-head + .frame { margin-top: clamp(24px, 4vw, 48px); }
 
 /* ── Digital cards: the real picture, framed; the line screen only arrives over it ── */
-.cell .thumb-wrap { position: relative; display: block; aspect-ratio: 16 / 10; margin: 0 0 0.35rem; border-radius: var(--r); overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); box-shadow: inset 0 0 0 1px var(--hair); }
+.cell .thumb-wrap { position: relative; display: block; aspect-ratio: 16 / 10; margin: 0 0 0.35rem; border-radius: var(--r); overflow: hidden; background: color-mix(in srgb, var(--ink) 4%, var(--ground)); }
+.cell .thumb-wrap::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent); pointer-events: none; }   /* the frame is drawn over the picture, in ink at low alpha: a near-white screenshot keeps its edge, a dark render gets no light rim */
 .cell .thumb-img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform var(--t3) var(--out); }   /* the photograph simply appears; only the hover scale moves */
 .cell .thumb-wrap.is-mark .thumb-img { object-fit: contain; padding: 18%; }
 @media (hover: hover) { .cell:hover .thumb-img, .cell:focus-visible .thumb-img { transform: scale(1.025); } }
@@ -1023,9 +1024,12 @@ body .sec ul.tm li .v { order: -1; justify-self: start; text-align: left; font-s
 #palette-btn[aria-expanded="true"] { transform: translateY(1px); border-bottom-width: 1px; }
 
 /* the footer status strip: fixed slots, mono data */
-footer.foot .foot-status { display: flex; flex-wrap: wrap; gap: 0.2rem 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3); text-transform: uppercase; }
+footer.foot .foot-status { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3); text-transform: uppercase; }
 footer.foot .foot-status .sl { white-space: nowrap; }
-footer.foot .foot-status .dot { margin: 0 0.6em; color: var(--hair-2); }
+/* a separator belongs to the item after it and the row is pulled left by its width, so the one that would start a line is clipped: no line ever ends or begins on a dot */
+footer.foot .foot-status { overflow-x: clip; }
+footer.foot .foot-status .fs { display: flex; flex-wrap: wrap; gap: 0.2rem 0; margin-left: -1.9em; }
+footer.foot .foot-status .sl::before { content: "\00B7"; display: inline-block; width: 1.9em; text-align: center; color: var(--hair-2); }
 footer.foot .foot-status .sl b { font-weight: 400; color: var(--ink-2); }
 footer.foot .foot-status button.snd { appearance: none; border: 0; background: none; padding: 0; margin: 0; font: inherit; color: inherit; cursor: pointer; letter-spacing: inherit; text-transform: inherit; display: inline-flex; align-items: center; gap: 6px; position: relative; }
 footer.foot .foot-status button.snd i { display: inline-block; width: 6px; height: 6px; border: 1px solid currentColor; box-sizing: border-box; }
@@ -1103,11 +1107,40 @@ html, body { overflow-x: clip; max-width: 100%; }
 }
 @media (max-width: 760px) {
   footer.foot .foot-map, footer.foot .foot-out { display: none; }
-  footer.foot .foot-in { grid-template-areas: "status status" "meta ape"; padding-bottom: 18px; }
+  footer.foot .foot-in { grid-template-areas: "status status" "meta ape"; padding-bottom: 18px; row-gap: 12px; }
   footer.foot .foot-status { padding-top: 0; }
+  footer.foot .foot-in::before { content: ""; grid-column: 1 / -1; grid-row: 2; align-self: start; height: 0; border-top: 1px solid var(--hair); }   /* the hairline runs the full width, over the © line and the ape */
+  footer.foot .foot-meta { border-top: 0; padding-top: 12px; }
+  footer.foot .ape { margin-top: 12px; }
 }
 
 @media (min-width: 761px) { footer.foot .foot-in::before { grid-row: 3; } }   /* the hairline sits over the last row, the © line */
+
+/* ══ Nov 15 · v3, the shared chrome ═════════════════════════════════════════ */
+/* touch: the palette key reads "Menu", set like the pills beside it; it keeps the keycap edge */
+.pill.mono.menu { font-family: var(--sans); font-size: 13px; letter-spacing: 0; }
+@media (max-width: 600px) { .pill.mono.menu { font-size: 12.5px; } body .mast nav { gap: 3px; } body .mast nav .pill { padding: 0 7px; } }   /* six pills clear the 18 px gutters at 390 with "Menu" in place of the key */
+/* a focused card draws its whole ring: inside the frame, above its neighbours */
+.cells > .cell:focus-visible { outline-offset: -2px; z-index: 1; }
+body .sheet a.row:focus-visible { outline-offset: -2px; border-radius: var(--r); }
+/* touch: the section chip is a 44 px target (it clips its own overflow, so it cannot carry an ::after hit area) */
+@media (pointer: coarse) { .sec-chip { min-height: 44px; padding: 0 18px; } .sec-menu { bottom: calc(66px + env(safe-area-inset-bottom, 0px)); } }
+/* a short page still ends at the bottom of the window: the footer never floats mid-screen */
+body { min-height: 100svh; display: flex; flex-direction: column; }
+body > main { flex: 1 0 auto; width: 100%; }
+/* home, first screen: the statement stands one beat (24) under the band, as the band stands under the nav; the roles are one line */
+body .bottom { padding-top: 24px; }
+body .bottom .sub { max-width: none; text-wrap: balance; }
+@media (max-width: 600px) { body .field { padding-top: 0; } body .bottom { padding-top: 24px; } }   /* nav → band is 10 px on every page, the home included */
+/* print: the page as a document — no controls, nothing hidden mid-reveal, no block cut in two */
+@media print {
+  body { display: block; min-height: 0; }
+  .mast nav, .pal, .keys, .cta, .actions, .endstrip .cta, footer.foot .foot-map, footer.foot .foot-out, footer.foot .foot-status, footer.foot .ape, .wave-ctl, .pt-switch { display: none !important; }
+  .sr, .rv, .facts.sr > div, .cells.sr > .cell, .statement.wr .w { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+  .cell, figure.plate, .pairs, .lrow, .job, .sheet .row, .facts, .stage, .trace, .mhead { break-inside: avoid; }
+  h1, h2, h3, .sheet-h, .sec .k { break-after: avoid; }
+  footer.foot { margin-top: 24px; }
+}
 
 /* ══ Nov 1 · the receipts ════════════════════════════════════════════════════ */
 /* home: a proof strip between the statement and the doors */

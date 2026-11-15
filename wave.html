@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g=' 'sha256-oT+sAGx+G7EJWA4qVoW4AIyQ89u6fyQXG+oJzFLJ93E='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Wave panel — Collin Stilwell</title>
@@ -25,60 +25,61 @@
 <link rel="stylesheet" href="site.css?v=eac5685">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <style>
-  .cap-note { max-width: var(--col); margin: 0.9rem auto 1.6rem; color: var(--ink-2); font-size: 15.5px; line-height: 1.55; text-align: left; text-wrap: pretty; }
-  .earlier { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(20px, 3vw, 44px); max-width: var(--wide); margin: 0 auto; text-align: left; }
+  main.cs .cap-note { max-width: var(--col); margin: 12px auto 24px; color: var(--ink-2); font-size: 15px; line-height: 1.55; text-align: left; text-wrap: pretty; }   /* main.cs: the reading width has to beat the page's --wide cap */
+  .earlier { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(24px, 3vw, 48px); max-width: var(--wide); margin: 0 auto; text-align: left; }
   @media (max-width: 760px) { .earlier { grid-template-columns: 1fr; } }
   .eb .sheet { max-width: none; }
-  .eb .sheet .row { padding: 0.55rem 0; }
-  .eb-t { font-weight: 500; font-size: 1.15rem; margin: 0.9rem 0 0.3rem; letter-spacing: -0.01em; }
-  .eb-w { margin: 0 0 0.9rem; color: var(--ink-2); font-size: 14px; line-height: 1.5; text-wrap: pretty; }
-  .eb .wave-ctl { justify-content: flex-start; margin-top: 0.75rem; }
+  .eb .sheet .row { padding: 12px 0; }
+  .eb-t { font-family: var(--display); font-weight: 400; font-size: clamp(1.2rem, 1.7vw, 1.5rem); letter-spacing: -0.015em; line-height: 1.2; font-variation-settings: "opsz" 24; margin: 24px 0 6px; }
+  .eb-w { margin: 0 0 18px; min-height: 3em; color: var(--ink-2); font-size: 15px; line-height: 1.5; text-wrap: pretty; }   /* two lines reserved, so the two builds' tables start on one line */
+  @media (max-width: 760px) { .eb-w { min-height: 0; } }
+  .eb .wave-ctl { justify-content: flex-start; margin-top: 12px; }
   .tilemap { max-width: var(--wide); margin: 0 auto; text-align: left; }
-  .tm-h { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin: 0.5rem 0 0.9rem; }
-  .tm-plan { position: relative; aspect-ratio: 1219.2 / 355.6; border: 1px solid var(--hair); border-radius: 14px; overflow: hidden; }
+  .tm-h { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--ink-3); margin: 12px 0 18px; }
+  .tm-plan { position: relative; aspect-ratio: 1219.2 / 355.6; border: 1px solid var(--hair); border-radius: var(--r); overflow: hidden; }
   .tm-field { position: absolute; inset: 0; background: var(--accent);
     -webkit-mask-image: url(assets/physical/wave/tasteful/plan.png); mask-image: url(assets/physical/wave/tasteful/plan.png);
     -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
   .tm-seam { position: absolute; background: var(--ground); opacity: 0.8; }
   .tm-seam.v { top: 0; bottom: 0; width: 1px; }
   .tm-seam.h { left: 0; right: 0; height: 1px; top: 50%; }
-  .tm-pc { position: absolute; margin: 5px 0 0 5px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink); background: var(--ground); border: 1px solid var(--hair); padding: 1px 4px; border-radius: 4px; }
-  .tm-grid { display: grid; gap: 8px; margin-top: 8px; }
-  .tm-row { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 8px; }
-  .tm-cell { position: relative; appearance: none; font: inherit; color: inherit; text-align: left; cursor: pointer; background: transparent; border: 1px solid var(--hair); border-radius: 10px; padding: 8px 8px 7px; display: flex; flex-direction: column; gap: 4px; transition: border-color 0.2s var(--ease); }
+  .tm-pc { position: absolute; margin: 5px 0 0 5px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink); background: var(--ground); border: 1px solid var(--hair); padding: 1px 4px; border-radius: var(--r); }
+  .tm-grid { display: grid; gap: 6px; margin-top: 6px; }
+  .tm-row { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 6px; }
+  .tm-cell { position: relative; appearance: none; font: inherit; color: inherit; text-align: left; cursor: pointer; background: transparent; border: 1px solid var(--hair); border-radius: var(--r); padding: 6px; display: flex; flex-direction: column; gap: 6px; transition: border-color var(--t1) linear; }
   .tm-cell:hover { border-color: var(--ink-3); }
   .tm-cell:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .tm-cell.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  .tm-cell.on { border-color: var(--sel); background: color-mix(in srgb, var(--sel) 7%, transparent); }
   .tm-id { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
   .tm-cell.on .tm-id { color: var(--ink); }
   .tm-sig { width: 100%; height: auto; display: block; }
   .tm-sig path { fill: var(--ground); stroke: var(--accent); stroke-width: 1.15; stroke-linejoin: round; opacity: calc(0.46 + 0.068 * (8 - var(--i))); }
   .tm-f { font-family: var(--mono); font-size: 11px; color: var(--ink-2); display: flex; flex-direction: column; gap: 1px; line-height: 1.35; }
   .tm-f > span { white-space: nowrap; }
-  .tm-cell .dw { position: absolute; background: var(--accent); }
+  .tm-cell .dw { position: absolute; background: var(--sel); }
   .tm-cell .dw.l, .tm-cell .dw.r { width: 3px; height: 8px; margin-top: -4px; }
   .tm-cell .dw.t, .tm-cell .dw.b { height: 3px; width: 8px; margin-left: -4px; }
   .tm-cell .dw.l { left: -2px; } .tm-cell .dw.r { right: -2px; }
   .tm-cell .dw.t { top: -2px; } .tm-cell .dw.b { bottom: -2px; }
-  #tile-cap, .wave-view figcaption { text-transform: none; letter-spacing: 0.06em; }
-  .tm-note { font-size: 14px; color: var(--ink-2); margin: 0.8rem 0 0; max-width: var(--col); text-wrap: pretty; }
-  @media (max-width: 760px) { .tm-grid { overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; } .tm-row { min-width: 40rem; gap: 6px; } .tm-cell { padding: 7px 7px 6px; } .tm-pc { font-size: 10px; padding: 0 3px; } .tm-f { white-space: nowrap; font-size: 10px; } .tm-plan { min-width: 0; } }
+  /* one caption style on this page: 12 px data under every plate */
+  main.cs figure.plate figcaption { text-transform: none; letter-spacing: 0.04em; font-size: 12px; margin-top: 12px; }
+  .tm-note { font-size: 15px; color: var(--ink-2); margin: 12px 0 0; max-width: var(--col); text-wrap: pretty; }
+  @media (max-width: 760px) { .tm-grid { overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; } .tm-grid::-webkit-scrollbar { display: none; } .tm-row { min-width: 40rem; } .tm-pc { padding: 0 3px; } .tm-f { white-space: nowrap; } .tm-plan { min-width: 0; } }
   /* control rows start at the caption's left edge, not the page centre */
   main.cs .wave-ctl { max-width: var(--wide); margin-left: auto; margin-right: auto; justify-content: flex-start; }
-  main.cs figure.plate.wide + .wave-ctl { padding-left: max(0px, calc((100% - var(--col)) / 2)); }   /* under a wide plate the caption starts where the prose starts; so does its control row */
   /* toggles show state like hardware: a 6 px square, hollow when off, filled when on. Action pills carry none. */
   .pill .tg { display: inline-block; flex: none; width: 6px; height: 6px; box-sizing: border-box; margin-right: 8px; border: 1px solid currentColor; transition: background-color var(--t1) linear; }
   .pill[aria-pressed="true"] .tg { background: currentColor; }
   /* the plan: height field in ink at low alpha; accent only on the selected tile and the dowel ticks */
   .tm-field { background: var(--ink); opacity: 0.46; }
   .tm-reg { position: absolute; width: 16.6667%; height: 50%; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; appearance: none; -webkit-appearance: none; font: inherit; color: inherit; text-align: left; cursor: pointer; }
-  .tm-reg .tm-pc { left: 0; top: 0; border-radius: 6px; transition: background-color var(--t1) linear, color var(--t1) linear, border-color var(--t1) linear; }
+  .tm-reg .tm-pc { left: 0; top: 0; border-radius: var(--r); transition: background-color var(--t1) linear, color var(--t1) linear, border-color var(--t1) linear; }
   .tm-reg:hover .tm-pc { border-color: var(--ink-3); }
   .tm-reg:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-  .tm-reg.on { box-shadow: inset 0 0 0 1px var(--accent); }
-  .tm-reg.on .tm-pc { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tm-reg.on { box-shadow: inset 0 0 0 1px var(--sel); }
+  .tm-reg.on .tm-pc { background: var(--sel); color: #FCFBFA; border-color: var(--sel); }
   .tm-sig path { stroke: var(--ink); }
-  .tm-cell.on .tm-sig path { stroke: var(--accent); }
+  .tm-cell.on .tm-sig path { stroke: var(--sel); }
   /* the earlier builds' tile stepper: key · ◂ readout ▸ · the select it drives is clipped away, not removed */
   .stp { position: relative; display: inline-flex; align-items: center; }
   .stp-k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-right: 12px; }
@@ -92,7 +93,7 @@
   .stp-sel { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; }
   @media (max-width: 760px) { .stp-c { height: 28px; } .stp-b { width: 28px; } }
   /* the 3D viewer's readout stays on after load as a data line: tile · size · facets · how to move it */
-  main.cs figure.plate .v3d .v3d-state { letter-spacing: 0.02em; color: var(--ink-2); background: color-mix(in srgb, var(--ground) 88%, transparent); padding: 3px 8px; border-radius: 6px; max-width: calc(100% - 24px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  main.cs figure.plate .v3d .v3d-state { letter-spacing: 0.02em; color: var(--ink-2); background: color-mix(in srgb, var(--ground) 88%, transparent); padding: 3px 6px; border-radius: var(--r); max-width: calc(100% - 24px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   main.cs figure.plate .v3d.has-read .v3d-hint { display: none; }
   @media (max-width: 760px) { main.cs figure.plate .v3d .v3d-state { white-space: normal; line-height: 1.5; text-overflow: clip; } }
   @media (prefers-reduced-motion: reduce) { .pill .tg, .tm-reg .tm-pc, .stp-b { transition: none; } }
@@ -107,7 +108,7 @@
 </header>
 <main id="main" class="page cs">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="Wave" data-src="assets/physical/wave/header.jpg" aria-label="The full wave panel render, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+  <div class="mhead rv"><canvas class="matrix" data-text="Wave" data-src="assets/physical/wave/header.jpg" aria-label="The full wave panel render, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv d1"><a href="physical.html">Physical</a> · wall panel</p>
   <h1 class="display rv d1">Wave panel</h1>
   <p class="lede one rv d2">A parametric slat relief for behind the desk, printed as twelve tiles and painted as one.</p>
@@ -116,9 +117,9 @@
   <h2 class="sheet-h" id="full-run">Full run</h2>
   <figure class="plate wide mt-0">
     <img fetchpriority="high" decoding="async" width="1200" height="750" src="assets/physical/wave/tasteful/run.jpg" alt="The full wave panel, twelve tiles assembled">
-    <figcaption>Full run · twelve tiles</figcaption>
+    <figcaption>48 × 14 in · twelve tiles</figcaption>
   </figure>
-  <div class="wave-ctl"><a class="pill mono" id="hero-3d" href="#tiles">View in 3D</a></div>
+  <div class="wave-ctl"><a class="pill mono" id="hero-3d" href="#tiles">Full run in 3D</a></div>
   <p class="cap-note">Tiles print flat, dowel together, glue to a board, and get one coat of matte paint. Seams sit in the wave’s troughs.</p>
   <div class="sheet kv"><div class="row"><span class="k">run</span><span class="t">48 × 14 in · 6 × 2 tiles of 203 × 178 mm</span></div><div class="row"><span class="k">slats</span><span class="t">9 per tile · 22.6 mm pitch · 6.4 → 4.8 mm, printed hollow</span></div><div class="row"><span class="k">crests</span><span class="t">knife edge · 45° flanks following the wave</span></div><div class="row"><span class="k">wave</span><span class="t">two ridges + swell, short wave, diagonal wave, vertical ripple · peaks on the flanks · calm behind the monitor · ends taper into the wall</span></div><div class="row"><span class="k">print</span><span class="t">0.8 mm nozzle · 0.32 mm · 1 wall · 12% · ≈2 kg PLA+</span></div></div>
 
@@ -142,7 +143,7 @@
     <div class="eb wave-view" data-build="v1">
       <figure class="plate"><img data-role="img" loading="lazy" decoding="async" src="assets/physical/wave/v1/run.jpg" alt="First build, full run"><figcaption data-role="cap">Full run · 10 tiles</figcaption></figure>
       <h3 class="eb-t">First cut</h3>
-      <p class="eb-w">Closest to the reference panel. Dropped for filament use and fins thin enough to snap in handling.</p>
+      <p class="eb-w">Dropped for filament use and fins thin enough to snap in handling.</p>
       <div class="sheet kv"><div class="row"><span class="k">run</span><span class="t">50 × 20 in · 5 × 2 tiles of 250 mm</span></div><div class="row"><span class="k">slats</span><span class="t">20 per tile · 12.5 mm pitch · 3.6 → 2.4 mm solid</span></div><div class="row"><span class="k">print</span><span class="t">0.4 mm nozzle · full back plate · ≈6 kg</span></div></div>
       <div class="wave-ctl"><div class="stp" role="group" aria-label="Tile"><span class="stp-k">tile</span><span class="stp-c"><button class="stp-b" type="button" data-step="-1" aria-label="Previous tile"><svg width="6" height="8" viewBox="0 0 6 8" aria-hidden="true"><path d="M6 0 0 4l6 4z"/></svg></button><span class="stp-r" tabindex="0" role="status" title="← → step through the tiles">Full run</span><button class="stp-b" type="button" data-step="1" aria-label="Next tile"><svg width="6" height="8" viewBox="0 0 6 8" aria-hidden="true"><path d="M0 0l6 4-6 4z"/></svg></button></span><select data-role="sel" class="stp-sel" aria-hidden="true" tabindex="-1"><option value="-1">Full run</option><option value="0">r0 c0</option><option value="1">r0 c1</option><option value="2">r0 c2</option><option value="3">r0 c3</option><option value="4">r0 c4</option><option value="5">r1 c0</option><option value="6">r1 c1</option><option value="7">r1 c2</option><option value="8">r1 c3</option><option value="9">r1 c4</option></select></div><button class="pill mono" type="button" data-role="v3d" aria-pressed="false"><i class="tg" aria-hidden="true"></i>View in 3D</button><a class="pill mono" data-role="dl" href="#" aria-disabled="true" download>Download STL</a></div>
     </div>
@@ -155,56 +156,9 @@
     </div>
   </div>
 
-  <div class="cta"><a class="pill solid" href="fourwalls.html">Four Walls</a><a class="pill ghost" href="text2print.html">text2print</a></div>
+  <div class="cta"><a class="pill solid" href="text2print.html">text2print</a><a class="pill ghost" href="physical.html">Physical</a></div>
 <script src="assets/wave3d.js?v=5"></script>
-<script src="assets/wave-page.js?v=1"></script>
-<script>// wave.html, page-local: plan regions ↔ tile map, the earlier builds' stepper, and the 3D readout.
-(function () {
-  var cells = [].slice.call(document.querySelectorAll('.tm-cell')), regs = [].slice.call(document.querySelectorAll('.tm-reg')), grid = document.querySelector('.tm-grid');
-  // the plan lights the selected tile; a region on the plan selects it (the map's own click does the rest)
-  var light = function () {
-    var on = cells.filter(function (c) { return c.classList.contains('on'); })[0], i = on ? on.dataset.tile : null;
-    regs.forEach(function (r) { var is = r.dataset.tile === i; r.classList.toggle('on', is); r.setAttribute('aria-pressed', is); });
-  };
-  regs.forEach(function (r) { r.addEventListener('click', function () { var c = cells.filter(function (c) { return c.dataset.tile === r.dataset.tile; })[0]; if (c) c.click(); }); });
-  if (grid) { new MutationObserver(light).observe(grid, { attributes: true, attributeFilter: ['class'], subtree: true }); light(); }
-
-  // stepper: cycles Full run → r0 c0 → … → r1 c4 → Full run; sets the clipped select and fires change for the page script
-  [].forEach.call(document.querySelectorAll('.stp'), function (s) {
-    var sel = s.querySelector('select'), r = s.querySelector('.stp-r'), n = sel.options.length;
-    var show = function () { r.textContent = sel.options[sel.selectedIndex].textContent; };
-    var go = function (d) { sel.selectedIndex = (sel.selectedIndex + d + n) % n; show(); sel.dispatchEvent(new Event('change', { bubbles: true })); };
-    [].forEach.call(s.querySelectorAll('.stp-b'), function (b) { b.addEventListener('click', function () { go(+b.dataset.step); }); });
-    r.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') go(-1); else if (e.key === 'ArrowRight') go(1);
-      else if (e.key === 'Home') go(-sel.selectedIndex); else if (e.key === 'End') go(n - 1 - sel.selectedIndex); else return;
-      e.preventDefault();
-    });
-    sel.addEventListener('change', show); show();
-  });
-
-  // 3D readout: after a load the state line stays on as data. Facets come from the parsed geometry;
-  // the byte count is the binary STL's (84-byte header + 50 bytes a facet), which is the file behind Download.
-  if (window.Wave3D) {
-    var P = Wave3D.Viewer.prototype, show3 = P.show, say = P.say, coarse = matchMedia('(pointer: coarse)');
-    var fmt = function (b) { return Math.round(b / 1024).toLocaleString('en-US') + ' KB'; };   // KB everywhere, as the captions and the tile map
-    var how = function (v) { return coarse.matches ? (v.armed ? 'drag · pinch zoom' : 'tap · pinch zoom') : 'drag · ⌘/ctrl scroll zoom'; };
-    var tell = function (v) { if (!v.read || v.box.hidden) return; v.state.textContent = v.read + ' · ' + how(v); v.box.classList.add('has-read'); };   // the readout carries the hint, so the separate hint steps back
-    P.say = function () { say.apply(this, arguments); tell(this); };
-    P.show = function (tiles) {
-      var self = this, seq = (self.seq = (self.seq || 0) + 1); self.read = ''; self.box.classList.remove('has-read');
-      return show3.apply(this, arguments).then(function () {
-        if (self.seq !== seq || !self.group || self.state.textContent) return;   // superseded, or the loader printed an error
-        var tris = 0;
-        self.group.children.forEach(function (m) { var a = m.geometry && m.geometry.attributes && m.geometry.attributes.position; if (a) tris += Math.floor(a.count / 3); });
-        var name = self.build === 'ape' ? 'the bust' : tiles.length === 1 ? tiles[0].id.replace('_', ' ') : 'Full run · ' + tiles.length + ' tiles';
-        self.read = name + ' · ' + fmt(tiles.length * 84 + tris * 50) + (tris ? ' · ' + tris.toLocaleString('en-US') + ' tris' : '');
-        tell(self);
-      });
-    };
-  }
-})();
-</script>
+<script src="assets/wave-page.js?v=2"></script>
 </main>
 <footer class="foot">
   <div class="foot-in">
