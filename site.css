@@ -1532,4 +1532,13 @@ body.scrolled .topbar { box-shadow: 0 10px 30px -22px rgba(22,22,22,0.35); }
     @keyframes v4prog { to { transform: scaleX(1); } }
   }
 }
+/* next-project card at the foot of a case study; selected work under the lander */
+body .cs > .sheet-h.nx-h, body .cs > .frame.nx { max-width: var(--wide); margin-left: auto; margin-right: auto; }
+body .cs > .sheet-h.nx-h { margin-top: clamp(48px, 6vw, 96px); }
+body .frame.nx + .endstrip { border-top: 0; margin-top: 12px; }
+body .hw { width: 100%; box-sizing: border-box; padding: 0 var(--pad) clamp(36px, 5vw, 72px); }
+body .hw .sheet-h { margin-top: clamp(24px, 3vw, 48px); }
+body .hw .cta { margin-top: 36px; display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+body .hw .cell h2 { font-size: clamp(1.2rem, 1.5vw, 1.4rem); }
+body .hw .cell p { font-size: 15px; }
 /* ==== /v4:polish ==== */
