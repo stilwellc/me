@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>SecMCPHub, a case study — Collin Stilwell</title>
-<meta name="description" content="SecMCPHub: Claude Code skills that pull vulnerability, GRC, and incident data over MCP into one self-contained monthly security review.">
+<meta name="description" content="SecMCPHub: Claude Code skills that pull vulnerability, GRC, and incident data over MCP into one self-contained weekly or monthly security review.">
 <meta property="og:title" content="SecMCPHub, a case study — Collin Stilwell">
-<meta property="og:description" content="SecMCPHub: Claude Code skills that pull vulnerability, GRC, and incident data over MCP into one self-contained monthly security review.">
+<meta property="og:description" content="SecMCPHub: Claude Code skills that pull vulnerability, GRC, and incident data over MCP into one self-contained weekly or monthly security review.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/secmcphub.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/secmcphub.png">
@@ -31,35 +31,44 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill on" aria-current="page" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill on" aria-current="page" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs">
-  <div class="mhead rv"><canvas class="matrix" data-text="SecMCPHub" data-src="assets/secmcphub.svg" aria-label="A report with rising bars, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
-  <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">SecMCPHub on GitHub ↗</a></p>
-  <h1 class="display rv d1">A monthly security report<br>from one command.</h1>
+<main id="main" class="page cs case">
+  <div class="mhead rv"><canvas class="matrix" data-text="SecMCPHub" data-src="assets/secmcphub.svg" aria-label="A report with rising bars, drawn in the line screen" role="img"></canvas></div>
+  <p class="eyebrow rv"><a href="security.html">Security</a> · <a href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">GitHub ↗</a></p>
+  <h1 class="display rv d1">A weekly or monthly security review<br> from one command.</h1>
   <p class="lede rv d2">Claude Code skills that pull vulnerability, GRC and incident data over MCP into one HTML report.</p>
 
-  <div class="facts three rv d3">
+  <div class="facts rv d3">
     <div><div class="n">1</div><div class="l">command<span class="sub">/security-report</span></div></div>
-    <div><div class="n">3 → 1</div><div class="l">systems, one view<span class="sub">vulnerabilities · GRC · incidents</span></div></div>
-    <div><div class="n">0</div><div class="l">servers<span class="sub">one self-contained HTML file</span></div></div>
+    <div><div class="n">3 → 1</div><div class="l">sources<span class="sub">one view</span></div></div>
+    <div><div class="n">2</div><div class="l">mapping tables<span class="sub">CWE and incident to risk</span></div></div>
+    <div><div class="n">0</div><div class="l">servers<span class="sub">one HTML file</span></div></div>
   </div>
 
-  <figure class="plate wide sample rv d3"><a href="assets/secmcphub-sample.html" target="_blank" rel="noopener"><img src="assets/secmcphub-sample.webp" width="1440" height="900" alt="A sample SecMCPHub report for a made-up company: a B grade at 78 of 100, eight weighted score factors, three this-week callouts, and eight KPI tiles with sparklines" loading="lazy" decoding="async"></a><figcaption>Sample report · synthetic data, stamped SAMPLE</figcaption></figure>
-  <div class="cta"><a class="pill solid" href="assets/secmcphub-sample.html" target="_blank" rel="noopener">See a sample report ↗</a><a class="pill ghost" href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">Open the repo ↗</a></div>
+  <figure class="plate wide sample rv d3"><a href="assets/secmcphub-sample.html" target="_blank" rel="noopener"><img src="assets/secmcphub-sample.webp" width="1440" height="900" alt="A sample SecMCPHub report for a made-up company: a B grade at 78 of 100, eight weighted score factors, three this-week callouts, and eight KPI tiles with sparklines" loading="lazy" decoding="async"></a><figcaption>Sample report · synthetic data</figcaption></figure>
+
+  <section class="sec" id="problem">
+    <div class="k">the problem</div>
+    <div>
+      <h2>Three sources, three separate reports.</h2>
+      <p>Vulnerability management, the GRC risk register and incident ticketing each report on their own. A review needs findings, risks, controls and incidents in one view.</p>
+    </div>
+  </section>
 
   <section class="sec" id="build">
-    <div class="k">the build · shape</div>
+    <div class="k">the build</div>
     <div>
       <h2>Skills, a template, and two mapping tables.</h2>
-      <p><b>/security-report</b> refreshes the data; <b>/rewrite-dashboard</b> rebuilds the renderer. Data and rendering sit in separate script blocks, so a refresh only touches data.</p>
-      <pre class="code tree">SecMCPHub/
-├── security-report.md             <b>← skill: the refresh</b>
-├── rewrite-dashboard.md           <b>← skill: rebuild the renderer</b>
-├── security-posture-report.html   <b>← renderer + empty data block</b>
-├── security-metrics-history.json
-├── cwe-risk-mapping.json
-└── ir-risk-mapping.json</pre>
+      <p><b>/security-report</b> refreshes the data each week; <b>/rewrite-dashboard</b> rebuilds the renderer. Data and rendering sit in separate script blocks, so a refresh only touches data.</p>
+      <ul>
+        <li><span>Skill: the weekly refresh</span><span class="v">security-report.md</span></li>
+        <li><span>Skill: rebuild the renderer</span><span class="v">rewrite-dashboard.md</span></li>
+        <li><span>Renderer and empty data block</span><span class="v">security-posture-report.html</span></li>
+        <li><span>Rolling KPI history</span><span class="v">security-metrics-history.json</span></li>
+        <li><span>CWE to risk category</span><span class="v">cwe-risk-mapping.json</span></li>
+        <li><span>Incident project to risk</span><span class="v">ir-risk-mapping.json</span></li>
+      </ul>
     </div>
   </section>
 
@@ -67,21 +76,22 @@
     <div class="k">the run</div>
     <div>
       <h2>Pull, compute, cross-reference, render.</h2>
-      <p>Trend deltas are computed against the KPI history file.</p>
+      <p>Trend deltas are computed against the KPI history file, and the report is validated before it is saved.</p>
       <div class="stage four">
-        <div><div class="t">pull</div><div class="d">findings in batches · GRC paginated · incidents by project</div></div>
-        <div><div class="t">compute</div><div class="d">trend deltas · MTTR · SLA · composite grade</div></div>
-        <div><div class="t">cross-reference</div><div class="d">CWE → risk · incidents as evidence</div></div>
-        <div><div class="t">render</div><div class="d">one self-contained HTML file</div></div>
+        <div><div class="t">pull</div><div class="d">findings · GRC<br>incidents</div></div>
+        <div><div class="t">compute</div><div class="d">deltas · MTTR<br>SLA · grade</div></div>
+        <div><div class="t">cross-reference</div><div class="d">CWE → risk<br>attack paths</div></div>
+        <div><div class="t">render</div><div class="d">one self-contained<br>HTML file</div></div>
       </div>
     </div>
   </section>
 
   <section class="sec" id="proof">
-    <div class="k">the proof · one view</div>
+    <div class="k">the proof</div>
     <div>
       <h2>Three reports become one view.</h2>
       <p>Findings map to risk categories through CWE, and incidents are evidence against the same risks. The two chain into <b>attack paths</b> linking a control gap, the vulnerabilities that exploit it, and the incidents that already did.</p>
+      <figure class="plate wide sample"><a href="assets/secmcphub-sample.html" target="_blank" rel="noopener"><img src="assets/secmcphub-attack-path.webp" width="1536" height="592" alt="Attack path AP-1 in the sample report, public API to customer data exfiltration: five linked steps from a missing authorization check through SQL injection and a reused hard-coded token to bulk record staging and data exfiltration, with finding counts on each step and two incidents listed beneath" loading="lazy" decoding="async"></a><figcaption>Attack path AP-1 · synthetic sample</figcaption></figure>
     </div>
   </section>
 
@@ -99,7 +109,7 @@
   </section>
 
   <div class="cta">
-    <a class="pill solid" href="assets/secmcphub-sample.html" target="_blank" rel="noopener">See a sample report ↗</a>
+    <a class="pill ghost" href="assets/secmcphub-sample.html" target="_blank" rel="noopener">See a sample report ↗</a>
     <a class="pill ghost" href="https://github.com/stilwellc/SecMCPHub" target="_blank" rel="noopener">Open the repo ↗</a>
   </div>
 

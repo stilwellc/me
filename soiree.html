@@ -33,19 +33,20 @@
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
   <nav aria-label="Site"><a class="pill on" aria-current="page" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs">
-  <div class="mhead rv"><canvas class="matrix" data-text="Soirée" data-src="assets/soiree.svg" aria-label="A martini glass with an olive, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+<main id="main" class="page cs case">
+  <div class="mhead rv"><canvas class="matrix" data-text="Soirée" data-src="assets/soiree.svg" aria-label="A martini glass with an olive, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://soiree.today" target="_blank" rel="noopener">soiree.today ↗</a></p>
-  <h1 class="display rv d1">Tonight’s events in NYC,<br>Hoboken, and Philadelphia.</h1>
+  <h1 class="display rv d1">Tonight’s events in NYC,<br> Hoboken, and Philadelphia.</h1>
   <p class="lede rv d2">Soirée scrapes event listings, fixes their dates, and shows what’s on tonight.</p>
 
-  <div class="facts three rv d3">
-    <div><div class="n" data-live="soiree-count">445</div><div class="l">events listed<span class="sub" data-live="soiree-when">as of Sep 23, 2026</span></div></div>
-    <div><div class="n" data-live="soiree-free">165</div><div class="l">of them free</div></div>
-    <div><div class="n">3</div><div class="l">regions<span class="sub">NYC · Hoboken/Jersey City · Philadelphia</span></div></div>
+  <div class="facts rv d3">
+    <div><div class="n" data-live="soiree-count">135</div><div class="l">events listed<span class="sub" data-live="soiree-when">as of Nov 15, 2026</span></div></div>
+    <div><div class="n" data-live="soiree-free">55</div><div class="l">of them free<span class="sub">priced as free</span></div></div>
+    <div><div class="n">24</div><div class="l">sources<span class="sub">as of Nov 15, 2026</span></div></div>
+    <div><div class="n">3</div><div class="l">regions<span class="sub">NYC, New Jersey, Philadelphia</span></div></div>
   </div>
 
-  <figure class="plate wide rv d3"><img src="assets/soiree-tonight.webp" width="1440" height="840" alt="The tonight view on soiree.today: category pills for art, perks and pop-ups, and culture and community, one featured event card, and a list of what is on today and tomorrow" loading="lazy" decoding="async"><figcaption>The tonight view · captured Sep 23, 2026</figcaption></figure>
+  <figure class="plate wide rv d3"><img src="assets/soiree-tonight.webp" width="1920" height="973" alt="The soiree.today home page: the headline This Week’s soirée, a Browse tonight button, an illustrated card reading Happening today, 26 events, and a location picker set to NYC" loading="lazy" decoding="async"><figcaption><span class="nw">soiree.today</span><i class="sp"> · </i><span class="nw">captured Nov 15, 2026</span></figcaption></figure>
 
   <section class="sec" id="problem">
     <div class="k">the problem</div>
@@ -56,35 +57,31 @@
   </section>
 
   <section class="sec" id="build">
-    <div class="k">the build · the rule</div>
+    <div class="k">the build</div>
     <div>
       <h2>Real dates first, placeholders marked ongoing.</h2>
       <p>Events with real dates sort first. Placeholder dates render as <b>ongoing</b> and are marked past, with history kept, once they vanish from their source.</p>
       <figure class="datefix" aria-label="The date rule on one listing: a placeholder date of Sep 12 becomes ongoing">
-        <div class="df-cell"><span class="df-k">before</span><span class="df-v">Sep 12 <span class="df-n">(placeholder)</span></span><span class="df-d">sorted as if it were a real day</span></div>
+        <div class="df-cell"><span class="df-k">before</span><span class="df-v">Sep 12<span class="df-n">(placeholder)</span></span><span class="df-d">sorted as if it were a real day</span></div>
         <div class="df-cell after"><span class="df-k">after</span><span class="df-v">ongoing</span><span class="df-d">sorted after every real date</span></div>
       </figure>
     </div>
   </section>
 
   <section class="sec" id="run">
-    <div class="k">the run · sources</div>
+    <div class="k">the run</div>
     <div>
       <h2>One scraper per source.</h2>
-      <p>NYC For Free, The Local Girl (Hoboken and Jersey City), Time Out New York, and the MoMA, Guggenheim and New Museum calendars. Each scraper has its own success-rate target and timeout.</p>
+      <p>The feed read on Nov 15, 2026 carries 24 sources, among them the Whitney, the New Museum, the Brooklyn Botanic Garden, NJPAC, Barrow Mansion in Jersey City and the Hoboken Historical Museum. Each scraper has its own success-rate target and timeout.</p>
     </div>
   </section>
 
   <section class="sec" id="proof">
-    <div class="k">the proof · tonight</div>
+    <div class="k">the proof</div>
     <div>
-      <h2>On tonight, live from soiree.today.</h2>
-      <ol id="tonight" class="tonight" aria-label="On tonight, live from soiree.today"></ol>
-      <ul>
-        <li><span>Browse by</span><span class="v">tonight · today · this week · free only</span></li>
-        <li><span>Moods</span><span class="v">art · perks &amp; pop-ups · culture &amp; community · openings · shows</span></li>
-        <li><span>Runs on</span><span class="v">Node.js · Cloudflare · scheduled scrapers</span></li>
-      </ul>
+      <h2>One-night events, read from soiree.today.</h2>
+      <p class="lbl" data-live="soiree-state">Read Nov 15, 2026</p>
+      <ol id="tonight" class="tonight" aria-label="One-night events, read from soiree.today on Nov 15, 2026"><li><span><a href="https://barrowmansion.org/event/chakrasambra-meditation-2/2026-11-15/" target="_blank" rel="noopener">Chakrasambra Meditation</a></span><span class="v">Barrow Mansion · Jersey City · Nov 15, 11:30 AM</span></li><li><span><a href="https://www.njpac.org/event/bruce-hornsby/" target="_blank" rel="noopener">Bruce Hornsby with Christian McBride: One on One</a></span><span class="v">New Jersey Performing Arts Center · Newark · Nov 15, 3 PM</span></li><li><span><a href="https://www.smushgallery.com/calendar/2026/1/5/happening-smush-mmmyoga-c9tkp-jph89-acckc-rk75z-nz53e-jb5mf-t65ky-wbrt4-zem3d-328g5-9ldcx-jmm63-knxwc" target="_blank" rel="noopener">Closing Weekend - Cat, Stick, Easel, Moon: Surrealist Paintings by Rachel L Bedder</a></span><span class="v">SMUSH Gallery · Jersey City · Nov 15</span></li></ol>
     </div>
   </section>
 
@@ -93,11 +90,16 @@
     <div>
       <h2>Say “ongoing” rather than guess a day.</h2>
       <p>A listing without a real date still shows, but never as tonight.</p>
+      <ul>
+        <li><span>Browse by</span><span class="v">tonight · today · this week · free only</span></li>
+        <li><span>Moods</span><span class="v">art · perks &amp; pop-ups · culture &amp; community</span></li>
+        <li><span>Runs on</span><span class="v">Node.js · Cloudflare · scheduled scrapers</span></li>
+      </ul>
     </div>
   </section>
 
   <div class="cta">
-    <a class="pill solid" href="https://soiree.today" target="_blank" rel="noopener">Open soiree.today ↗</a>
+    <a class="pill ghost" href="https://soiree.today" target="_blank" rel="noopener">Open soiree.today ↗</a>
   </div>
 
   <div class="endstrip">

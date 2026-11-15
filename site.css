@@ -1256,3 +1256,57 @@ body .sheet.record .row .t a { text-decoration: underline; text-underline-offset
 body .sheet.record .row .t a:hover { text-decoration-color: var(--ink); }
 body .p-about .bio + .sheet.record { margin-top: clamp(24px, 3vw, 36px); }
 /* ==== /v3:words ==== */
+
+/* ==== v3:cases ==== */
+/* the four case studies (lectr, SecMCPHub, Soirée, text2print) */
+/* plates sit on the two-width system: no 12px mat, a hairline so a near-white screenshot has an edge, captions on the plate edge */
+body .case figure.plate img, body .case figure.plate.wide img { padding: 0; background: var(--ground); outline: 1px solid var(--hair-2); outline-offset: -1px; }
+body .case figure.plate.wide figcaption, body .case .pairs figcaption { margin-left: 0; }
+body .case figure.plate picture { display: block; }
+body .case > figure.plate.wide { margin-top: clamp(24px, 4vw, 60px); }
+body .case .sec figure.plate.wide { margin-top: 1.5rem; }
+body .case .sec .facts + figure.plate.wide { margin-top: 2rem; }
+/* fact strips: four cells, a sub on every cell, the strip closed by one rule */
+body .case .facts .l .sub { margin-top: 0.3rem; }
+body .case .facts > div { padding-left: 12px; padding-right: 12px; }
+body .case .facts .l .sub { text-wrap: balance; }
+body .case .sec .facts { margin-top: 1.5rem; }
+/* a mono label under a block: what the block is and when it was read */
+body .case .sec p.lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin: 0 auto 1rem; }
+body .case .sec pre.code + p.lbl { margin-top: -0.4rem; margin-bottom: 1.4rem; }
+/* spec rows and stage cards keep a gap from the prose above */
+body .case .sec p + ul, body .case .sec p + .stage { margin-top: 1.25rem; }
+/* arrows in pills sit off the word */
+body .case .pill svg.ic { margin-left: 0.3em; }
+/* lectr: the worked example. Four rows; the last row has no rule under it but the basis line */
+body .case .trace { margin-top: 1.25rem; }
+body .case .trow.result { border-top: 0; }
+body .case .trow .tb .mono { line-height: 1.6; }
+body .case .sp { font-style: normal; }
+body .case .trow .tb { gap: 0.15rem; }
+body .case .trow .tb b + .mono, body .case .trow .tb .mono + .mono:has(a) { margin-top: 0.3rem; }
+/* lectr: graded calls stack title over data at every width, the data hung under the title */
+body .case #trace-rec li { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; padding: 14px 0; }
+body .case #trace-rec li .v { justify-self: start; text-align: left; white-space: normal; padding-left: 2.05rem; color: var(--ink-2); }
+body .case #trace-rec li > span:first-child { padding-left: 2.05rem; text-indent: -2.05rem; }
+body .case #trace-rec li > span:first-child::before { display: inline-block; width: 2.05rem; text-indent: 0; }
+/* Soirée: the before → after joint keeps its arrow (the shorthand reset it) */
+body .datefix .df-cell + .df-cell::before { background: var(--ground) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8h10M9 4l4 4-4 4' fill='none' stroke='%236E6F6B' stroke-width='1.5'/%3E%3C/svg%3E") center / 10px no-repeat; }
+/* Soirée: the read list is one closed block */
+body .case ol#tonight { margin: 0 auto; border-top: 1px solid var(--hair); }
+body .case ol#tonight li { padding: 12px 0; align-items: baseline; }
+body .case ol#tonight li .v { letter-spacing: 0.04em; }
+@media (max-width: 600px) {
+  body .case h1.display br { display: none; }
+  body .case .trow .tb .mono.items .nw { display: block; }
+  body .case .trow .tb .mono.items .sp { display: none; }
+  body .case figcaption .nw { display: block; }
+  body .case figcaption .sp { display: none; }
+  body .case #trace-rec li .v, body .case #trace-rec li > span:first-child { padding-left: 0; text-indent: 0; }
+  body .case #trace-rec li > span:first-child::before { width: auto; }
+}
+@media (max-width: 480px) {
+  .stage.four > div:nth-last-child(2) { border-bottom: 1px solid var(--hair); }
+  body .datefix .df-n { display: inline-block; width: 100%; margin-left: 0; }
+}
+/* ==== /v3:cases ==== */

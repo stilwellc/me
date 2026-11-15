@@ -33,49 +33,50 @@
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
   <nav aria-label="Site"><a class="pill on" aria-current="page" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs">
-  <div class="mhead rv"><canvas class="matrix" data-text="text2print" data-src="assets/text2print.svg" aria-label="A vase printed in layers under a nozzle, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
-  <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">text2print on GitHub ↗</a></p>
-  <h1 class="display rv d1">A studio that turns a shape,<br>a texture or a sentence into a print.</h1>
-  <p class="lede rv d2">text2print builds print-ready Bambu Lab projects from a shape and a texture, or from a description Claude turns into a design, and checks every layer before it hands over a file.</p>
+<main id="main" class="page cs case">
+  <div class="mhead rv"><canvas class="matrix" data-text="text2print" data-src="assets/text2print.svg" aria-label="A vase printed in layers under a nozzle, drawn in the line screen" role="img"></canvas></div>
+  <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">GitHub ↗</a></p>
+  <h1 class="display rv d1">A studio that turns a shape,<br> a texture or a sentence into a print.</h1>
+  <p class="lede rv d2">text2print builds print-ready Bambu Lab projects from a shape and a texture, or from a sentence.</p>
 
   <div class="facts rv d3">
-    <div><div class="n">26</div><div class="l">shapes<span class="sub">trays to lidded boxes to lamp shades</span></div></div>
-    <div><div class="n">46</div><div class="l">textures<span class="sub">19 woven · 7 fabric · 6 spiral · 14 more</span></div></div>
-    <div><div class="n">5</div><div class="l">lid styles<span class="sub">slip · gift box · screw · magnets · none</span></div></div>
-    <div><div class="n">337</div><div class="l">tests<span class="sub">fits, floating rods, slicer output</span></div></div>
+    <div><div class="n">25</div><div class="l">shapes<span class="sub">tray to lamp shade</span></div></div>
+    <div><div class="n">43</div><div class="l">textures<span class="sub">17 woven, 26 more</span></div></div>
+    <div><div class="n">4</div><div class="l">lid styles<span class="sub">slip, gift, screw, magnet</span></div></div>
+    <div><div class="n">586</div><div class="l">tests<span class="sub">190 full or slicer</span></div></div>
   </div>
+
+  <figure class="plate wide rv d3"><img src="assets/physical/text2print/studio.webp" width="1600" height="1000" alt="The text2print studio: Design with Claude and the shape cards on the left, a drawn-silhouette vessel in three-colour jacquard loops in the centre, and size, strands, colours, AMS changes and filament on the right" loading="lazy" decoding="async"><figcaption><span class="nw">The studio</span><i class="sp"> · </i><span class="nw">a drawn silhouette in jacquard</span></figcaption></figure>
 
   <section class="sec" id="problem">
     <div class="k">the problem</div>
     <div>
       <h2>Modeling is the slow part.</h2>
-      <p>A textured, two-colour, lidded object takes hours to model and more hours to make printable. text2print generates the geometry, the colour changes and the slicer settings together, so the file that comes out is the file that prints.</p>
+      <p>A textured, two-colour, lidded object takes hours to model and more hours to make printable. text2print generates the geometry, the colour changes and the slicer settings together.</p>
     </div>
   </section>
 
   <section class="sec" id="studio">
-    <div class="k">the studio</div>
+    <div class="k">the build</div>
     <div>
       <h2>Pick a shape and a texture, or describe it.</h2>
-      <p>The studio runs locally in the browser. Choose a shape, a texture, colours and a lid, or type a sentence into Design with Claude and let it compose the design. The right panel shows size, rod count, colour changes, print time and filament; one button writes a Bambu Studio project for the P2S.</p>
-      <figure class="plate wide"><img src="assets/physical/text2print/studio.webp" width="1600" height="1000" alt="The text2print studio: shapes on the left, a woven lidded box with contour lines on its lid in the centre, and size, lid fit, colour changes and print time on the right" loading="lazy"><figcaption>The studio · the watch case's base and gift-box lid</figcaption></figure>
-      <p class="after-plate">Woven textures print as rods: each layer is a course of lines that cross the course below, so the weave is the object, with no infill and no supports. Colour changes follow the courses, fades dither between two filaments, and lids are short caps of the same weave printed face down.</p>
+      <p>The studio runs locally in the browser. Choose a shape, a texture, colours and a lid, or type a sentence into Design with Claude and let it compose the design. The right panel shows size, colour changes and filament; one button writes a Bambu Studio project for the P2S.</p>
+      <p>Woven textures print as rods: each layer is a course of lines that cross the course below, so the weave is the object, with no infill and no supports. Colour changes follow the courses, fades dither between two filaments, and lids are short caps of the same weave printed face down.</p>
     </div>
   </section>
 
   <section class="sec" id="example">
-    <div class="k">the example</div>
+    <div class="k">the run</div>
     <div>
       <h2>A woven case for three watches.</h2>
       <p>A twill base in charcoal and cream holds a printed sleeve with three bays. The lid is a gift-box lid built over an insert: the sleeve stands 21 mm above the base and is the neck the lid slides onto, so the closed box is one block with a single seam.</p>
       <div class="pairs">
-        <figure class="plate"><img src="assets/physical/text2print/watch/closed.webp" width="1600" height="1000" alt="The closed watch case: a charcoal and cream twill block with contour lines on the lid" loading="lazy"><figcaption>Closed · 225 × 92 × 89.6 mm</figcaption></figure>
-        <figure class="plate"><img src="assets/physical/text2print/watch/open.webp" width="1600" height="1000" alt="The case open: lid lifted, cream sleeve standing above the woven base" loading="lazy"><figcaption>Open · the sleeve is the neck</figcaption></figure>
-        <figure class="plate"><img src="assets/physical/text2print/watch/top.webp" width="1600" height="1000" alt="The lid from above: topographic lines of three hills laid as charcoal rods on cream weave" loading="lazy"><figcaption>Lid · one hill per watch</figcaption></figure>
-        <figure class="plate"><img src="assets/physical/text2print/watch/underside.webp" width="1600" height="1000" alt="The base's underside: solid charcoal with an inlaid cream border line and the letters cns" loading="lazy"><figcaption>Underside · inlaid in the first two layers</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/text2print/watch/closed.webp" width="1600" height="1000" alt="The closed watch case: a charcoal and cream twill block with contour lines on the lid" loading="lazy" decoding="async"><figcaption>Closed · 225 × 92 × 89.6 mm</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/text2print/watch/open.webp" width="1600" height="1000" alt="The case open: lid lifted, cream sleeve standing above the woven base" loading="lazy" decoding="async"><figcaption>Open · the sleeve is the neck</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/text2print/watch/top.webp" width="1600" height="1000" alt="The lid from above: topographic lines of three hills laid as charcoal rods on cream weave" loading="lazy" decoding="async"><figcaption>Lid · one hill per watch</figcaption></figure>
+        <figure class="plate"><img src="assets/physical/text2print/watch/underside.webp" width="1600" height="1000" alt="The base’s underside: solid charcoal with an inlaid cream border line and the letters cns" loading="lazy" decoding="async"><figcaption>Underside · inlaid in the first two layers</figcaption></figure>
       </div>
-      <p>The lid's weave starts where the base's stops, so its rows match a single box woven to the full height, rod for rod. The contour lines are continuous rods laid on the lid's top course, and the base's underside carries an inlaid border and maker mark in the first two layers.</p>
+      <p>The lid’s weave starts where the base’s stops, so its rows match a single box woven to the full height, rod for rod. The contour lines are continuous rods laid on the lid’s top course, and the base’s underside carries an inlaid border and maker mark in the first two layers.</p>
       <ul>
         <li><span>Fit</span><span class="v">lid 0.25–0.30 mm a side over the sleeve · base 0.6 mm</span></li>
         <li><span>Base</span><span class="v">≈7 h 22 m · 75 colour changes</span></li>
@@ -88,19 +89,30 @@
     <div class="k">the proof</div>
     <div>
       <h2>Every layer checked, then the slicer.</h2>
-      <p>Before a file is handed over, the mesh is cut into its print layers and every island is checked for something underneath it. The check found a real bug: on a 6 mm wall, the twill's skipped rod was sometimes the only rod in the wall, leaving 440 cross-rods printing in mid-air. The weave now never skips a rod that something rests on, and a test keeps it that way.</p>
-      <p>The project is then sliced headless with the Bambu Studio CLI and its warnings read back. Projects default to a 60 °C bed on the textured PEI plate, write every per-filament setting the GUI expects, and print woven lid tops on a peel-off raft in the lid's lightest colour.</p>
+      <p>Before a file is handed over, the mesh is cut into its print layers and every island is checked for something underneath it. The check found a real bug: on a 6 mm wall, the twill’s skipped rod was sometimes the only rod in the wall, leaving 440 cross-rods printing in mid-air. The weave now never skips a rod that something rests on, and a test keeps it that way.</p>
+      <p>The project is then sliced headless with the Bambu Studio CLI and its warnings read back. Projects default to a 60 °C bed on the textured PEI plate, write every per-filament setting the GUI expects, and print woven lid tops on a peel-off raft in the lid’s lightest colour.</p>
       <ul>
-        <li><span>Watch case</span><span class="v">0 floating islands · 0 slicer warnings</span></li>
+        <li><span>Watch case, floating islands</span><span class="v">0</span></li>
+        <li><span>Watch case, slicer warnings</span><span class="v">0</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="call">
+    <div class="k">the call</div>
+    <div>
+      <h2>The file that comes out is the file that prints.</h2>
+      <p>Nothing is handed over until the layer check and the slicer both pass.</p>
+      <ul>
         <li><span>Language</span><span class="v">Python 3.12 · trimesh · manifold3d · CadQuery</span></li>
         <li><span>Runtime</span><span class="v">local studio · Claude Code skill · Bambu Studio CLI</span></li>
+        <li><span>License</span><span class="v">MIT · public on GitHub</span></li>
       </ul>
     </div>
   </section>
 
   <div class="cta">
-    <a class="pill solid" href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">Open the repo ↗</a>
-    <a class="pill ghost" href="physical.html">Physical</a>
+    <a class="pill ghost" href="https://github.com/stilwellc/text2print" target="_blank" rel="noopener">Open the repo ↗</a>
   </div>
 
   <div class="endstrip">
