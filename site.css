@@ -1542,3 +1542,10 @@ body .hw .cta { margin-top: 36px; display: flex; justify-content: center; gap: 0
 body .hw .cell h2 { font-size: clamp(1.2rem, 1.5vw, 1.4rem); }
 body .hw .cell p { font-size: 15px; }
 /* ==== /v4:polish ==== */
+
+/* ==== v4:anim ==== moving pictures from the READMEs: natural shape, a hairline on the light renders, still frame under reduced motion (the <picture> source) */
+body figure.plate.anim img { aspect-ratio: auto; object-fit: contain; background: #F8F7F2; box-shadow: 0 0 0 1px var(--hair); }
+body figure.plate.anim picture { display: block; }
+body .sec figure.plate.anim { margin-top: 1.4rem; }
+body .pairs figure.plate.anim { margin-top: 0; }
+/* ==== /v4:anim ==== */

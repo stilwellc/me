@@ -22,7 +22,7 @@
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/michroma-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=6c9228e">
+<link rel="stylesheet" href="site.css?v=c1d4cbe">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
@@ -61,9 +61,16 @@
     <div>
       <h2>Pick a shape and a texture, or describe it.</h2>
       <p>The studio runs locally in the browser. Choose a shape, a texture, colours and a lid, or type a sentence into Design with Claude and let it compose the design. The right panel shows size, colour changes and filament; one button writes a Bambu Studio project for the P2S.</p>
+      <figure class="plate anim"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/physical/text2print/anim-studio-demo-still.webp"><img src="assets/physical/text2print/anim-studio-demo.webp" width="920" height="575" alt="Screen recording of the studio: picking the round dish shape, the rose window woven texture and a marine blue colour, the 3D preview rebuilding and spinning" loading="lazy" decoding="async"></picture><figcaption><span class="nw">The studio ·</span> <span class="nw">shape, texture, colour, preview</span></figcaption></figure>
       <p>Woven textures print as rods: each layer is a course of lines that cross the course below, so the weave is the object, with no infill and no supports. Colour changes follow the courses, fades dither between two filaments, and lids are short caps of the same weave printed face down.</p>
+      <div class="pairs">
+        <figure class="plate anim"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/physical/text2print/anim-print-build-still.webp"><img src="assets/physical/text2print/anim-print-build.webp" width="520" height="520" alt="Time-lapse of a woven cup printing course by course, each course a row of parallel rods in alternating blue and cream" loading="lazy" decoding="async"></picture><figcaption>Woven rods · course by course</figcaption></figure>
+        <figure class="plate anim"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/physical/text2print/anim-droop-still.webp"><img src="assets/physical/text2print/anim-droop.webp" width="520" height="520" alt="A fringe cup: strands printed straight out into the air, then sagging under gravity into a hanging fringe" loading="lazy" decoding="async"></picture><figcaption>Droop · as printed and after</figcaption></figure>
+      </div>
     </div>
   </section>
+
+  <figure class="plate wide anim"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/physical/text2print/anim-hero-still.webp"><img src="assets/physical/text2print/anim-hero.webp" width="1280" height="380" alt="Six text2print pieces at true relative size, spinning: a woven grid cup, a halftone flames cup, a colour-knit vase hung with loops, a twist vase, a fringe cup and a woven dish" loading="lazy" decoding="async"></picture><figcaption><span class="nw">Six pieces ·</span> <span class="nw">true relative size</span></figcaption></figure>
 
   <section class="sec" id="example">
     <div class="k">the run</div>
@@ -149,7 +156,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=6c9228e"></script>
-<script src="site.js?v=6c9228e"></script>
+<script src="assets/engine.js?v=c1d4cbe"></script>
+<script src="site.js?v=c1d4cbe"></script>
 </body>
 </html>
