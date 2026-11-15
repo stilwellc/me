@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>lectr, a case study — Collin Stilwell</title>
-<meta name="description" content="lectr values upcoming auction lots from 1.1 million realized sales across eighteen houses, rebuilt nightly.">
+<meta name="description" content="lectr values upcoming auction lots against a book of 1.25 million lots from 21 houses, rebuilt nightly.">
 <meta property="og:title" content="lectr, a case study — Collin Stilwell">
-<meta property="og:description" content="lectr values upcoming auction lots from 1.1 million realized sales across eighteen houses, rebuilt nightly.">
+<meta property="og:description" content="lectr values upcoming auction lots against a book of 1.25 million lots from 21 houses, rebuilt nightly.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/lectr.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/lectr.png">
@@ -33,31 +33,27 @@
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
   <nav aria-label="Site"><a class="pill on" aria-current="page" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs">
-  <div class="mhead rv"><canvas class="matrix" data-text="lectr" data-src="assets/lectr.svg" aria-label="A bid paddle between two index ranges, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+<main id="main" class="page cs case">
+  <div class="mhead rv"><canvas class="matrix" data-text="lectr" data-src="assets/lectr.svg" aria-label="A bid paddle between two index ranges, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://lectr.bid" target="_blank" rel="noopener">lectr.bid ↗</a></p>
-  <h1 class="display rv d1">Auction valuations<br>traced to realized sales.</h1>
+  <h1 class="display rv d1">Auction valuations<br> traced to realized sales.</h1>
   <p class="lede rv d2">lectr values upcoming auction lots from past sales and rebuilds itself every night.</p>
-  <ul class="does num rv d2">
-    <li>Crawls eighteen auction houses nightly, one isolated job each.</li>
-    <li>Reconciles hammer and buyer’s premium so prices compare across houses.</li>
-    <li>Values upcoming lots from realized comparables, with a band and a confidence.</li>
-    <li>Records every call before the hammer and grades it after.</li>
-  </ul>
 
   <div class="facts rv d3">
-    <div><div class="n" id="cs-lots">1.14M</div><div class="l">lots in the book<span class="sub"><span id="cs-when">live</span></span></div></div>
-    <div><div class="n">18</div><div class="l">houses, one crawler each</div></div>
-    <div><div class="n">52<span class="u"> min</span></div><div class="l">full nightly run</div></div>
-    <div><div class="n">3</div><div class="l">publish gates</div></div>
+    <div><div class="n" id="cs-lots">1.25M</div><div class="l">lots in the book<span class="sub" id="cs-when">as of Nov 14, 2026</span></div></div>
+    <div><div class="n" data-live="houses-n">21</div><div class="l">auction houses<span class="sub">16 crawled nightly</span></div></div>
+    <div><div class="n">52<span class="u"> min</span></div><div class="l">full nightly run<span class="sub">was 110–130 min</span></div></div>
+    <div><div class="n">3</div><div class="l">publish gates<span class="sub">each fails closed</span></div></div>
   </div>
 
+  <figure class="plate wide rv d3"><picture><source media="(max-width: 600px)" srcset="assets/lectr-home-phone.webp" width="780" height="1306"><img src="assets/lectr-home.webp" width="1440" height="701" alt="The lectr overview: eight market views across the top, the headline Every lot on the block, priced against the record, a demand read per market, and a panel with 6,820 lots on the block and 53 below market" loading="lazy" decoding="async"></picture><figcaption><span class="nw">The overview on lectr.bid</span><i class="sp"> · </i><span class="nw">captured Nov 13, 2026</span></figcaption></figure>
+
   <section class="sec" id="corpus">
-    <div class="k">the problem · corpus</div>
+    <div class="k">the problem</div>
     <div>
-      <h2>Eighteen houses, one book.</h2>
+      <h2><span data-live="houses-n">21</span> houses, one book.</h2>
       <p>Each house has its own crawler and book segment. A failed house can’t touch another house’s data, and a crawl that shrinks its own segment can’t overwrite the last good one.</p>
-      <p class="mono" id="houses">Christie’s · Sotheby’s · Bonhams · Phillips · Wright · Rago · LAMA · Goldin · REA · Huggins &amp; Scott · Lelands · Memory Lane · Hake’s · RR Auction · SCP · MLB Auctions · NFL Auction · Love of the Game</p>
+      <p class="mono" id="houses"><span class="nw">Bonhams ·</span> <span class="nw">Bruun Rasmussen ·</span> <span class="nw">Christie’s ·</span> <span class="nw">Goldin ·</span> <span class="nw">Hake’s ·</span> <span class="nw">Huggins &amp; Scott ·</span> <span class="nw">Julien’s ·</span> <span class="nw">LAMA ·</span> <span class="nw">Lelands ·</span> <span class="nw">Love of the Game ·</span> <span class="nw">MLB Auctions ·</span> <span class="nw">Memory Lane ·</span> <span class="nw">NFL Auction ·</span> <span class="nw">Phillips ·</span> <span class="nw">Propstore ·</span> <span class="nw">REA ·</span> <span class="nw">RR Auction ·</span> <span class="nw">Rago ·</span> <span class="nw">SCP ·</span> <span class="nw">Sotheby’s ·</span> <span class="nw">Wright</span></p>
     </div>
   </section>
 
@@ -67,9 +63,9 @@
       <h2>Crawl, assemble, deploy.</h2>
       <p>Crawl runs one GitHub Actions job per house in parallel. Assemble merges segments, runs the value engine and market indices, and writes the payload deploy builds from. Stages pass same-run artifacts; write-once versions in Cloudflare R2 are the durable copy.</p>
       <div class="stage">
-        <div><div class="t">crawl</div><div class="d">18 jobs in parallel · per-house segments</div></div>
-        <div><div class="t">assemble</div><div class="d">merge · engine · indices · gates</div></div>
-        <div><div class="t">deploy</div><div class="d">static export → Cloudflare Pages</div></div>
+        <div><div class="t">crawl</div><div class="d">one job per house<br>in parallel</div></div>
+        <div><div class="t">assemble</div><div class="d">merge · engine<br>indices · gates</div></div>
+        <div><div class="t">deploy</div><div class="d">static export to<br>Cloudflare Pages</div></div>
       </div>
     </div>
   </section>
@@ -79,17 +75,18 @@
     <div>
       <h2>Nothing publishes unless three gates agree.</h2>
       <p><b>Corpus shrink.</b> If the merged book is more than 10% smaller than the last published one, the last good version stays live.</p>
-      <p><b>Price bleed.</b> A broken feed can stamp one price across a batch. The sentinel blocks only repeat-price clusters within a sale date that were not there yesterday, since a 25-year book carries hundreds of honest bid-increment ties. Any single price on 500+ lots is refused regardless.</p>
+      <p><b>Price bleed.</b> A broken feed can stamp one price across a batch. The sentinel blocks only repeat-price clusters within a sale date that were not there yesterday, since a book that goes back to 1989 carries hundreds of honest bid‑increment ties. Any single price on 500+ lots is refused regardless.</p>
       <pre class="code">[assemble] sanity gate OK: lots 1119724→1138521, sold 1095964→1110578
 [assemble] sentinel: 87 repeat signatures, 82 poison <b>(0 NEW vs baseline of 87)</b>
 [validate] Directional signal: <b>VALIDATED</b> — ships (monotonic beat-rate gradient)</pre>
+      <p class="lbl">Assemble log · from a run at 1.14M lots</p>
       <p><b>Engine holdout.</b> Each release is replayed against a temporal holdout. Lots called cheap must beat their estimate more often than lots called rich, by a minimum spread (current spread in the record below). A local wobble marks the signal degraded; a failed spread blocks the release.</p>
       <p class="mono"><a href="https://lectr.bid/blog/how-we-built-the-pricing-engine" target="_blank" rel="noopener">How we built the price-movement engine ↗</a></p>
     </div>
   </section>
 
   <section class="sec" id="speed">
-    <div class="k">the run · speed</div>
+    <div class="k">the run</div>
     <div>
       <h2>From 130 minutes to 52, without changing a number.</h2>
       <p>Two steps dominated assemble: repeat-sale grouping and per-maker indices. Both were rewritten, with outputs verified identical against the full book.</p>
@@ -102,28 +99,29 @@
     </div>
   </section>
 
-
   <section class="sec" id="trace">
-    <div class="k">the proof · trace</div>
+    <div class="k">the proof · one lot</div>
     <div>
-      <h2>One lot, its call, and its comps.</h2>
-      <p>The comps, graded record and backtest load live from lectr.bid; if that fails, the 2026-09-20 snapshot shows, labeled.</p>
+      <h2>One lot, from the call to the hammer.</h2>
       <div class="trace">
         <div class="trow lot">
           <div class="tl">the lot</div>
-          <div class="tb"><b>Cartier · 18k gold and diamond ‘Panthère de Cartier’ wristwatch</b><span class="mono">Bonhams · Property from a Bel Air Estate · lot 177 · <span id="trace-when">closes 2026-09-24</span> · estimate $5,000 – $7,000, hammer basis</span><span class="mono"><a href="https://www.bonhams.com/auction/31916/lot/177" target="_blank" rel="noopener">the lot at Bonhams &#8599;</a> · <a href="https://lectr.bid/lot/bonhams-31916-177" target="_blank" rel="noopener">on lectr &#8599;</a></span></div>
+          <div class="tb"><b>Cartier · 18k gold and diamond ‘Panthère de Cartier’ wristwatch</b><span class="mono items"><span class="nw">Bonhams</span><i class="sp"> · </i><span class="nw">Property from a Bel Air Estate</span><i class="sp"> · </i><span class="nw">lot 177</span><i class="sp"> · </i><span class="nw" id="trace-when">closed 2026-09-24</span></span><span class="mono items"><span class="nw">estimate $5,000 – $7,000, hammer basis</span></span><span class="mono"><a href="https://www.bonhams.com/auction/31916/lot/177" target="_blank" rel="noopener">the lot at Bonhams ↗</a> · <a href="https://lectr.bid/lot/bonhams-31916-177" target="_blank" rel="noopener">on lectr ↗</a></span></div>
         </div>
         <div class="trow call">
-          <div class="tl">the call</div>
-          <div class="tb"><b class="big">$10,880</b><span class="mono">comp value, all-in · band $7,431 – $20,182 · below comparable market, about 1.8× the estimate midpoint</span><span class="mono">confidence medium · 43 comps in the pool · 97% of them sold · same model realized before: $12,800, Bonhams, 2025-11-18</span></div>
+          <div class="tl">the call · read 2026-09-20</div>
+          <div class="tb"><b class="big">$10,880</b><span class="mono items"><span class="nw">comp value, all-in</span><i class="sp"> · </i><span class="nw">band $7,431 – $20,182</span></span><span class="mono items"><span class="nw">below comparable market</span><i class="sp"> · </i><span class="nw">1.8× the estimate midpoint</span></span><span class="mono items"><span class="nw">confidence medium</span><i class="sp"> · </i><span class="nw">43 comps in the pool</span><i class="sp"> · </i><span class="nw">97% of them sold</span></span></div>
         </div>
         <div class="trow comps">
-          <div class="tl">the comps <span id="trace-comps-src">· snapshot 2026-09-20</span></div>
+          <div class="tl">the comps · read 2026-09-20</div>
           <ul class="tb num" id="trace-comps"><li><span>Bonhams · 2025-11-18</span><span class="v">$12,800</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,240</span></li><li><span>Bonhams · 2025-09-26</span><span class="v">$10,880</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$9,600</span></li><li><span>Bonhams · 2025-06-12</span><span class="v">$19,200</span></li><li><span>Bonhams · 2024-12-09</span><span class="v">$15,360</span></li><li><span>Bonhams · 2024-09-17</span><span class="v">$10,240</span></li><li><span>Bonhams · 2023-05-23</span><span class="v">$16,640</span></li><li><span>Phillips · 2020-12-03</span><span class="v">$5,292</span></li><li><span>Bonhams · 2005-10-05</span><span class="v">$8,736</span></li></ul>
+        </div>
+        <div class="trow result">
+          <div class="tl">the hammer · 2026-09-24</div>
+          <div class="tb"><b class="big">$15,360</b><span class="mono items"><span class="nw">realized, all-in</span><i class="sp"> · </i><span class="nw">hammer $12,000</span></span><span class="mono items"><span class="nw">inside the band</span><i class="sp"> · </i><span class="nw">41% over the call</span></span></div>
         </div>
         <p class="basis">All-in realized vs hammer-basis estimate: the gap carries the buyer’s premium by design.</p>
       </div>
-
     </div>
   </section>
 
@@ -131,14 +129,15 @@
     <div class="k">the proof · record</div>
     <div>
       <h2>Graded calls.</h2>
-      <p>The five latest graded calls, then the backtest across the whole book. <span class="mono" id="trace-rec-src">Snapshot 2026-09-20.</span></p>
-      <ul id="trace-rec" class="num"><li><span>97 Topps Chrome Refractor #138 Kobe Bryant rookie, BGS 9 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $50,020 → realized $73,200</span></li><li><span>2017 National Treasures rookie patch autograph, BGS 9 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $231,800 → realized $292,800</span></li><li><span>87 Fleer #57 Michael Jordan signed rookie, PSA EX 5 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $10,347 → realized $123,220</span></li><li><span>85 Star #101 Michael Jordan rookie, BGS NM-MT 8 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $32,803 → realized $119,560</span></li><li><span>95 Playboy Chromium refractor #85, PSA 10 · Goldin · called <span class="nw">2026-08-24</span></span><span class="v">called $38,026 → realized $23,790</span></li></ul>
+      <p>The five latest graded calls, then the backtest across the whole book and the median error on 2,276 graded lots. <span class="mono" id="trace-rec-src">Snapshot 2026-11-14.</span></p>
+      <ul id="trace-rec" class="num"><li><span><a href="https://lectr.bid/lot/goldin-202609-2316-2134-edd1badf-44ae-4493-8a49-16d608391196" target="_blank" rel="noopener">Sidney Crosby Game-Used, Signed CCM Ribcor Reckoner Hockey Stick</a> · Goldin · called <span class="nw">2026-11-04</span></span><span class="v">bid $783 · floor $2,516 → realized $2,440 <span class="mk no">under floor</span></span></li><li><span><a href="https://lectr.bid/lot/goldin-202610-2716-3638-4ec2e8fe-56dd-4b6c-949d-31c4a83fef79" target="_blank" rel="noopener">2018 Panini Prizm World Cup Red Prizm #80 Kylian Mbappe Rookie Card</a> · Goldin · called <span class="nw">2026-11-04</span></span><span class="v">called $1,711 → realized $1,238 <span class="mk ok">within 30%</span></span></li><li><span><a href="https://lectr.bid/lot/goldin-202610-2718-1624-72d195d3-b797-45b8-87b3-74e631f0bc1c" target="_blank" rel="noopener">2000 Bowman #236 Tom Brady Rookie Card - PSA MINT 9</a> · Goldin · called <span class="nw">2026-11-04</span></span><span class="v">bid $1,044 · floor $4,586 → realized $4,392 <span class="mk no">under floor</span></span></li><li><span><a href="https://lectr.bid/lot/goldin-202610-2019-3335-6ce343ab-5dbc-4319-8135-4ddda77b1cb0" target="_blank" rel="noopener">87 Fleer #57 Michael Jordan Rookie Card - PSA VG-EX 4</a> · Goldin · called <span class="nw">2026-11-04</span></span><span class="v">bid $2,270 · floor $4,727 → realized $5,185 <span class="mk ok">over floor</span></span></li><li><span><a href="https://lectr.bid/lot/goldin-202610-1320-1705-aa6a0eee-c211-4a62-8df3-5ef7c144f94a" target="_blank" rel="noopener">Nolan Ryan Signed Mitchell &amp; Ness Houston Astros Jersey - PSA/DNA</a> · Goldin · called <span class="nw">2026-11-04</span></span><span class="v">bid $234 · floor $271 → realized $440 <span class="mk ok">over floor</span></span></li></ul>
       <div class="facts" id="trace-bt">
-        <div><div class="n" id="bt-flag-n">38,855</div><div class="l">lots the engine flagged, graded</div></div>
-        <div><div class="n" id="bt-flag-perf">+41%</div><div class="l">their median result vs estimate<span class="sub">unflagged <span id="bt-unflag-perf">+16%</span></span></div></div>
-        <div><div class="n" id="bt-flag-beat">65%</div><div class="l">beat the high estimate<span class="sub">unflagged <span id="bt-unflag-beat">46%</span></span></div></div>
-        <div><div class="n" id="bt-graded">1,928</div><div class="l">calls graded against the live bid</div></div>
+        <div><div class="n" id="bt-flag-perf">+44%</div><div class="l">flagged lots vs estimate<span class="sub">unflagged <span id="bt-unflag-perf">+20%</span></span></div></div>
+        <div><div class="n" id="bt-flag-beat">65%</div><div class="l">beat the high estimate<span class="sub">unflagged <span id="bt-unflag-beat">50%</span></span></div></div>
+        <div><div class="n">17,975</div><div class="l">backtested calls<span class="sub">as of Nov 13, 2026</span></div></div>
+        <div><div class="n">24.4%</div><div class="l">median value error<span class="sub">house midpoint 30.9%</span></div></div>
       </div>
+      <figure class="plate wide"><picture><source media="(max-width: 600px)" srcset="assets/lectr-receipts-phone.webp" width="630" height="400"><img src="assets/lectr-receipts.webp" width="1440" height="692" alt="The receipts page on lectr.bid: Every call, graded against the hammer, with the forward tape of logged calls, each row showing the call, the hammer and the difference" loading="lazy" decoding="async"></picture><figcaption><span class="nw">Receipts on lectr.bid</span><i class="sp"> · </i><span class="nw">captured Nov 13, 2026</span></figcaption></figure>
     </div>
   </section>
 
@@ -147,12 +146,17 @@
     <div>
       <h2>When the data looks wrong, publish nothing.</h2>
       <p>Every gate fails closed and leaves yesterday’s book live.</p>
+      <ul>
+        <li><span>Stack</span><span class="v">TypeScript · Next.js static export</span></li>
+        <li><span>Runs on</span><span class="v">GitHub Actions · Cloudflare Pages + R2</span></li>
+        <li><span>Source</span><span class="v">visible on GitHub · all rights reserved</span></li>
+      </ul>
     </div>
   </section>
 
   <div class="cta">
-    <a class="pill solid" href="https://lectr.bid" target="_blank" rel="noopener">Open lectr.bid ↗</a>
-    <a class="pill ghost" href="https://lectr.bid/blog/how-we-built-the-pricing-engine" target="_blank" rel="noopener">How we built the price-movement engine ↗</a>
+    <a class="pill ghost" href="https://lectr.bid" target="_blank" rel="noopener">Open lectr.bid ↗</a>
+    <a class="pill ghost" href="https://lectr.bid/receipts" target="_blank" rel="noopener">Receipts ↗</a>
   </div>
 
   <div class="endstrip">
