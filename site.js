@@ -373,8 +373,8 @@ function flagCheck(s) {
   if (!pal || !inp || !list) return;
   var norm = function (s) { return String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase(); };
   var ITEMS = PAGES.map(function (p) { return { t: p.t, h: p.h, u: p.u, k: p.k || '', w: p.w }; }).concat([
-    { t: 'Starling', h: 'digital', u: 'digital.html#starling', k: 'ebay deals', w: 'Digital' }, { t: 'Elixir secure coding', h: 'security', u: 'security.html#elixir', k: 'semgrep ash podium', w: 'Security' },
-    { t: 'Open lectr.bid', h: '↗', u: 'https://lectr.bid', x: 1 }, { t: 'How we built the price-movement engine', h: '↗', u: 'https://lectr.bid/blog/how-we-built-the-pricing-engine', x: 1, k: 'blog pricing' }, { t: 'Open Starling', h: '↗', u: 'https://starling-6s1.pages.dev', x: 1 }, { t: 'text2print (GitHub)', h: '↗', u: 'https://github.com/stilwellc/text2print', x: 1 }, { t: 'Open soiree.today', h: '↗', u: 'https://soiree.today', x: 1 },
+    { t: 'Elixir secure coding', h: 'security', u: 'security.html#elixir', k: 'semgrep ash podium', w: 'Security' },
+    { t: 'Open lectr.bid', h: '↗', u: 'https://lectr.bid', x: 1 }, { t: 'How we built the price-movement engine', h: '↗', u: 'https://lectr.bid/blog/how-we-built-the-pricing-engine', x: 1, k: 'blog pricing' }, { t: 'Starling (GitHub)', h: '↗', u: 'https://github.com/stilwellc/starling', x: 1, k: 'ebay deals' }, { t: 'text2print (GitHub)', h: '↗', u: 'https://github.com/stilwellc/text2print', x: 1 }, { t: 'Stilwell Farms (GitHub)', h: '↗', u: 'https://github.com/stilwellc/stilwell-farms', x: 1, k: 'game boy color' }, { t: 'palette (GitHub)', h: '↗', u: 'https://github.com/stilwellc/palette', x: 1, k: 'charts slides dashboards skill' }, { t: 'polymarket-dashboard (GitHub)', h: '↗', u: 'https://github.com/stilwellc/polymarket-dashboard', x: 1, k: 'profit loss' }, { t: 'Open soiree.today', h: '↗', u: 'https://soiree.today', x: 1 },
     { t: 'github.com/stilwellc', h: '↗', u: 'https://github.com/stilwellc', x: 1, k: 'code' }, { t: 'LinkedIn', h: '↗', u: LINKEDIN, x: 1, k: 'contact reply message hire' }, { t: 'Substack', h: '↗', u: 'https://collinsthoughts.substack.com', x: 1, k: 'essays writing' },
     { t: 'Shortcuts', h: '?', k: 'keys keyboard help', fn: function () { openKeys(); } }
   ]);
@@ -438,7 +438,7 @@ function flagCheck(s) {
   }
   // commands for the curious: matched exactly, never listed
   var PORTS = { 'index.html': 80, 'digital.html': 443, 'physical.html': 3000, 'fourwalls.html': 3306, 'wave.html': 5432, 'security.html': 8443, 'writing.html': 8080, 'github.html': 9418, 'about.html': 8000, 'resume.html': 8888, 'lectr.html': 4000, 'secmcphub.html': 7000, 'soiree.html': 6000, 'text2print.html': 9100, 'colophon.html': 9000 };
-  var APPS = [['lectr', 1001, 'auction intelligence', '/srv/lectr', '/bin/nightly', 'https://lectr.bid'], ['starling', 1002, 'ebay deep value', '/srv/starling', '/bin/sweep', 'https://starling-6s1.pages.dev'], ['soiree', 1003, 'what is on tonight', '/srv/soiree', '/bin/scrape', 'https://soiree.today'], ['text2print', 1004, 'text to printable file', '/srv/text2print', '/bin/cadquery', 'https://github.com/stilwellc/text2print'], ['secmcphub', 1005, 'monthly security review', '/srv/secmcphub', '/bin/report', 'https://github.com/stilwellc/SecMCPHub']];
+  var APPS = [['lectr', 1001, 'auction intelligence', '/srv/lectr', '/bin/nightly', 'https://lectr.bid'], ['starling', 1002, 'ebay deep value', '/srv/starling', '/bin/sweep', 'https://github.com/stilwellc/starling'], ['soiree', 1003, 'what is on tonight', '/srv/soiree', '/bin/scrape', 'https://soiree.today'], ['text2print', 1004, 'text to printable file', '/srv/text2print', '/bin/cadquery', 'https://github.com/stilwellc/text2print'], ['secmcphub', 1005, 'monthly security review', '/srv/secmcphub', '/bin/report', 'https://github.com/stilwellc/SecMCPHub']];
   function command(raw) {
     var c = norm(raw.trim()).replace(/\s+/g, ' ');
     if (c === 'sudo' || c === 'sudo su' || c === 'sudo -i') { say('collin is not in the sudoers file. This incident will be reported.'); return true; }
@@ -509,62 +509,64 @@ function flagCheck(s) {
   });
 })();
 
-// the weekday ticks beside the grid: row d is the weekday of (today − (6 − d)) days
+// the weekday ticks beside the grid: row d is the weekday of (end − (6 − d)) days.
+// The grid, its ticks and its axis share one frame (.gh-wrap).
 function ghDays(grid, now) {
-  if (grid.parentNode.classList.contains('gh-wrap')) { var d0 = grid.parentNode.querySelector('.gh-days'); if (d0) d0.remove(); } else { var wrap = document.createElement('div'); wrap.className = 'gh-wrap'; grid.parentNode.insertBefore(wrap, grid); wrap.appendChild(grid); }
+  var wrap = grid.parentNode;
+  if (wrap.classList.contains('gh-wrap')) { var d0 = wrap.querySelector('.gh-days'); if (d0) d0.remove(); } else { wrap = document.createElement('div'); wrap.className = 'gh-wrap'; grid.parentNode.insertBefore(wrap, grid); wrap.appendChild(grid); }
+  var ax = wrap.nextElementSibling; if (ax && ax.classList.contains('gh-axis')) wrap.appendChild(ax);
   var days = document.createElement('div'); days.className = 'gh-days'; days.setAttribute('aria-hidden', 'true'); var L = ['S', 'M', 'T', 'W', 'T', 'F', 'S'], out = '';
   for (var d = 0; d < 7; d++) { var dt = new Date(now); dt.setDate(now.getDate() - (6 - d)); out += '<span>' + L[dt.getDay()] + '</span>'; }
-  days.innerHTML = out; grid.parentNode.insertBefore(days, grid);
+  days.innerHTML = out; wrap.insertBefore(days, grid);
 }
 // ── GitHub, live ───────────────────────────────────────────────────────────
-// A short list of the repositories that matter, described in the site's own
-// words. The page ships a snapshot; a live read hydrates it in place and a
-// failed one leaves the snapshot standing.
+// The page ships a snapshot of the repositories and the push grid; a live read
+// refreshes the facts that move and a failed one leaves the snapshot standing.
+// The cells keep the order they were created in, newest first.
 (function () {
   var cells = document.getElementById('gh-cells');
   if (!cells) return;
-  var FEAT = ['lectr', 'starling', 'text2print', 'soiree', 'Mobi', 'SecMCPHub', 'ash-semgrep-rules'];
+  var FEAT = ['stilwell-farms', 'palette', 'polymarket-dashboard', 'starling', 'lectr', 'text2print', 'SecMCPHub', 'me', 'soiree', 'ash-semgrep-rules'];
+  // the repos' own descriptions; these fill in where a repo has none
   var DESC = {
-    lectr: 'Auction intelligence over 1.1M lots from 18 houses: a value engine with a public backtest, rebuilt every night.',
-    starling: 'eBay listings priced under what lectr says they’re worth.',
-    text2print: 'Claude Code skill that turns a text description into a printable file.',
-    soiree: 'Tonight’s events, scraped from the people who post them.',
-    Mobi: 'co.stil, a studio site for my software and physical work.',
-    SecMCPHub: 'Claude Code skills that build a monthly security review from MCP data.',
-    "ash-semgrep-rules": 'Semgrep rules that catch Ash Framework authorization gaps.'
+    SecMCPHub: 'Claude Code skills that turn security data into a weekly or monthly review over MCP.',
+    me: 'This site: plain static files on GitHub Pages.',
+    soiree: 'NYC, Hoboken/Jersey City, and Philadelphia events, scraped from venue calendars and newsletters.',
+    'ash-semgrep-rules': 'Semgrep rules that catch Ash Framework authorization gaps.'
   };
-  var LANG = { 'ash-semgrep-rules': 'Semgrep' };
+  var LANG = { 'ash-semgrep-rules': 'Semgrep', SecMCPHub: 'Claude Code skills', palette: 'Claude Code skill', 'polymarket-dashboard': 'Python' };
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function day(iso) { var m = /^(\d{4})-(\d\d)-(\d\d)/.exec(String(iso || '')); return m ? MON[+m[2] - 1] + ' ' + (+m[3]) + ', ' + m[1] : ''; }
+  function ymd(dt) { return dt.getFullYear() + '-' + ('0' + (dt.getMonth() + 1)).slice(-2) + '-' + ('0' + dt.getDate()).slice(-2); }
   // the state LED at the frame's top-right corner, read from the page's own state line
-  (function () { var st = document.getElementById('gh-state'), act = document.querySelector('.act'); if (!st || !act) return; var led = document.createElement('span'); led.className = 'gh-led'; led.innerHTML = '<i></i><span>' + h(st.textContent.trim()) + '</span>'; act.appendChild(led); st.hidden = true; })();
-  // the snapshot grid gets its weekday ticks at once; the live read redraws them
-  (function () { var g = document.getElementById('gh-grid'); if (g && g.children.length) ghDays(g, new Date()); })();
+  (function () { var st = document.getElementById('gh-state'), act = document.querySelector('.act'); if (!st || !act) return; var led = document.createElement('span'); led.className = 'gh-led'; led.innerHTML = '<i></i><span>' + h(st.textContent.trim()) + '</span>'; var hd = act.querySelector('.sheet-h'); if (hd) hd.insertAdjacentElement('afterend', led); else act.appendChild(led); st.hidden = true; })();
+  // the snapshot grid gets its weekday ticks at once, counted from the day it was taken; the live read redraws them
+  (function () { var g = document.getElementById('gh-grid'); if (!g || !g.children.length) return; var end = new Date((g.getAttribute('data-end') || '') + 'T12:00:00'); ghDays(g, isNaN(end) ? new Date() : end); })();
   ghGet('users/stilwellc', 'gh:user', function (u) { return u && u.created_at ? { public_repos: u.public_repos, created_at: u.created_at } : null; }).then(function (u) {
     if (!u) return;
     if (u.public_repos != null) setNum(document.getElementById('gh-repos'), String(+u.public_repos));
     var y = new Date(u.created_at).getFullYear(); if (y) setNum(document.getElementById('gh-since'), String(y));
   }).catch(function () {});
-  ghGet('users/stilwellc/repos?per_page=100&sort=pushed', 'gh:repos', function (rs) { return Array.isArray(rs) ? rs.map(function (r) { return { name: r.name, fork: r.fork, pushed_at: r.pushed_at, html_url: r.html_url, stargazers_count: r.stargazers_count, language: r.language, description: r.description }; }) : null; }).then(function (rs) {
+  ghGet('users/stilwellc/repos?per_page=100&sort=created', 'gh:repos2', function (rs) { return Array.isArray(rs) ? rs.map(function (r) { return { name: r.name, fork: r.fork, created_at: r.created_at, html_url: r.html_url, stargazers_count: r.stargazers_count, language: r.language, description: r.description }; }) : null; }).then(function (rs) {
     if (!Array.isArray(rs) || !rs.length) return;
-    var own = rs.filter(function (r) { return FEAT.indexOf(r.name) >= 0 && !r.fork; }).sort(function (a, b) { return String(b.pushed_at).localeCompare(String(a.pushed_at)); });
+    var own = rs.filter(function (r) { return FEAT.indexOf(r.name) >= 0 && !r.fork && r.created_at; }).sort(function (a, b) { return String(b.created_at).localeCompare(String(a.created_at)); });
     if (!own.length) return;
     var byName = {}; own.forEach(function (r) { byName[r.name] = r; });
     var stat = [].slice.call(cells.querySelectorAll('[data-repo]'));
     if (stat.length) {
-      // the page's own cells and words stay; only the facts that move are refreshed
+      // the page's own cells and words stay; only the facts that can move are refreshed
       stat.forEach(function (cell) {
         var r = byName[cell.getAttribute('data-repo')]; if (!r) return;
-        var foot = cell.querySelector('.foot'); if (foot && r.pushed_at) foot.textContent = 'pushed ' + String(r.pushed_at).slice(0, 10);
+        var foot = cell.querySelector('.foot'), when = day(r.created_at); if (foot && when) foot.textContent = 'created ' + when;
         var stars = +r.stargazers_count || 0, top = cell.querySelector('.top'), sp = cell.querySelector('.stars');
         if (stars >= 5 && top) { if (!sp) { sp = document.createElement('span'); sp.className = 'pill mono stars'; top.appendChild(sp); } sp.textContent = '★ ' + stars; }
-        cell.__p = String(r.pushed_at || '');
       });
-      stat.slice().sort(function (a, b) { return String(b.__p || '').localeCompare(String(a.__p || '')); }).forEach(function (c) { cells.appendChild(c); });
       return;
     }
     swap(cells, own.map(function (r) {
       var url = String(r.html_url || ''), ok = url.indexOf('https://github.com/') === 0, stars = +r.stargazers_count || 0;
       var tag = ok ? 'a class="cell" data-repo="' + h(r.name) + '" href="' + h(url) + '" target="_blank" rel="noopener"' : 'div class="cell" data-repo="' + h(r.name) + '"';
-      return '<' + tag + '><div class="top"><span class="pill mono">' + h(LANG[r.name] || r.language || 'repo') + '</span>' + (stars >= 5 ? '<span class="pill mono stars">★ ' + stars + '</span>' : '') + '</div><h2>' + h(r.name) + (ok ? '<span class="arrow">↗</span>' : '') + '</h2><p>' + h(DESC[r.name] || r.description || '') + '</p><div class="foot">pushed ' + h(String(r.pushed_at || '').slice(0, 10)) + '</div></' + (ok ? 'a' : 'div') + '>';
+      return '<' + tag + '><div class="top"><span class="pill mono">' + h(LANG[r.name] || r.language || 'repo') + '</span>' + (stars >= 5 ? '<span class="pill mono stars">★ ' + stars + '</span>' : '') + '</div><h2>' + h(r.name) + (ok ? '<span class="arrow">↗</span>' : '') + '</h2><p>' + h(r.description || DESC[r.name] || '') + '</p><div class="foot">created ' + h(day(r.created_at)) + '</div></' + (ok ? 'a' : 'div') + '>';
     }).join(''));
   }).catch(function () {});
   ghEvents().then(function (ev) {
@@ -573,36 +575,37 @@ function ghDays(grid, now) {
     var pushes = ev.filter(function (e) { return e.t === 'PushEvent'; });
     var pe = document.getElementById('gh-pushes');
     if (pe) {
-      var sp = pe.parentNode;
-      if (sp && /pushes in the last/.test(sp.textContent)) sp.innerHTML = '<b id="gh-pushes">' + pushes.length + '</b> of the last ' + ev.length + ' public events were pushes';
-      else setNum(pe, String(pushes.length));
+      setNum(pe, String(pushes.length));
+      var pl = document.getElementById('gh-pushes-l'); if (pl) pl.textContent = 'pushes in ' + ev.length + ' events';
     }
     if (pushes.length) {
       var last = document.getElementById('gh-last'), when = ago(new Date(pushes[0].d).getTime());
       if (last) last.textContent = last.classList.contains('n') ? when.replace(' ago', '').replace(/ days?/, 'd').replace(/ weeks?/, 'w').replace(' min', 'm').replace('just now', 'now') : when;
-      else { var st = document.getElementById('gh-stats'); if (st) { var s = document.createElement('span'); s.innerHTML = 'last push <b id="gh-last">' + h(when) + '</b>'; st.appendChild(s); } }
     }
-    // twelve weeks, a column a week, newest on the right
-    if (grid) {
-      var days = {}; pushes.forEach(function (e) { var d = e.d.slice(0, 10); days[d] = (days[d] || 0) + 1; });
-      var now = new Date(), W = 12, cls = [], tips = [];
+    // a column a week, newest on the right, as many weeks as the events reach back (4 to 12);
+    // days are counted in the reader's own time zone, the way the weekday ticks are
+    var first = ev.reduce(function (m, e) { var t = new Date(e.d).getTime(); return t && (!m || t < m) ? t : m; }, 0);
+    if (grid && first) {
+      var days = {}; pushes.forEach(function (e) { var k0 = ymd(new Date(e.d)); days[k0] = (days[k0] || 0) + 1; });
+      var now = new Date(), span = Math.floor((now.getTime() - first) / 864e5) + 1, W = Math.max(4, Math.min(12, Math.ceil(span / 7))), cls = [], tips = [];
       for (var w = W - 1; w >= 0; w--) for (var d = 0; d < 7; d++) {
         var dt = new Date(now); dt.setDate(now.getDate() - (w * 7 + (6 - d)));
-        var k = dt.toISOString().slice(0, 10), n = days[k] || 0;
+        var k = ymd(dt), n = days[k] || 0;
         cls.push(n >= 6 ? 'l3' : n >= 3 ? 'l2' : n >= 1 ? 'l1' : ''); tips.push(k + ' · ' + n + ' push' + (n === 1 ? '' : 'es'));
       }
       if (grid.children.length === cls.length) [].forEach.call(grid.children, function (c, i) { c.className = cls[i]; c.title = tips[i]; });
       else swap(grid, cls.map(function (c, i) { return '<i class="' + c + '" title="' + h(tips[i]) + '"></i>'; }).join(''));
-      grid.setAttribute('aria-label', 'Push activity: ' + pushes.length + ' pushes among the last ' + ev.length + ' public events, twelve weeks shown');
+      grid.setAttribute('aria-label', 'Push activity: ' + pushes.length + ' pushes among the last ' + ev.length + ' public events, ' + W + ' weeks shown');
       grid.classList.add('weeks');
       ghDays(grid, now);
-      var ax = grid.closest('.act').querySelector('.gh-axis');
-      if (!ax) { ax = document.createElement('div'); ax.className = 'gh-axis'; ax.setAttribute('aria-hidden', 'true'); (grid.parentNode.classList.contains('gh-wrap') ? grid.parentNode : grid).insertAdjacentElement('afterend', ax); }
       var from = new Date(now); from.setDate(now.getDate() - (W * 7 - 1));
-      ax.innerHTML = '<span>' + h(from.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })) + '</span><span>today</span>';
+      var fromTxt = from.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      var ax = grid.closest('.act').querySelector('.gh-axis');
+      if (!ax) { ax = document.createElement('div'); ax.className = 'gh-axis'; ax.innerHTML = '<span class="ax-from"></span><span>today</span>'; grid.parentNode.appendChild(ax); }
+      var af = ax.querySelector('.ax-from'); if (af) af.textContent = fromTxt;
+      var at = ax.querySelector('.ax-to'); if (at) at.textContent = 'today';
+      var fs = document.getElementById('gh-first'); if (fs) fs.textContent = 'The last ' + ev.length + ' public events reach back to ' + day(ymd(new Date(first))) + '.';
     }
-    var first = ev.reduce(function (m, e) { var d = e.d.slice(0, 10); return !m || d < m ? d : m; }, ''), note = document.querySelector('.gh-note');
-    if (note && first) { var fs = document.getElementById('gh-first'); if (!fs) { fs = document.createElement('span'); fs.id = 'gh-first'; note.insertBefore(fs, note.firstChild); } fs.textContent = 'Since ' + first + '. '; }
     var state = document.getElementById('gh-state'); if (state) state.textContent = 'live';
     var led = document.querySelector('.gh-led'); if (led) { led.classList.add('live'); led.lastChild.textContent = 'live'; }
   });

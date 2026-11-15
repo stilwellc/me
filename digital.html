@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Digital — Collin Stilwell</title>
-<meta name="description" content="Software by Collin Stilwell: lectr, Starling, text2print, and Soirée.">
+<meta name="description" content="Software by Collin Stilwell: lectr, text2print, Stilwell Farms, Starling, Soirée, palette, and a Polymarket dashboard.">
 <meta property="og:title" content="Digital — Collin Stilwell">
-<meta property="og:description" content="Software by Collin Stilwell: lectr, Starling, text2print, and Soirée.">
+<meta property="og:description" content="Software by Collin Stilwell: lectr, text2print, Stilwell Farms, Starling, Soirée, palette, and a Polymarket dashboard.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/digital.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/digital.png">
@@ -35,41 +35,60 @@
 <main id="main" class="page cs">
 <div class="lander-head">
   <div class="mhead rv"><canvas class="matrix" data-text="Digital" data-src="assets/digital.svg" aria-label="A terminal prompt, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
-  <p class="eyebrow rv d1">Digital · 4 projects</p>
+  <p class="eyebrow rv d1">Digital · 7 projects</p>
   <h1 class="display rv d1">Software I built.</h1>
-  <p class="lede one rv d2">Web apps I run, and the studio that makes my 3D prints.</p>
+  <p class="lede one rv d2">Web apps I run, a Game Boy Color game, and the studio that makes my 3D prints.</p>
 </div>
-  <div class="frame rv d2"><div class="cells num">
-<a class="cell" href="lectr.html">
-  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-lectr.jpg" alt="The lectr overview: index rows with range bars and sparklines beside a live market panel" loading="lazy" decoding="async" style="object-position:30% 50%"></span><div class="top"><span class="pill mono" data-of="04">web app · case study</span><span class="when mono">Jul 2026</span></div>
+  <div class="frame rv d2"><div class="cells num lead7">
+<a class="cell lead" href="lectr.html">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-lectr.webp" width="1140" height="712" alt="The lectr overview: the headline “Every lot on the block, priced against the record”, index rows with sparklines, and a panel counting 6,820 lots on the block" decoding="async"></span><div class="top"><span class="pill mono" data-of="07">web app · case study</span><span class="when mono">Jul 2026</span></div>
   <h2>lectr<span class="arrow">→</span></h2>
-  <p>Auction intelligence across 18 houses. Every price traceable to a sale.</p>
-  <div class="foot">TypeScript · Next.js · Cloudflare R2 + Pages · GitHub Actions · Supabase</div>
-</a>
-<a class="cell" href="https://starling-6s1.pages.dev" target="_blank" rel="noopener">
-  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-starling.jpg" alt="The Starling board: a dark page with a lead story and a priced eBay listing" loading="lazy" decoding="async" style="object-position:42% 40%"></span><div class="top"><span class="pill mono" data-of="04">web app · powered by lectr</span><span class="when mono">Aug 2026</span></div>
-  <h2 id="starling">Starling<span class="arrow">↗</span></h2>
-  <p>eBay listings priced well under what lectr says they’re worth.</p>
-  <div class="foot">TypeScript · Cloudflare Pages + R2 · lectr value engine</div>
+  <p>Auction intelligence across 21 houses. Every price traceable to a sale.</p>
+  <div class="foot">TypeScript · Next.js · Cloudflare R2 + Pages</div>
 </a>
 <a class="cell" href="text2print.html">
-  <span class="thumb-wrap"><img class="thumb-img" src="assets/physical/text2print/studio-thumb.webp" width="800" height="500" alt="The text2print studio: a shape list on the left, a woven lidded box in the viewport, controls on the right" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono" data-of="04">studio · case study</span><span class="when mono">2026</span></div>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/physical/text2print/studio-thumb.webp" width="800" height="500" alt="The text2print studio: a shape list on the left, a woven lidded box in the viewport, controls on the right" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono" data-of="07">studio · case study</span><span class="when mono">Jun 2026</span></div>
   <h2>text2print<span class="arrow">→</span></h2>
-  <p>A local studio that turns a shape, a texture or a sentence into a print-ready Bambu Lab project.</p>
-  <div class="foot">Python · manifold3d · Bambu Studio CLI</div>
+  <p>Pick a shape and a texture, get a print-ready Bambu Studio project.</p>
+  <div class="foot">Python · CLI · web studio · Claude Code skill</div>
+</a>
+<a class="cell" href="farms.html">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/farms/thumb.webp" width="1600" height="1000" alt="Six Stilwell Farms screens: the title screen, the farm in fall, the valley map, Market Street, the mine and the farm at night" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono" data-of="07">game · case study</span><span class="when mono">Nov 2026</span></div>
+  <h2>Stilwell Farms<span class="arrow">→</span></h2>
+  <p>An original Game Boy Color farm game made for the ModRetro Chromatic. Playable in the browser.</p>
+  <div class="foot">C · GBDK-2020 · 512 KB ROM</div>
+</a>
+<a class="cell" href="starling.html">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-starling.webp" width="1600" height="1000" alt="The Starling board: a Rolex Daytona listed $30,174 under its book value, with the ask marked on a price range" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono" data-of="07">web app · case study</span><span class="when mono">Aug 2026</span></div>
+  <h2 id="starling">Starling<span class="arrow">→</span></h2>
+  <p>eBay Buy It Now listings priced deep under what lectr says they sell for.</p>
+  <div class="foot">TypeScript · Next.js · eBay Browse API</div>
 </a>
 <a class="cell" href="soiree.html">
-  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-soiree.jpg" alt="The Soirée home page: a red illustrated card beside tonight’s listings" loading="lazy" decoding="async" style="object-position:70% 50%"></span><div class="top"><span class="pill mono" data-of="04">web app · case study</span><span class="when mono">Jan 2026</span></div>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-soiree.jpg" width="1000" height="571" alt="The Soirée home page: a red illustrated card beside tonight’s listings" loading="lazy" decoding="async" style="object-position:70% 50%"></span><div class="top"><span class="pill mono" data-of="07">web app · case study</span><span class="when mono">Jan 2026</span></div>
   <h2>Soirée<span class="arrow">→</span></h2>
   <p>Tonight’s events, scraped from the people who post them.</p>
-  <div class="foot">Node.js · Cloudflare · scrapers · cron</div>
+  <div class="foot">JavaScript · scrapers · cron</div>
+</a>
+<a class="cell" href="https://github.com/stilwellc/palette" target="_blank" rel="noopener">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-palette.webp" width="1200" height="750" alt="A palette graphic made from fictional data: the headline “265 opened. 79 fixed. Fixes come in sweeps.” over a bar chart" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono" data-of="07">Claude Code skill · repo</span><span class="when mono">Nov 2026</span></div>
+  <h2>palette<span class="arrow">↗</span></h2>
+  <p>Turns numbers into charts, one-pagers, slide decks and dashboards in one editorial style.</p>
+  <div class="foot">HTML · CSS · no build step · PDF + PNG export</div>
+</a>
+<a class="cell" href="https://github.com/stilwellc/polymarket-dashboard" target="_blank" rel="noopener">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-polymarket.webp" width="1320" height="825" alt="The Polymarket dashboard in demo mode with invented data: a profit figure over stakes, fees and best and worst markets" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono" data-of="07">local tool · repo</span><span class="when mono">Nov 2026</span></div>
+  <h2>Polymarket dashboard<span class="arrow">↗</span></h2>
+  <p>A local, read-only profit and loss dashboard for one Polymarket US account.</p>
+  <div class="foot">Python · GET requests only · macOS Keychain</div>
 </a>
 </div></div>
   <div class="sheet also rv d3">
     <a class="row" href="physical.html"><span class="k">also</span><span><span class="t">Also physical<span class="arrow">→</span></span><span class="d">Four Walls, the 3D prints, and the wave panel.</span></span></a>
     <a class="row" href="security.html"><span class="k">also</span><span><span class="t">Also security<span class="arrow">→</span></span><span class="d">SecMCPHub, Semgrep rules for Ash, and the secure-coding course.</span></span></a>
+    <a class="row" href="github.html"><span class="k">also</span><span><span class="t">Also on GitHub<span class="arrow">→</span></span><span class="d">Every public repository, forks and contributions included.</span></span></a>
   </div>
-  <div class="cta"><a class="pill solid" href="resume.html">Career</a><a class="pill ghost" href="about.html">About</a></div>
+  <div class="cta"><a class="pill solid" href="physical.html">Physical</a><a class="pill ghost" href="github.html">GitHub</a></div>
 </main>
 <footer class="foot">
   <div class="foot-in">
