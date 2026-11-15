@@ -22,7 +22,7 @@
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/michroma-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=c1d4cbe">
+<link rel="stylesheet" href="site.css?v=0c8bfca">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -30,7 +30,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill on" aria-current="page" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill on" aria-current="page" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill" href="about.html">About</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
 <main id="main" class="page cs p-security">
 <div class="lander-head">
@@ -47,24 +47,10 @@
   <div class="foot">4 legs · 5 stops · block tier: FP rate under 5% over a quarter</div>
 </a>
 </div></div>
-  <h2 class="sheet-h rv d2" id="operated">Operated</h2>
-  <div class="facts rv d2">
-    <div><div class="n">4</div><div class="l">security programs built from nothing</div></div>
-    <div><div class="n">$650M</div><div class="l">exit, security and privacy through it</div></div>
-    <div><div class="n">200</div><div class="l">engineers covered by one product security team</div></div>
-    <div><div class="n">1M+</div><div class="l">people on the telehealth platform secured</div></div>
-  </div>
-  <div class="sheet ops rv d2">
-    <div class="row"><span class="k">2026–now</span><span><span class="t">WeightWatchers</span><span class="d">Moving product security from a compliance function to an engineering one as the company expands into clinical care.</span></span></div>
-    <div class="row"><span class="k">2025–2026</span><span><span class="t">Remedy Meds</span><span class="d">Founded the security team after the acquisition: product security, corporate security, and privacy.</span></span></div>
-    <div class="row"><span class="k">2023–2026</span><span><span class="t">Thirty Madison</span><span class="d">Security and privacy for Nurx, Keeps, and Cove, telehealth for over a million people, through the $650M exit.</span></span></div>
-    <div class="row"><span class="k">2021–2023</span><span><span class="t">Podium</span><span class="d">Payments security from proof of concept to billions in volume; built the product security team for about 200 engineers.</span></span></div>
-  </div>
-
   <h2 class="sheet-h rv d2" id="work">The work</h2>
   <div class="frame rv d2"><div class="cells led">
 <a class="cell lead" href="secmcphub.html">
-  <span class="thumb-wrap"><img class="thumb-img" src="assets/secmcphub-sample.webp" width="1440" height="900" alt="A SecMCPHub monthly security review: a posture score beside bars for each finding class" loading="lazy" decoding="async" style="object-position:50% 30%"></span><div class="top"><span class="pill mono">open source · case study</span><span class="when mono">Jun 2026</span></div>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/secmcphub-crop.webp" width="1000" height="625" alt="A SecMCPHub sample report on synthetic data: a B posture score of 78 out of 100 beside coverage bars" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono">open source · case study</span><span class="when mono">Jun 2026</span></div>
   <h2>SecMCPHub<span class="arrow">→</span></h2>
   <p>Claude Code skills that turn vulnerability, GRC, and incident data into one security review, weekly or monthly.</p>
   <div class="foot">Claude Code · MCP · HTML · JSON</div>
@@ -76,19 +62,19 @@
   <div class="foot">4 formats · 15 chart helpers · no build step</div>
 </a>
 <a class="cell" id="ash" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/ash-rule.svg" width="1000" height="540" alt="The Semgrep rule’s key: actor and a dashed empty box" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">open source · Semgrep</span><span class="when mono">Nov 2025</span></div>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/tile-ash.webp" width="1200" height="750" alt="The first lines of the ash-changeset-missing-actor Semgrep rule: it flags an Ash changeset or query executed without a valid actor" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono">open source · Semgrep</span><span class="when mono">Nov 2025</span></div>
   <h2>Ash Semgrep rules<span class="arrow">↗</span></h2>
   <p>Seven rules for authorization gaps in Ash Framework apps. One flags any changeset or query built without an <code>actor:</code> option, so the resource’s policies may never run.</p>
   <div class="foot">Semgrep · Elixir · Ash Framework · 7 rules</div>
 </a>
 <a class="cell" id="elixir" href="https://github.com/erlef/elixir-secure-coding" target="_blank" rel="noopener">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/shot-elixir.svg" width="1000" height="540" alt="A droplet, the Elixir mark" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">open source · course</span><span class="when mono">2023</span></div>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/tile-elixir.webp" width="1200" height="750" alt="The eight topics of the Elixir Secure Coding Training curriculum, from OWASP to The Secure Road" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono">open source · course</span><span class="when mono">2023</span></div>
   <h2>Elixir secure coding<span class="arrow">↗</span></h2>
   <p>Podium’s open secure-coding curriculum for Elixir engineers, now upstream at erlef. Contributor.</p>
   <div class="foot">Elixir · Phoenix · Livebook</div>
 </a>
 <a class="cell" id="brumby" href="https://github.com/stilwellc/Brumby-Code-Checker-Fall-2019" target="_blank" rel="noopener">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/brumby.svg" width="1000" height="540" alt="A row of short and long bars: the Brumby diff" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">scanner · Rowan + ASRC</span><span class="when mono">2019–2020</span></div>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/tile-brumby.webp" width="1200" height="750" alt="Brumby’s similarity function: the average of cosine similarity and longest common subsequence, scaled by a size weight" loading="lazy" decoding="async"></span><div class="top"><span class="pill mono">scanner · Rowan + ASRC</span><span class="when mono">2019–2020</span></div>
   <h2>Brumby Code Checker<span class="arrow">↗</span></h2>
   <p>A redundancy scanner that flags duplicated code in C++, Java, and Ada, built for Lockheed Martin systems. Three similarity measures (cosine, ordered naive, longest common subsequence) combined as a weighted average.</p>
   <div class="foot">750 files · about 2 minutes · 270,000 comparisons</div>
@@ -111,19 +97,19 @@
 </div></div>
   <div class="sheet also rv d3"><a class="row" href="digital.html"><span class="k">also</span><span><span class="t">Digital<span class="arrow">→</span></span><span class="d">lectr, Starling, text2print, Soirée, and Stilwell Farms.</span></span></a></div>
 
-  <div class="cta"><a class="pill solid" href="resume.html">Career</a><a class="pill ghost" href="writing.html">Writing</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
+  <div class="cta"><a class="pill solid" href="about.html#career">About</a><a class="pill ghost" href="writing.html">Writing</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
 </main>
 <footer class="foot">
   <div class="foot-in">
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape-sm.webp" width="52" height="45" alt=""></button>
-    <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Career</a><a href="colophon.html">Colophon</a></nav>
+    <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
     <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… digital, physical, security, writing, github, about, career" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… digital, physical, security, writing, github, about" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -134,7 +120,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=c1d4cbe"></script>
-<script src="site.js?v=c1d4cbe"></script>
+<script src="assets/engine.js?v=0c8bfca"></script>
+<script src="site.js?v=0c8bfca"></script>
 </body>
 </html>

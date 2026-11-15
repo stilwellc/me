@@ -22,7 +22,7 @@
 <link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/michroma-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=c1d4cbe">
+<link rel="stylesheet" href="site.css?v=0c8bfca">
 <style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
 <script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
 </head>
@@ -30,9 +30,9 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="mast">
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
-  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill on" aria-current="page" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+  <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="writing.html">Writing</a><a class="pill on" aria-current="page" href="about.html">About</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs p-about">
+<main id="main" class="page cs p-about res">
 <div class="lander-head">
   <div class="mhead rv"><canvas class="matrix" data-text="About" data-src="assets/about.svg" aria-label="A city skyline, drawn in the line screen" role="img"></canvas></div>
   <p class="eyebrow rv d1">About · New Jersey</p>
@@ -46,23 +46,37 @@
   <div class="sheet record kv rv d2">
     <div class="row"><span class="k">builds</span><span class="t"><a href="lectr.html">lectr</a>, an auction-intelligence app; <a href="text2print.html">text2print</a>, a local 3D-print studio; <a href="fourwalls.html">Four Walls</a>, a renovation down to the studs.</span></div>
     <div class="row"><span class="k">writes</span><span class="t"><a href="writing.html">Essays</a> on security, on Substack, and market notes for lectr.</span></div>
-    <div class="row"><span class="k">school</span><span class="t">Computer science at Rowan, cum laude, then NYU’s M.S. Cyber Security program as a Cyber Fellow.</span></div>
     <div class="row"><span class="k">lives</span><span class="t">New Jersey.</span></div>
   </div>
 
-  <div class="cta rv d3"><a class="pill solid" href="resume.html">Career</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
+  <h2 class="sheet-h" id="career">Career</h2>
+  <div class="ledger">
+    <div class="lrow now"><div class="k">2026–now</div><div><h3 class="t">WeightWatchers</h3><ul class="roles"><li><span class="r">Senior Product Security Engineer</span><span class="w">Jun 2026 – present</span></li></ul></div></div>
+    <div class="lrow"><div class="k">2025–2026</div><div><h3 class="t">Remedy Meds</h3><ul class="roles"><li><span class="r">Senior Product Security Engineer II</span><span class="w">Oct 2025 – Jun 2026</span></li></ul></div></div>
+    <div class="lrow"><div class="k">2023–2026</div><div><h3 class="t">Thirty Madison</h3><ul class="roles"><li><span class="r">Senior Product Security Engineer II</span><span class="w">Feb 2025 – Jun 2026</span></li><li><span class="r">Senior Product Security Engineer</span><span class="w">Apr 2023 – Feb 2025</span></li></ul></div></div>
+    <div class="lrow"><div class="k">2021–2023</div><div><h3 class="t">Podium</h3><ul class="roles"><li><span class="r">Tech Lead, Product Security</span><span class="w">Jul 2022 – Apr 2023</span></li><li><span class="r">Application Security Engineer</span><span class="w">Nov 2021 – Apr 2023</span></li></ul></div></div>
+    <div class="lrow"><div class="k">2019–2021</div><div><h3 class="t">TD</h3><ul class="roles"><li><span class="r">Associate, Enterprise Security</span><span class="w">Jul 2020 – Nov 2021</span></li><li><span class="r">Summer Analyst, Enterprise Security</span><span class="w">May – Aug 2019</span></li></ul></div></div>
+    <div class="lrow"><div class="k">2018</div><div><h3 class="t">New Jersey State Police</h3><ul class="roles"><li><span class="r">Intern, Network Engineering</span><span class="w">May – Aug 2018</span></li></ul></div></div>
+  </div>
+  <h2 class="sheet-h" id="education">Education</h2>
+  <div class="ledger">
+    <div class="lrow"><div class="k">2021–2023</div><div><h3 class="t">New York University</h3><ul class="roles"><li><span class="r">M.S. Cyber Security program</span><span class="w">Cyber Fellow</span></li></ul></div></div>
+    <div class="lrow"><div class="k">2016–2020</div><div><h3 class="t">Rowan University</h3><ul class="roles"><li><span class="r">B.S. Computer Science, cum laude</span><span class="w">Concentration in cyber defense</span></li></ul></div></div>
+  </div>
+
+  <div class="cta"><a class="pill solid" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">Full history on LinkedIn ↗</a><a class="pill ghost" href="security.html">Security</a></div>
 </main>
 <footer class="foot">
   <div class="foot-in">
     <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape-sm.webp" width="52" height="45" alt=""></button>
-    <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Career</a><a href="colophon.html">Colophon</a></nav>
+    <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="colophon.html">Colophon</a></nav>
     <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
     <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
   </div>
 </footer>
 <div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
   <div class="pal-box">
-    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… digital, physical, security, writing, github, about, career" autocomplete="off" spellcheck="false">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… digital, physical, security, writing, github, about" autocomplete="off" spellcheck="false">
     <ul id="pal-list"></ul>
     <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
   </div>
@@ -73,7 +87,7 @@
     <div class="keys-grid"></div>
   </div>
 </div>
-<script src="assets/engine.js?v=c1d4cbe"></script>
-<script src="site.js?v=c1d4cbe"></script>
+<script src="assets/engine.js?v=0c8bfca"></script>
+<script src="site.js?v=0c8bfca"></script>
 </body>
 </html>

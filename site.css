@@ -1549,3 +1549,9 @@ body figure.plate.anim picture { display: block; }
 body .sec figure.plate.anim { margin-top: 1.4rem; }
 body .pairs figure.plate.anim { margin-top: 0; }
 /* ==== /v4:anim ==== */
+
+/* ==== v5:about-career ==== the career summary on About: one tight row per employer */
+body .p-about .ledger .lrow { padding: 12px 0; }
+body .p-about .lrow ul.roles { margin-top: 0.2rem; }
+body .p-about .sheet-h { margin-top: 3rem; }
+/* ==== /v5:about-career ==== */

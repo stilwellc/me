@@ -98,22 +98,21 @@ var PAGES = [
   { u: 'index.html', t: 'Home', h: 'g h', w: 'Collin' },
   { u: 'digital.html', t: 'Digital', h: 'g d', w: 'Digital' },
   { u: 'physical.html', t: 'Physical', h: 'g p', w: 'Physical' },
-  { u: 'fourwalls.html', t: 'Four Walls', h: 'the residence', w: 'Four Walls', k: 'apartment renovation home' },
-  { u: 'wave.html', t: 'Wave panel', h: 'wall panel', w: 'Wave', k: 'printing' },
   { u: 'security.html', t: 'Security', h: 'g s', w: 'Security', k: 'day job' },
   { u: 'writing.html', t: 'Writing', h: 'g w', w: 'Writing', k: 'essays substack' },
   { u: 'github.html', t: 'GitHub', h: 'g g', w: 'GitHub', k: 'code repos' },
-  { u: 'about.html', t: 'About', h: 'g a', w: 'About' },
-  { u: 'resume.html', t: 'Career', h: 'g r', w: 'Career', k: 'resume résumé cv overview' },
-  { u: 'lectr.html', t: 'lectr, a case study', h: 'g l', w: 'lectr', k: 'auction', cs: 1 },
-  { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'security', w: 'SecMCPHub', k: 'security review', cs: 1 },
-  { u: 'soiree.html', t: 'Soirée, a case study', h: 'digital', w: 'Soirée', k: 'events tonight', cs: 1 },
-  { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing studio bambu woven watch case', cs: 1 },
+  { u: 'about.html', t: 'About', h: 'g a', w: 'About', k: 'career resume résumé cv' },
   { u: 'colophon.html', t: 'Colophon', h: 'stack and build', w: 'Colophon', k: 'playground' },
+  { u: 'fourwalls.html', t: 'Four Walls', h: 'the residence', w: 'Four Walls', k: 'apartment renovation home' },
+  { u: 'wave.html', t: 'Wave panel', h: 'wall panel', w: 'Wave', k: 'printing' },
+  { u: 'lectr.html', t: 'lectr, a case study', h: 'g l', w: 'lectr', k: 'auction', cs: 1 },
+  { u: 'text2print.html', t: 'text2print, a case study', h: 'digital', w: 'text2print', k: 'printing studio bambu woven watch case', cs: 1 },
   { u: 'farms.html', t: 'Stilwell Farms, a case study', h: 'digital', w: 'Stilwell Farms', k: 'game boy color gbc chromatic modretro farm game', cs: 1 },
-  { u: 'starling.html', t: 'Starling, a case study', h: 'digital', w: 'Starling', k: 'ebay deals board', cs: 1 }
+  { u: 'starling.html', t: 'Starling, a case study', h: 'digital', w: 'Starling', k: 'ebay deals board', cs: 1 },
+  { u: 'soiree.html', t: 'Soirée, a case study', h: 'digital', w: 'Soirée', k: 'events tonight', cs: 1 },
+  { u: 'secmcphub.html', t: 'SecMCPHub, a case study', h: 'security', w: 'SecMCPHub', k: 'security review', cs: 1 }
 ];
-PAGES.forEach(function (p, i) { p.n = ('0' + (i + 1)).slice(-2); });   // the system is numbered: 01 Home … 17 Starling
+PAGES.forEach(function (p, i) { p.n = ('0' + (i + 1)).slice(-2); });   // the system is numbered: 01 Home … 16 SecMCPHub
 function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('/').pop().toLowerCase() || 'index.html'; for (var i = 0; i < PAGES.length; i++) if (PAGES[i].u === f) return PAGES[i]; return null; }
 
 // ── touch: the ⌘K pill is the menu (before the topbar clones the nav) ────────
@@ -490,7 +489,7 @@ function flagCheck(s) {
   pal.addEventListener('click', function (e) { if (e.target === pal) close(); });
   var btn = document.getElementById('palette-btn'); if (btn) btn.addEventListener('click', open);
   var pending = null, pt = 0;
-  var CHORD = { h: 'index.html', d: 'digital.html', s: 'security.html', w: 'writing.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'resume.html', l: 'lectr.html', p: 'physical.html' };
+  var CHORD = { h: 'index.html', d: 'digital.html', s: 'security.html', w: 'writing.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'about.html#career', l: 'lectr.html', p: 'physical.html' };
   addEventListener('keydown', function (e) {
     var ae = document.activeElement, inField = /^(INPUT|TEXTAREA|SELECT)$/.test((ae || {}).tagName || '') || (ae && ae.isContentEditable);
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); pal.hidden ? open() : close(); return; }
@@ -918,7 +917,7 @@ function whack(intro) {
   var strip = document.createElement('div'); strip.className = 'foot-status'; strip.setAttribute('aria-label', 'Status');
   var slots = here ? ['<span class="sl s-page">page <b>' + here.n + '/' + ('0' + PAGES.length).slice(-2) + '</b></span>'] : [];   // a page outside the numbered system (404, the vault) prints no page slot
   if (document.documentElement.dataset.secs && +document.documentElement.dataset.secs > 1) slots.push('<span class="sl s-secno"><b>§01</b></span>');
-  slots.push('<span class="sl s-weight"><b>—</b></span>', '<span class="sl s-flags">flags <b>' + got.length + '/3</b></span>', '<span class="sl"><button type="button" class="snd" aria-pressed="' + String(SND.on) + '" title="Sound: the band setting, palette and toggle detents, a flag confirm"><i></i>snd</button></span>');
+  slots.push('<span class="sl s-flags">flags <b>' + got.length + '/3</b></span>', '<span class="sl"><button type="button" class="snd" aria-pressed="' + String(SND.on) + '" title="Sound: the band setting, palette and toggle detents, a flag confirm"><i></i>snd</button></span>');
   strip.innerHTML = '<div class="fs">' + slots.join('') + '</div>';   // the separators are drawn by CSS, before each slot
   fin.appendChild(strip);
   strip.querySelector('button.snd').addEventListener('click', function () { SND.set(!SND.on); });
