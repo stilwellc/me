@@ -6,9 +6,9 @@
 <script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Security — Collin Stilwell</title>
-<meta name="description" content="The security work of Collin Stilwell: a product security program in four parts, SecMCPHub, Semgrep rules for Ash, Podium’s secure-coding course, and the essay.">
+<meta name="description" content="The security work of Collin Stilwell: a product security program on four legs, SecMCPHub, palette, Semgrep rules for Ash, an Elixir secure-coding course, and two essays.">
 <meta property="og:title" content="Security — Collin Stilwell">
-<meta property="og:description" content="The security work of Collin Stilwell: a product security program in four parts, SecMCPHub, Semgrep rules for Ash, Podium’s secure-coding course, and the essay.">
+<meta property="og:description" content="The security work of Collin Stilwell: a product security program on four legs, SecMCPHub, palette, Semgrep rules for Ash, an Elixir secure-coding course, and two essays.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://stilwellc.github.io/me/security.html">
 <meta property="og:image" content="https://stilwellc.github.io/me/assets/og/security.png">
@@ -32,19 +32,19 @@
   <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
   <nav aria-label="Site"><a class="pill" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill on" aria-current="page" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
 </header>
-<main id="main" class="page cs">
+<main id="main" class="page cs p-security">
 <div class="lander-head">
-  <div class="mhead rv"><canvas class="matrix" data-text="Security" data-src="assets/security.svg" aria-label="A row of space invaders and a cannon, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
-  <p class="eyebrow rv d1">Security · 4 pieces · 2 essays</p>
+  <div class="mhead rv"><canvas class="matrix" data-text="Security" data-src="assets/security.svg" aria-label="A row of space invaders and a cannon, drawn in the line screen" role="img"></canvas></div>
+  <p class="eyebrow rv d1">Security · 5 pieces · 2 essays</p>
   <h1 class="display rv d1">Guardrails, not gates.</h1>
-  <p class="lede one rv d2">How I run product security, and the security work I’ve published. Roles and dates are on the <a href="resume.html">career page</a>.</p>
+  <p class="lede one rv d2">How I run product security, and the security work I’ve published.</p>
 </div>
   <div class="frame rv d2"><div class="cells one">
-<a class="cell lead" id="program" href="#writing">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/program.svg" alt="A loop of four boxes, the first filled: the program’s four parts" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">program · how I run it</span><span class="when mono">2022 – now</span></div>
-  <h2>The program<span class="arrow">→</span></h2>
-  <p>Four parts: guardrails by default, a human pass, safe primitives, and feedback into the rules. Built in five stops, foundation to maturity.</p>
-  <div class="foot">4 parts · 5 stops · &lt;5% false positives before a rule may block</div>
+<a class="cell lead" id="program" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/essay-appsec.webp" width="1200" height="736" alt="The four legs, as the essay draws them: Security by Default, Reactionary Security, Security by Design, and Continuous Feedback &amp; Metrics" loading="lazy" decoding="async" style="object-position:50% 0"></span><div class="top"><span class="pill mono">program · how I run it</span><span class="when mono">2022–now</span></div>
+  <h2>The program<span class="arrow">↗</span></h2>
+  <p>Four legs: Security by Default, Reactionary Security, Security by Design, and Continuous Feedback &amp; Metrics. Built in five stops, from Foundation to Maturity.</p>
+  <div class="foot">4 legs · 5 stops · block tier: FP rate under 5% over a quarter</div>
 </a>
 </div></div>
   <h2 class="sheet-h rv d2" id="operated">Operated</h2>
@@ -55,56 +55,61 @@
     <div><div class="n">1M+</div><div class="l">people on the telehealth platform secured</div></div>
   </div>
   <div class="sheet ops rv d2">
-    <div class="row"><span class="k">2026 – now</span><span><span class="t">WeightWatchers</span><span class="d">Moving product security from a compliance function to an engineering one as the company expands into clinical care.</span></span></div>
+    <div class="row"><span class="k">2026–now</span><span><span class="t">WeightWatchers</span><span class="d">Moving product security from a compliance function to an engineering one as the company expands into clinical care.</span></span></div>
     <div class="row"><span class="k">2025–2026</span><span><span class="t">Remedy Meds</span><span class="d">Founded the security team after the acquisition: product security, corporate security, and privacy.</span></span></div>
     <div class="row"><span class="k">2023–2026</span><span><span class="t">Thirty Madison</span><span class="d">Security and privacy for Nurx, Keeps, and Cove, telehealth for over a million people, through the $650M exit.</span></span></div>
     <div class="row"><span class="k">2021–2023</span><span><span class="t">Podium</span><span class="d">Payments security from proof of concept to billions in volume; built the product security team for about 200 engineers.</span></span></div>
   </div>
 
   <h2 class="sheet-h rv d2" id="work">The work</h2>
-  <div class="frame rv d2"><div class="cells">
-<a class="cell" href="secmcphub.html">
-  <span class="thumb-wrap"><img class="thumb-img" src="assets/secmcphub-sample.webp" alt="A SecMCPHub monthly security review: a posture score beside bars for each finding class" loading="lazy" decoding="async" style="object-position:50% 30%"></span><div class="top"><span class="pill mono">open source · case study</span><span class="when mono">Jun 2026</span></div>
+  <div class="frame rv d2"><div class="cells led">
+<a class="cell lead" href="secmcphub.html">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/secmcphub-sample.webp" width="1440" height="900" alt="A SecMCPHub monthly security review: a posture score beside bars for each finding class" loading="lazy" decoding="async" style="object-position:50% 30%"></span><div class="top"><span class="pill mono">open source · case study</span><span class="when mono">Jun 2026</span></div>
   <h2>SecMCPHub<span class="arrow">→</span></h2>
-  <p>Claude Code skills that turn vulnerability, GRC, and incident data into one monthly security review.</p>
+  <p>Claude Code skills that turn vulnerability, GRC, and incident data into one security review, weekly or monthly.</p>
   <div class="foot">Claude Code · MCP · HTML · JSON</div>
 </a>
+<a class="cell" id="palette" href="https://github.com/stilwellc/palette" target="_blank" rel="noopener">
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/shot-palette.webp" width="1200" height="750" alt="A palette chart on fictional data: findings opened and fixed each week, with the headline 265 opened, 79 fixed" loading="lazy" decoding="async" style="object-position:50% 0"></span><div class="top"><span class="pill mono">open source · Claude Code skill</span><span class="when mono">Nov 2026</span></div>
+  <h2>palette<span class="arrow">↗</span></h2>
+  <p>A Claude Code skill that turns numbers into charts, one-pagers, slide decks, and dashboards in one editorial style, and exports them as PDF and PNG. Built for an application security team; the sample data is fictional.</p>
+  <div class="foot">4 formats · 15 chart helpers · no build step</div>
+</a>
 <a class="cell" id="ash" href="https://github.com/stilwellc/ash-semgrep-rules" target="_blank" rel="noopener">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/ash-rule.svg" alt="The Semgrep rule’s key: actor and a dashed empty box" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">open source · Semgrep</span><span class="when mono">2025</span></div>
+  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/ash-rule.svg" width="1000" height="540" alt="The Semgrep rule’s key: actor and a dashed empty box" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">open source · Semgrep</span><span class="when mono">Nov 2025</span></div>
   <h2>Ash Semgrep rules<span class="arrow">↗</span></h2>
   <p>Seven rules for authorization gaps in Ash Framework apps. One flags any changeset or query built without an <code>actor:</code>, so the resource’s policies may never run.</p>
   <div class="foot">Semgrep · Elixir · Ash Framework · 7 rules</div>
 </a>
-<a class="cell" id="elixir" href="https://github.com/stilwellc/elixir-secure-coding" target="_blank" rel="noopener">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/shot-elixir.svg" alt="A droplet, the Elixir mark" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">open source · course</span><span class="when mono">2023</span></div>
+<a class="cell" id="elixir" href="https://github.com/erlef/elixir-secure-coding" target="_blank" rel="noopener">
+  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/shot-elixir.svg" width="1000" height="540" alt="A droplet, the Elixir mark" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">open source · course</span><span class="when mono">2023</span></div>
   <h2>Elixir secure coding<span class="arrow">↗</span></h2>
-  <p>Podium’s open secure-coding curriculum for Elixir engineers. Top contributor.</p>
+  <p>Podium’s open secure-coding curriculum for Elixir engineers, now upstream at erlef. Contributor.</p>
   <div class="foot">Elixir · Phoenix · Livebook</div>
 </a>
-<a class="cell" id="brumby" href="resume.html">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/brumby.svg" alt="A row of short and long bars: the Brumby diff" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">scanner · Rowan + ASRC</span><span class="when mono">2019–2020</span></div>
-  <h2>Brumby Code Checker<span class="arrow">→</span></h2>
-  <p>A redundancy scanner for C++, Java, and Ada, built for Lockheed Martin systems. Three similarity measures combined into one weighted score.</p>
-  <div class="foot">cosine · ordered naive · longest common subsequence</div>
+<a class="cell" id="brumby" href="https://github.com/stilwellc/Brumby-Code-Checker-Fall-2019" target="_blank" rel="noopener">
+  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/brumby.svg" width="1000" height="540" alt="A row of short and long bars: the Brumby diff" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">scanner · Rowan + ASRC</span><span class="when mono">2019–2020</span></div>
+  <h2>Brumby Code Checker<span class="arrow">↗</span></h2>
+  <p>A redundancy scanner that flags duplicated code in C++, Java, and Ada, built for Lockheed Martin systems. Three similarity measures (cosine, ordered naive, longest common subsequence) combined as a weighted average.</p>
+  <div class="foot">750 files · about 2 minutes · 270,000 comparisons</div>
 </a>
 </div></div>
   <h2 class="sheet-h rv d3" id="writing">Writing</h2>
   <div class="frame rv d3"><div class="cells">
 <a class="cell" id="essay-ai" href="https://collinsthoughts.substack.com/p/ai-in-security-volume-from-the-model" target="_blank" rel="noopener">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/structure.svg" alt="A grid of three by three cells with a filled centre" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">essay · Substack</span><span class="when mono">Oct 2026</span></div>
-  <h2>AI in security<span class="arrow">↗</span></h2>
-  <p>Volume from the model, trust from the structure: AI triage of findings, agents doing security work through deterministic scripts, and guarding the agents developers use.</p>
-  <div class="foot">≈2,100 words · collinsthoughts.substack.com</div>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/essay-ai.webp" width="1200" height="801" alt="The essay’s first figure: three clusters of dots for the three directions a security team meets AI" loading="lazy" decoding="async" style="object-position:50% 0"></span><div class="top"><span class="pill mono">essay · Substack</span><span class="when mono">Oct 2026</span></div>
+  <h2>AI in Security: Volume From the Model, Trust From the Structure<span class="arrow">↗</span></h2>
+  <p>What we learned using AI to triage security findings, run our own work, and guard the agents developers use.</p>
+  <div class="foot">≈2,000 words · collinsthoughts.substack.com</div>
 </a>
 <a class="cell" id="essay-appsec" href="https://collinsthoughts.substack.com/p/building-an-application-security" target="_blank" rel="noopener">
-  <span class="thumb-wrap is-mark"><img class="thumb-img" src="assets/chair.svg" alt="A chair in outline" loading="lazy" decoding="async" style="object-position:50% 50%"></span><div class="top"><span class="pill mono">essay · Substack</span><span class="when mono">May 2026</span></div>
-  <h2>Building an AppSec program that works<span class="arrow">↗</span></h2>
-  <p>The essay behind the program: the four legs of the chair, the build order, and seven common failures.</p>
+  <span class="thumb-wrap"><img class="thumb-img" src="assets/essay-appsec-filter.webp" width="1200" height="795" alt="A figure from the essay: a pull request passes a SAST scan, then an AI false-positive filter, then one of three rule tiers" loading="lazy" decoding="async" style="object-position:50% 0"></span><div class="top"><span class="pill mono">essay · Substack</span><span class="when mono">May 2026</span></div>
+  <h2>Building an Application Security Program That Actually Works<span class="arrow">↗</span></h2>
+  <p>The essay behind the program: four legs, a five-stop build order, and seven failures that sink AppSec programs.</p>
   <div class="foot">≈3,200 words · collinsthoughts.substack.com</div>
 </a>
 </div></div>
-  <div class="sheet also rv d3"><a class="row" href="digital.html"><span class="k">also</span><span><span class="t">Also digital<span class="arrow">→</span></span><span class="d">lectr, Starling, text2print, and Soirée.</span></span></a></div>
-
+  <div class="sheet also rv d3"><a class="row" href="digital.html"><span class="k">also</span><span><span class="t">Digital<span class="arrow">→</span></span><span class="d">lectr, Starling, text2print, Soirée, and Stilwell Farms.</span></span></a></div>
 
   <div class="cta"><a class="pill solid" href="resume.html">Career</a><a class="pill ghost" href="writing.html">Writing</a><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
 </main>
