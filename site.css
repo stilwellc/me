@@ -1321,79 +1321,81 @@ body .repos .cell .foot { padding-top: 0.5rem; }
 /* ==== /v3:digital ==== */
 
 /* ==== v3:farms ==== */
-/* pixel art is shown at whole multiples of the Game Boy Color's 160 × 144 and never smoothed */
-body .farms figure.px img, body .farms .gbc-poster, body .farms .gbc canvas { image-rendering: pixelated; }
-body .farms .pxgrid { display: grid; grid-template-columns: repeat(3, 320px); justify-content: center; gap: 1.25rem 0; max-width: var(--wide); margin: 2rem auto 0; }
-body .farms .pxgrid.styles { grid-template-columns: repeat(2, 320px); }
-body .farms figure.px { margin: 0; position: relative; text-align: left; }
-body .farms figure.px img { display: block; width: 320px; height: auto; max-width: 100%; }
-body .farms .pxgrid figure.px::after { content: ""; position: absolute; inset: 0 0 auto 0; aspect-ratio: 160 / 144; box-shadow: inset 0 0 0 3px var(--ground); pointer-events: none; }   /* three 320px tiles fill the 960 line exactly, so the gutter is a 6px seam drawn over their edges */
-body .farms .pxgrid.styles figure.px::after { aspect-ratio: 160 / 74; }
-body .farms figure.px figcaption { margin: 0.4rem 0 0; padding: 0 0.75rem 0 3px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
-body .farms figure.px.one { width: 576px; max-width: 100%; margin: 2rem auto; }
-body .farms figure.px.one img { width: 576px; }
-body .farms .pxgrid + :is(p, ul) { margin-top: 2rem; }
-body .farms .sec p .mono, body .farms .sec p.mono { font-family: var(--mono); font-size: 0.86em; }
-@media (max-width: 1055px) {
-  body .farms .pxgrid { grid-template-columns: repeat(2, 320px); gap: 1.25rem 12px; }
-  body .farms .pxgrid figure.px::after { display: none; }
-}
+/* Stilwell Farms. Every picture of the game is a plate on one of the two widths, 6px corners and the plate hairline;
+   inside it the game sits on its own dark ground at a whole multiple of its pixels, never smoothed, never clipped. */
+body .farms figure.plate.px { max-width: var(--col); margin: 2rem auto 0; }
+body .farms figure.plate.px.wide { max-width: var(--wide); margin-top: clamp(24px, 4vw, 60px); }
+body .farms .pxb { display: grid; grid-template-columns: repeat(2, 320px); justify-content: center; align-items: start; gap: 16px; padding: 24px 0; background: #1B1430; border-radius: var(--r); outline: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); outline-offset: -1px; line-height: 0; }
+body .farms .pxb.one { grid-template-columns: auto; padding: 16px 0; }
+body .farms .pxb picture { display: block; }
+body .farms figure.plate .pxb img, body .farms .pxb canvas { display: block; width: 320px; height: auto; aspect-ratio: auto; object-fit: fill; padding: 0; border: 0; border-radius: 0; outline: 0; background: none; image-rendering: pixelated; }
+body .farms figure.plate .pxb.one picture img { width: 928px; }
+body .farms figure.plate.px figcaption .nw { display: inline; white-space: nowrap; }
+body .farms .sec figure.plate.px + ul { margin-top: 2rem; }
+body .farms .sec p .mono { font-family: var(--mono); font-size: 0.86em; }
+@media (max-width: 1055px) { body .farms figure.plate .pxb.one picture img { width: 640px; } }
 @media (max-width: 719px) {
-  body .farms .pxgrid { grid-template-columns: repeat(2, 160px); }
-  body .farms .pxgrid figure.px img { width: 160px; }
-  body .farms .pxgrid:has(img[src$=".webp"]), body .farms .pxgrid.styles { grid-template-columns: 320px; }
-  body .farms .pxgrid:has(img[src$=".webp"]) figure.px img, body .farms .pxgrid.styles figure.px img { width: 320px; }
-  body .farms figure.px figcaption { letter-spacing: 0.08em; padding-right: 0; }
-  body .farms figure.px.one, body .farms figure.px.one img { width: 288px; }
-  body .farms figure.px.one img { image-rendering: auto; }
+  body .farms h1.display br { display: none; }
+  body .farms .pxb { grid-template-columns: 320px; padding: 17px 0; }
+  body .farms .pxb.stills, body .farms .pxb.styles { grid-template-columns: repeat(2, 160px); gap: 12px; }
+  body .farms figure.plate .pxb.stills img, body .farms figure.plate .pxb.styles img { width: 160px; }
+  body .farms figure.plate .pxb.one picture img { width: 320px; }
 }
-/* the player: the title frame at rest, the running ROM after Play */
-body .farms .gbc { margin: 2rem auto 0; max-width: var(--col); text-align: center; }
+@media (max-width: 355px) {
+  body .farms .pxb, body .farms .pxb.stills, body .farms .pxb.styles { grid-template-columns: 160px; }
+  body .farms figure.plate .pxb img, body .farms figure.plate .pxb.one picture img { width: 160px; }
+}
+/* the player: the title frame at rest, the running ROM after Play. 4× on a desk, 3× in a short window, 2× on a phone */
+body .farms .gbc { text-align: left; }
 body .farms .gbc [hidden] { display: none !important; }
-body .farms .gbc-screen { position: relative; display: inline-block; padding: 12px; border: 1px solid var(--hair-2); border-radius: var(--r); background: var(--ground); line-height: 0; outline: 0; }
-body .farms .gbc-screen img, body .farms .gbc-screen canvas { display: block; width: 480px; height: 432px; }
+body .farms .pxb.gbc-screen { position: relative; padding: 32px 0; }
+body .farms figure.plate .gbc-screen img, body .farms .gbc-screen canvas { width: 640px; height: 576px; }
 body .farms .gbc.on .gbc-poster { display: none; }
-body .farms .gbc.on .gbc-screen:focus { border-color: var(--ink); }
-body .farms .gbc-screen:focus-visible { outline: 0; }
+body .farms .gbc-screen:focus { outline: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); }
+body .farms .gbc.on .gbc-screen:focus-visible { outline: 2px solid var(--sel); outline-offset: 3px; }
 body .farms .gbc.paused canvas { opacity: 0.5; }
-body .farms .gbc-play { position: absolute; left: 50%; top: 31%; transform: translateX(-50%); cursor: pointer; font-family: inherit; line-height: 1; white-space: nowrap; }
+body .farms .gbc-play { position: absolute; left: 50%; top: 34%; transform: translateX(-50%); cursor: pointer; font-family: inherit; line-height: 1; white-space: nowrap; }
 @media (hover: hover) { body .farms .gbc-play:hover { transform: translate(-50%, -1px); } }
 body .farms .gbc-play:disabled { opacity: 0.6; cursor: default; }
 html:not(.js) body .farms .gbc-play { display: none; }
-body .farms .gbc-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 10px 18px; margin: 12px auto 0; max-width: 506px; }
-body .farms .gbc ul.gbc-keys { display: flex; flex-wrap: wrap; gap: 8px 14px; width: auto; max-width: none; margin: 0; padding: 0; list-style: none; }
+body .farms .gbc figcaption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; line-height: 1.5; }
+body .farms .gbc-ctl { display: flex; gap: 6px; margin-left: auto; text-transform: none; letter-spacing: 0; }
+body .farms .gbc-ctl .pill { height: 44px; padding: 0 16px; font-size: 13px; }
+body .farms .gbc ul.gbc-keys { display: flex; flex-wrap: wrap; gap: 8px 18px; width: auto; max-width: none; margin: 12px 0 0; padding: 0; list-style: none; }
 body .farms .gbc ul.gbc-keys li { display: flex; align-items: center; gap: 4px; padding: 0; border: 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
 body .farms .gbc ul.gbc-keys li span { margin-left: 3px; }
 body .farms .gbc ul.gbc-keys kbd { text-transform: none; letter-spacing: 0; }
-body .farms .gbc-ctl { display: flex; gap: 6px; margin-left: auto; text-transform: none; letter-spacing: 0; }
-body .farms .gbc-ctl .pill { height: 40px; padding: 0 14px; font-size: 13px; }
-body .farms .gbc figcaption { margin: 12px auto 0; max-width: 506px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); text-align: left; line-height: 1.5; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
 body .farms .gbc-pad { display: none; }
-@media (max-width: 619px) {
-  body .farms h1.display br { display: none; }
-  body .farms .gbc-screen img, body .farms .gbc-screen canvas { width: 320px; height: 288px; }
-  body .farms .gbc-bar, body .farms .gbc figcaption { max-width: 346px; }
+@media (max-width: 1055px), (max-height: 799px) {
+  body .farms .pxb.gbc-screen { padding: 16px 0; }
+  body .farms figure.plate .gbc-screen img, body .farms .gbc-screen canvas { width: 480px; height: 432px; }
 }
+@media (max-width: 719px) {
+  body .farms .pxb.gbc-screen { padding: 17px 0; }
+  body .farms figure.plate .gbc-screen img, body .farms .gbc-screen canvas { width: 320px; height: 288px; }
+}
+@media (max-width: 355px) { body .farms figure.plate .gbc-screen img, body .farms .gbc-screen canvas { width: 160px; height: 144px; } }
 @media (hover: none), (pointer: coarse) {
   body .farms .gbc ul.gbc-keys { display: none; }
-  body .farms .gbc.on .gbc-pad { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 18px 0; max-width: 346px; margin: 18px auto 0; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-  body .farms .gbc-dpad { position: relative; width: 132px; height: 132px; justify-self: start; touch-action: none; }
+  body .farms .gbc.on .gbc-pad { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 18px 0; margin: 18px 0 0; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  body .farms .gbc-dpad { position: relative; width: 144px; height: 144px; justify-self: start; touch-action: none; }
   body .farms .gbc-dpad i { position: absolute; background: var(--ink); border-radius: var(--r); }
-  body .farms .gbc-dpad i:first-child { left: 0; right: 0; top: 44px; height: 44px; }
-  body .farms .gbc-dpad i:last-child { top: 0; bottom: 0; left: 44px; width: 44px; }
+  body .farms .gbc-dpad i:first-child { left: 0; right: 0; top: 48px; height: 48px; }
+  body .farms .gbc-dpad i:last-child { top: 0; bottom: 0; left: 48px; width: 48px; }
   body .farms .gbc-dpad.on i { background: var(--ink-2); }
-  body .farms .gbc-ab { justify-self: end; display: flex; gap: 14px; align-items: flex-end; }
-  body .farms .gbc-ab button { width: 62px; height: 62px; border-radius: 999px; border: 0; background: var(--ink); color: var(--ground); font-family: var(--mono); font-size: 13px; touch-action: none; }
-  body .farms .gbc-ab button[data-joy="A"] { margin-bottom: 26px; }
+  body .farms .gbc-ab { justify-self: end; display: flex; gap: 16px; align-items: flex-end; }
+  body .farms .gbc-ab button { width: 64px; height: 64px; padding: 0; border-radius: 999px; border: 0; background: var(--ink); color: var(--ground); font-family: var(--mono); font-size: 13px; touch-action: none; }
+  body .farms .gbc-ab button[data-joy="A"] { margin-bottom: 28px; }
   body .farms .gbc-ab button.on, body .farms .gbc-ss button.on { background: var(--ink-2); color: var(--ground); }
   body .farms .gbc-ss { grid-column: 1 / -1; display: flex; justify-content: center; gap: 12px; }
-  body .farms .gbc-ss button { height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--hair-2); background: transparent; color: var(--ink-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; touch-action: none; }
+  body .farms .gbc-ss button { height: 44px; min-width: 96px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--hair-2); background: transparent; color: var(--ink-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; touch-action: none; }
   body .farms .gbc.on figcaption { margin-top: 18px; }
 }
-/* the cartridge beside its paragraph */
+/* the cartridge beside its paragraph, then the spec rows */
 body .farms .cart { display: grid; grid-template-columns: 216px minmax(0, 1fr); gap: 2rem; align-items: center; max-width: var(--col); margin: 0.5rem auto 0; }
 body .farms .cart img { display: block; width: 216px; height: auto; }
 body .farms .cart p.fine { font-size: 13px; line-height: 1.5; color: var(--ink-3); margin-bottom: 0; }
+body .farms .cart + ul { margin-top: 2rem; }
 @media (max-width: 619px) { body .farms .cart { grid-template-columns: 1fr; gap: 1rem; justify-items: center; } body .farms .cart img { width: 200px; } }
 /* ==== /v3:farms ==== */
 
@@ -1433,3 +1435,11 @@ body .act .gh-led { position: static; display: flex; justify-content: center; ma
 /* wave: the paragraph under the hero's control row keeps the plate's 2rem */
 body main.cs .wave-ctl + p.cap-note { margin-top: 2rem; }
 /* ==== /v3:integration ==== */
+
+/* ==== v3b:fin-new ==== */
+/* Starling: comma'd numerals need air at display tracking; a plate keeps one distance from the block above it, list or paragraph */
+body .case .facts .n.c { letter-spacing: 0.02em; }
+body .case .sec ul + figure.plate.wide { margin-top: 38px; }
+/* Stilwell Farms: while the ROM runs, the floating section chip is put away so it never sits on the touch controls */
+body:has(.farms .gbc.on:not(.paused)) .sec-chip, body:has(.farms .gbc.on:not(.paused)) .sec-menu { display: none !important; }
+/* ==== /v3b:fin-new ==== */
