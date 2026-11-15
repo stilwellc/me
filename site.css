@@ -1310,3 +1310,48 @@ body .case ol#tonight li .v { letter-spacing: 0.04em; }
   body .datefix .df-n { display: inline-block; width: 100%; margin-left: 0; }
 }
 /* ==== /v3:cases ==== */
+/* ==== v3:digital ==== */
+/* Digital: seven cards. The first leads at full width, the picture beside the
+   words; the other six pair up, so the frame closes on a full row. */
+.cells.lead7 > .cell.lead { grid-column: 1 / -1; border-right: 0; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 0.6rem clamp(24px, 3.5vw, 48px); }
+.cells.lead7 > .cell:nth-child(2n) { border-right: 1px solid var(--hair); }
+.cells.lead7 > .cell:nth-child(2n+1) { border-right: 0; }
+.cells.lead7 > .cell.lead .thumb-wrap { margin-bottom: 0; }
+@media (min-width: 761px) {
+  body .cells.lead7 > .cell.lead h2 { font-size: clamp(1.6rem, 2.6vw, 2.25rem); letter-spacing: -0.02em; }
+  .cells.lead7 > .cell.lead .top { align-self: end; }
+  .cells.lead7 > .cell.lead .foot { align-self: start; margin-top: 0.4rem; padding-top: 0; }
+}
+@media (max-width: 760px) {
+  .cells.lead7 > .cell, .cells.lead7 > .cell:nth-child(2n) { border-right: 0; }
+  .cells.lead7 > .cell.lead .thumb-wrap { margin-bottom: 0.35rem; }
+  .cells.lead7 > .cell.lead { align-items: stretch; }
+}
+/* a light screenshot keeps its edge on the eggshell: the hairline sits above the image */
+.cell .thumb-wrap::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--hair-2); pointer-events: none; }
+.cell .thumb-wrap.is-pixel .thumb-img { image-rendering: pixelated; }
+
+/* GitHub: the grid, its weekday ticks and its axis share one frame; a week is a
+   fixed-width column, so three weeks of events draw three columns, not twelve. */
+body .act .gh-wrap { width: fit-content; max-width: 100%; box-sizing: border-box; grid-template-columns: auto minmax(0, 1fr); gap: 0 10px; padding: clamp(14px, 1.6vw, 20px); border: 1px solid var(--hair); border-radius: var(--r); }
+body .act .gh-wrap .grid, body .act .gh-wrap .grid.weeks { grid-column: 2; width: auto; max-width: none; margin: 0; padding: 0; border: 0; border-radius: 0; display: grid; grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(0, 66px); grid-template-rows: repeat(7, 12px); gap: 4px 6px; }
+body .act .gh-wrap .grid i { width: auto; height: 12px; border-radius: 2px; }
+body .act .gh-wrap .gh-days { grid-column: 1; grid-row: 1; }
+body .act .gh-wrap .gh-axis { grid-column: 2; max-width: none; margin: 8px 0 0; padding: 0; }
+@media (max-width: 640px) {
+  body .act .gh-wrap .grid, body .act .gh-wrap .grid.weeks { grid-template-rows: repeat(7, 10px); gap: 3px 4px; grid-auto-columns: minmax(0, 54px); }
+  body .act .gh-wrap .grid i { height: 10px; }
+}
+body .gh-note { max-width: var(--wide); margin-top: 12px; text-align: center; font-size: 15px; }
+body .gh-note .lg { display: flex; justify-content: center; align-items: center; margin: 0 0 6px; }
+body .gh-note .lg span:last-child { margin-right: 0; }
+.gh-note #gh-state[hidden] { display: none; }
+/* on the phone the LED sits under the heading, above the grid: one state, printed once */
+@media (max-width: 600px) { body .act .gh-led { position: static; display: flex; justify-content: center; margin: 0 0 12px; } }
+body .cs .facts.gh { max-width: var(--wide); }   /* four counters on the framed width, so each label holds one line */
+/* forks and contributions: a sheet like the also-rows, the year in the key column */
+body .sheet.forks { max-width: var(--col); }
+body .sheet.forks .row .k { text-transform: none; letter-spacing: 0.04em; font-size: 12px; }
+body .sheet.forks .row .d b { font-weight: 400; color: var(--ink); }
+body .repos .cell .foot { padding-top: 0.5rem; }
+/* ==== /v3:digital ==== */

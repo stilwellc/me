@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-MLN6x0INEW+V/Bihnl4vDTONTMqCTo/BWWZDDmqnWZI=' 'sha256-iakrEyhXgUA0y0fdOC2Cv8hpSR0fvM0ap0OPtc16F4g='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://lectr.bid; font-src 'self'; connect-src 'self' https://api.github.com https://lectr.bid https://soiree.today; manifest-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+<script>document.documentElement.classList.add('js');addEventListener('pagereveal',function(e){if(e.viewTransition)document.documentElement.classList.add('arrived')})</script>
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Starling, a case study — Collin Stilwell</title>
+<meta name="description" content="Starling: a deal board that sweeps eBay Buy It Now and surfaces listings priced deep under lectr’s settled auction prices.">
+<meta property="og:title" content="Starling, a case study — Collin Stilwell">
+<meta property="og:description" content="Starling: a deal board that sweeps eBay Buy It Now and surfaces listings priced deep under lectr’s settled auction prices.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://stilwellc.github.io/me/starling.html">
+<meta property="og:image" content="https://stilwellc.github.io/me/assets/og/starling.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://stilwellc.github.io/me/assets/og/starling.png">
+<link rel="canonical" href="https://stilwellc.github.io/me/starling.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23161616'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Helvetica,Arial,sans-serif' font-size='13' fill='%23FCFBFA'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/geist-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bricolage-grotesque-200-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/michroma-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css?v=eac5685">
+<style>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":"/me/*"},"eagerness":"moderate"}]}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="mast">
+  <a class="brand" href="./" aria-label="Collin Stilwell, home"><span class="n">Collin Stilwell</span></a>
+  <nav aria-label="Site"><a class="pill on" aria-current="page" href="digital.html">Digital</a><a class="pill" href="physical.html">Physical</a><a class="pill" href="security.html">Security</a><a class="pill" href="about.html">About</a><a class="pill" href="resume.html">Career</a><button class="pill mono" id="palette-btn" type="button" aria-label="Command palette" title="Command palette (⌘K)">⌘K</button></nav>
+</header>
+<main id="main" class="page cs">
+  <div class="mhead rv"><canvas class="matrix" data-text="Starling" data-src="assets/starling.svg" aria-label="A speckled starling on a perch, drawn in the line screen" role="img"></canvas><span class="hint">click to replay</span></div>
+  <p class="eyebrow rv"><a href="digital.html">Digital</a> · <a href="https://github.com/stilwellc/starling" target="_blank" rel="noopener">starling on GitHub ↗</a></p>
+  <h1 class="display rv d1">eBay listings priced deep<br>under what they sell for.</h1>
+  <p class="lede rv d2">Starling sweeps eBay Buy It Now every three hours and surfaces the listings priced deep under lectr’s settled auction prices, each with its evidence and a risk grade.</p>
+
+  <div class="facts rv d3">
+    <div><div class="n">199</div><div class="l">on the board<span class="sub">deals, as of Nov 14, 2026</span></div></div>
+    <div><div class="n">5,691</div><div class="l">listings<span class="sub">evaluated in that run</span></div></div>
+    <div><div class="n">3,148</div><div class="l">on the tape<span class="sub">calls, each frozen when surfaced</span></div></div>
+    <div><div class="n">5,000</div><div class="l">calls a day<span class="sub">the eBay Browse API budget</span></div></div>
+  </div>
+
+  <figure class="plate wide rv d3"><picture><source media="(max-width: 600px)" srcset="assets/starling/board-phone.webp" width="860" height="1076"><img src="assets/starling/board.webp" width="1920" height="1200" alt="The Starling board: the top deal is a Rolex Daytona asking $46,957 against a $77,131 book median from 20 sales, shown $30,174 under the book with a moderate risk grade" loading="lazy" decoding="async"></picture><figcaption>The board · run locally from the public repo · data of Nov 14, 2026</figcaption></figure>
+
+  <section class="sec" id="problem">
+    <div class="k">the problem</div>
+    <div>
+      <h2>A low price means nothing without a known value.</h2>
+      <p>A Buy It Now price is cheap only against what the same item has sold for. lectr holds that record: 1.1M lots and 761K settled auction prices. Starling takes lectr’s value book and points it at eBay’s fixed-price listings.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="build">
+    <div class="k">the build · the pipeline</div>
+    <div>
+      <h2>Pin the listing to a known key, or abstain.</h2>
+      <p>Each vertical has its own matcher: sports cards, Pokémon, watches, autographs and art editions. A matcher either pins a listing to one key in the value book or abstains.</p>
+      <ul class="tm">
+        <li><span>Search sweeps on the eBay Browse API. A scheduler splits the daily call budget across verticals and a quota ledger stops before the limit.</span><span class="v">poll</span></li>
+        <li><span>A second lookup on shortlisted candidates pulls the item’s own specifics.</span><span class="v">enrich</span></li>
+        <li><span>The vertical’s matcher pins the listing to a book key, or abstains.</span><span class="v">identify</span></li>
+        <li><span>Condition flags and a scam cap: anything more than 90% under its value is suppressed.</span><span class="v">gate</span></li>
+        <li><span>A risk grade, and a rank from depth, confidence and liquidity.</span><span class="v">score</span></li>
+        <li><span>The board is written as one JSON file and committed to the repo.</span><span class="v">publish</span></li>
+        <li><span>Every surfaced deal is appended to a ledger and later resolved to its outcome.</span><span class="v">receipts</span></li>
+      </ul>
+      <figure class="plate wide"><picture><source media="(max-width: 600px)" srcset="assets/starling/deal-phone.webp" width="860" height="1076"><img src="assets/starling/deal.webp" width="1920" height="1333" alt="A Starling deal page: the asking price marked on the book’s price range, the book median from 20 sales, the gap, confidence, last sale and one-year trend, and the reasons behind a moderate risk grade" loading="lazy" decoding="async"></picture><figcaption>One deal · the evidence and the reasons behind its risk grade</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="sec" id="run">
+    <div class="k">the run</div>
+    <div>
+      <h2>Every three hours, on a schedule.</h2>
+      <p>A GitHub Actions cron runs the pipeline, commits the regenerated board, and that commit deploys a static Next.js export to Cloudflare Pages. Only official eBay APIs are used.</p>
+      <p>The pipeline’s state lives in Cloudflare R2 as write-once versions behind a single pointer, with dated snapshots to roll back to. The whole system also runs offline against recorded eBay responses, so every stage is built and tested without eBay access.</p>
+      <ul>
+        <li><span>Schedule</span><span class="v">cron 15 */3 * * *</span></li>
+        <li><span>eBay Browse API budget</span><span class="v">5,000 calls a day</span></li>
+        <li><span>Fixture mode</span><span class="v">npm run board:fixture</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="proof">
+    <div class="k">the proof · the tape</div>
+    <div>
+      <h2>Every call is kept.</h2>
+      <p>Book value, depth and risk are frozen the moment a deal is surfaced and never rewritten. When a listing leaves Buy It Now, the outcome is recorded against the call.</p>
+      <figure class="plate wide"><picture><source media="(max-width: 600px)" srcset="assets/starling/tape-phone.webp" width="860" height="1076"><img src="assets/starling/tape.webp" width="1920" height="1200" alt="The Starling tape: 3,148 calls logged, 1,375 still live on Buy It Now, and a table of calls with date, vertical, identity, depth at surface, book value, risk grade and outcome" loading="lazy" decoding="async"></picture><figcaption>The tape · 3,148 calls logged · Nov 14, 2026</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="sec" id="call">
+    <div class="k">the call</div>
+    <div>
+      <h2>No exact identity, no deal.</h2>
+      <p>A deal exists only when its listing pins to an exact key in the value book. The value book stays in private storage and the board publishes book numbers only for the deals it shows. The deployed board sits behind a PIN; the source is public.</p>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="pill solid" href="https://github.com/stilwellc/starling" target="_blank" rel="noopener">Source on GitHub ↗</a>
+    <a class="pill ghost" href="lectr.html">lectr case study →</a>
+  </div>
+
+  <div class="endstrip">
+    <div class="cta"><a class="pill ghost" href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">LinkedIn ↗</a><a class="pill ghost" href="about.html">About</a><a class="pill solid" href="farms.html">Next: Stilwell Farms →</a></div>
+  </div>
+</main>
+<footer class="foot">
+  <div class="foot-in">
+    <button class="ape" id="ape" type="button" aria-label="The ape. Press him." title="Press him"><img src="assets/ape-sm.webp" width="52" height="45" alt=""></button>
+    <nav class="foot-map" aria-label="Pages"><a href="digital.html">Digital</a><a href="physical.html">Physical</a><a href="security.html">Security</a><a href="writing.html">Writing</a><a href="github.html">GitHub</a><a href="about.html">About</a><a href="resume.html">Career</a><a href="colophon.html">Colophon</a></nav>
+    <div class="foot-out"><a href="https://github.com/stilwellc" target="_blank" rel="noopener">github ↗</a><a href="https://www.linkedin.com/in/collin-stilwell/" target="_blank" rel="noopener">linkedin ↗</a><a href="https://collinsthoughts.substack.com" target="_blank" rel="noopener">substack ↗</a></div>
+    <div class="foot-meta"><span class="foot-copy">© 2026 Collin Stilwell · New Jersey</span><a class="foot-build" href="colophon.html">hand-built · no framework</a></div>
+  </div>
+</footer>
+<div class="pal" id="pal" hidden role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="pal-box">
+    <input id="pal-in" aria-label="Go to a page or run a command" placeholder="Go to… digital, physical, security, writing, github, about, career" autocomplete="off" spellcheck="false">
+    <ul id="pal-list"></ul>
+    <div class="pal-foot"><span>↑↓ move · ↵ open · esc close</span><span>? for shortcuts</span></div>
+  </div>
+</div>
+<div class="keys" id="keys" hidden role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+  <div class="keys-box">
+    <div class="keys-h">Shortcuts</div>
+    <div class="keys-grid"></div>
+  </div>
+</div>
+<script src="assets/engine.js?v=eac5685"></script>
+<script src="site.js?v=eac5685"></script>
+</body>
+</html>
