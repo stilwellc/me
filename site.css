@@ -1570,3 +1570,15 @@ body .p-about .sheet-h { margin-top: 3rem; }
   body .mhead, body .field { --bw: 100vw; }
 }
 /* ==== /v6:phone-mast ==== */
+
+/* ==== v7:menu ==== the hamburger: a short list of the main pages, no search field, no numbers */
+.pill.mono.menu { padding: 0 11px; }
+.pill.mono.menu .burger { width: 16px; height: 16px; display: block; margin: 0; }
+.pal.as-menu { padding-top: 76px; }
+.pal.as-menu .pal-box { width: min(300px, calc(100% - 2rem)); }
+.pal.as-menu .pal-box input { position: absolute; width: 1px; height: 1px; padding: 0; border: 0; opacity: 0; pointer-events: none; }
+.pal.as-menu .pal-foot, .pal.as-menu li .no, .pal.as-menu li .d { display: none; }
+.pal.as-menu .pal-box ul { max-height: 70vh; }
+.pal.as-menu .pal-box li { padding: 13px 14px; font-size: 16.5px; }
+@media (max-width: 899px) { .pal.as-menu { place-items: start end; padding-right: 16px; } .pal.as-menu .pal-box { width: min(260px, calc(100% - 2rem)); } }
+/* ==== /v7:menu ==== */
