@@ -121,7 +121,7 @@ function pageOf(u) { var f = String(u || '').split('#')[0].split('?')[0].split('
   var foot = document.querySelector('.pal-foot'); if (foot) { foot.hidden = true; foot.style.display = 'none'; }
   var inp = document.getElementById('pal-in'); if (inp) inp.placeholder = 'Go to…';
   // there is no Command key on a touch device: the keycap reads "Menu"
-  var kb = document.getElementById('palette-btn'); if (kb) { kb.textContent = 'Menu'; kb.classList.add('menu'); kb.setAttribute('aria-label', 'Menu'); kb.removeAttribute('title'); }
+
   [].forEach.call(document.querySelectorAll('.k-key'), function (e) { e.textContent = 'the menu'; });   // copy that names the key names the menu instead
 })();
 
@@ -405,7 +405,7 @@ function flagCheck(s) {
   function render() {
     out = null;
     var q = norm(inp.value.trim()), terms = q.split(/\s+/).filter(Boolean);
-    var pool = q ? ITEMS.concat(HERE_SECS, OTHER_SECS || []) : ITEMS.slice(0, PAGES.length).concat(HERE_SECS, ITEMS.slice(PAGES.length));
+    var pool = MENU && !q ? MENU_ITEMS : q ? ITEMS.concat(HERE_SECS, OTHER_SECS || []) : ITEMS.slice(0, PAGES.length).concat(HERE_SECS, ITEMS.slice(PAGES.length));
     shown = pool.filter(function (i) { if (!q) return true; var s = hay(i); return s.indexOf(q) >= 0 || terms.every(function (t) { return s.indexOf(t) >= 0; }); });
     sel = Math.min(sel, Math.max(0, shown.length - 1));
     draw();
@@ -470,11 +470,15 @@ function flagCheck(s) {
     }
     return false;
   }
-  var opener = null;
+  var opener = null, MENU = false;
   var kbtn = document.getElementById('palette-btn');
+  if (kbtn) { kbtn.innerHTML = '<svg class="ic burger" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.5 5h11M2.5 11h11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>'; kbtn.classList.add('menu'); kbtn.setAttribute('aria-label', 'Menu'); kbtn.removeAttribute('title'); }
+  // the menu: the button opens a short list of the main pages; the full palette stays on the keyboard (⌘K)
+  var MENU_U = ['index.html', 'digital.html', 'physical.html', 'security.html', 'writing.html', 'github.html', 'about.html'];
+  var MENU_ITEMS = MENU_U.map(function (u) { var p = pageOf(u); return { t: p.t, h: '', u: u, w: p.w, m: 1 }; }).concat([{ t: 'LinkedIn ↗', h: '', u: LINKEDIN, x: 1, m: 1 }]);
   function foot() { var f = pal.querySelector('.pal-foot'); if (!f) return; var got = []; try { got = JSON.parse(ssGet('ctf') || '[]'); } catch (e) {} var secs = HERE_SECS.length + (OTHER_SECS ? OTHER_SECS.length : 0); f.innerHTML = '<span>' + PAGES.length + ' pages · ' + secs + ' sections · flags ' + got.length + '/3</span><span>? shortcuts</span>'; }
   inp.placeholder = '> go to a page · type a command';
-  function open() { closeKeys(); opener = document.activeElement; pal.hidden = false; inp.value = ''; sel = 0; render(); foot(); if (!TOUCH) inp.focus(); inp.setAttribute('aria-expanded', 'true'); if (kbtn) kbtn.setAttribute('aria-expanded', 'true'); loadSections(); }
+  function open(menu) { MENU = menu === true; pal.classList.toggle('as-menu', MENU); closeKeys(); opener = document.activeElement; pal.hidden = false; inp.value = ''; sel = 0; render(); foot(); if (!TOUCH) inp.focus(); inp.setAttribute('aria-expanded', 'true'); if (kbtn) kbtn.setAttribute('aria-expanded', 'true'); loadSections(); }
   function close() { pal.hidden = true; inp.setAttribute('aria-expanded', 'false'); if (kbtn) kbtn.setAttribute('aria-expanded', 'false'); inp.blur(); unpreview(); if (opener && opener.focus) { opener.focus(); opener = null; } }
   function openKeys() { if (!keys) return; close(); opener = opener || document.activeElement; keys.hidden = false; var box = keys.querySelector('.keys-box'); if (box) { box.tabIndex = -1; box.focus(); } }
   function closeKeys() { if (!keys || keys.hidden) return; keys.hidden = true; if (opener && opener.focus) { opener.focus(); opener = null; } }
@@ -487,7 +491,7 @@ function flagCheck(s) {
   list.addEventListener('click', function (e) { var li = e.target.closest('li[data-k]'); if (li) go(shown[+li.dataset.k]); });
   list.addEventListener('mousemove', function (e) { var li = e.target.closest('li[data-k]'); if (!li || +li.dataset.k === sel) return; sel = +li.dataset.k; draw(); preview(); });
   pal.addEventListener('click', function (e) { if (e.target === pal) close(); });
-  var btn = document.getElementById('palette-btn'); if (btn) btn.addEventListener('click', open);
+  var btn = document.getElementById('palette-btn'); if (btn) btn.addEventListener('click', function () { open(true); });
   var pending = null, pt = 0;
   var CHORD = { h: 'index.html', d: 'digital.html', s: 'security.html', w: 'writing.html', n: 'writing.html', g: 'github.html', a: 'about.html', r: 'about.html#career', l: 'lectr.html', p: 'physical.html' };
   addEventListener('keydown', function (e) {
